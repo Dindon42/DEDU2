@@ -1,26 +1,13 @@
-
-// Credit:
-// Midi to Arduino Converter
-//     - Andy Tran (extramaster), 2015
-// https://www.extramaster.net/tools/midiToArduino/
-//
-// Process:
-// Midi -> Midi tracks -> Note mappings -> Frequency
-//
-// CC0
-
-// Set this to be the pin that your buzzer resides in. (Note that you can only have one buzzer actively using the PWM signal at a time).
 int Tone_Pin = 52;
-
-
 
 void setup() {
 
-    ChansonDEDU();
+  double facteur=2;
+  ChansonDEDU(facteur);
 }
 
 
-void ChansonDEDU() {
+void ChansonDEDU(double facteur) {
   //Notes
   int Note_G3 = 196;
   int Note_A3 = 220;
@@ -30,8 +17,7 @@ void ChansonDEDU() {
   int Note_E4 = 330;
   int Note_F4 = 349;
 
-  double facteur = 1;
-
+  
   double joue_croche = 150 / facteur;
   double delay_croche = 100 / facteur;
   double joue_noire = 2*joue_croche;

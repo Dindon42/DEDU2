@@ -65,8 +65,6 @@ void setup() {
 
   //Illumine toutes les LED bleu et envoie un son
   analogWrite(B, 100);
-  YouSpinMeRound();
-  delay(500);
   tone(Tone_Pin, 1500, 500);
 
   //Attend l'input des joueurs.
@@ -150,9 +148,7 @@ void setup() {
 
 
 void loop() {
-
 start:
-
 
   for (int i = 31; i <= 49; i += 2) { //turnOFFALL
     digitalWrite(i, LOW);
@@ -398,6 +394,7 @@ MARQUEURHONTE:
 
 FFA:
 
+  ChansonDEDU(4);
   for (int e = 1; e <= 35; e++) {
 
     r = 154 - random(20);
@@ -436,63 +433,148 @@ FFA:
   //FIN FFA
 }
 
-void YouSpinMeRound() {
+void YouSpinMeRound(double facteur) {
+int Note_1 = 184;
+int Note_2 = 220;
+int Note_3 = 164;
+int Note_4 = 246;
 
-    tone(Tone_Pin, 184, 206.25);
-    delay(312.5);
-    delay(156.25);
-    tone(Tone_Pin, 184, 237.1875);
-    delay(359.375);
-    delay(109.375);
-    tone(Tone_Pin, 184, 239.765625);
-    delay(363.28125);
-    delay(105.46875);
-    tone(Tone_Pin, 220, 211.40625);
-    delay(320.3125);
-    delay(148.4375);
-    tone(Tone_Pin, 220, 216.5625);
-    delay(328.125);
-    delay(140.625);
-    tone(Tone_Pin, 164, 152.109375);
-    delay(230.46875);
-    delay(3.90625);
-    tone(Tone_Pin, 164, 152.109375);
-    delay(230.46875);
-    delay(3.90625);
-    tone(Tone_Pin, 246, 226.875);
-    delay(343.75);
-    delay(125.0);
-    tone(Tone_Pin, 184, 229.453125);
-    delay(347.65625);
-    delay(121.09375);
-    tone(Tone_Pin, 184, 97.96875);
-    delay(148.4375);
-    delay(85.9375);
-    tone(Tone_Pin, 184, 118.59375);
-    delay(179.6875);
-    delay(54.6875);
-    tone(Tone_Pin, 246, 116.015625);
-    delay(175.78125);
-    delay(58.59375);
-    tone(Tone_Pin, 246, 110.859375);
-    delay(167.96875);
-    delay(66.40625);
-    tone(Tone_Pin, 220, 108.28125);
-    delay(164.0625);
-    delay(70.3125);
-    tone(Tone_Pin, 220, 97.96875);
-    delay(148.4375);
-    delay(85.9375);
-    tone(Tone_Pin, 164, 239.765625);
-    delay(363.28125);
-    delay(105.46875);
-    tone(Tone_Pin, 164, 239.765625);
-    delay(363.28125);
-    delay(105.46875);
-    tone(Tone_Pin, 246, 239.765625);
-    delay(363.28125);
-    delay(105.46875);
-    tone(Tone_Pin, 220, 239.765625);
-    delay(500.28125);
+    tone(Tone_Pin, Note_1, 206.25 / facteur);
+    delay(312.5 / facteur);
+    delay(156.25 / facteur);
+    tone(Tone_Pin, Note_1, 237.1875 / facteur);
+    delay(359.375 / facteur);
+    delay(109.375 / facteur);
+    tone(Tone_Pin, Note_1, 239.765625 / facteur);
+    delay(363.28125 / facteur);
+    delay(105.46875 / facteur);
+    tone(Tone_Pin, Note_2, 211.40625 / facteur);
+    delay(320.3125 / facteur);
+    delay(148.4375 / facteur);
+    tone(Tone_Pin, Note_2, 216.5625 / facteur);
+    delay(328.125 / facteur);
+    delay(140.625 / facteur);
+    tone(Tone_Pin, Note_3, 152.109375 / facteur);
+    delay(230.46875 / facteur);
+    delay(3.90625 / facteur);
+    tone(Tone_Pin, Note_3, 152.109375 / facteur);
+    delay(230.46875 / facteur);
+    delay(3.90625 / facteur);
+    tone(Tone_Pin, Note_4, 226.875 / facteur);
+    delay(343.75 / facteur);
+    delay(125.0 / facteur);
+    tone(Tone_Pin, Note_1, 229.453125 / facteur);
+    delay(347.65625 / facteur);
+    delay(121.09375 / facteur);
+    tone(Tone_Pin, Note_1, 97.96875 / facteur);
+    delay(148.4375 / facteur);
+    delay(85.9375 / facteur);
+    tone(Tone_Pin, Note_1, 118.59375 / facteur);
+    delay(179.6875 / facteur);
+    delay(54.6875 / facteur);
+    tone(Tone_Pin, Note_4, 116.015625 / facteur);
+    delay(175.78125 / facteur);
+    delay(58.59375 / facteur);
+    tone(Tone_Pin, Note_4, 110.859375 / facteur);
+    delay(167.96875 / facteur);
+    delay(66.40625 / facteur);
+    tone(Tone_Pin, Note_2, 108.28125 / facteur);
+    delay(164.0625 / facteur);
+    delay(70.3125 / facteur);
+    tone(Tone_Pin, Note_2, 97.96875 / facteur);
+    delay(148.4375 / facteur);
+    delay(85.9375 / facteur);
+    tone(Tone_Pin, Note_3, 239.765625 / facteur);
+    delay(363.28125 / facteur);
+    delay(105.46875 / facteur);
+    tone(Tone_Pin, Note_3, 239.765625 / facteur);
+    delay(363.28125 / facteur);
+    delay(105.46875 / facteur);
+    tone(Tone_Pin, Note_3, 239.765625 / facteur);
+    delay(363.28125 / facteur);
+    delay(105.46875 / facteur);
+    tone(Tone_Pin, Note_2, 239.765625 / facteur);
+    delay(500.28125 / facteur);
 
+}
+
+void ChansonDEDU(double facteur) {
+  //Notes
+  int Note_G3 = 196;
+  int Note_A3 = 220;
+  int Note_B3 = 247;
+  int Note_C4 = 261;
+  int Note_D4 = 294;
+  int Note_E4 = 330;
+  int Note_F4 = 349;
+
+  
+  double joue_croche = 150 / facteur;
+  double delay_croche = 100 / facteur;
+  double joue_noire = 2*joue_croche;
+  double delay_noire = 2*delay_croche;
+  double joue_blanche = 4*joue_croche;
+  double delay_blanche = 2*delay_croche;
+
+/*
+NEW g3,g3,g3,b3,b3,c4,c4,F4,b3,g3,g3,d4,b3,g3,e4,d4,b3,c4
+OLD g3,g3,g3,b3,b3,c4,c4,d4,b3,g3,g3,d4,b3,g3,c4,b3,a3,g3
+*/
+
+  tone(Tone_Pin, Note_G3, joue_croche);
+  delay(joue_croche);
+  delay(delay_croche);
+  tone(Tone_Pin, Note_G3, joue_croche);
+  delay(joue_croche);
+  delay(delay_noire);
+  tone(Tone_Pin, Note_G3, joue_croche);
+  delay(joue_croche);
+  delay(delay_croche);
+  tone(Tone_Pin, Note_B3, joue_noire);
+  delay(joue_noire);
+  delay(delay_noire);
+  tone(Tone_Pin, Note_B3, joue_noire);
+  delay(joue_noire);
+  delay(delay_noire);
+  tone(Tone_Pin, Note_C4, joue_noire);
+  delay(joue_noire);
+  delay(delay_noire);
+  tone(Tone_Pin, Note_C4, joue_noire);
+  delay(joue_noire);
+  delay(delay_noire);
+  tone(Tone_Pin, Note_F4, joue_blanche);
+  delay(joue_blanche);
+  delay(delay_blanche);
+  tone(Tone_Pin, Note_B3, joue_croche);
+  delay(joue_croche);
+  delay(delay_croche);
+  tone(Tone_Pin, Note_G3, joue_croche);
+  delay(joue_croche);
+  delay(delay_noire);
+  tone(Tone_Pin, Note_G3, joue_croche);
+  delay(joue_croche);
+  delay(delay_croche);
+  tone(Tone_Pin, Note_D4, joue_croche);
+  delay(joue_croche);
+  delay(delay_noire);
+  tone(Tone_Pin, Note_B3, joue_croche);
+  delay(joue_croche);
+  delay(delay_croche);
+  tone(Tone_Pin, Note_G3, joue_croche);
+  delay(joue_croche);
+  delay(delay_noire);
+  delay(delay_noire);
+  tone(Tone_Pin, Note_E4, joue_blanche);
+  delay(joue_blanche);
+  delay(delay_blanche);
+  delay(delay_noire);
+  tone(Tone_Pin, Note_D4, joue_croche);
+  delay(joue_croche);
+  delay(delay_noire);
+  tone(Tone_Pin, Note_B3, joue_croche);
+  delay(joue_croche);
+  delay(delay_croche);
+  tone(Tone_Pin, Note_C4, joue_blanche);
+  delay(joue_blanche);
+  delay(delay_blanche);
 }
