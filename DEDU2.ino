@@ -37,6 +37,13 @@ int vitesse_raw;
 //Set vitesse
 void setup() 
 {
+  
+  /*
+  //Debugging lines if required.
+  Serial.begin(9600);
+  Serial.print("NO FORMAT");
+  */
+  
   //Attach to servo and move it to initial position
   myservo.attach(Servo_Pin);
   myservo.write(Servo_LowPos);
@@ -86,14 +93,13 @@ void setup()
   //Tous les bleus à OFF.
   analogWrite(B, 0);
 
+  //Montre aux joueurs les sélections.
   ClignoteEtSon(nbj_raw,1500,200);
-
   delay(500);
-  
   TurnOffAllLights();
-  
   delay(500);
 
+  
   //FIN NBJ
   //-----------------------------------------------
 
@@ -121,10 +127,11 @@ void setup()
     }
   }
 
+  //Lumières vertes OFF
   analogWrite(G, 0);
 
+  //Montre aux joueurs les sélections.
   ClignoteEtSon(vitesse_raw,1000,100);
-
   delay(500);
   TurnOffAllLights();
   delay(500);
@@ -134,6 +141,8 @@ void setup()
 
 //Setup complete.  MAIN loop.
 void loop() {
+
+
 start:
 
   
@@ -141,6 +150,7 @@ start:
   delay(500);
 
   //Debut DELAY et TESTFRAUDEUR --------------------------------------
+
 
   r = 50 + (12 - vitesse) * random(100);
   x = 0;
