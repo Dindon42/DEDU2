@@ -66,7 +66,7 @@ void setup() {
   //Illumine toutes les LED bleu et envoie un son
   analogWrite(B, 100);
   YouSpinMeRound();
-  delay(1000);
+  delay(500);
   tone(Tone_Pin, 1500, 500);
 
   //Attend l'input des joueurs.
