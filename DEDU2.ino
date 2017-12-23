@@ -28,6 +28,7 @@ void setup() {
   myservo.attach(53);
   myservo.write(Serv_LowPos);
 
+  //Pin definitions
   pinMode(31, OUTPUT);
   pinMode(33, OUTPUT);
   pinMode(35, OUTPUT);
@@ -53,8 +54,11 @@ void setup() {
   pinMode(40, INPUT);
   pinMode(42, INPUT);
 
-  // NBJ ----------------------------------------
-
+  // Nombre de Joueurs
+  // Attend que les joueurs choisissent le nombre en cliquant sur le bouton correspondant au nombre souhaité.
+  // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au nombre suivant.
+  //----------------------------------------
+  
   analogWrite(B, 100);
   tone(t, 1500, 500);
 
