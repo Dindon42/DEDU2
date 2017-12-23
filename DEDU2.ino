@@ -96,7 +96,7 @@ void setup()
   //Montre aux joueurs les sélections.
   ClignoteEtSon(nbj_raw,1500,200);
   delay(500);
-  TurnOffAllLights();
+  TurnOffAllRedLights();
   delay(500);
 
   
@@ -133,7 +133,7 @@ void setup()
   //Montre aux joueurs les sélections.
   ClignoteEtSon(vitesse_raw,1000,100);
   delay(500);
-  TurnOffAllLights();
+  TurnOffAllRedLights();
   delay(500);
 
 }
@@ -142,11 +142,12 @@ void setup()
 //Setup complete.  MAIN loop.
 void loop() {
 
+    goto FFA;
 
 start:
 
   
-  TurnOffAllLights();
+  TurnOffAllRedLights();
   delay(500);
 
   //Debut DELAY et TESTFRAUDEUR --------------------------------------
@@ -248,7 +249,7 @@ PQP:
     delay (500);
 
     
-    TurnOffAllLights();
+    TurnOffAllRedLights();
     
     analogWrite(G, 20);
     delay(500);
@@ -297,7 +298,7 @@ DQP:
   }
   noTone(Tone_Pin);
   delay (2500);
-  TurnOffAllLights();
+  TurnOffAllRedLights();
   analogWrite(B, 0);
   delay(500);
   goto start;
@@ -308,7 +309,7 @@ DQP:
 
 TROMPEOEIL:
 
-  TurnOffAllLights();
+  TurnOffAllRedLights();
 
   for (int e = 0; e <= 4000; e++) {
     for (int i = 1; i <= nbj; i++) {
@@ -322,7 +323,7 @@ TROMPEOEIL:
 
 bailout:
 
-  TurnOffAllLights();
+  TurnOffAllRedLights();
 
   for (int e = 0; e <= 300; e++) {
     for (int i = 24; i <= 40; i += 2) {
@@ -338,7 +339,7 @@ bailout:
 
   delay(1500);
 
-  TurnOffAllLights();
+  TurnOffAllRedLights();
 
   goto start;
 
@@ -395,7 +396,7 @@ FFA:
     r = 60 + random(200);
     delay(r);
 
-    TurnOffAllLights();
+    TurnOffAllRedLights();
 
     analogWrite(B, 80);
     r = 60 + random(200);
@@ -487,6 +488,38 @@ int Note_4 = 246;
 void ChansonDEDU(double facteur)
 {
   //Notes
+  int G3 = 196;
+  int A3 = 220;
+  int B3 = 247;
+  int C4 = 261;
+  int D4 = 294;
+  int E4 = 330;
+  int F4 = 349;
+
+  int numNotes=18;
+
+  double Base_Time = 150 / facteur;
+  double Play_Time[3]={Base_Time,2*Base_Time,4*Base_Time};
+  double Base_Time_W = 100 / facteur;
+  double Wait_Time[4]={Base_Time_W,2*Base_Time_W,2*Base_Time_W,4*Base_Time_W};
+
+  double Notes[numNotes]    =       {G3,  G3, G3, B3, B3, C4, C4, F4, B3, G3, G3, D4, B3, G3, E4, D4, B3, C4};
+  int Play_Time_Index[numNotes] =   {0,   0,  0,  1,  1,  1,  1,  2,  0,  0,  0,  0,  0,  0,  2,  0,  0,  2};
+  int Wait_Time_Index[numNotes] =   {0,   1,  0,  1,  1,  1,  1,  2,  0,  1,  0,  1,  0,  3,  3,  1,  0,  2};
+  
+  for (int i=0 ; i<numNotes ; i++)
+  {
+    PlayNote(Tone_Pin,Notes[i],Play_Time[Play_Time_Index[i]],Wait_Time[Wait_Time_Index[i]]);
+  }
+
+/*
+ * 
+ * /*
+NEW
+NOTE  g3  g3  g3  b3  b3  c4  c4  F4  b3  g3  g3  d4  b3  g3  e4  d4  b3  c4
+TIME  0   0   0   1   1   1   1   2   0   0   0   0   0   0   2   0   0   2
+WAIT  0   1   0   1   1   1   1   2   0   1   0   1   0   1+1 2+1 1   0   2
+
   int Note_G3 = 196;
   int Note_A3 = 220;
   int Note_B3 = 247;
@@ -494,19 +527,17 @@ void ChansonDEDU(double facteur)
   int Note_D4 = 294;
   int Note_E4 = 330;
   int Note_F4 = 349;
-
   
   double joue_croche = 150 / facteur;
   double delay_croche = 100 / facteur;
+  
   double joue_noire = 2*joue_croche;
   double delay_noire = 2*delay_croche;
+  
   double joue_blanche = 4*joue_croche;
   double delay_blanche = 2*delay_croche;
 
-/*
-NEW g3,g3,g3,b3,b3,c4,c4,F4,b3,g3,g3,d4,b3,g3,e4,d4,b3,c4
-OLD g3,g3,g3,b3,b3,c4,c4,d4,b3,g3,g3,d4,b3,g3,c4,b3,a3,g3
-*/
+
 
   tone(Tone_Pin, Note_G3, joue_croche);
   delay(joue_croche);
@@ -564,10 +595,12 @@ OLD g3,g3,g3,b3,b3,c4,c4,d4,b3,g3,g3,d4,b3,g3,c4,b3,a3,g3
   tone(Tone_Pin, Note_C4, joue_blanche);
   delay(joue_blanche);
   delay(delay_blanche);
+
+  */
 }
 
-//Turn off all lights.
-void TurnOffAllLights()
+//Turn off all the reds
+void TurnOffAllRedLights()
 {
    for (int i=0; i<=nbj_raw_max;i++)
   {
@@ -587,4 +620,10 @@ void ClignoteEtSon(int NbMax,int FreqStart, int FreqIncrease)
     tone(Tone_Pin, Tone_Frequency, 150);
     delay(150);
   }
+}
+
+void PlayNote(int Tone_Pin, double Freq, double PlayTime, double WaitTime)
+{
+  tone(Tone_Pin, Freq, PlayTime);
+  delay(PlayTime+WaitTime);
 }
