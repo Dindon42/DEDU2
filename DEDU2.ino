@@ -3,11 +3,11 @@ Servo myservo;
 //Definitions
 
 //Pins
-int G = 3;
-int B = 2;
-int t = 52;
+int G = 3; //Green LED ALL
+int B = 2; //Blue LED ALL
+int t = 52; //Tone
 
-int Serv_LowPos = 40;
+int Servo_LowPos = 40;
 
 int val;
 int x;
@@ -26,7 +26,7 @@ void setup() {
 
   //Attach to servo and move it to initial position
   myservo.attach(53);
-  myservo.write(Serv_LowPos);
+  myservo.write(Servo_LowPos);
 
   //Pin definitions
   pinMode(31, OUTPUT);
@@ -54,14 +54,16 @@ void setup() {
   pinMode(40, INPUT);
   pinMode(42, INPUT);
 
-  // Nombre de Joueurs
+  // NBJ - Nombre de Joueurs
   // Attend que les joueurs choisissent le nombre en cliquant sur le bouton correspondant au nombre souhaité.
   // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au nombre suivant.
-  //----------------------------------------
-  
+  // ----------------------------------------
+
+  //Illumine toutes les LED bleu et envoie un son
   analogWrite(B, 100);
   tone(t, 1500, 500);
 
+  //Attend l'input des joueurs.
   nbj = 0;
   while (nbj == 0) {
     for (int i = 24; i <= 42; i = i + 2)
@@ -92,11 +94,6 @@ void setup() {
   delay(500);
 
   //FIN NBJ -----------------------------------------------
-
-  //myservo.write(155);
-  //delay(1000);
-  //myservo.write(40);
-  //delay(1000);
 
   //Debut VITESSE-----------------------------------------------
 
@@ -167,7 +164,7 @@ start:
         tone(t, 1500, 1000);
         myservo.write(70);
         delay(1000);
-        myservo.write(Serv_LowPos);
+        myservo.write(Servo_LowPos);
         delay(500);
         goto start;
       }
@@ -419,7 +416,7 @@ FFA:
 
   analogWrite(B, 0);
   analogWrite(G, 0);
-  myservo.write(Serv_LowPos);
+  myservo.write(Servo_LowPos);
   delay(500);
 
   goto start;
