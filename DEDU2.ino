@@ -5,11 +5,13 @@ Servo myservo;
 //Pins
 int G = 3; //Green LED ALL
 int B = 2; //Blue LED ALL
-int t = 52; //Tone
+int Tone_Pin = 52; //Tone
 //Position à l'arrêt du Servo (bâton rentré)
 int Servo_LowPos = 40;
 int Servo_Pin = 53;
 
+int nbj_max=10;
+int nbj_raw_max=9;
 int OutPinStart = 31;
 int OutPinInterval = 2;
 int InPinStart = 24;
@@ -40,8 +42,8 @@ void setup() {
   myservo.write(Servo_LowPos);
 
   //Pin definitions
-  //LED des joueurs
-  for (int i=0; i<=9;i++)
+  //LED ROUGE des joueurs
+  for (int i=0; i<=nbj_raw_max;i++)
   {
     pinMode(OutPinStart+OutPinInterval*i, OUTPUT);
   }
@@ -51,7 +53,7 @@ void setup() {
   pinMode(B, OUTPUT);
 
   //Manettes.
-  for (int i=0; i<=9;i++)
+  for (int i=0; i<=nbj_raw_max;i++)
   {
     pinMode(InPinStart+InPinInterval*i, INPUT);
   }
@@ -63,13 +65,14 @@ void setup() {
 
   //Illumine toutes les LED bleu et envoie un son
   analogWrite(B, 100);
-  tone(t, 1500, 500);
-
+  YouSpinMeRound();
+  delay(1000);
+  tone(Tone_Pin, 1500, 500);
 
   //Attend l'input des joueurs.
   nbj = 0;
   while (nbj == 0) {
-    for (int i=0; i<=9;i++)
+    for (int i=0; i<=nbj_raw_max;i++)
     {
       val = digitalRead(InPinStart+InPinInterval*i);
       if (val == HIGH)
@@ -80,6 +83,7 @@ void setup() {
     }
   }
 
+  //Tous les bleus à OFF.
   analogWrite(B, 0);
 
   //Clignote
@@ -89,7 +93,7 @@ void setup() {
     x = OutPinStart + i * OutPinInterval;
     digitalWrite(x, HIGH);
     tf = 1000 + 500 * i;
-    tone(t, tf, 150);
+    tone(Tone_Pin, tf, 150);
     delay(150);
   }
 
@@ -106,7 +110,7 @@ void setup() {
   //Debut VITESSE-----------------------------------------------
 
   analogWrite(G, 100);
-  tone(t, 2500, 500);
+  tone(Tone_Pin, 2500, 500);
 
   vitesse = 0;
 
@@ -127,7 +131,7 @@ void setup() {
     x = 29 + (i * 2);
     digitalWrite(x, HIGH);
     tf = 1500 + 300 * i;
-    tone(t, tf, 100);
+    tone(Tone_Pin, tf, 100);
     delay(150);
   }
 
@@ -169,7 +173,7 @@ start:
         x = 1;
       }
       if (x > 0) {
-        tone(t, 1500, 1000);
+        tone(Tone_Pin, 1500, 1000);
         myservo.write(70);
         delay(1000);
         myservo.write(Servo_LowPos);
@@ -245,10 +249,10 @@ PQP:
 
     for (int i = 1; i <= 120; i++) {
       tf = 500 + 30 * i;
-      tone(t, tf, 3);
+      tone(Tone_Pin, tf, 3);
       delay(3);
     }
-    noTone(t);
+    noTone(Tone_Pin);
     delay (500);
 
     for (int i = 31; i <= 49; i += 2) { //turnOFFALL
@@ -296,10 +300,10 @@ DQP:
 
   for (int i = 1; i <= 80; i++) {
     tf = 2000 - 20 * i;
-    tone(t, tf);
+    tone(Tone_Pin, tf);
     delay(15);
   }
-  noTone(t);
+  noTone(Tone_Pin);
   delay (2500);
   for (int i = 31; i <= 49; i += 2) { //turnOFFALL
     digitalWrite(i, LOW);
@@ -339,7 +343,7 @@ bailout:
       if (digitalRead(i) == HIGH) {
         z = i + 7;
         digitalWrite(z, HIGH);
-        tone(t, 1500, 400);
+        tone(Tone_Pin, 1500, 400);
       }
       delay(1);
     }
@@ -365,19 +369,19 @@ MARQUEURHONTE:
   for (e ; e >= 1; e -= 5) {
     for (int i = 1; i <= nbj; i++) {
       y = 29 + (2 * i);
-      tone(t, 3500, 10);
+      tone(Tone_Pin, 3500, 10);
       digitalWrite(y, HIGH);
       delay(e);
       digitalWrite(y, LOW);
     }
   }
-  noTone(t);
+  noTone(Tone_Pin);
   analogWrite(B, 6);
 
   x = random(1, nbj);
   y = 29 + (2 * x);
   for (int e = 1; e <= 4; e++) {
-    tone(t, 3500, 10);
+    tone(Tone_Pin, 3500, 10);
     digitalWrite(y, HIGH);
     delay(500);
     digitalWrite(y, LOW);
@@ -430,6 +434,65 @@ FFA:
   goto start;
 
   //FIN FFA
+}
 
+void YouSpinMeRound() {
+
+    tone(Tone_Pin, 184, 206.25);
+    delay(312.5);
+    delay(156.25);
+    tone(Tone_Pin, 184, 237.1875);
+    delay(359.375);
+    delay(109.375);
+    tone(Tone_Pin, 184, 239.765625);
+    delay(363.28125);
+    delay(105.46875);
+    tone(Tone_Pin, 220, 211.40625);
+    delay(320.3125);
+    delay(148.4375);
+    tone(Tone_Pin, 220, 216.5625);
+    delay(328.125);
+    delay(140.625);
+    tone(Tone_Pin, 164, 152.109375);
+    delay(230.46875);
+    delay(3.90625);
+    tone(Tone_Pin, 164, 152.109375);
+    delay(230.46875);
+    delay(3.90625);
+    tone(Tone_Pin, 246, 226.875);
+    delay(343.75);
+    delay(125.0);
+    tone(Tone_Pin, 184, 229.453125);
+    delay(347.65625);
+    delay(121.09375);
+    tone(Tone_Pin, 184, 97.96875);
+    delay(148.4375);
+    delay(85.9375);
+    tone(Tone_Pin, 184, 118.59375);
+    delay(179.6875);
+    delay(54.6875);
+    tone(Tone_Pin, 246, 116.015625);
+    delay(175.78125);
+    delay(58.59375);
+    tone(Tone_Pin, 246, 110.859375);
+    delay(167.96875);
+    delay(66.40625);
+    tone(Tone_Pin, 220, 108.28125);
+    delay(164.0625);
+    delay(70.3125);
+    tone(Tone_Pin, 220, 97.96875);
+    delay(148.4375);
+    delay(85.9375);
+    tone(Tone_Pin, 164, 239.765625);
+    delay(363.28125);
+    delay(105.46875);
+    tone(Tone_Pin, 164, 239.765625);
+    delay(363.28125);
+    delay(105.46875);
+    tone(Tone_Pin, 246, 239.765625);
+    delay(363.28125);
+    delay(105.46875);
+    tone(Tone_Pin, 220, 239.765625);
+    delay(500.28125);
 
 }
