@@ -24,7 +24,7 @@ int y;
 int z;
 int r;
 int e;
-int tf;
+int Tone_Frequency;
 int nbj;
 int nbj_raw;
 int vitesse;
@@ -90,8 +90,8 @@ void setup() {
     //Light and sound for valid players.
     x = OutPinStart + i * OutPinInterval;
     digitalWrite(x, HIGH);
-    tf = 1000 + 500 * i;
-    tone(Tone_Pin, tf, 150);
+    Tone_Frequency = 1000 + 500 * i;
+    tone(Tone_Pin, Tone_Frequency, 150);
     delay(150);
   }
 
@@ -128,8 +128,8 @@ void setup() {
   for (int i = 1; i <= vitesse; i++) {
     x = 29 + (i * 2);
     digitalWrite(x, HIGH);
-    tf = 1500 + 300 * i;
-    tone(Tone_Pin, tf, 100);
+    Tone_Frequency = 1500 + 300 * i;
+    tone(Tone_Pin, Tone_Frequency, 100);
     delay(150);
   }
 
@@ -244,8 +244,8 @@ PQP:
 
 
     for (int i = 1; i <= 120; i++) {
-      tf = 500 + 30 * i;
-      tone(Tone_Pin, tf, 3);
+      Tone_Frequency = 500 + 30 * i;
+      tone(Tone_Pin, Tone_Frequency, 3);
       delay(3);
     }
     noTone(Tone_Pin);
@@ -295,8 +295,8 @@ DQP:
   analogWrite(B, 10);
 
   for (int i = 1; i <= 80; i++) {
-    tf = 2000 - 20 * i;
-    tone(Tone_Pin, tf);
+    Tone_Frequency = 2000 - 20 * i;
+    tone(Tone_Pin, Tone_Frequency);
     delay(15);
   }
   noTone(Tone_Pin);
