@@ -8,6 +8,12 @@ int B = 2; //Blue LED ALL
 int t = 52; //Tone
 //Position à l'arrêt du Servo (bâton rentré)
 int Servo_LowPos = 40;
+int Servo_Pin = 53;
+
+int OutPinStart = 31;
+int OutPinInterval = 2;
+int InPinStart = 24;
+int InPinInterval = 2;
 
 //Variables internes.
 int val;
@@ -21,50 +27,43 @@ int nbj;
 int vitesse;
 
 
-//One-time setup: 
+
+//One-time setup:
 //Define input/output
 //Set NBJ
 //Set vitesse
 void setup() {
 
   //Attach to servo and move it to initial position
-  myservo.attach(53);
+  myservo.attach(Servo_Pin);
   myservo.write(Servo_LowPos);
 
   //Pin definitions
-  pinMode(31, OUTPUT);
-  pinMode(33, OUTPUT);
-  pinMode(35, OUTPUT);
-  pinMode(37, OUTPUT);
-  pinMode(39, OUTPUT);
-  pinMode(41, OUTPUT);
-  pinMode(43, OUTPUT);
-  pinMode(45, OUTPUT);
-  pinMode(47, OUTPUT);
-  pinMode(49, OUTPUT);
+  //LED des joueurs
+  for (int i=0; i<=9;i++)
+  {
+    pinMode(OutPinStart+OutPinInterval*i, OUTPUT);
+  }
 
+  //Toutes lumières G et B
   pinMode(G, OUTPUT);
   pinMode(B, OUTPUT);
 
-  pinMode(24, INPUT);
-  pinMode(26, INPUT);
-  pinMode(28, INPUT);
-  pinMode(30, INPUT);
-  pinMode(32, INPUT);
-  pinMode(34, INPUT);
-  pinMode(36, INPUT);
-  pinMode(38, INPUT);
-  pinMode(40, INPUT);
-  pinMode(42, INPUT);
+  //Manettes.
+  for (int i=0; i<=9;i++)
+  {
+    pinMode(InPinStart+InPinInterval*i, INPUT);
+  }
 
   // NBJ - Nombre de Joueurs
   // Attend que les joueurs choisissent le nombre en cliquant sur le bouton correspondant au nombre souhaité.
-  // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au nombre suivant.
+  // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au mode suivant.
   // ----------------------------------------
 
   //Illumine toutes les LED bleu et envoie un son
   analogWrite(B, 100);
   tone(t, 1500, 500);
+
 
   //Attend l'input des joueurs.
   nbj = 0;
