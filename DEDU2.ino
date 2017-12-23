@@ -24,6 +24,7 @@ int r;
 int e;
 int tf;
 int nbj;
+int nbj_raw;
 int vitesse;
 
 
@@ -68,11 +69,13 @@ void setup() {
   //Attend l'input des joueurs.
   nbj = 0;
   while (nbj == 0) {
-    for (int i = 24; i <= 42; i = i + 2)
-    { val = digitalRead(i);
+    for (int i=0; i<=9;i++)
+    {
+      val = digitalRead(InPinStart+InPinInterval*i);
       if (val == HIGH)
       {
-        nbj = i / 2 - 11;
+        nbj_raw = i;
+        nbj = i+1;
       }
     }
   }
@@ -80,8 +83,10 @@ void setup() {
   analogWrite(B, 0);
 
   //Clignote
-  for (int i = 1; i <= nbj; i++) {
-    x = 29 + (i * 2);
+  for (int i = 0; i <= nbj_raw; i++)
+  {
+    //Light and sound for valid players.
+    x = OutPinStart + i * OutPinInterval;
     digitalWrite(x, HIGH);
     tf = 1000 + 500 * i;
     tone(t, tf, 150);
@@ -90,6 +95,7 @@ void setup() {
 
   delay(500);
 
+  //Turn off all lights.
   for (int i = 31; i <= 49; i += 2) { //turnOFFALL
     digitalWrite(i, LOW);
   }
