@@ -28,15 +28,15 @@ int Tone_Frequency;
 int nbj;
 int nbj_raw;
 int vitesse;
-
+int vitesse_raw;
 
 
 //One-time setup:
 //Define input/output
 //Set NBJ
 //Set vitesse
-void setup() {
-
+void setup() 
+{
   //Attach to servo and move it to initial position
   myservo.attach(Servo_Pin);
   myservo.write(Servo_LowPos);
@@ -69,7 +69,8 @@ void setup() {
 
   //Attend l'input des joueurs.
   nbj = 0;
-  while (nbj == 0) {
+  while (nbj == 0) 
+  {
     for (int i=0; i<=nbj_raw_max;i++)
     {
       val = digitalRead(InPinStart+InPinInterval*i);
@@ -77,6 +78,7 @@ void setup() {
       {
         nbj_raw = i;
         nbj = i+1;
+        break;
       }
     }
   }
@@ -84,75 +86,58 @@ void setup() {
   //Tous les bleus à OFF.
   analogWrite(B, 0);
 
-  //Clignote
-  for (int i = 0; i <= nbj_raw; i++)
-  {
-    //Light and sound for valid players.
-    x = OutPinStart + i * OutPinInterval;
-    digitalWrite(x, HIGH);
-    Tone_Frequency = 1000 + 500 * i;
-    tone(Tone_Pin, Tone_Frequency, 150);
-    delay(150);
-  }
+  ClignoteEtSon(nbj_raw,1500,200);
 
   delay(500);
-
-  //Turn off all lights.
-  for (int i = 31; i <= 49; i += 2) { //turnOFFALL
-    digitalWrite(i, LOW);
-  }
+  
+  TurnOffAllLights();
+  
   delay(500);
 
-  //FIN NBJ -----------------------------------------------
+  //FIN NBJ
+  //-----------------------------------------------
 
-  //Debut VITESSE-----------------------------------------------
+  //-----------------------------------------------
+  //Debut VITESSE
+  // Attend que les joueurs choisissent la vitesse du jeu.
+  // 1 = lent, 10 = vite
 
   analogWrite(G, 100);
   tone(Tone_Pin, 2500, 500);
 
   vitesse = 0;
 
-  while (vitesse == 0) {
-    for (int i = 24; i <= 42; i = i + 2)
-    { val = digitalRead(i);
+  while (vitesse == 0)
+  {
+    for (int i=0; i<=nbj_raw_max;i++)
+    {
+      val = digitalRead(InPinStart+InPinInterval*i);
       if (val == HIGH)
       {
-        vitesse = i / 2 - 11;
+        vitesse = i+1;
+        vitesse_raw = i;
+        break;
       }
     }
   }
 
   analogWrite(G, 0);
 
-  //Clignote
-  for (int i = 1; i <= vitesse; i++) {
-    x = 29 + (i * 2);
-    digitalWrite(x, HIGH);
-    Tone_Frequency = 1500 + 300 * i;
-    tone(Tone_Pin, Tone_Frequency, 100);
-    delay(150);
-  }
+  ClignoteEtSon(vitesse_raw,1000,100);
 
-  delay(1000);
-
-  for (int i = 31; i <= 49; i += 2) { //turnOFFALL
-    digitalWrite(i, LOW);
-  }
+  delay(500);
+  TurnOffAllLights();
+  delay(500);
 
 }
 
-//-------------------------------------------------------
 
-
-
-
-
+//Setup complete.  MAIN loop.
 void loop() {
 start:
 
-  for (int i = 31; i <= 49; i += 2) { //turnOFFALL
-    digitalWrite(i, LOW);
-  }
+  
+  TurnOffAllLights();
   delay(500);
 
   //Debut DELAY et TESTFRAUDEUR --------------------------------------
@@ -433,7 +418,8 @@ FFA:
   //FIN FFA
 }
 
-void YouSpinMeRound(double facteur) {
+void YouSpinMeRound(double facteur)
+{
 int Note_1 = 184;
 int Note_2 = 220;
 int Note_3 = 164;
@@ -495,10 +481,10 @@ int Note_4 = 246;
     delay(105.46875 / facteur);
     tone(Tone_Pin, Note_2, 239.765625 / facteur);
     delay(500.28125 / facteur);
-
 }
 
-void ChansonDEDU(double facteur) {
+void ChansonDEDU(double facteur)
+{
   //Notes
   int Note_G3 = 196;
   int Note_A3 = 220;
@@ -577,4 +563,27 @@ OLD g3,g3,g3,b3,b3,c4,c4,d4,b3,g3,g3,d4,b3,g3,c4,b3,a3,g3
   tone(Tone_Pin, Note_C4, joue_blanche);
   delay(joue_blanche);
   delay(delay_blanche);
+}
+
+//Turn off all lights.
+void TurnOffAllLights()
+{
+   for (int i=0; i<=nbj_raw_max;i++)
+  {
+    digitalWrite(OutPinStart+OutPinInterval*i, LOW);
+  }
+}
+
+void ClignoteEtSon(int NbMax,int FreqStart, int FreqIncrease)
+{
+  //Clignote
+  for (int i = 0; i <= NbMax; i++)
+  {
+    //Light and sound for valid players.
+    x = OutPinStart + i * OutPinInterval;
+    digitalWrite(x, HIGH);
+    Tone_Frequency = FreqStart + FreqIncrease * i;
+    tone(Tone_Pin, Tone_Frequency, 150);
+    delay(150);
+  }
 }
