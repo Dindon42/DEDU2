@@ -216,9 +216,10 @@ PQP:
   {
     for (int i = 1; i <= nbj; i++) {
       y = 22 + (2 * i);
-      if (digitalRead(y) == HIGH) {
+      if (digitalRead(y) == HIGH)
+      {
         val = y;
-      } ;
+      }
     }
   }
   while (val == 0);
@@ -246,9 +247,9 @@ PQP:
     noTone(Tone_Pin);
     delay (500);
 
-    for (int i = 31; i <= 49; i += 2) { //turnOFFALL
-      digitalWrite(i, LOW);
-    }
+    
+    TurnOffAllLights();
+    
     analogWrite(G, 20);
     delay(500);
     analogWrite(G, 0);
@@ -296,9 +297,7 @@ DQP:
   }
   noTone(Tone_Pin);
   delay (2500);
-  for (int i = 31; i <= 49; i += 2) { //turnOFFALL
-    digitalWrite(i, LOW);
-  }
+  TurnOffAllLights();
   analogWrite(B, 0);
   delay(500);
   goto start;
@@ -309,9 +308,7 @@ DQP:
 
 TROMPEOEIL:
 
-  for (int i = 31; i <= 49; i += 2) { //turnOFFALL
-    digitalWrite(i, HIGH);
-  }
+  TurnOffAllLights();
 
   for (int e = 0; e <= 4000; e++) {
     for (int i = 1; i <= nbj; i++) {
@@ -325,9 +322,7 @@ TROMPEOEIL:
 
 bailout:
 
-  for (int i = 31; i <= 49; i += 2) { //turnOFFALL
-    digitalWrite(i, LOW);
-  }
+  TurnOffAllLights();
 
   for (int e = 0; e <= 300; e++) {
     for (int i = 24; i <= 40; i += 2) {
@@ -343,9 +338,7 @@ bailout:
 
   delay(1500);
 
-  for (int i = 31; i <= 49; i += 2) { //turnOFFALL
-    digitalWrite(i, LOW);
-  }
+  TurnOffAllLights();
 
   goto start;
 
@@ -402,9 +395,7 @@ FFA:
     r = 60 + random(200);
     delay(r);
 
-    for (int i = 31; i <= 49; i += 2) { //turnOFFALL
-      digitalWrite(i, LOW);
-    }
+    TurnOffAllLights();
 
     analogWrite(B, 80);
     r = 60 + random(200);
