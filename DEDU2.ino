@@ -1,7 +1,14 @@
 #include <Servo.h>
 Servo myservo;
+//Definitions
+
+//Pins
 int G = 3;
 int B = 2;
+
+int t=52;
+int Serv_LowPos=40;
+
 int val;
 int x;
 int y;
@@ -10,14 +17,16 @@ int r;
 int e;
 int tf;
 int nbj;
-int t=52;
 int vitesse;
 
 
+
+
 void setup() {       
-  
+
+//Attach to servo and move it to initial position
 myservo.attach(53);
-myservo.write(40);
+myservo.write(Serv_LowPos);
 
 pinMode(31, OUTPUT); 
 pinMode(33, OUTPUT); 
@@ -150,7 +159,7 @@ for (int a=1; a <= r; a++) {
   tone(t,1500,1000);
   myservo.write(70);                              
   delay(1000);  
-  myservo.write(40);                  
+  myservo.write(Serv_LowPos);                  
   delay(500);
   goto start;
 }
@@ -399,7 +408,7 @@ analogWrite(G, 0);
 
 analogWrite(B, 0);
 analogWrite(G, 0);
-myservo.write(40);                 
+myservo.write(Serv_LowPos);                 
 delay(500); 
 
 goto start;
