@@ -1,14 +1,15 @@
 #include <Servo.h>
 Servo myservo;
-//Definitions
 
+//Definitions
 //Pins
 int G = 3; //Green LED ALL
 int B = 2; //Blue LED ALL
 int t = 52; //Tone
-
+//Position à l'arrêt du Servo (bâton rentré)
 int Servo_LowPos = 40;
 
+//Variables internes.
 int val;
 int x;
 int y;
@@ -20,8 +21,10 @@ int nbj;
 int vitesse;
 
 
-
-
+//One-time setup: 
+//Define input/output
+//Set NBJ
+//Set vitesse
 void setup() {
 
   //Attach to servo and move it to initial position
