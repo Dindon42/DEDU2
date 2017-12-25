@@ -37,7 +37,6 @@ int vitesse_raw;
 //Set vitesse
 void setup() 
 {
-  
   /*
   //Debugging lines if required.
   Serial.begin(9600);
@@ -69,81 +68,24 @@ void setup()
   // Attend que les joueurs choisissent le nombre en cliquant sur le bouton correspondant au nombre souhaité.
   // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au mode suivant.
   // ----------------------------------------
+  NombreJoueurs();
 
-  //Illumine toutes les LED bleu et envoie un son
-  analogWrite(B, 100);
-  tone(Tone_Pin, 1500, 500);
-
-  //Attend l'input des joueurs.
-  nbj = 0;
-  while (nbj == 0) 
-  {
-    for (int i=0; i<=nbj_raw_max;i++)
-    {
-      val = digitalRead(InPinStart+InPinInterval*i);
-      if (val == HIGH)
-      {
-        nbj_raw = i;
-        nbj = i+1;
-        break;
-      }
-    }
-  }
-
-  //Tous les bleus à OFF.
-  analogWrite(B, 0);
-
-  //Montre aux joueurs les sélections.
-  ClignoteEtSon(nbj_raw,1500,200);
-  delay(500);
-  TurnOffAllRedLights();
-  delay(500);
-
-  
-  //FIN NBJ
-  //-----------------------------------------------
-
-  //-----------------------------------------------
   //Debut VITESSE
   // Attend que les joueurs choisissent la vitesse du jeu.
   // 1 = lent, 10 = vite
+  Vitesse();
 
-  analogWrite(G, 100);
-  tone(Tone_Pin, 2500, 500);
-
-  vitesse = 0;
-
-  while (vitesse == 0)
+  
+  //TestModeEngage
+  if (vitesse_raw==0 && nbj_raw==0)
   {
-    for (int i=0; i<=nbj_raw_max;i++)
-    {
-      val = digitalRead(InPinStart+InPinInterval*i);
-      if (val == HIGH)
-      {
-        vitesse = i+1;
-        vitesse_raw = i;
-        break;
-      }
-    }
+    TestMode();
   }
-
-  //Lumières vertes OFF
-  analogWrite(G, 0);
-
-  //Montre aux joueurs les sélections.
-  ClignoteEtSon(vitesse_raw,1000,100);
-  delay(500);
-  TurnOffAllRedLights();
-  delay(500);
 
 }
 
-
 //Setup complete.  MAIN loop.
 void loop() {
-
-
-
 start:
     
   TurnOffAllRedLights();
@@ -171,7 +113,7 @@ start:
         delay(500);
         goto start;
       }
-    }
+    }  
     delay(40);
   }
 
@@ -420,6 +362,93 @@ FFA:
   //FIN FFA
 }
 
+void NombreJoueurs()
+{
+  //Illumine toutes les LED bleu et envoie un son
+  analogWrite(B, 100);
+  tone(Tone_Pin, 1500, 500);
+
+  //Attend l'input des joueurs.
+  nbj = 0;
+  while (nbj == 0) 
+  {
+    for (int i=0; i<=nbj_raw_max;i++)
+    {
+      val = digitalRead(InPinStart+InPinInterval*i);
+      if (val == HIGH)
+      {
+        nbj_raw = i;
+        nbj = i+1;
+        break;
+      }
+    }
+  }
+
+  //Tous les bleus à OFF.
+  analogWrite(B, 0);
+
+  //Montre aux joueurs les sélections.
+  ClignoteEtSon(nbj_raw,1500,200);
+  delay(500);
+  TurnOffAllRedLights();
+  delay(500);
+}
+
+void Vitesse()
+{
+  analogWrite(G, 100);
+  tone(Tone_Pin, 2500, 500);
+
+  vitesse = 0;
+
+  while (vitesse == 0)
+  {
+    for (int i=0; i<=nbj_raw_max;i++)
+    {
+      val = digitalRead(InPinStart+InPinInterval*i);
+      if (val == HIGH)
+      {
+        vitesse = i+1;
+        vitesse_raw = i;
+        break;
+      }
+    }
+  }
+
+  //Lumières vertes OFF
+  analogWrite(G, 0);
+
+  //Montre aux joueurs les sélections.
+  ClignoteEtSon(vitesse_raw,1000,100);
+  delay(500);
+  TurnOffAllRedLights();
+  delay(500);
+}
+
+void TestMode()
+{
+  
+  tone(Tone_Pin, 2500, 200);
+  tone(Tone_Pin, 1000, 200);
+  tone(Tone_Pin, 2500, 200);
+  tone(Tone_Pin, 1000, 200);
+  
+  while (1)
+  {
+    for (int i=0; i<=nbj_raw_max;i++)
+    {
+      if (digitalRead(InPinStart+InPinInterval*i) == HIGH)
+      {
+        digitalWrite(OutPinStart+OutPinInterval*i, HIGH);
+      }
+      else
+      {
+        digitalWrite(OutPinStart+OutPinInterval*i, LOW);
+      }
+    }
+  }
+}
+
 void YouSpinMeRound(double facteur)
 {
 int Note_1 = 184;
@@ -516,7 +545,7 @@ void ChansonDEDU(double facteur)
 //Turn off all the reds
 void TurnOffAllRedLights()
 {
-   for (int i=0; i<=nbj_raw_max;i++)
+  for (int i=0; i<=nbj_raw_max;i++)
   {
     digitalWrite(OutPinStart+OutPinInterval*i, LOW);
   }
