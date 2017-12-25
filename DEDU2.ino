@@ -64,6 +64,10 @@ void setup()
     pinMode(InPinStart+InPinInterval*i, INPUT);
   }
 
+  //Chanson de bienvenue
+  ChansonDEDU(2);
+  delay(250);
+
   // NBJ - Nombre de Joueurs
   // Attend que les joueurs choisissent le nombre en cliquant sur le bouton correspondant au nombre souhaité.
   // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au mode suivant.
@@ -80,6 +84,10 @@ void setup()
   if (vitesse_raw==0 && nbj_raw==0)
   {
     TestMode();
+  }
+  else
+  {
+    
   }
 
 }
@@ -428,10 +436,10 @@ void Vitesse()
 void TestMode()
 {
   
-  tone(Tone_Pin, 2500, 200);
-  tone(Tone_Pin, 1000, 200);
-  tone(Tone_Pin, 2500, 200);
-  tone(Tone_Pin, 1000, 200);
+  PlayNote(Tone_Pin,2500,200,20);
+  PlayNote(Tone_Pin,1000,200,20);
+  PlayNote(Tone_Pin,2500,200,20);
+  PlayNote(Tone_Pin,1000,200,20);
   
   while (1)
   {
