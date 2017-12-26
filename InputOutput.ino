@@ -15,10 +15,36 @@ bool ReadInputActivateOutput(int NbInputs)
   return AtLeastOneHIGH;
 }
 
+//Reads all input pins, if HIGH, deactivate the OUTPUT. Return the number of output switched.
+int ReadInputDeactivateOutputIfActive(int NbInputs)
+{
+  int count=0;
+  for (int i=0; i<=NbInputs ; i++)
+  {
+    if (ReadPlayerInput(i)==HIGH)
+    {
+      if(ReadPlayerOutput(i)==HIGH)
+      {
+        //Deactivate the output
+        DeactivateRedLight(i);
+        count++;
+      }
+      
+    }
+  }
+  return count;
+}
+
 //Returns HIGH or LOW
 int ReadPlayerInput(int iPlayer)
 {
   return digitalRead(PlayerInputPins[iPlayer]);
+}
+
+//Returns HIGH or LOW
+int ReadPlayerOutput(int iPlayer)
+{
+  return digitalRead(PlayerOutputPins[iPlayer]);
 }
 
 //Return first active player.  -1 is default if none active.  Player 1 is 0.
@@ -48,6 +74,34 @@ int CheckAllActive(int NbInputs)
     }
   }
   return NumActive;
+}
+
+//Checks the active outputs, returns the number of active.
+int CheckAllActiveOutputs(int NbOutputs)
+{
+  int NumActive=0;
+  for (int i=0; i<=NbOutputs ; i++)
+  {
+    //Store in global input array
+    OutputState[i]=ReadPlayerOutput(i);
+    if (OutputState[i]==HIGH)
+    {
+      NumActive++;
+    }
+  }
+}
+
+//Return first active player output.  -1 is default if none active.  Player 1 is 0.
+int FirstActiveOutput(int NbInputs)
+{
+  for (int i=0; i<=NbInputs ; i++)
+  {
+    if (ReadPlayerOutput(i)==HIGH)
+    {
+      return i;
+    }
+  }
+  return -1;
 }
 
 //Waits for all inputs to be non-active or MAX ITER, in which case, error mode.

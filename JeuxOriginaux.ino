@@ -232,40 +232,80 @@ void TrompeOeil()
 //Dernier qui pèse
 void DQP()
 {
-  analogWrite(B, 100);
-  for (int i = 1; i <= nbj; i++) {
-    y = 29 + (2 * i);
-    digitalWrite(y, HIGH);
-  }
-
-
+  int Perdant = -1;
+  
+  ActivateBlueLED(100);
+  TurnOnAllRedLights();
+  
   z = nbj;
 
-  do {
-    for (int i = 1; i <= nbj; i++) {
-      x = 22 + (2 * i);
-      y = x + 7;
-      if (digitalRead(y) == HIGH) {
-        if (digitalRead(x) == HIGH) {
-          digitalWrite(y, LOW);
-          z--;
-        }
-      }
-    }
-
-  }
-  while (z != 1);
-  analogWrite(B, 10);
-
-  for (int i = 1; i <= 80; i++) {
+  do
+  {
+    z=z-ReadInputDeactivateOutputIfActive(nbj_raw);
+  }while (z != 1);
+  Perdant=FirstActiveOutput(nbj_raw);
+  
+  ActivateBlueLED(10);
+  TurnOffNonActivePlayerRedLights();
+  
+  for (int i = 1; i <= 80; i++)
+  {
     Tone_Frequency = 2000 - 20 * i;
     tone(Tone_Pin, Tone_Frequency);
-    delay(15);
+    delay(10);
   }
   noTone(Tone_Pin);
-  delay (2500);
+
+  //Identify the Winner
+  for (int e = 1; e <= 4; e++) {
+    ActivateRedLight(Perdant);
+    delay(500);
+    DeactivateRedLight(Perdant);
+    delay(500);
+  }
+  
   TurnOffAllRedLights();
-  analogWrite(B, 0);
+  DeactivateBlueLED();
+  delay(500);
+  
+  loop();
+}
+
+  //Debut FFA
+
+void FFA()
+{
+  double myRand1 = random(280,400)/100;
+  int myRand2 = random(28,42);
+
+  if (Game_Mode==1)
+  {
+    ChansonDEDU(myRand1);
+  }
+  
+  for (int e = 1; e <= myRand2; e++) {
+
+    myservo.write(Servo_HighPos - random(20));
+
+    TurnOnAllRedLights();
+    delay(60 + random(200));
+    TurnOffAllRedLights();
+
+    ActivateBlueLED(80);
+    delay(60 + random(200));
+    DeactivateBlueLED();
+
+    ActivateGreenLED(80);
+    r = 60 + random(200);
+    delay(r);
+    DeactivateGreenLED();
+  }
+
+
+  DeactivateBlueLED();
+  DeactivateGreenLED();
+  TurnOffAllRedLights();
+  myservo.write(Servo_LowPos);
   delay(500);
   
   loop();

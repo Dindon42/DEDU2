@@ -10,6 +10,7 @@ int const Tone_Pin = 52; //Tone
 
 //Position à l'arrêt du Servo (bâton rentré)
 int const Servo_LowPos = 40;
+int const Servo_HighPos = 154;
 int const Servo_Pin = 53;
 
 int const nbj_max=10;
@@ -25,6 +26,7 @@ int PlayerOutputPins[nbj_max];
 
 //Debugging
 unsigned long TimeStart;
+bool SkipSetup=false;
 
 
 //Variables internes.
@@ -44,6 +46,7 @@ int vitesse=1;
 int vitesse_raw=0;
 int Game_Mode=0;
 int InputState[nbj_max];
+int OutputState[nbj_max];
 
 
 
@@ -58,6 +61,15 @@ void setup()
   //Debugging lines if required.
   Serial.begin(9600);
   Serial.println("Bienvenue chez DEDU");
+
+  //DEBUGGING: SKIP SETUP AND USE VALUES.
+  //SkipSetup = true;
+  //Valeurs de base
+  nbj=4;
+  nbj_raw=3;
+  vitesse=10;
+  vitesse_raw=9;
+  Game_Mode == 0;
   ///ENLEVER
   
 
@@ -90,56 +102,33 @@ void setup()
     PlayerInputPins[i]=Pin;
   }
 
-  WaitForAllNonActive(nbj_raw_max);
+  if (SkipSetup==false)
+  {
+    WaitForAllNonActive(nbj_raw_max);
+    
+    // NBJ - Nombre de Joueurs
+    // Attend que les joueurs choisissent le nombre en cliquant sur le bouton correspondant au nombre souhaité.
+    // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au mode suivant.
+    // ----------------------------------------
+    NombreJoueurs();
+    //TestModeEngage if player = 1
+    if (nbj_raw==0)
+    {
+      TestMode();
+    }
   
-  // NBJ - Nombre de Joueurs
-  // Attend que les joueurs choisissent le nombre en cliquant sur le bouton correspondant au nombre souhaité.
-  // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au mode suivant.
-  // ----------------------------------------
-  NombreJoueurs();
-/*  
-  ///ENLEVER
-  nbj=10;
-  nbj_raw=9;
-*/
-  //TestModeEngage
-  if (nbj_raw==0)
-  {
-    TestMode();
-  }
-
-  //Debut VITESSE
-  // Attend que les joueurs choisissent la vitesse du jeu.
-  // 1 = lent, 10 = vite
-  Vitesse();
-/*  
-  ///ENLEVER
-  vitesse=10;
-  vitesse_raw=9;
-*/
-
-/*
-int vitesse_ecart=1;
-int vitesse_ecart_raw=0;
-  //Debut Ecart VITESSE
-  // Attend que les joueurs choisissent l'ecart de vitesse du jeu.
-  // 1 = lent, 10 = vite
-  EcartVitesse(); 
-  ///ENLEVER
-  vitesse_ecart=10;
-  vitesse_ecart_raw=9;
-*/
-
-  //Choix de Version Originale ou Améliorée.
-  GameMode();
-/*
-  ///ENLEVER
-  Game_Mode == 0;
-*/
-  if (Game_Mode == 1)
-  {
-    ChansonDEDU(3);
-    delay(125);
+    //Debut VITESSE
+    // Attend que les joueurs choisissent la vitesse du jeu.
+    // 1 = lent, 10 = vite
+    Vitesse();
+  
+    //Choix de Version Originale ou Améliorée.
+    GameMode();
+    if (Game_Mode == 1)
+    {
+      ChansonDEDU(3);
+      delay(125);
+    }
   }
 }
 
@@ -149,80 +138,23 @@ start:
 
   WaitForAllNonActive(nbj_raw);
 
-
   TurnOffAllRedLights();
   delay(100);
   
 /// TEST AREA
-//DQP();
+
 /// END TEST
   
   Delay_Fraudeur();
-  
-  // Debut REPARTITEUR
-  r = random(101);
 
-  if (r < 37)
+  if(Game_Mode == 0)
   {
-    PQP();
+    RepartiteurOriginal();
   }
-  else if (r < 82)
+  else
   {
-    DQP();
+    Repartiteur();
   }
-  else if (r < 90)
-  {
-    TrompeOeil();
-  }
-  else if (r < 94)
-  {
-    goto FFA;
-  }
-  else {
-    MarqueurHonte();
-  }
-  // fin REPARTITEUR
-
-  //Debut FFA
-
-FFA:
-
-  ChansonDEDU(1);
-  
-  for (int e = 1; e <= 35; e++) {
-
-    r = 154 - random(20);
-    myservo.write(r);
-
-    for (int i = 31; i <= 49; i += 2) { //turnONALL
-      digitalWrite(i, HIGH);
-    }
-
-    r = 60 + random(200);
-    delay(r);
-
-    TurnOffAllRedLights();
-
-    analogWrite(B, 80);
-    r = 60 + random(200);
-    delay(r);
-    analogWrite(B, 0);
-
-    analogWrite(G, 80);
-    r = 60 + random(200);
-    delay(r);
-    analogWrite(G, 0);
-  }
-
-
-  analogWrite(B, 0);
-  analogWrite(G, 0);
-  myservo.write(Servo_LowPos);
-  delay(500);
-
-  goto start;
-
-  //FIN FFA
 }
 
 

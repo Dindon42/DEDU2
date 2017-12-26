@@ -80,14 +80,18 @@ void TurnOffNonActiveRedLights()
       DeactivateRedLight(i);
     }
   }
-  
+  TurnOffNonActivePlayerRedLights();
+}
+
+
+void TurnOffNonActivePlayerRedLights()
+{
   //Turn off non active players
   for (int i=nbj_raw+1; i<=nbj_raw_max;i++)
   {
     DeactivateRedLight(i);
   }
 }
-
 
 void ClignoteEtSon(int NbMax,int FreqStart, int FreqIncrease, int NbOffset)
 {
