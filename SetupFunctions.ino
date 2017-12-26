@@ -1,8 +1,8 @@
 
 void GameMode()
 { 
-  analogWrite(B, 100);
-  analogWrite(G, 100);
+  ActivateGreenLED(100);
+  ActivateBlueLED(100);
   tone(Tone_Pin, 500, 500);
 
   //Attend l'input des joueurs.
@@ -30,8 +30,8 @@ void GameMode()
   }
 
   //Tous les bleus et vert à OFF.
-  analogWrite(B, 0);
-  analogWrite(G, 0);
+  DeactivateGreenLED();
+  DeactivateBlueLED();
   
   if (Game_Mode==0)
   {
@@ -51,27 +51,19 @@ void GameMode()
 void NombreJoueurs()
 {
   //Illumine toutes les LED bleu et envoie un son
-  analogWrite(B, 100);
+  ActivateBlueLED(100);
   tone(Tone_Pin, 1500, 500);
 
   //Attend l'input des joueurs.
   nbj = 0;
-  while (nbj == 0)
+  while (nbj_raw == -1)
   {
-    for (int i=0; i<=nbj_raw_max;i++)
-    {
-      val = digitalRead(InPinStart+InPinInterval*i);
-      if (val == HIGH)
-      {
-        nbj_raw = i;
-        nbj = i+1;
-        break;
-      }
-    }
+    nbj_raw=FirstActive(nbj_raw_max);
   }
+  nbj=nbj_raw+1;
 
   //Tous les bleus à OFF.
-  analogWrite(B, 0);
+  DeactivateBlueLED();
 
   //Montre aux joueurs les sélections.
   ClignoteEtSon(nbj_raw,1500,200,0);
@@ -84,27 +76,19 @@ void NombreJoueurs()
 //Fonction de setup pour Vitesse
 void Vitesse()
 {
-  analogWrite(G, 100);
+  //Vertes à ON
+  ActivateGreenLED(100);
   tone(Tone_Pin, 2500, 500);
 
   vitesse = 0;
-
-  while (vitesse == 0)
+  while (vitesse_raw == -1)
   {
-    for (int i=0; i<=nbj_raw_max;i++)
-    {
-      val = digitalRead(InPinStart+InPinInterval*i);
-      if (val == HIGH)
-      {
-        vitesse = i+1;
-        vitesse_raw = i;
-        break;
-      }
-    }
+    vitesse_raw=FirstActive(nbj_raw_max);
   }
+  vitesse=vitesse_raw+1;
 
   //Lumières vertes OFF
-  analogWrite(G, 0);
+  DeactivateGreenLED();
 
   //Montre aux joueurs les sélections.
   ClignoteEtSon(vitesse_raw,2500,300,0);

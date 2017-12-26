@@ -7,7 +7,7 @@ void Delay_Fraudeur()
   //Spd = 10, average 250 iterations of the loop-> 10 sec;
   //Spd = 6, average 400 iterations -> 15 sec; 
   //Spd = 1, average 650 iterations -> 20 sec; 
-  r = 150 + (12 - vitesse) * random(100);
+  r = 150 + (12 - vitesse) * random(101);
   
   /*
   unsigned long TimeStart=millis();
@@ -126,8 +126,7 @@ void PQP()
 void MarqueurHonte()
 {
   //Joueur chanceux
-  int Winner = random(0, nbj_raw);
-  
+  int Winner = random(nbj);
   //Délai entre chaque clignotement
   int SpinDelay = 160 - nbj * 7;
 
@@ -166,4 +165,59 @@ void MarqueurHonte()
   loop();
  }
 
+void TrompeOeil()
+{
+  int NumActive = -1;
+  int maxIter = 5000;
+  int maxIter_Sheep = 3000;
+  int Looser=-1;
+
+  //Initialize Loosers Array
+  int Loosers[nbj];
+  for (int i=0 ; i<=nbj_raw;i++)
+  {
+    Loosers[i]=0;
+  }
+  
+  TurnOnAllRedLights();
+
+  for (int i = 0; i <= maxIter; i++)
+  {
+    Looser=FirstActive(nbj_raw);
+    if (Looser >= 0) 
+    {
+      Loosers[Looser]=1;
+      break;
+    }
+    delay(1);
+  }
+
+  if (Looser >= 0)
+  {
+    TurnOffNonActiveRedLights();
+    tone(Tone_Pin, 1500, 200);
+    
+    for (int j = 0; j <= maxIter_Sheep; j++)
+    {
+      for (int i=0 ; i<=nbj_raw;i++)
+      {
+        if(ReadPlayerInput(i)==HIGH && Loosers[i]==0)
+        {
+          Loosers[i]=1;
+          ActivateRedLight(i);
+          tone(Tone_Pin, 1500, 200);
+        }
+      }
+      delay(1);
+    }
+  }
+
+  //Game End
+  delay(250);
+  TurnOffAllRedLights();
+
+  loop();
+
+  
+}
 

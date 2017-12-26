@@ -3,17 +3,18 @@ Servo myservo;
 
 //Definitions
 //Pins
-int G = 3; //Green LED ALL
-int B = 2; //Blue LED ALL
+int const myRandPin=0; //To initialize the random function
+int const G = 3; //Green LED ALL
+int const B = 2; //Blue LED ALL
 
 /////ENLEVER
-int Tone_Pin = 9999; //Tone
-//int Tone_Pin = 52; //Tone
+//int Tone_Pin = 9999; //Tone
+int const Tone_Pin = 52; //Tone
 /////ENLEVER
 
 //Position à l'arrêt du Servo (bâton rentré)
-int Servo_LowPos = 40;
-int Servo_Pin = 53;
+int const Servo_LowPos = 40;
+int const Servo_Pin = 53;
 
 int const nbj_max=10;
 int const nbj_raw_max=9;
@@ -21,6 +22,7 @@ int const OutPinStart = 31;
 int const OutPinInterval = 2;
 int const InPinStart = 24;
 int const InPinInterval = 2;
+
 
 int PlayerInputPins[nbj_max];
 int PlayerOutputPins[nbj_max];
@@ -44,6 +46,7 @@ int vitesse;
 int vitesse_raw;
 int Game_Mode;
 int InputState[nbj_max];
+int OutputState[nbj_max];
 
 
 //One-time setup:
@@ -57,7 +60,12 @@ void setup()
   Serial.begin(9600);
   Serial.println("CECI EST UN TEST");
   ///ENLEVER
-  
+
+
+
+  //Initialize random sequence based on floating value from an unconnected pin.
+  randomSeed(analogRead(myRandPin));
+
   //Attach to servo and move it to initial position
   myservo.attach(Servo_Pin);
   myservo.write(Servo_LowPos);
@@ -83,11 +91,14 @@ void setup()
     PlayerInputPins[i]=Pin;
   }
 
+  WaitForAllNonActive(nbj_raw_max);
+  
   // NBJ - Nombre de Joueurs
   // Attend que les joueurs choisissent le nombre en cliquant sur le bouton correspondant au nombre souhaité.
   // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au mode suivant.
   // ----------------------------------------
   //NombreJoueurs();
+  
   ///ENLEVER
   nbj=10;
   nbj_raw=9;
@@ -96,6 +107,7 @@ void setup()
   // Attend que les joueurs choisissent la vitesse du jeu.
   // 1 = lent, 10 = vite
   //Vitesse();
+  
   ///ENLEVER
   vitesse=10;
   vitesse_raw=0;
@@ -109,6 +121,8 @@ void setup()
   {
     //Choix de Version Originale ou Améliorée.
     //GameMode();
+
+    ///ENLEVER
     Game_Mode == 0;
 
     if (Game_Mode == 1)
@@ -125,11 +139,20 @@ start:
 
   TurnOffAllRedLights();
   delay(100);
+
+  WaitForAllNonActive(nbj_raw);
+  
+//// TEST AREA
+
+//ENLEVER
+TrompeOeil();
+
+/// END TEST
   
   Delay_Fraudeur();
   
   // Debut REPARTITEUR
-  r = random(100);
+  r = random(101);
 
   if (r < 37) {
     PQP();
@@ -138,7 +161,7 @@ start:
     goto DQP;
   }
   else if (r < 90) {
-    goto TROMPEOEIL;
+    TrompeOeil();
   }
   else if (r < 94) {
     goto FFA;
@@ -191,48 +214,6 @@ DQP:
   goto start;
 
   //Fin DQP-----------------------------------------------------
-
-  // debut TROMPEOEIL -----------------------------------
-
-TROMPEOEIL:
-
-  TurnOnAllRedLights();
-
-  for (int e = 0; e <= 4000; e++) {
-    for (int i = 1; i <= nbj; i++) {
-      y = 22 + (2 * i);
-      if (digitalRead(y) == HIGH) {
-        goto bailout;
-      }
-    }
-    delay(1);
-  }
-
-bailout:
-
-  TurnOffAllRedLights();
-
-  for (int e = 0; e <= 300; e++) {
-    for (int i = 24; i <= 40; i += 2) {
-      if (digitalRead(i) == HIGH) {
-        z = i + 7;
-        digitalWrite(z, HIGH);
-        tone(Tone_Pin, 1500, 400);
-      }
-      delay(1);
-    }
-  }
-
-
-  delay(1500);
-
-  TurnOffAllRedLights();
-
-  goto start;
-
-  // fin TROMPEOEIL
-
-
 
   //Debut FFA
 

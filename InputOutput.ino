@@ -1,30 +1,32 @@
 //Reads all input pins, if HIGH, activate the OUTPUT. If at least one is active, return TRUE
 bool ReadInputActivateOutput(int NbInputs)
 {
-  int val=0;
   bool AtLeastOneHIGH=false;
   
   for (int i=0; i<=NbInputs ; i++)
   {
-    val=digitalRead(PlayerInputPins[i]);
-    if (val==HIGH)
+    if (ReadPlayerInput(i)==HIGH)
     {
       //Activate the output
-      digitalWrite(PlayerOutputPins[i],HIGH);
+      ActivateRedLight(i);
       AtLeastOneHIGH = true;
     }
   }
   return AtLeastOneHIGH;
 }
 
+//Returns HIGH or LOW
+int ReadPlayerInput(int iPlayer)
+{
+  return digitalRead(PlayerInputPins[iPlayer]);
+}
+
+//Return first active player.  -1 is default if none active.  Player 1 is 0.
 int FirstActive(int NbInputs)
 {
-  int val=0;
-
   for (int i=0; i<=NbInputs ; i++)
   {
-    val=digitalRead(PlayerInputPins[i]);
-    if (val==HIGH)
+    if (ReadPlayerInput(i)==HIGH)
     {
       return i;
     }
@@ -32,20 +34,47 @@ int FirstActive(int NbInputs)
   return -1;
 }
 
-//Returns the number of active inputs.
+//Returns the number of active inputs.  0 is default if none.
 int CheckAllActive(int NbInputs)
 {
   int NumActive=0;
-  Serial.println(NumActive);
   for (int i=0; i<=NbInputs ; i++)
   {
-    val=digitalRead(PlayerInputPins[i]);
-    InputState[i]=val;
-    if (val==HIGH)
+    //Store in global input array
+    InputState[i]=ReadPlayerInput(i);
+    if (InputState[i]==HIGH)
     {
       NumActive++;
     }
   }
   return NumActive;
+}
+
+//Waits for all inputs to be non-active or MAX ITER, in which case, error mode.
+void WaitForAllNonActive(int NbInputs)
+{
+  int max_iter = 60;
+  int count = 0;
+  
+  Serial.println("IN:");
+  do
+  {
+    count++;
+    delay(15);
+  }while(CheckAllActive(nbj_raw) !=0 && count<=max_iter);
+
+  Serial.print("OUT:");
+  Serial.println(count);
+  
+  if(count >=max_iter)
+  {
+    FlashAndBuzzAllActive();
+    WaitForAllNonActive(NbInputs);
+  }
+  
+  Serial.print("TrulyOUT:");
+  Serial.println(count);
+  
+  
 }
 
