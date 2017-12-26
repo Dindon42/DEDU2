@@ -25,10 +25,13 @@ int z;
 int r;
 int e;
 int Tone_Frequency;
+
+//Variables globales
 int nbj;
 int nbj_raw;
 int vitesse;
 int vitesse_raw;
+int Game_Mode;
 
 
 //One-time setup:
@@ -40,7 +43,7 @@ void setup()
   /*
   //Debugging lines if required.
   Serial.begin(9600);
-  Serial.print("NO FORMAT");
+  Serial.print("CECI EST UN TEST");
   */
   
   //Attach to servo and move it to initial position
@@ -64,10 +67,6 @@ void setup()
     pinMode(InPinStart+InPinInterval*i, INPUT);
   }
 
-  //Chanson de bienvenue
-  ChansonDEDU(2);
-  delay(250);
-
   // NBJ - Nombre de Joueurs
   // Attend que les joueurs choisissent le nombre en cliquant sur le bouton correspondant au nombre souhaité.
   // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au mode suivant.
@@ -78,7 +77,6 @@ void setup()
   // Attend que les joueurs choisissent la vitesse du jeu.
   // 1 = lent, 10 = vite
   Vitesse();
-
   
   //TestModeEngage
   if (vitesse_raw==0 && nbj_raw==0)
@@ -87,7 +85,14 @@ void setup()
   }
   else
   {
-    
+    //Version Originale ou Améliorée.
+    GameMode();
+
+    if (Game_Mode == 1)
+    {
+      ChansonDEDU(2);
+      delay(250);
+    }
   }
 
 }
@@ -370,6 +375,55 @@ FFA:
   //FIN FFA
 }
 
+void GameMode()
+{ 
+  analogWrite(B, 100);
+  analogWrite(G, 100);
+  tone(Tone_Pin, 500, 500);
+
+  //Attend l'input des joueurs.
+  Game_Mode = 999;
+  while (Game_Mode==999)
+  {
+    for (int i=0; i<=nbj_raw_max;i++)
+    {
+      val = digitalRead(InPinStart+InPinInterval*i);
+      if (val == HIGH)
+      {
+        //Original_Game
+        if (i<=0)
+        {
+          Game_Mode = 0;
+        }
+        else
+        //New and improved
+        {
+          Game_Mode=1;
+        }
+        break;
+      }
+    }
+  }
+
+  //Tous les bleus et vert à OFF.
+  analogWrite(B, 0);
+  analogWrite(G, 0);
+  
+  if (Game_Mode==0)
+  {
+    ClignoteEtSon(4,500,200,0);
+  }
+  else if(Game_Mode==1)
+  {
+    ClignoteEtSon(9,900,200,5);
+  }
+  
+  delay(500);
+  TurnOffAllRedLights();
+  delay(500);
+  
+}
+
 void NombreJoueurs()
 {
   //Illumine toutes les LED bleu et envoie un son
@@ -378,7 +432,7 @@ void NombreJoueurs()
 
   //Attend l'input des joueurs.
   nbj = 0;
-  while (nbj == 0) 
+  while (nbj == 0)
   {
     for (int i=0; i<=nbj_raw_max;i++)
     {
@@ -396,7 +450,7 @@ void NombreJoueurs()
   analogWrite(B, 0);
 
   //Montre aux joueurs les sélections.
-  ClignoteEtSon(nbj_raw,1500,200);
+  ClignoteEtSon(nbj_raw,1500,200,0);
   delay(500);
   TurnOffAllRedLights();
   delay(500);
@@ -427,7 +481,7 @@ void Vitesse()
   analogWrite(G, 0);
 
   //Montre aux joueurs les sélections.
-  ClignoteEtSon(vitesse_raw,1000,100);
+  ClignoteEtSon(vitesse_raw,2500,300,0);
   delay(500);
   TurnOffAllRedLights();
   delay(500);
@@ -559,10 +613,10 @@ void TurnOffAllRedLights()
   }
 }
 
-void ClignoteEtSon(int NbMax,int FreqStart, int FreqIncrease)
+void ClignoteEtSon(int NbMax,int FreqStart, int FreqIncrease, int NbOffset)
 {
-  //Clignote
-  for (int i = 0; i <= NbMax; i++)
+  //Clignote + Son
+  for (int i = 0 + NbOffset; i <= NbMax; i++)
   {
     //Light and sound for valid players.
     x = OutPinStart + i * OutPinInterval;
