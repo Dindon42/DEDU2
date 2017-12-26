@@ -6,11 +6,7 @@ Servo myservo;
 int const myRandPin=0; //To initialize the random function
 int const G = 3; //Green LED ALL
 int const B = 2; //Blue LED ALL
-
-/////ENLEVER
-//int Tone_Pin = 9999; //Tone
 int const Tone_Pin = 52; //Tone
-/////ENLEVER
 
 //Position à l'arrêt du Servo (bâton rentré)
 int const Servo_LowPos = 40;
@@ -27,6 +23,8 @@ int const InPinInterval = 2;
 int PlayerInputPins[nbj_max];
 int PlayerOutputPins[nbj_max];
 
+//Debugging
+unsigned long TimeStart;
 
 
 //Variables internes.
@@ -40,13 +38,13 @@ int e;
 int Tone_Frequency;
 
 //Variables globales
-int nbj;
-int nbj_raw;
-int vitesse;
-int vitesse_raw;
-int Game_Mode;
+int nbj=1;
+int nbj_raw=0;
+int vitesse=1;
+int vitesse_raw=0;
+int Game_Mode=0;
 int InputState[nbj_max];
-int OutputState[nbj_max];
+
 
 
 //One-time setup:
@@ -55,12 +53,13 @@ int OutputState[nbj_max];
 //Set vitesse
 void setup() 
 {
+  
   ///ENLEVER
   //Debugging lines if required.
   Serial.begin(9600);
-  Serial.println("CECI EST UN TEST");
+  Serial.println("Bienvenue chez DEDU");
   ///ENLEVER
-
+  
 
 
   //Initialize random sequence based on floating value from an unconnected pin.
@@ -97,39 +96,50 @@ void setup()
   // Attend que les joueurs choisissent le nombre en cliquant sur le bouton correspondant au nombre souhaité.
   // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au mode suivant.
   // ----------------------------------------
-  //NombreJoueurs();
-  
+  NombreJoueurs();
+/*  
   ///ENLEVER
   nbj=10;
   nbj_raw=9;
+*/
+  //TestModeEngage
+  if (nbj_raw==0)
+  {
+    TestMode();
+  }
 
   //Debut VITESSE
   // Attend que les joueurs choisissent la vitesse du jeu.
   // 1 = lent, 10 = vite
-  //Vitesse();
-  
+  Vitesse();
+/*  
   ///ENLEVER
   vitesse=10;
-  vitesse_raw=0;
-  
-  //TestModeEngage
-  if (vitesse_raw==0 && nbj_raw==0)
-  {
-    TestMode();
-  }
-  else
-  {
-    //Choix de Version Originale ou Améliorée.
-    //GameMode();
+  vitesse_raw=9;
+*/
 
-    ///ENLEVER
-    Game_Mode == 0;
+/*
+int vitesse_ecart=1;
+int vitesse_ecart_raw=0;
+  //Debut Ecart VITESSE
+  // Attend que les joueurs choisissent l'ecart de vitesse du jeu.
+  // 1 = lent, 10 = vite
+  EcartVitesse(); 
+  ///ENLEVER
+  vitesse_ecart=10;
+  vitesse_ecart_raw=9;
+*/
 
-    if (Game_Mode == 1)
-    {
-      ChansonDEDU(2);
-      delay(250);
-    }
+  //Choix de Version Originale ou Améliorée.
+  GameMode();
+/*
+  ///ENLEVER
+  Game_Mode == 0;
+*/
+  if (Game_Mode == 1)
+  {
+    ChansonDEDU(3);
+    delay(125);
   }
 }
 
@@ -137,16 +147,14 @@ void setup()
 void loop() {
 start:
 
+  WaitForAllNonActive(nbj_raw);
+
+
   TurnOffAllRedLights();
   delay(100);
-
-  WaitForAllNonActive(nbj_raw);
   
-//// TEST AREA
-
-//ENLEVER
-TrompeOeil();
-
+/// TEST AREA
+//DQP();
 /// END TEST
   
   Delay_Fraudeur();
@@ -154,66 +162,26 @@ TrompeOeil();
   // Debut REPARTITEUR
   r = random(101);
 
-  if (r < 37) {
+  if (r < 37)
+  {
     PQP();
   }
-  else if (r < 82) {
-    goto DQP;
+  else if (r < 82)
+  {
+    DQP();
   }
-  else if (r < 90) {
+  else if (r < 90)
+  {
     TrompeOeil();
   }
-  else if (r < 94) {
+  else if (r < 94)
+  {
     goto FFA;
   }
   else {
     MarqueurHonte();
   }
   // fin REPARTITEUR
-
-
-  //Debut DQP ---------------------------------
-
-DQP:
-
-  analogWrite(B, 100);
-  for (int i = 1; i <= nbj; i++) {
-    y = 29 + (2 * i);
-    digitalWrite(y, HIGH);
-  }
-
-
-  z = nbj;
-
-  do {
-    for (int i = 1; i <= nbj; i++) {
-      x = 22 + (2 * i);
-      y = x + 7;
-      if (digitalRead(y) == HIGH) {
-        if (digitalRead(x) == HIGH) {
-          digitalWrite(y, LOW);
-          z--;
-        }
-      }
-    }
-
-  }
-  while (z != 1);
-  analogWrite(B, 10);
-
-  for (int i = 1; i <= 80; i++) {
-    Tone_Frequency = 2000 - 20 * i;
-    tone(Tone_Pin, Tone_Frequency);
-    delay(15);
-  }
-  noTone(Tone_Pin);
-  delay (2500);
-  TurnOffAllRedLights();
-  analogWrite(B, 0);
-  delay(500);
-  goto start;
-
-  //Fin DQP-----------------------------------------------------
 
   //Debut FFA
 

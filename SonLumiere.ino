@@ -97,8 +97,8 @@ void ClignoteEtSon(int NbMax,int FreqStart, int FreqIncrease, int NbOffset)
     //Light and sound for valid players.
     ActivateRedLight(i);
     Tone_Frequency = FreqStart + FreqIncrease * i;
-    tone(Tone_Pin, Tone_Frequency, 150);
-    delay(150);
+    tone(Tone_Pin, Tone_Frequency, 50);
+    delay(100);
   }
 }
 

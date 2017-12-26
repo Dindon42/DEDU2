@@ -56,25 +56,19 @@ void WaitForAllNonActive(int NbInputs)
   int max_iter = 60;
   int count = 0;
   
-  Serial.println("IN:");
   do
   {
     count++;
     delay(15);
   }while(CheckAllActive(nbj_raw) !=0 && count<=max_iter);
-
-  Serial.print("OUT:");
-  Serial.println(count);
   
   if(count >=max_iter)
   {
     FlashAndBuzzAllActive();
     WaitForAllNonActive(NbInputs);
   }
-  
-  Serial.print("TrulyOUT:");
-  Serial.println(count);
-  
+
+  TurnOffAllRedLights();
   
 }
 
