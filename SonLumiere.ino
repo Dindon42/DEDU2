@@ -4,7 +4,16 @@ void TurnOffAllRedLights()
 {
   for (int i=0; i<=nbj_raw_max;i++)
   {
-    digitalWrite(OutPinStart+OutPinInterval*i, LOW);
+    digitalWrite(PlayerOutputPins[i], LOW);
+  }
+}
+
+//Turn ON all the reds
+void TurnOnAllRedLights()
+{
+  for (int i=0; i<=nbj_raw_max;i++)
+  {
+    digitalWrite(PlayerOutputPins[i], HIGH);
   }
 }
 
@@ -14,8 +23,7 @@ void ClignoteEtSon(int NbMax,int FreqStart, int FreqIncrease, int NbOffset)
   for (int i = 0 + NbOffset; i <= NbMax; i++)
   {
     //Light and sound for valid players.
-    x = OutPinStart + i * OutPinInterval;
-    digitalWrite(x, HIGH);
+    digitalWrite(PlayerOutputPins[i], HIGH);
     Tone_Frequency = FreqStart + FreqIncrease * i;
     tone(Tone_Pin, Tone_Frequency, 150);
     delay(150);

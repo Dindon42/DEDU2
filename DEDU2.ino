@@ -15,21 +15,23 @@ int Tone_Pin = 9999; //Tone
 int Servo_LowPos = 40;
 int Servo_Pin = 53;
 
-int nbj_max=10;
-int nbj_raw_max=9;
-int OutPinStart = 31;
-int OutPinInterval = 2;
-int InPinStart = 24;
-int InPinInterval = 2;
+int const nbj_max=10;
+int const nbj_raw_max=9;
+int const OutPinStart = 31;
+int const OutPinInterval = 2;
+int const InPinStart = 24;
+int const InPinInterval = 2;
+
 int PlayerInputPins[nbj_max];
 int PlayerOutputPins[nbj_max];
+
 
 
 //Variables internes.
 int Pin;
 int val;
-int x;
 int y;
+int x;
 int z;
 int r;
 int e;
@@ -41,6 +43,7 @@ int nbj_raw;
 int vitesse;
 int vitesse_raw;
 int Game_Mode;
+int InputState[nbj_max];
 
 
 //One-time setup:
@@ -49,11 +52,11 @@ int Game_Mode;
 //Set vitesse
 void setup() 
 {
-  /*
+  ///ENLEVER
   //Debugging lines if required.
   Serial.begin(9600);
-  Serial.print("CECI EST UN TEST");
-  */
+  Serial.println("CECI EST UN TEST");
+  ///ENLEVER
   
   //Attach to servo and move it to initial position
   myservo.attach(Servo_Pin);
@@ -84,12 +87,18 @@ void setup()
   // Attend que les joueurs choisissent le nombre en cliquant sur le bouton correspondant au nombre souhaité.
   // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au mode suivant.
   // ----------------------------------------
-  NombreJoueurs();
+  //NombreJoueurs();
+  ///ENLEVER
+  nbj=10;
+  nbj_raw=9;
 
   //Debut VITESSE
   // Attend que les joueurs choisissent la vitesse du jeu.
   // 1 = lent, 10 = vite
-  Vitesse();
+  //Vitesse();
+  ///ENLEVER
+  vitesse=10;
+  vitesse_raw=0;
   
   //TestModeEngage
   if (vitesse_raw==0 && nbj_raw==0)
@@ -99,7 +108,8 @@ void setup()
   else
   {
     //Choix de Version Originale ou Améliorée.
-    GameMode();
+    //GameMode();
+    Game_Mode == 0;
 
     if (Game_Mode == 1)
     {
@@ -118,12 +128,11 @@ start:
   
   Delay_Fraudeur();
   
-
   // Debut REPARTITEUR
   r = random(100);
 
   if (r < 37) {
-    goto PQP;
+    PQP();
   }
   else if (r < 82) {
     goto DQP;
@@ -135,71 +144,9 @@ start:
     goto FFA;
   }
   else {
-    goto MARQUEURHONTE;
+    MarqueurHonte();
   }
   // fin REPARTITEUR
-
-
-  //Debut PQP --------------------------------------
-
-PQP:
-
-  val = 0;
-  r = random(5);
-  if (r == 4) {
-    analogWrite(G, 1);
-  }
-  else {
-    analogWrite(G, 100);
-  }
-
-  do
-  {
-    for (int i = 1; i <= nbj; i++) {
-      y = 22 + (2 * i);
-      if (digitalRead(y) == HIGH)
-      {
-        val = y;
-      }
-    }
-  }
-  while (val == 0);
-
-  analogWrite(G, 0);
-
-  for (int a = 1 ; a <= 3 ; a++)  {
-    if (val == 24) digitalWrite(31, HIGH);
-    if (val == 26) digitalWrite(33, HIGH);
-    if (val == 28) digitalWrite(35, HIGH);
-    if (val == 30) digitalWrite(37, HIGH);
-    if (val == 32) digitalWrite(39, HIGH);
-    if (val == 34) digitalWrite(41, HIGH);
-    if (val == 36) digitalWrite(43, HIGH);
-    if (val == 38) digitalWrite(45, HIGH);
-    if (val == 40) digitalWrite(47, HIGH);
-    if (val == 42) digitalWrite(49, HIGH);
-
-
-    for (int i = 1; i <= 120; i++) {
-      Tone_Frequency = 500 + 30 * i;
-      tone(Tone_Pin, Tone_Frequency, 3);
-      delay(3);
-    }
-    noTone(Tone_Pin);
-    delay (500);
-
-    
-    TurnOffAllRedLights();
-    
-    analogWrite(G, 20);
-    delay(500);
-    analogWrite(G, 0);
-  }
-
-
-  goto start;
-
-  //FIN PQP----------------------------------------
 
 
   //Debut DQP ---------------------------------
@@ -249,7 +196,7 @@ DQP:
 
 TROMPEOEIL:
 
-  TurnOffAllRedLights();
+  TurnOnAllRedLights();
 
   for (int e = 0; e <= 4000; e++) {
     for (int i = 1; i <= nbj; i++) {
@@ -285,39 +232,7 @@ bailout:
 
   // fin TROMPEOEIL
 
-  // Debut MARQUEURHONTE
 
-MARQUEURHONTE:
-
-  analogWrite(B, 80);
-  e = 160 - nbj * 7;
-  for (e ; e >= 1; e -= 5) {
-    for (int i = 1; i <= nbj; i++) {
-      y = 29 + (2 * i);
-      tone(Tone_Pin, 3500, 10);
-      digitalWrite(y, HIGH);
-      delay(e);
-      digitalWrite(y, LOW);
-    }
-  }
-  noTone(Tone_Pin);
-  analogWrite(B, 6);
-
-  x = random(1, nbj);
-  y = 29 + (2 * x);
-  for (int e = 1; e <= 4; e++) {
-    tone(Tone_Pin, 3500, 10);
-    digitalWrite(y, HIGH);
-    delay(500);
-    digitalWrite(y, LOW);
-    delay(500);
-  }
-
-  analogWrite(B, 0);
-
-  goto start;
-
-  // Fin MARQUEURHONTE
 
   //Debut FFA
 
