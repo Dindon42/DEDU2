@@ -5,7 +5,12 @@ Servo myservo;
 //Pins
 int G = 3; //Green LED ALL
 int B = 2; //Blue LED ALL
-int Tone_Pin = 52; //Tone
+
+/////ENLEVER
+int Tone_Pin = 9999; //Tone
+//int Tone_Pin = 52; //Tone
+/////ENLEVER
+
 //Position à l'arrêt du Servo (bâton rentré)
 int Servo_LowPos = 40;
 int Servo_Pin = 53;
@@ -16,8 +21,12 @@ int OutPinStart = 31;
 int OutPinInterval = 2;
 int InPinStart = 24;
 int InPinInterval = 2;
+int PlayerInputPins[nbj_max];
+int PlayerOutputPins[nbj_max];
+
 
 //Variables internes.
+int Pin;
 int val;
 int x;
 int y;
@@ -54,7 +63,9 @@ void setup()
   //LED ROUGE des joueurs
   for (int i=0; i<=nbj_raw_max;i++)
   {
-    pinMode(OutPinStart+OutPinInterval*i, OUTPUT);
+    Pin=OutPinStart+OutPinInterval*i;
+    pinMode(Pin, OUTPUT);
+    PlayerOutputPins[i]=Pin;
   }
 
   //Toutes lumières G et B
@@ -64,7 +75,9 @@ void setup()
   //Manettes.
   for (int i=0; i<=nbj_raw_max;i++)
   {
-    pinMode(InPinStart+InPinInterval*i, INPUT);
+    Pin=InPinStart+InPinInterval*i;
+    pinMode(Pin, INPUT);
+    PlayerInputPins[i]=Pin;
   }
 
   // NBJ - Nombre de Joueurs

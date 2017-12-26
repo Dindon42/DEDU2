@@ -1,8 +1,12 @@
 void Delay_Fraudeur()
 {
   //Debut DELAY et TESTFRAUDEUR --------------------------------------
+
+  ///ENLEVER
   r = 50 + (12 - vitesse) * random(100) + 5000;
-//r = 50 + (12 - vitesse) * random(100);
+  //r = 50 + (12 - vitesse) * random(100);
+  ///ENLEVER
+  
   x = 0;
 
   for (int a = 1; a <= r; a++) {
