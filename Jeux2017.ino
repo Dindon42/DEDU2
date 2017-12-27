@@ -257,7 +257,6 @@ void MIN()
 
 void JeuChanson()
 {
-  int NombreChansons=3;
   int NombreNotes;
   int myRand;
   int ProchainJoueur;
@@ -270,7 +269,7 @@ void JeuChanson()
   ActivateBlueLED(100);
   ActivateGreenLED(100);
   TurnOnAllRedLights();
-  delay(5000);
+  delay(1000);
   
   NombreNotes=SelectionChanson(random(NombreChansons));
 
@@ -386,12 +385,6 @@ void JeuChanson()
     }
     Scores[e]=Scores[e]/((2*NombreNotes)-1);
   }
-
-  Serial.print("SCORE0:");
-  Serial.println(Scores[0]);
-  Serial.print("SCORE1:");
-  Serial.println(Scores[1]);
-
   
   //Winning Team
   if (Scores[0]>Scores[1])
@@ -465,11 +458,7 @@ void JeuChanson()
     delay(500);
     DeactivateGreenLED();
   }
-  
-  
   delay(2000);
-JeuChanson();
-  
 }
 
 

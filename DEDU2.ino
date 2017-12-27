@@ -23,6 +23,10 @@ int const InPinStart = 24;
 int const InPinInterval = 2;
 
 
+////Chansons.
+int const NombreChansons=9;
+////
+
 int PlayerInputPins[nbj_max];
 int PlayerOutputPins[nbj_max];
 
