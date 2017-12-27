@@ -11,7 +11,9 @@ void Delay_Fraudeur()
    * R=352 => 14s
    * 
    * 0.04s/R
+  */
   
+  /*
   Serial.print("V=");
   Serial.print(vitesse);
   Serial.print("  R=");
@@ -68,6 +70,7 @@ void PQP()
   int r = random(5);
   //int NumWin = 0;
 
+  //Init lights as GREEN.
   //Random Low intensity green from time to time.
   if (r == 4) 
   {
@@ -187,7 +190,8 @@ void TrompeOeil()
   {
     Loosers[i]=0;
   }
-  
+
+  //Init lights as red!
   TurnOnAllRedLights();
 
   for (int i = 0; i <= maxIter; i++)
@@ -233,7 +237,8 @@ void TrompeOeil()
 void DQP()
 {
   int Perdant = -1;
-  
+
+  //init lights as purple
   ActivateBlueLED(100);
   TurnOnAllRedLights();
   

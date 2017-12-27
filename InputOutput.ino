@@ -35,6 +35,25 @@ int ReadInputDeactivateOutputIfActive(int NbInputs)
   return count;
 }
 
+//Reads each user input.  If the input is Active, toggle the light.
+void ReadInputToggleOutput(int NbInputs)
+{
+  for (int i=0; i<=NbInputs ; i++)
+  {
+    if (ReadPlayerInput(i)==HIGH)
+    {
+      if(ReadPlayerOutput(i)==HIGH)
+      {
+        DeactivateRedLight(i);
+      }
+      else
+      {
+        ActivateRedLight(i);
+      }
+    }
+  }
+}
+
 //Returns HIGH or LOW
 int ReadPlayerInput(int iPlayer)
 {
@@ -86,6 +105,7 @@ int CheckAllActiveOutputs(int NbOutputs)
     OutputState[i]=ReadPlayerOutput(i);
     if (OutputState[i]==HIGH)
     {
+      
       NumActive++;
     }
   }

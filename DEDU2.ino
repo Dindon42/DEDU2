@@ -24,7 +24,7 @@ int const InPinInterval = 2;
 int PlayerInputPins[nbj_max];
 int PlayerOutputPins[nbj_max];
 
-//Debugging
+//TimeDebugging
 unsigned long TimeStart;
 bool SkipSetup=false;
 
@@ -48,8 +48,6 @@ int Game_Mode=0;
 int InputState[nbj_max];
 int OutputState[nbj_max];
 
-
-
 //One-time setup:
 //Define input/output
 //Set NBJ
@@ -60,16 +58,16 @@ void setup()
   ///ENLEVER
   //Debugging lines if required.
   Serial.begin(9600);
-  Serial.println("Bienvenue chez DEDU");
-
+  Serial.println("Debugging window:");
   //DEBUGGING: SKIP SETUP AND USE VALUES.
-  //SkipSetup = true;
+  SkipSetup = true;
   //Valeurs de base
-  nbj=4;
-  nbj_raw=3;
+  nbj=10;
+  nbj_raw=9;
   vitesse=10;
   vitesse_raw=9;
-  Game_Mode == 0;
+  Game_Mode == 1;
+  
   ///ENLEVER
   
 
@@ -140,8 +138,10 @@ start:
 
   TurnOffAllRedLights();
   delay(100);
-  
+   
 /// TEST AREA
+
+TLMPareil();
 
 /// END TEST
   
@@ -149,10 +149,13 @@ start:
 
   if(Game_Mode == 0)
   {
+    
+    Serial.println("Bienvenue chez DEDU");
     RepartiteurOriginal();
   }
   else
   {
+    Serial.println("Bienvenue chez DEDU");
     Repartiteur();
   }
 }
