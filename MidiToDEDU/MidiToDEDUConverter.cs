@@ -31,7 +31,7 @@ namespace MidiToDedu
 
             // Read the file and display it line by line.  
             string BaseDir = "C:\\temp\\TEST\\";
-            string File = "DeadOrAlive2";
+            string File = "DeadOrAlive1";
             string Ext = ".txt";
 
             System.IO.StreamReader Infile = new System.IO.StreamReader(BaseDir+File+Ext);
@@ -130,27 +130,27 @@ namespace MidiToDedu
             for (int i = 0; i < DataTripletCounter; i++)
             {
                 if (i < DataTripletCounter - 1)
-                Outfile.Write(MyValues[i, 0] + ",");
+                Outfile.Write(Math.Round(MyValues[i, 0], 1) + ",");
                 else
-                Outfile.Write(MyValues[i, 0]);
+                Outfile.Write(Math.Round(MyValues[i, 0], 1));
             }
             Outfile.Write("},\n");
             Outfile.Write("    {");
             for (int i = 0; i < DataTripletCounter; i++)
             {
                 if (i < DataTripletCounter - 1)
-                    Outfile.Write(MyValues[i, 1] + ",");
+                    Outfile.Write(Math.Round(MyValues[i, 1], 1) + ",");
                 else
-                    Outfile.Write(MyValues[i, 1]);
+                    Outfile.Write(Math.Round(MyValues[i, 1], 1));
             }
             Outfile.Write("},\n");
             Outfile.Write("    {");
             for (int i = 0; i < DataTripletCounter; i++)
             {
                 if (i < DataTripletCounter - 1)
-                    Outfile.Write(MyValues[i, 2] + ",");
+                    Outfile.Write(Math.Round(MyValues[i, 2], 1) + ",");
                 else
-                    Outfile.Write(MyValues[i, 2]);
+                    Outfile.Write(Math.Round(MyValues[i, 2], 1));
             }
             Outfile.Write("},\n");
             Outfile.WriteLine("    };");

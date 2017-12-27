@@ -257,6 +257,7 @@ void MIN()
 
 void JeuChanson()
 {
+  int NombreChansons=3;
   int NombreNotes;
   int myRand;
   int ProchainJoueur;
@@ -271,15 +272,12 @@ void JeuChanson()
   TurnOnAllRedLights();
   delay(5000);
   
-  NombreNotes=SelectionChanson(0);
+  NombreNotes=SelectionChanson(random(NombreChansons));
 
   
   Serial.print("NombreNotes:");
   Serial.println(NombreNotes);
   
-  Serial.print("Fact:");
-  Serial.println(FacteurVitesse);
-
   AllocateTwoTeams(nbj);
 
   //Répéter pour chaque équipe
@@ -290,7 +288,12 @@ void JeuChanson()
 
     //Definir Facteur Vitesse
     myRand= random(RandomMin,RandomMax);
-    FacteurVitesse=myRand/100;
+    FacteurVitesse=(float) myRand/100;
+    
+    Serial.print("MyRand:");
+    Serial.println(myRand);
+    Serial.print("Fact:");
+    Serial.println(FacteurVitesse);
     
     TurnOffAllRedLights();
     DeactivateBlueLED();
@@ -394,10 +397,14 @@ void JeuChanson()
   if (Scores[0]>Scores[1])
   {
     WinTeam=0;
+    Scores[0]=Scores[0]*1.15;
+    Scores[1]=Scores[1]*0.85;
   }
   else
   {
     WinTeam=1;
+    Scores[0]=Scores[0]*0.85;
+    Scores[1]=Scores[1]*1.15;
   }
   
   //Game complete.  Scoring!

@@ -115,13 +115,24 @@ int SelectionChanson(int Numero)
   
   int NombreDeNotes;
   
-  //float MaChanson[3][255];
+  //float MaChanson[3][100];
   float ChansonDEDU[3][18] = {
     {196,196,196,247,247,261,261,349,247,196,196,294,247,196,330,294,247,261},
     {150,150,150,300,300,300,300,600,150,150,150,150,150,150,600,150,150,600},
     {100,200,100,200,200,200,200,200,100,200,100,200,100,400,400,200,100,200},
     };
-  
+  float DeadOrAlive1[3][25] = {
+    {293,293,293,293,293,293,261,233,261,233,261,233,261,261,233,261,233,261,233,261,293,293,293,174,195},
+    {111.4,107.6,130.6,146,117.6,393.5,78.4,149.9,162.9,167.5,169.8,136,311.2,169.8,149.9,142.9,151.4,161.4,135.3,336.6,287.4,289.7,362.7,295.9,427.3},
+    {110.8,114.6,91.6,85.5,236.1,132.4,143.8,72.4,59.3,79.7,57.9,76,112.8,71.8,73.3,79.3,81.9,65.5,75.9,114.3,125.5,154.7,100.2,130,87.5},
+    };
+  float DeadOrAlive2[3][19] = {
+    {195,195,195,233,233,174,174,261,233,195,195,293,293,233,233,174,174,261,233},
+    {254.2,261.8,248.6,277.8,292.4,105.6,163.9,240.3,300,116,141,125,148.6,133.3,168.7,225,328.5,300.7,200.7},
+    {209.7,196.5,162.5,166.7,152.1,116.7,97.2,189.4,120.4,106.2,79.4,99.1,73.6,88.9,97.9,154.6,136.3,127.1,66.9},
+    };
+
+    
   switch(Numero)
   {
     case 0:
@@ -139,7 +150,31 @@ int SelectionChanson(int Numero)
         }
       }
       RandomMin=100;
-      RandomMax=300;
+      RandomMax=325;
+      return NombreDeNotes;
+    case 1:
+      NombreDeNotes = sizeof(DeadOrAlive1[0]) / sizeof(float);
+      for (int i = 0; i < ParamChansons; i++)
+      {
+          for (int j = 0; j < NombreDeNotes; j++)
+          {
+              MaChanson[i][j] = DeadOrAlive1[i][j];
+          }
+      }
+      RandomMin = 90;
+      RandomMax = 135;
+      return NombreDeNotes;
+    case 2:
+      NombreDeNotes = sizeof(DeadOrAlive2[0]) / sizeof(float);
+      for (int i = 0; i < ParamChansons; i++)
+      {
+          for (int j = 0; j < NombreDeNotes; j++)
+          {
+              MaChanson[i][j] = DeadOrAlive2[i][j];
+          }
+      }
+      RandomMin = 90;
+      RandomMax = 160;
       return NombreDeNotes;
     default:
       return 0;
