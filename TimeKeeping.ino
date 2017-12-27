@@ -7,5 +7,4 @@ unsigned long TakeTime()
 unsigned long TimeDiff()
 {
   return (millis()-TimeStart)/1000;
-}
-  
+} 

@@ -138,8 +138,8 @@ int SelectionChanson(int Numero)
           MaChanson[i][j]=ChansonDEDU[i][j];
         }
       }
-      RandomMin=150;
-      RandomMax=350;
+      RandomMin=100;
+      RandomMax=200;
       return NombreDeNotes;
     default:
       return 0;

@@ -46,8 +46,46 @@ void AllocateTwoTeams(int nbj)
       NbjAlloueEq1++;
     }
   }
-  
-
-  
-  
 }
+
+void DefinirOrdreJoueurs(int equipe,int NombreActions)
+{
+  int JoueurPrec=0;
+  //Reset
+  for(int i=0; i<NbNoteMax ; i++)
+  {
+    OrdreJoueurs[i]=-1;
+  }
+  
+  for(int i=0; i<NombreActions; i++)
+  {
+    for (int j=JoueurPrec;j<=nbj_raw;j++)
+    {
+      if(Equipes[j]==equipe)
+      {
+        OrdreJoueurs[i]=j;
+        JoueurPrec=j+1;
+        break;
+      }
+      if(j==nbj_raw)
+      {
+        j=-1;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

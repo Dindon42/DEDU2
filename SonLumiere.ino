@@ -114,10 +114,11 @@ void PlayNote(int Tone_Pin, double Freq, double PlayTime, double WaitTime)
 
 void PlayNoteWithLight(int Tone_Pin, double Freq, double PlayTime, double WaitTime,int Player)
 {
-  ActivateRedLight(i);
+  ActivateRedLight(Player);
   tone(Tone_Pin, Freq, PlayTime);
-  DeactivateRedLight(i);
-  delay(PlayTime+WaitTime);
+  delay(PlayTime);
+  DeactivateRedLight(Player);
+  delay(WaitTime);
 }
 
 //Error mode to tell something is going on.

@@ -259,13 +259,15 @@ void JeuChanson()
 {
   int NombreNotes;
   int myRand;
+  int ProchainJoueur;
   float FacteurVitesse;
 
   //Set White Lights
   ActivateBlueLED(100);
   ActivateGreenLED(100);
   TurnOnAllRedLights();
-  delay(5000);
+  //delay(5000);
+  delay(500);
   
   NombreNotes=SelectionChanson(0);
   myRand= random(RandomMin,RandomMax);
@@ -279,48 +281,73 @@ void JeuChanson()
   Serial.println(FacteurVitesse);
 
   AllocateTwoTeams(nbj);
-  
-  //Set Lights for Team1
-  TurnOffAllRedLights();
-  DeactivateBlueLED();
-  DeactivateGreenLED();
-  delay(2000);
-  
-  for(int i=0 ; i<=nbj_raw ; i++)
+
+  //Répéter pour chaque équipe
+  for (int e = 0; e<NbEquipes ; e++)
   {
-    if(Equipes[i]==0)
-    {
-      ActivateRedLight(i);
-      delay(1000);
-    }
-    Serial.print("  ");
-    Serial.print(Equipes[i]);
-  }
-  Serial.println();
-
-  
-
-  delay(20000);
-  JeuChanson();
-  
-  
-  for(int i=0; i<NombreNotes; i++)
-  {
-    PlayNote(Tone_Pin, MaChanson[0][i], MaChanson[1][i]/FacteurVitesse, MaChanson[2][i]/FacteurVitesse);
-  }
-
-  
-
-  
-  for(int i=0; i<NombreNotes; i++)
-  {
+    //OrdreJoueurs
+    DefinirOrdreJoueurs(e,NombreNotes);
     
+    
+      
+    TurnOffAllRedLights();
+    DeactivateBlueLED();
+    DeactivateGreenLED();
+    //delay(2000);
+    delay(500);
+    
+    Serial.println("EQUIPES:");
+    for(int i=0 ; i<=nbj_raw ; i++)
+    {
+      if(Equipes[i]==e)
+      {
+        ActivateRedLight(i);
+        delay(1000);
+      }
+      Serial.print("  ");
+      Serial.print(Equipes[i]);
+    }
+    Serial.println();
+
+    
+    Serial.println("OrdreJoueurs:");
+    for(int i=0;i<NombreNotes;i++)
+    {
+      Serial.print("  ");
+      Serial.print(OrdreJoueurs[i]);
+    }
+    Serial.println("");
+    
+    
+    delay(500);
+    TurnOffAllRedLights();
+    delay(1500);
+
+    
+    //Show the Player
+    for(int n=0; n<NombreNotes; n++)
+    {
+      PlayNoteWithLight(Tone_Pin, MaChanson[0][n], MaChanson[1][n]/FacteurVitesse, MaChanson[2][n]/FacteurVitesse,OrdreJoueurs[n]);
+    }
+
+    
+    TurnOffAllRedLights();
+    delay(1500);
+    for(int t=0; t<4 ; t++)
+    {
+      tone(Tone_Pin,800,10);
+      delay(700);
+    }
+    delay(25000);
+    JeuChanson();
+  
+    
+    for(int i=0; i<NombreNotes; i++)
+    {
+      
+    }
+  
   }
-  
-
-
-  //Player's turn
-  
   delay(2000);
 }
 

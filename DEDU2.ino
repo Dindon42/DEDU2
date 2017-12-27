@@ -58,7 +58,9 @@ int const ParamChansons=3;
 int const NbNoteMax=100;
 float MaChanson[ParamChansons][NbNoteMax];
 float LeurChanson[ParamChansons][NbNoteMax];
-float MesNotes[ParamChansons][NbNoteMax];
+float MesScores[ParamChansons][NbNoteMax];
+int OrdreJoueurs[NbNoteMax];
+float SongAvgBpm;
 int RandomMin;
 int RandomMax;
 
