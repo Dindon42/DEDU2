@@ -5,22 +5,6 @@ void Delay_Fraudeur()
   //Pendant ce temps, si un joueur appuie sur sa manette, sa lumière rouge allume.  Même chose pour les voisins.
   
   int r = 50 + (12 - vitesse) * random(100); 
-  /*ex.:
-   * R=412 => 16s
-   * R=574 => 22s
-   * R=352 => 14s
-   * 
-   * 0.04s/R
-  */
-  
-  /*
-  Serial.print("V=");
-  Serial.print(vitesse);
-  Serial.print("  R=");
-  Serial.print(r);
-  TakeTime();
-  */
-  
   int LoopsToGo=20;
   bool AtLeastOneActive = false;
   bool TriggerEnd = false;
@@ -55,13 +39,6 @@ void Delay_Fraudeur()
     delay(500);
     loop();
   }
-
-  /*
-  Serial.print("  DelayTime  ");
-  Serial.println(TimeDiff());
-  Delay_Fraudeur();
-  */
-  
 }
 
 void PQP()

@@ -272,10 +272,6 @@ void JeuChanson()
   delay(1000);
   
   NombreNotes=SelectionChanson(random(NombreChansons));
-
-  
-  Serial.print("NombreNotes:");
-  Serial.println(NombreNotes);
   
   AllocateTwoTeams(nbj);
 
@@ -289,17 +285,12 @@ void JeuChanson()
     myRand= random(RandomMin,RandomMax);
     FacteurVitesse=(float) myRand/100;
     
-    Serial.print("MyRand:");
-    Serial.println(myRand);
-    Serial.print("Fact:");
-    Serial.println(FacteurVitesse);
     
     TurnOffAllRedLights();
     DeactivateBlueLED();
     DeactivateGreenLED();
     delay(2000);
     
-    Serial.println("EQUIPES:");
     for(int i=0 ; i<=nbj_raw ; i++)
     {
       if(Equipes[i]==e)
@@ -307,26 +298,12 @@ void JeuChanson()
         ActivateRedLight(i);
         delay(1000);
       }
-      Serial.print("  ");
-      Serial.print(Equipes[i]);
     }
-    Serial.println();
 
-    
-    Serial.println("OrdreJoueurs:");
-    for(int i=0;i<NombreNotes;i++)
-    {
-      Serial.print("  ");
-      Serial.print(OrdreJoueurs[i]);
-    }
-    Serial.println("");
-    
-    
     delay(500);
     TurnOffAllRedLights();
     delay(1500);
 
-    
     //Show the Player
     for(int n=0; n<NombreNotes; n++)
     {
@@ -356,18 +333,6 @@ void JeuChanson()
       }while(ReadPlayerInput(0)==HIGH);
       LeurTemps[1][n]=TimeDiff();
       DeactivateRedLight(OrdreJoueurs[n]);
-    }
-
-    Serial.println("");
-    Serial.println("Resultats:");
-    for (int i=0; i<=1;i++)
-    {
-      for(int n=0; n<NombreNotes; n++)
-      {
-        Serial.print("  ");
-        Serial.print(LeurTemps[i][n]);
-      }
-      Serial.println("  ");
     }
 
     //ResetScore

@@ -80,24 +80,6 @@ int RandomMax;
 //Set vitesse
 void setup() 
 {
-  
-  ///ENLEVER
-  //Debugging lines if required.
-  Serial.begin(9600);
-  Serial.println("Debugging window:");
-  //DEBUGGING: SKIP SETUP AND USE VALUES.
-  SkipSetup = true;
-  //Valeurs de base
-  nbj=9;
-  nbj_raw=8;
-  vitesse=10;
-  vitesse_raw=9;
-  Game_Mode = 1;
-  
-  ///ENLEVER
-  
-
-
   //Initialize random sequence based on floating value from an unconnected pin.
   randomSeed(analogRead(myRandPin));
 
@@ -161,26 +143,19 @@ void loop()
 {
   WaitForAllNonActive(nbj_raw);
 
-  TurnOffAllRedLights();
-  DeactivateBlueLED();
-  DeactivateGreenLED();
+  TurnOffAllLights();
+  
   delay(100);
-
-/// TEST AREA
-JeuChanson();
-/// END TEST
   
   Delay_Fraudeur();
 
   if(Game_Mode == 0)
   {
     
-    Serial.println("Bienvenue chez DEDU");
     RepartiteurOriginal();
   }
   else
   {
-    Serial.println("Bienvenue chez DEDU2");
     Repartiteur();
   }
 }

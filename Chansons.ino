@@ -99,10 +99,6 @@ int SelectionChanson(int Numero)
   switch(Numero)
   {
     case 0:
-      /*
-      Serial.println(sizeof(ChansonDEDU)/sizeof(ChansonDEDU[0]));
-      Serial.println(sizeof(ChansonDEDU[0])/sizeof(float));
-      */
       NombreDeNotes=sizeof(ChansonDEDU[0])/sizeof(float);
       
       for(int i=0; i<ParamChansons; i++)
