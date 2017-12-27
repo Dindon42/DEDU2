@@ -107,3 +107,71 @@ void ChansonDEDU(double facteur)
     PlayNote(Tone_Pin,Notes[i],Play_Time[Play_Time_Index[i]],Wait_Time[Wait_Time_Index[i]]);
   }
 }
+
+
+//Returns the size to read;
+int SelectionChanson(int Numero)
+{
+  
+  int NombreDeNotes;
+  
+  //float MaChanson[3][255];
+  float ChansonDEDU[3][18] = {
+    {196,196,196,247,247,261,261,349,247,196,196,294,247,196,330,294,247,261},
+    {150,150,150,300,300,300,300,600,150,150,150,150,150,150,600,150,150,600},
+    {100,200,100,200,200,200,200,200,100,200,100,200,100,400,400,200,100,200},
+    };
+  
+  switch(Numero)
+  {
+    case 0:
+      /*
+      Serial.println(sizeof(ChansonDEDU)/sizeof(ChansonDEDU[0]));
+      Serial.println(sizeof(ChansonDEDU[0])/sizeof(float));
+      */
+      NombreDeNotes=sizeof(ChansonDEDU[0])/sizeof(float);
+      
+      for(int i=0; i<ParamChansons; i++)
+      {
+        for(int j=0; j<NombreDeNotes;j++)
+        {
+          MaChanson[i][j]=ChansonDEDU[i][j];
+        }
+      }
+      RandomMin=150;
+      RandomMax=350;
+      return NombreDeNotes;
+    default:
+      return 0;
+  }
+}
+      /*
+  //Notes
+  int G3 = 196;
+  int A3 = 220;
+  int B3 = 247;
+  int C4 = 261;
+  int D4 = 294;
+  int E4 = 330;
+  int F4 = 349;
+
+  int numNotes=18;
+double Base_Time = 150 / facteur;
+double Play_Time[3]={Base_Time,2*Base_Time,4*Base_Time};
+double Base_Time_W = 100 / facteur;
+double Wait_Time[4]={Base_Time_W,2*Base_Time_W,2*Base_Time_W,4*Base_Time_W};
+
+double Notes[numNotes]    =       {G3,  G3, G3, B3, B3, C4, C4, F4, B3, G3, G3, D4, B3, G3, E4, D4, B3, C4};
+int Play_Time_Index[numNotes] =   {0,   0,  0,  1,  1,  1,  1,  2,  0,  0,  0,  0,  0,  0,  2,  0,  0,  2};
+int Wait_Time_Index[numNotes] =   {0,   1,  0,  1,  1,  1,  1,  2,  0,  1,  0,  1,  0,  3,  3,  1,  0,  2};
+
+*/
+
+
+
+
+
+
+
+
+

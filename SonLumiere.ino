@@ -112,6 +112,14 @@ void PlayNote(int Tone_Pin, double Freq, double PlayTime, double WaitTime)
   delay(PlayTime+WaitTime);
 }
 
+void PlayNoteWithLight(int Tone_Pin, double Freq, double PlayTime, double WaitTime,int Player)
+{
+  ActivateRedLight(i);
+  tone(Tone_Pin, Freq, PlayTime);
+  DeactivateRedLight(i);
+  delay(PlayTime+WaitTime);
+}
+
 //Error mode to tell something is going on.
 void FlashAndBuzzAllActive()
 {

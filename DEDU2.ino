@@ -1,5 +1,6 @@
 #include <Servo.h>
 #include "pitches.h"
+
 Servo myservo;
 
 //Definitions
@@ -48,6 +49,18 @@ int vitesse_raw=0;
 int Game_Mode=0;
 int InputState[nbj_max];
 int OutputState[nbj_max];
+int Equipes[10];
+int NbEquipes;
+int NbJoueursEq1;
+int NbJoueursEq2;
+
+int const ParamChansons=3;
+int const NbNoteMax=100;
+float MaChanson[ParamChansons][NbNoteMax];
+float LeurChanson[ParamChansons][NbNoteMax];
+float MesNotes[ParamChansons][NbNoteMax];
+int RandomMin;
+int RandomMax;
 
 //One-time setup:
 //Define input/output
@@ -63,8 +76,8 @@ void setup()
   //DEBUGGING: SKIP SETUP AND USE VALUES.
   SkipSetup = true;
   //Valeurs de base
-  nbj=4;
-  nbj_raw=3;
+  nbj=9;
+  nbj_raw=8;
   vitesse=10;
   vitesse_raw=9;
   Game_Mode = 1;
@@ -142,7 +155,7 @@ void loop()
   delay(100);
 
 /// TEST AREA
-Chanson();
+JeuChanson();
 /// END TEST
   
   Delay_Fraudeur();

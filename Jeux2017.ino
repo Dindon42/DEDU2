@@ -255,9 +255,73 @@ void MIN()
   loop();
 }
 
-void Chanson()
+void JeuChanson()
 {
+  int NombreNotes;
+  int myRand;
+  float FacteurVitesse;
+
+  //Set White Lights
+  ActivateBlueLED(100);
+  ActivateGreenLED(100);
+  TurnOnAllRedLights();
+  delay(5000);
   
+  NombreNotes=SelectionChanson(0);
+  myRand= random(RandomMin,RandomMax);
+  FacteurVitesse=myRand/100;
+
+  
+  Serial.print("NombreNotes:");
+  Serial.println(NombreNotes);
+  
+  Serial.print("Fact:");
+  Serial.println(FacteurVitesse);
+
+  AllocateTwoTeams(nbj);
+  
+  //Set Lights for Team1
+  TurnOffAllRedLights();
+  DeactivateBlueLED();
+  DeactivateGreenLED();
+  delay(2000);
+  
+  for(int i=0 ; i<=nbj_raw ; i++)
+  {
+    if(Equipes[i]==0)
+    {
+      ActivateRedLight(i);
+      delay(1000);
+    }
+    Serial.print("  ");
+    Serial.print(Equipes[i]);
+  }
+  Serial.println();
+
+  
+
+  delay(20000);
+  JeuChanson();
+  
+  
+  for(int i=0; i<NombreNotes; i++)
+  {
+    PlayNote(Tone_Pin, MaChanson[0][i], MaChanson[1][i]/FacteurVitesse, MaChanson[2][i]/FacteurVitesse);
+  }
+
+  
+
+  
+  for(int i=0; i<NombreNotes; i++)
+  {
+    
+  }
+  
+
+
+  //Player's turn
+  
+  delay(2000);
 }
 
 
