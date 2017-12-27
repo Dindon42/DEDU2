@@ -67,7 +67,7 @@ void setup()
   nbj_raw=3;
   vitesse=10;
   vitesse_raw=9;
-  Game_Mode == 1;
+  Game_Mode = 1;
   
   ///ENLEVER
   
