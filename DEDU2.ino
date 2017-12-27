@@ -56,9 +56,15 @@ int NbJoueursEq2;
 
 int const ParamChansons=3;
 int const NbNoteMax=100;
+
+//Pour Chaque chanson:
+//0 => Freq
+//1 => Temps Actif
+//2 => Temps Silence Après
 float MaChanson[ParamChansons][NbNoteMax];
-float LeurChanson[ParamChansons][NbNoteMax];
-float MesScores[ParamChansons][NbNoteMax];
+//Pour Chaque joueur: Silence,puis Musique.
+float LeurTemps[ParamChansons-1][NbNoteMax];
+float Scores[2];
 int OrdreJoueurs[NbNoteMax];
 float SongAvgBpm;
 int RandomMin;

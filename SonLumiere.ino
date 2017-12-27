@@ -164,3 +164,21 @@ void FlashAndBuzzAllActive()
   
 }
 
+void TurnOffAllLights()
+{
+  TurnOffAllRedLights();
+  DeactivateGreenLED();
+  DeactivateBlueLED();
+}
+
+void IlluminateTeamRedLights(int Equipe)
+{
+  
+}
+
+
+
+
+
+
+

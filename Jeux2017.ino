@@ -261,13 +261,14 @@ void JeuChanson()
   int myRand;
   int ProchainJoueur;
   float FacteurVitesse;
-
+  int ToneIncrease=200;
+  int BaseTone=800;
+  int CurTone;
   //Set White Lights
   ActivateBlueLED(100);
   ActivateGreenLED(100);
   TurnOnAllRedLights();
-  //delay(5000);
-  delay(500);
+  delay(5000);
   
   NombreNotes=SelectionChanson(0);
   myRand= random(RandomMin,RandomMax);
@@ -288,13 +289,10 @@ void JeuChanson()
     //OrdreJoueurs
     DefinirOrdreJoueurs(e,NombreNotes);
     
-    
-      
     TurnOffAllRedLights();
     DeactivateBlueLED();
     DeactivateGreenLED();
-    //delay(2000);
-    delay(500);
+    delay(2000);
     
     Serial.println("EQUIPES:");
     for(int i=0 ; i<=nbj_raw ; i++)
@@ -333,21 +331,82 @@ void JeuChanson()
     
     TurnOffAllRedLights();
     delay(1500);
-    for(int t=0; t<4 ; t++)
-    {
+    for(int t=0; t<4 ; t++){
       tone(Tone_Pin,800,10);
       delay(700);
     }
-    delay(25000);
-    JeuChanson();
-  
     
-    for(int i=0; i<NombreNotes; i++)
+    for(int n=0; n<NombreNotes; n++)
     {
-      
+      ActivateRedLight(OrdreJoueurs[n]);
+      TakeTime();
+      do{
+        noTone(Tone_Pin);
+      }while(ReadPlayerInput(0)==LOW);
+      LeurTemps[0][n]=TimeDiff();
+      TakeTime();
+      do{
+        tone(Tone_Pin,MaChanson[0][n], 15);
+        delay(15);
+      }while(ReadPlayerInput(0)==HIGH);
+      LeurTemps[1][n]=TimeDiff();
+      DeactivateRedLight(OrdreJoueurs[n]);
     }
-  
+
+    Serial.println("");
+    Serial.println("Resultats:");
+    for (int i=0; i<=1;i++)
+    {
+      for(int n=0; n<NombreNotes; n++)
+      {
+        Serial.print("  ");
+        Serial.print(LeurTemps[i][n]);
+      }
+      Serial.println("  ");
+    }
+
+    //ResetScore
+    Scores[e]=0;
+    for (int n=0; n<NombreNotes; n++)
+    {
+      if (n!=0)
+      {
+        //WaitTime
+        Scores[e]+=RelativeError(LeurTemps[0][n],MaChanson[2][n]);
+      }
+      
+      //PlayTime
+      Scores[e]+=RelativeError(LeurTemps[1][n],MaChanson[1][n]);
+    }
+    Scores[e]=Scores[e]/((2*NombreNotes)-1);
   }
+
+  //Game complete.  Scoring!
+  TurnOffAllLights();
+  
+  for (int e = 0; e<NbEquipes ; e++)
+  {
+    CurTone=BaseTone;
+    for(int i=0 ; i<=nbj_raw ; i++)
+    {
+      if(Equipes[i]==e)
+      {
+        ActivateRedLight(i);
+        tone(Tone_Pin,CurTone,100);
+        delay(200);
+        CurTone+=ToneIncrease;
+      }
+    }
+
+    ActivateGreenLED(50);
+    ActivateBlueLED(50);
+    TurnOnAllRedLights();
+
+    
+  }
+  
+  
+  
   delay(2000);
 }
 

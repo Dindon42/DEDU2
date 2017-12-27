@@ -64,7 +64,15 @@ void DefinirOrdreJoueurs(int equipe,int NombreActions)
       if(Equipes[j]==equipe)
       {
         OrdreJoueurs[i]=j;
-        JoueurPrec=j+1;
+        
+        if(j==nbj_raw)
+        {
+          JoueurPrec=0;
+        }
+        else
+        {
+          JoueurPrec=j+1;
+        }
         break;
       }
       if(j==nbj_raw)
