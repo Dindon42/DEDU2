@@ -148,11 +148,20 @@ void DQP2()
 
 void MIN()
 {
+  int Sum0 = 0;
+  int Sum1 = 0;
+  
+  int DeclaredLoosers[nbj_max];
+  for (int i=0; i<=nbj_raw_max;i++)
+  {
+    DeclaredLoosers[i]=0;
+  }
+  
   //Init Setup: Mauve comme DQP1
   ActivateGreenLED(100);
   TurnOnAllRedLights();
   
-  int RandTimer=8+random(15);
+  int RandTimer=5+random(15);
 
   double TimeInterval = 1000;
   double TimeDelta=600/RandTimer;
@@ -169,10 +178,40 @@ void MIN()
 
     TimeInterval-=TimeDelta;
   }
-
+  CheckAllActive(nbj_raw);
   
-
+  TurnOffAllRedLights();
+  DeactivateGreenLED();
   delay(1000);
+
+  for (int i=0; i<=nbj_raw ; i++)
+  {
+    if (InputState[i]==HIGH)
+      Sum1++;
+    else
+      Sum0++;
+  }
+
+  //ALL LOSERS
+  if(Sum0==0||Sum1==0)
+  {
+    for(int i=0 ; i<4 ; i++)
+    {
+      tone(Tone_Pin,800,500);
+      TurnOnAllRedLights();
+      delay(700);
+      TurnOffAllRedLights();
+      delay(700);
+    }
+  }
+  else if(Sum0>Sum0)
+  {
+    
+  }
+
+  delay(100000);
+  
+ 
   MIN();
   
 }
