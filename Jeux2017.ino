@@ -146,7 +146,7 @@ void DQP2()
   }
   DeactivateBlueLED();
 
-  loop();
+  //loop();
 }
 
 void MIN()
@@ -166,8 +166,8 @@ void MIN()
   
   int RandTimer=5+random(15);
 
-  double TimeInterval = 1000;
-  double TimeDelta=600/RandTimer;
+  float TimeInterval = 1000;
+  float TimeDelta=600/RandTimer;
   
   for(int i = 0;i < RandTimer;i++)
   {
@@ -232,7 +232,7 @@ void MIN()
     }
     
     DeactivateGreenLED();
-    loop();
+    //loop();
   }
 
   //Sound for loosers.
@@ -252,7 +252,7 @@ void MIN()
     }
     delay(700);
   }
-  loop();
+  //loop();
 }
 
 void JeuChanson()
@@ -269,7 +269,7 @@ void JeuChanson()
   ActivateBlueLED(100);
   ActivateGreenLED(100);
   TurnOnAllRedLights();
-  delay(1000);
+  delay(3200);
   
   NombreNotes=SelectionChanson(random(NombreChansons));
   
@@ -289,7 +289,7 @@ void JeuChanson()
     TurnOffAllRedLights();
     DeactivateBlueLED();
     DeactivateGreenLED();
-    delay(2000);
+    delay(1200);
     
     for(int i=0 ; i<=nbj_raw ; i++)
     {
@@ -324,15 +324,15 @@ void JeuChanson()
       TakeTime();
       do{
         noTone(Tone_Pin);
-      }while(ReadPlayerInput(n)==LOW);
+      }while(ReadPlayerInput(OrdreJoueurs[n])==LOW);
       LeurTemps[0][n]=TimeDiff();
       TakeTime();
       do{
-        tone(Tone_Pin,MaChanson[0][n], 15);
-        delay(15);
+        tone(Tone_Pin,MaChanson[0][n], 20);
+        delay(20);
       }while(ReadPlayerInput(n)==HIGH);
       LeurTemps[1][n]=TimeDiff();
-      DeactivateRedLight(OrdreJoueurs[n]);
+      DeactivateRedLight(OrdreJoueurs[OrdreJoueurs[n]]);
     }
 
     //ResetScore
