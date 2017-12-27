@@ -144,6 +144,7 @@ void DQP2()
     }
     delay(500);
   }
+  DeactivateBlueLED();
 
   loop();
 }
@@ -252,6 +253,35 @@ void MIN()
     delay(700);
   }
   loop();
+}
+
+void Chanson()
+{
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

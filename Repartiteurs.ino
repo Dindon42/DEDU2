@@ -9,7 +9,7 @@ void Repartiteur()
   //5 DQP2
   //6 MIN
   int const NbJeux = 7;
-  int const ProbIndivJeux[NbJeux]={42,42,21,12,12,10,20};
+  int const ProbIndivJeux[NbJeux]={42,42,21,12,12,21,21};
   int ProbAccumuleeJeux[NbJeux];
   int max_prob=0;
 

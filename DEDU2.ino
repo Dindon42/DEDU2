@@ -132,16 +132,17 @@ void setup()
 }
 
 //Setup complete.  MAIN loop.
-void loop() {
-start:
-
+void loop() 
+{
   WaitForAllNonActive(nbj_raw);
 
   TurnOffAllRedLights();
+  DeactivateBlueLED();
+  DeactivateGreenLED();
   delay(100);
-   
-/// TEST AREA
 
+/// TEST AREA
+Chanson();
 /// END TEST
   
   Delay_Fraudeur();
