@@ -45,7 +45,7 @@ int SelectionChanson(int Numero)
         }
       }
       RandomMin=100;
-      RandomMax=325;
+      RandomMax=250;
       return NombreDeNotes;
     case 1:
       pf=(float *)DeadOrAlive1;

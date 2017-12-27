@@ -269,7 +269,7 @@ void JeuChanson()
   ActivateBlueLED(100);
   ActivateGreenLED(100);
   TurnOnAllRedLights();
-  delay(3200);
+  delay(2500);
   
   NombreNotes=SelectionChanson(random(NombreChansons));
   
@@ -328,11 +328,12 @@ void JeuChanson()
       LeurTemps[0][n]=TimeDiff();
       TakeTime();
       do{
-        tone(Tone_Pin,MaChanson[0][n], 20);
-        delay(20);
-      }while(ReadPlayerInput(n)==HIGH);
+        tone(Tone_Pin,MaChanson[0][n], 15);
+        delay(5);
+      }while(ReadPlayerInput(OrdreJoueurs[n])==HIGH);
       LeurTemps[1][n]=TimeDiff();
-      DeactivateRedLight(OrdreJoueurs[OrdreJoueurs[n]]);
+      noTone(Tone_Pin);
+      DeactivateRedLight(OrdreJoueurs[n]);
     }
 
     //ResetScore
