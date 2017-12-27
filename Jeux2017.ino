@@ -264,6 +264,7 @@ void JeuChanson()
   int ToneIncrease=200;
   int BaseTone=800;
   int CurTone;
+  int WinTeam;
   //Set White Lights
   ActivateBlueLED(100);
   ActivateGreenLED(100);
@@ -271,8 +272,6 @@ void JeuChanson()
   delay(5000);
   
   NombreNotes=SelectionChanson(0);
-  myRand= random(RandomMin,RandomMax);
-  FacteurVitesse=myRand/100;
 
   
   Serial.print("NombreNotes:");
@@ -288,6 +287,10 @@ void JeuChanson()
   {
     //OrdreJoueurs
     DefinirOrdreJoueurs(e,NombreNotes);
+
+    //Definir Facteur Vitesse
+    myRand= random(RandomMin,RandomMax);
+    FacteurVitesse=myRand/100;
     
     TurnOffAllRedLights();
     DeactivateBlueLED();
@@ -372,20 +375,37 @@ void JeuChanson()
       if (n!=0)
       {
         //WaitTime
-        Scores[e]+=RelativeError(LeurTemps[0][n],MaChanson[2][n]);
+        Scores[e]+=RelativeError(LeurTemps[0][n],MaChanson[2][n]/FacteurVitesse);
       }
       
       //PlayTime
-      Scores[e]+=RelativeError(LeurTemps[1][n],MaChanson[1][n]);
+      Scores[e]+=RelativeError(LeurTemps[1][n],MaChanson[1][n]/FacteurVitesse);
     }
     Scores[e]=Scores[e]/((2*NombreNotes)-1);
   }
 
-  //Game complete.  Scoring!
-  TurnOffAllLights();
+  Serial.print("SCORE0:");
+  Serial.println(Scores[0]);
+  Serial.print("SCORE1:");
+  Serial.println(Scores[1]);
+
   
+  //Winning Team
+  if (Scores[0]>Scores[1])
+  {
+    WinTeam=0;
+  }
+  else
+  {
+    WinTeam=1;
+  }
+  
+  //Game complete.  Scoring!
   for (int e = 0; e<NbEquipes ; e++)
   {
+    TurnOffAllLights();
+    MoveDEDUFlag(0);
+    delay(1500);
     CurTone=BaseTone;
     for(int i=0 ; i<=nbj_raw ; i++)
     {
@@ -398,16 +418,51 @@ void JeuChanson()
       }
     }
 
-    ActivateGreenLED(50);
-    ActivateBlueLED(50);
+    delay(2000);
     TurnOnAllRedLights();
-
+    delay(250);
     
+    for(int j=0 ; j<=Scores[e]*100 ; j++)
+    {
+      ActivateGreenLED(j);
+      ActivateBlueLED(j);
+      MoveDEDUFlag(j);
+      noTone(Tone_Pin);
+      tone(Tone_Pin,800+20*j,300);
+      delay(25);
+    }
+    delay(2000);
+    
+    MoveDEDUFlag(0);
+    TurnOffAllLights();
+  }
+
+  delay(500);
+
+  //Winner found, lights on/off!
+  for (int a = 1 ; a <= 3 ; a++)  
+  {
+    IlluminateTeamRedLights(WinTeam);
+    
+    for (int i = 1; i <= 120; i++)
+    {
+      Tone_Frequency = 500 + 30 * i;
+      tone(Tone_Pin, Tone_Frequency, 3);
+      delay(3);
+    }
+    noTone(Tone_Pin);
+    delay (500);
+    TurnOffAllRedLights();
+    
+    ActivateGreenLED(20);
+    delay(500);
+    DeactivateGreenLED();
   }
   
   
-  
   delay(2000);
+JeuChanson();
+  
 }
 
 

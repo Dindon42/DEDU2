@@ -7,8 +7,5 @@ float RelativeError(float TestValue,float TrueValue)
   return Score;
 }
 
-void MoveDEDUFlag(float Score);
-{
-  
-}
+
 

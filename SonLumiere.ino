@@ -171,13 +171,34 @@ void TurnOffAllLights()
   DeactivateBlueLED();
 }
 
-void IlluminateTeamRedLights(int Equipe)
+void IlluminateTeamRedLights(int Team)
 {
-  
+  for(int i=0 ; i<=nbj_raw ; i++)
+  {
+    if(Equipes[i]==Team)
+    {
+      ActivateRedLight(i);
+    }
+  }
 }
 
 
-
+void MoveDEDUFlag(float PercTravel)
+{
+  if (PercTravel < 0)
+  {
+    PercTravel=0;
+  }
+  else if (PercTravel > 100)
+  {
+    PercTravel=100;
+  }
+  
+  int MinPos=Servo_LowPos;
+  int MaxPos=Servo_HighPos;
+  int Delta=MaxPos-MinPos;
+  myservo.write(MinPos + (PercTravel/100)*Delta);
+}
 
 
 
