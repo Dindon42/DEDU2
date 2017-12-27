@@ -1,3 +1,20 @@
+void OneUp()
+{
+  tone(Tone_Pin,NOTE_E6,125);
+  delay(130);
+  tone(Tone_Pin,NOTE_G6,125);
+  delay(130);
+  tone(Tone_Pin,NOTE_E7,125);
+  delay(130);
+  tone(Tone_Pin,NOTE_C7,125);
+  delay(130);
+  tone(Tone_Pin,NOTE_D7,125);
+  delay(130);
+  tone(Tone_Pin,NOTE_G7,125);
+  delay(125);
+  noTone(Tone_Pin);
+}
+
 void YouSpinMeRound(double facteur)
 {
 int Note_1 = 184;

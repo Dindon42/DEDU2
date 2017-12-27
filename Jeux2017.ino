@@ -144,6 +144,8 @@ void DQP2()
     }
     delay(500);
   }
+
+  loop();
 }
 
 void MIN()
@@ -195,24 +197,61 @@ void MIN()
   //ALL LOSERS
   if(Sum0==0||Sum1==0)
   {
-    for(int i=0 ; i<4 ; i++)
+    for (int i=0; i<=nbj_raw;i++)
     {
-      tone(Tone_Pin,800,500);
-      TurnOnAllRedLights();
-      delay(700);
-      TurnOffAllRedLights();
-      delay(700);
+      DeclaredLoosers[i]=1;
     }
   }
-  else if(Sum0>Sum0)
+  else if(Sum0>Sum1) // Low Looses
   {
+    for (int i=0; i<=nbj_raw;i++)
+    {
+      if (InputState[i]==LOW)
+        DeclaredLoosers[i]=1;
+    }
+  }
+  else if(Sum1>Sum0)//HIGH Looses
+  {
+    for (int i=0; i<=nbj_raw;i++)
+    {
+      if (InputState[i]==HIGH)
+        DeclaredLoosers[i]=1;
+    }
+  }
+  else//NoLoosers, start over.
+  {
+    ActivateGreenLED(100);
+    OneUp();
+    for(int i=0 ; i<4 ; i++)
+    {
+      DeactivateGreenLED();
+      delay(500);
+      ActivateGreenLED(100);
+      delay(500);
+    }
     
+    DeactivateGreenLED();
+    loop();
   }
 
-  delay(100000);
-  
- 
-  MIN();
+  //Sound for loosers.
+  for(int i=0 ; i<4 ; i++)
+  {
+    tone(Tone_Pin,800,500);
+    for (int i=0; i<=nbj_raw;i++)
+    {
+      if (DeclaredLoosers[i]==1)
+        ActivateRedLight(i);
+    }
+    delay(700);
+    for (int i=0; i<=nbj_raw;i++)
+    {
+      if (DeclaredLoosers[i]==1)
+        DeactivateRedLight(i);
+    }
+    delay(700);
+  }
+  loop();
   
 }
 

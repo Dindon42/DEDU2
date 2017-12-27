@@ -1,4 +1,5 @@
 #include <Servo.h>
+#include "pitches.h"
 Servo myservo;
 
 //Definitions
@@ -141,8 +142,6 @@ start:
    
 /// TEST AREA
 
-MIN();
-
 /// END TEST
   
   Delay_Fraudeur();
@@ -155,7 +154,7 @@ MIN();
   }
   else
   {
-    Serial.println("Bienvenue chez DEDU");
+    Serial.println("Bienvenue chez DEDU2");
     Repartiteur();
   }
 }
