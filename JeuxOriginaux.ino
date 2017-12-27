@@ -80,7 +80,6 @@ void PQP()
   {
     analogWrite(G, 100);
   }
-
   
   do 
   {
@@ -112,6 +111,7 @@ void PQP()
 
   analogWrite(G, 0);
 
+  //Winner found, lights on/off!
   for (int a = 1 ; a <= 3 ; a++)  
   {
     digitalWrite(PlayerOutputPins[Winner],HIGH);
@@ -133,6 +133,7 @@ void PQP()
     analogWrite(G, 0);
   }
   
+  //Back to MAIN!
   loop();
 }
 

@@ -62,8 +62,8 @@ void setup()
   //DEBUGGING: SKIP SETUP AND USE VALUES.
   SkipSetup = true;
   //Valeurs de base
-  nbj=10;
-  nbj_raw=9;
+  nbj=4;
+  nbj_raw=3;
   vitesse=10;
   vitesse_raw=9;
   Game_Mode == 1;
@@ -141,7 +141,7 @@ start:
    
 /// TEST AREA
 
-DQP2();
+MIN();
 
 /// END TEST
   

@@ -7,8 +7,9 @@ void Repartiteur()
   //3 FFA
   //4 MarqueurHonte
   //5 DQP2
-  int const NbJeux = 6;
-  int const ProbIndivJeux[NbJeux]={42,42,21,12,12,42};
+  //6 MIN
+  int const NbJeux = 7;
+  int const ProbIndivJeux[NbJeux]={42,42,21,12,12,10,20};
   int ProbAccumuleeJeux[NbJeux];
   int max_prob=0;
 
@@ -43,9 +44,13 @@ void Repartiteur()
   {
     MarqueurHonte();
   }
-  else
+  else if (r < ProbAccumuleeJeux[5])
   {
     DQP2();
+  }
+  else
+  {
+    MIN();
   }
 }
 
