@@ -324,13 +324,13 @@ void JeuChanson()
       TakeTime();
       do{
         noTone(Tone_Pin);
-      }while(ReadPlayerInput(0)==LOW);
+      }while(ReadPlayerInput(n)==LOW);
       LeurTemps[0][n]=TimeDiff();
       TakeTime();
       do{
         tone(Tone_Pin,MaChanson[0][n], 15);
         delay(15);
-      }while(ReadPlayerInput(0)==HIGH);
+      }while(ReadPlayerInput(n)==HIGH);
       LeurTemps[1][n]=TimeDiff();
       DeactivateRedLight(OrdreJoueurs[n]);
     }

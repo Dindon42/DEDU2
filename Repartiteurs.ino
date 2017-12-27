@@ -8,8 +8,9 @@ void Repartiteur()
   //4 MarqueurHonte
   //5 DQP2
   //6 MIN
-  int const NbJeux = 7;
-  int const ProbIndivJeux[NbJeux]={42,42,21,12,12,21,21};
+  //7 JeuChanson
+  int const NbJeux = 8;
+  int const ProbIndivJeux[NbJeux]={42,42,21,12,12,21,21,42};
   int ProbAccumuleeJeux[NbJeux];
   int max_prob=0;
 
