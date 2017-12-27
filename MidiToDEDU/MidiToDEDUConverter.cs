@@ -31,7 +31,7 @@ namespace MidiToDedu
 
             // Read the file and display it line by line.  
             string BaseDir = "C:\\temp\\TEST\\";
-            string File = "DeadOrAlive1";
+            string File = "DeadOrAlive2";
             string Ext = ".txt";
 
             System.IO.StreamReader Infile = new System.IO.StreamReader(BaseDir+File+Ext);
@@ -129,19 +129,28 @@ namespace MidiToDedu
             Outfile.Write("    {");
             for (int i = 0; i < DataTripletCounter; i++)
             {
+                if (i < DataTripletCounter - 1)
                 Outfile.Write(MyValues[i, 0] + ",");
+                else
+                Outfile.Write(MyValues[i, 0]);
             }
             Outfile.Write("},\n");
             Outfile.Write("    {");
             for (int i = 0; i < DataTripletCounter; i++)
             {
-                Outfile.Write(MyValues[i, 1] + ",");
+                if (i < DataTripletCounter - 1)
+                    Outfile.Write(MyValues[i, 1] + ",");
+                else
+                    Outfile.Write(MyValues[i, 1]);
             }
             Outfile.Write("},\n");
             Outfile.Write("    {");
             for (int i = 0; i < DataTripletCounter; i++)
             {
-                Outfile.Write(MyValues[i, 2] + ",");
+                if (i < DataTripletCounter - 1)
+                    Outfile.Write(MyValues[i, 2] + ",");
+                else
+                    Outfile.Write(MyValues[i, 2]);
             }
             Outfile.Write("},\n");
             Outfile.WriteLine("    };");
@@ -172,7 +181,7 @@ namespace MidiToDedu
 
             System.Console.WriteLine("Export Complete");
             // Suspend the screen.  
-            System.Console.ReadLine();
+            //System.Console.ReadLine();
         }
     }
 }
