@@ -37,7 +37,7 @@ void Delay_Fraudeur()
     delay(500);
     myservo.write(Servo_LowPos);
     delay(500);
-    loop();
+    //loop();
   }
 }
 
@@ -111,7 +111,7 @@ void PQP()
   }
   
   //Back to MAIN!
-  loop();
+  //loop();
 }
 
 void MarqueurHonte()
@@ -152,7 +152,7 @@ void MarqueurHonte()
   //Blue off.
   DeactivateBlueLED();
 
-  loop();
+  //loop();
  }
 
 void TrompeOeil()
@@ -207,13 +207,14 @@ void TrompeOeil()
   delay(250);
   TurnOffAllRedLights();
 
-  loop();
+  //loop();
 }
 
 
 //Dernier qui pèse
 void DQP()
 {
+  int z;
   int Perdant = -1;
 
   //init lights as purple
@@ -251,19 +252,20 @@ void DQP()
   DeactivateBlueLED();
   delay(500);
   
-  loop();
+  //loop();
 }
 
   //Debut FFA
 
 void FFA()
 {
-  double myRand1 = random(280,400)/100;
+  float myRand1 = random(280,400)/100;
   int myRand2 = random(28,42);
+  int r;
 
   if (Game_Mode==1)
   {
-    ChansonDEDU(myRand1);
+    JoueChansonDEDU(myRand1);
   }
   
   for (int e = 1; e <= myRand2; e++) {
@@ -291,5 +293,5 @@ void FFA()
   myservo.write(Servo_LowPos);
   delay(500);
   
-  loop();
+  //loop();
 }
