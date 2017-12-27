@@ -106,13 +106,13 @@ void ClignoteEtSon(int NbMax,int FreqStart, int FreqIncrease, int NbOffset)
   }
 }
 
-void PlayNote(int Tone_Pin, double Freq, double PlayTime, double WaitTime)
+void PlayNote(int Tone_Pin, float Freq, float PlayTime, float WaitTime)
 {
   tone(Tone_Pin, Freq, PlayTime);
   delay(PlayTime+WaitTime);
 }
 
-void PlayNoteWithLight(int Tone_Pin, double Freq, double PlayTime, double WaitTime,int Player)
+void PlayNoteWithLight(int Tone_Pin, float Freq, float PlayTime, float WaitTime,int Player)
 {
   ActivateRedLight(Player);
   tone(Tone_Pin, Freq, PlayTime);
