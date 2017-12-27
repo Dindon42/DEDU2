@@ -6,7 +6,7 @@ void Repartiteur()
   //2 TrompeOeil
   //3 FFA
   //4 MarqueurHonte
-  //5 TLMPareil
+  //5 DQP2
   int const NbJeux = 6;
   int const ProbIndivJeux[NbJeux]={42,42,21,12,12,42};
   int ProbAccumuleeJeux[NbJeux];
@@ -45,7 +45,7 @@ void Repartiteur()
   }
   else
   {
-    TLMPareil();
+    DQP2();
   }
 }
 

@@ -1,23 +1,18 @@
-void TLMPareil()
+void DQP2()
 {
-  //Init Setup: Mix cyan et Rose
-  ActivateGreenLED(15);
-  ActivateBlueLED(5);
   
-  for (int i=0 ; i<nbj_raw ; i++)
-  {
-    if (i%2==0)
-    {
-     ActivateRedLight(i); 
-    }
-  }
+  //Init Setup: Mauve comme DQP
+  ActivateBlueLED(100);
+  TurnOnAllRedLights();
 
+  int NumActiveOutputs=-1;
+  
   do
   {
     ReadInputToggleOutput(nbj_raw);
-    delay(250);
-    Serial.print(CheckAllActiveOutputs(nbj_raw));
-  }while(CheckAllActiveOutputs(nbj_raw)==0 || CheckAllActiveOutputs(nbj_raw)==nbj);
+    delay(25);
+    NumActiveOutputs = CheckAllActiveOutputs(nbj_raw);
+  }while(NumActiveOutputs!=1);
 
   //EndAll lights
   DeactivateGreenLED();
@@ -25,6 +20,31 @@ void TLMPareil()
   TurnOffAllRedLights();
   delay(2000);
 
-  TLMPareil();
+  DQP2();
+}
+
+void Maj()
+{
+  
+  //Init Setup: Mauve comme DQP
+  ActivateBlueLED(100);
+  TurnOnAllRedLights();
+
+  int NumActiveOutputs=-1;
+  
+  do
+  {
+    ReadInputToggleOutput(nbj_raw);
+    delay(25);
+    NumActiveOutputs = CheckAllActiveOutputs(nbj_raw);
+  }while(NumActiveOutputs!=1);
+
+  //EndAll lights
+  DeactivateGreenLED();
+  DeactivateBlueLED();
+  TurnOffAllRedLights();
+  delay(2000);
+
+  DQP2();
 }
 

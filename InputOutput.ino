@@ -101,20 +101,20 @@ int CheckAllActiveOutputs(int NbOutputs)
   int NumActive=0;
   for (int i=0; i<=NbOutputs ; i++)
   {
-    //Store in global input array
+    //Store in global output array
     OutputState[i]=ReadPlayerOutput(i);
     if (OutputState[i]==HIGH)
     {
-      
       NumActive++;
     }
   }
+  return NumActive;
 }
 
 //Return first active player output.  -1 is default if none active.  Player 1 is 0.
-int FirstActiveOutput(int NbInputs)
+int FirstActiveOutput(int NbOutputs)
 {
-  for (int i=0; i<=NbInputs ; i++)
+  for (int i=0; i<=NbOutputs ; i++)
   {
     if (ReadPlayerOutput(i)==HIGH)
     {

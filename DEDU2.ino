@@ -141,7 +141,7 @@ start:
    
 /// TEST AREA
 
-TLMPareil();
+DQP2();
 
 /// END TEST
   
