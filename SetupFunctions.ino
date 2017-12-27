@@ -72,8 +72,7 @@ void GameMode()
   }
   
   //Tous les bleus et vert à OFF.
-  DeactivateGreenLED();
-  DeactivateBlueLED();
+  TurnOffAllLights();
   
   if (Game_Mode==0)
   {
@@ -88,46 +87,3 @@ void GameMode()
   TurnOffAllRedLights();
   delay(500);
 }
-
-
-
-
-/*
- * 
-//Fonction de setup pour Ecart Vitesse
- *   Pour Setup:
-  int vitesse_ecart=1;
-  int vitesse_ecart_raw=0;
-    //Debut Ecart VITESSE
-    // Attend que les joueurs choisissent l'ecart de vitesse du jeu.
-    // 1 = lent, 10 = vite
-    EcartVitesse(); 
-    ///ENLEVER
-    vitesse_ecart=10;
-    vitesse_ecart_raw=9;
- * 
-//Fonction de setup pour Ecart Vitesse
-void EcartVitesse()
-{
-  //Vertes à ON
-  ActivateGreenLED(60);
-  ActivateBlueLED(20);
-  tone(Tone_Pin, 2500, 500);
-
-  do
-  {
-    vitesse_ecart_raw=FirstActive(nbj_raw_max);
-  }while (vitesse_ecart_raw == -1);
-  vitesse_ecart=vitesse_ecart_raw+1;
-
-  //Lumières vertes OFF
-  DeactivateGreenLED();
-  DeactivateBlueLED();
-
-  //Montre aux joueurs les sélections.
-  ClignoteEtSon(vitesse_raw,3000,400,0);
-  delay(500);
-  TurnOffAllRedLights();
-  delay(500);
-}
-*/
