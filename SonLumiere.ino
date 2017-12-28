@@ -171,6 +171,14 @@ void TurnOffAllLights()
   DeactivateBlueLED();
 }
 
+
+void TurnOnAllLights()
+{
+  TurnOnAllRedLights();
+  ActivateGreenLED(100);
+  ActivateBlueLED(100);
+}
+
 void IlluminateTeamRedLights(int Team)
 {
   for(int i=0 ; i<=nbj_raw ; i++)
@@ -183,6 +191,7 @@ void IlluminateTeamRedLights(int Team)
 }
 
 
+//0->100
 void MoveDEDUFlag(float PercTravel)
 {
   if (PercTravel < 0)
@@ -199,6 +208,24 @@ void MoveDEDUFlag(float PercTravel)
   int Delta=MaxPos-MinPos;
   myservo.write(MinPos + (PercTravel/100)*Delta);
 }
+
+int ServoAngle()
+{
+  return myservo.read();
+}
+
+
+//0->100
+float ServoAnglePercent()
+{
+  float MinPos=Servo_LowPos;
+  float MaxPos=Servo_HighPos;
+
+  float Percent = ((float)myservo.read()-MinPos)/(MaxPos-MinPos);
+  return Percent*100;
+}
+
+
 
 
 

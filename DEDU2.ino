@@ -7,7 +7,11 @@ Servo myservo;
 int const myRandPin=0; //To initialize the random function
 int const G = 3; //Green LED ALL
 int const B = 2; //Blue LED ALL
+
+//ENLEVER!!!!!!!
+
 int const Tone_Pin = 52; //Tone
+//int const Tone_Pin = 52; //Tone
 
 //Position à l'arrêt du Servo (bâton rentré)
 int const Servo_LowPos = 40;
@@ -75,17 +79,18 @@ int const NombreChansons=9;
 int PlayerInputPins[nbj_max];
 int PlayerOutputPins[nbj_max];
 
-//TimeDebugging
+//Time variables
 unsigned long TimeStart;
+
 bool SkipSetup=false;
 int Tone_Frequency;
 
 //Variables globales
-int nbj=1;
-int nbj_raw=0;
-int vitesse=1;
-int vitesse_raw=0;
-int Game_Mode=0;
+int nbj=4;
+int nbj_raw=3;
+int vitesse=10;
+int vitesse_raw=9;
+int Game_Mode=1;
 int InputState[nbj_max];
 int OutputState[nbj_max];
 int Equipes[10];
@@ -179,7 +184,7 @@ void setup()
 
 //Setup complete.  MAIN loop.
 void loop() 
-{
+{ 
   WaitForAllNonActive(nbj_raw);
 
   TurnOffAllLights();
@@ -187,7 +192,9 @@ void loop()
   delay(100);
   
   Delay_Fraudeur();
-
+  
+  TurnOffAllLights();
+  
   if(Game_Mode == 0)
   {
     

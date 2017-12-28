@@ -62,29 +62,6 @@ void PQP()
   {
     Winner=FirstActive(nbj_raw);
   }while (Winner == -1);
-    
-  //For future expansion if a tie exists.
-  /*
-  do
-  {
-    NumWin = CheckAllActive(nbj_raw);
-    
-    if (NumWin == 1)
-    {
-      for (int i=0 ; i<=nbj_raw ; i++)
-      {
-        if(InputState[i]==HIGH)
-        {
-          Winner = i;
-        }
-      }
-    }
-    else if(NumWin >= 2)
-    {
-      //WOW
-    }
-  }while (NumWin == 0);
-  */
 
   analogWrite(G, 0);
 
@@ -240,7 +217,7 @@ void DQP()
   }
   noTone(Tone_Pin);
 
-  //Identify the Winner
+  //Identify the Looser
   for (int e = 1; e <= 4; e++) {
     ActivateRedLight(Perdant);
     delay(500);

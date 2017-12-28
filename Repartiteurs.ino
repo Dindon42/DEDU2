@@ -9,8 +9,9 @@ void Repartiteur()
   //5 DQP2
   //6 MIN
   //7 JeuChanson
-  int const NbJeux = 8;
-  int const ProbIndivJeux[NbJeux]={42,21,21,12,12,21,21,42};
+  //8 PatateChaude
+  int const NbJeux = 9;
+  int const ProbIndivJeux[NbJeux]={42,21,21,12,12,21,21,42,33};
   int ProbAccumuleeJeux[NbJeux];
   int max_prob=0;
   int r;
@@ -54,9 +55,13 @@ void Repartiteur()
   {
     MIN();
   }
-  else
+  else if (r < ProbAccumuleeJeux[7])
   {
     JeuChanson();
+  }
+  else
+  {
+    PatateChaude(); 
   }
 }
 

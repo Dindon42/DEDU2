@@ -429,6 +429,106 @@ void JeuChanson()
 
 
 
+void PatateChaude()
+{
+  TurnOffAllLights();
+  delay(250);
+  //Lights Setup
+  ActivateBlueLED(21);
+  delay(2000);
+
+  int LuckyPlayer = random(nbj);
+  int NextPlayer;
+
+  if(random(2)==0)
+  {
+     NextPlayer=1;
+  }
+  else
+  {
+    NextPlayer=-1;
+  }
+  
+  unsigned long GameTimeMillis = 5555+random(16242);
+  bool ReadyToSwitch=false;
+  
+  ActivateRedLight(LuckyPlayer);
+  MoveDEDUFlag(1+random(25,42));
+  delay(20);
+  TakeTime();
+  do
+  {
+    if(ReadPlayerInput(LuckyPlayer)==LOW)
+    {
+      ReadyToSwitch=true;
+    }
+
+    if(ReadPlayerInput(LuckyPlayer)==HIGH && ReadyToSwitch==true)
+    {
+      //Deactivate my Light;
+      DeactivateRedLight(LuckyPlayer);
+      
+      //GoToNextPlayer
+      LuckyPlayer+=NextPlayer;
+      if (LuckyPlayer>nbj_raw)
+      {
+        LuckyPlayer=0;
+      }
+      else if (LuckyPlayer < 0)
+      {
+        LuckyPlayer=nbj_raw;
+      }
+      
+      //Activate new lucky Player
+      ActivateRedLight(LuckyPlayer);
+      tone(Tone_Pin, 800+LuckyPlayer*50, 2);
+      ReadyToSwitch=false;
+    }
+    
+    if (random(10000)>9996)
+    {
+      if (NextPlayer == 1)
+      {
+        NextPlayer=-1;
+
+        //Decrease Flag
+        MoveDEDUFlag(random(ServoAnglePercent()));
+      }
+      else
+      {
+        //IncreaseFlag
+        NextPlayer=1;
+        MoveDEDUFlag(random(ServoAnglePercent(),100));
+      }
+    }
+    delay(1);
+  }while(TimeDiff()<GameTimeMillis);
+
+  ActivateBlueLED(5);
+  
+  for (int i = 1; i <= 80; i++)
+  {
+    Tone_Frequency = 2000 - 20 * i;
+    tone(Tone_Pin, Tone_Frequency);
+    delay(10);
+  }
+  noTone(Tone_Pin);
+  
+  //Identify the Looser
+  for (int e = 1; e <= 4; e++) {
+    ActivateRedLight(LuckyPlayer);
+    delay(500);
+    DeactivateRedLight(LuckyPlayer);
+    delay(500);
+  }
+
+  TurnOffAllLights();
+  MoveDEDUFlag(0);
+  delay(1200);
+}
+
+
+
 
 
 
