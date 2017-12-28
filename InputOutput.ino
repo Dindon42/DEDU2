@@ -66,6 +66,20 @@ int ReadPlayerOutput(int iPlayer)
   return digitalRead(PlayerOutputPins[iPlayer]);
 }
 
+int ToggleOutput(int iPlayer)
+{
+  int Outputstate=ReadPlayerOutput(iPlayer);
+  if(Outputstate==HIGH)
+  {
+    DeactivateRedLight(iPlayer);
+  }
+  else
+  {
+    ActivateRedLight(iPlayer);
+  }
+  return Outputstate;
+}
+
 //Return first active player.  -1 is default if none active.  Player 1 is 0.
 int FirstActive(int NbInputs)
 {

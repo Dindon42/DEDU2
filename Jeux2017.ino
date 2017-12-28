@@ -528,6 +528,193 @@ void PatateChaude()
 }
 
 
+void AllRandom()
+{
+  int Wincondition;
+  int NewAssignment[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+  bool NumAlreadyAllocated=false;
+  int PosAssigned=0;
+  int r;
+  int r2;
+  int PreviousState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
+  int LightState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
+  int PrevLightState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
+  int OutputSum;
+  int Looser=-1;
+  //InitialSetup CYAN
+  TurnOffAllLights();
+  
+  ActivateBlueLED(10);
+  ActivateGreenLED(22);
+  delay(2000);
+
+  //WinCondition will be checked by a sum of lightstates.
+  if(random(2)==0)
+  {
+    Wincondition=0;
+  }
+  else
+  {
+    Wincondition=nbj;
+  }
+
+Serial.print("Wincondition:");
+  Serial.println(Wincondition);
+
+  //Initial Lights setup: 50/50 Lit vs Not Lit
+  AllocateTwoTeams(nbj);
+
+  //Fill Random Array
+  do
+  {
+    r = random(nbj);
+    
+    if(NewAssignment[r]==-1)
+    {
+      do
+      {
+       NumAlreadyAllocated=false;
+       
+       r2=random(nbj);
+       
+       for(int j=0;j<=nbj_raw;j++)
+       {
+        
+        if (NewAssignment[j]==r2)
+        {
+          
+          NumAlreadyAllocated=true;
+          break;
+        }
+       }
+
+       if(NumAlreadyAllocated==false)
+       {
+        NewAssignment[r]=r2;
+        PosAssigned++;
+       }
+       
+      }while(NewAssignment[r]==-1);
+    }
+  }while(PosAssigned<nbj);
+
+          
+  //Print Random Array
+  for (int i=0 ; i<=nbj_raw ; i++)
+  {
+    Serial.print("  ");
+    Serial.print(NewAssignment[i]);
+  }
+  Serial.println("");
+
+  //Activate Based on  assignment from previous call
+  for(int i=0 ; i<=nbj_raw ; i++)
+  {
+    if(Equipes[i]==0)
+    {
+      ActivateRedLight(NewAssignment[i]);
+      LightState[i]=HIGH;
+    }
+  }
+
+
+Serial.println("STATE");
+for (int j=0 ; j<=nbj_raw ; j++)
+{
+    Serial.print("  ");  
+    Serial.print(LightState[j]);
+}
+Serial.println();
+
+Serial.println("PREVSTATE");
+for (int j=0 ; j<=nbj_raw ; j++)
+{
+    Serial.print("  ");  
+    Serial.print(PrevLightState[j]);
+}
+Serial.println();
+
+//Tone 3,2,1 GO!
+
+
+  //Main loop
+  do
+  {
+    OutputSum=0;
+    for (int i=0 ; i<=nbj_raw ; i++)
+    {
+      //IF PLAYER IS HIGH AND PREV IS LOW, Toggle his light
+      if (ReadPlayerInput(i)==HIGH && PreviousState[i]==LOW)
+      {
+        LightState[i]=ToggleOutput(NewAssignment[i]);
+
+
+Serial.println("STATE");
+for (int j=0 ; j<=nbj_raw ; j++)
+{
+    Serial.print("  ");  
+    Serial.print(LightState[j]);
+}
+Serial.println();
+
+Serial.println("PREVSTATE");
+for (int j=0 ; j<=nbj_raw ; j++)
+{
+    Serial.print("  ");  
+    Serial.print(PrevLightState[j]);
+}
+Serial.println();
+        
+      }
+      PreviousState[i]=ReadPlayerInput(i);
+      OutputSum+=LightState[i];
+    }
+
+    //Win Condition
+    if (OutputSum == Wincondition)
+    {
+      Serial.print("WinNow?");
+      //Check in previous state who was not OK.
+      for (int i=0 ; i<=nbj_raw ; i++)
+      {
+        if (Wincondition==nbj)
+        {
+          if(PrevLightState[i]==0)
+          {
+            Looser=i;
+          }
+        }
+        else
+        {
+          if(PrevLightState[i]==1)
+          {
+            Looser=i;
+          }
+        }
+      }
+    }
+    else
+    {
+      for (int i=0 ; i<=nbj_raw ; i++)
+      {
+        PrevLightState[i]=LightState[i];
+      }
+    }
+    
+    delay(15);
+  }while(Looser==-1);
+  
+Serial.print("Looser:");
+Serial.println(Looser);
+
+  
+
+
+
+  delay(12000);
+  TurnOffAllLights();
+}
+
 
 
 

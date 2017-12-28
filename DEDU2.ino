@@ -8,10 +8,7 @@ int const myRandPin=0; //To initialize the random function
 int const G = 3; //Green LED ALL
 int const B = 2; //Blue LED ALL
 
-//ENLEVER!!!!!!!
-
 int const Tone_Pin = 52; //Tone
-//int const Tone_Pin = 52; //Tone
 
 //Position à l'arrêt du Servo (bâton rentré)
 int const Servo_LowPos = 40;
@@ -24,6 +21,43 @@ int const OutPinStart = 31;
 int const OutPinInterval = 2;
 int const InPinStart = 24;
 int const InPinInterval = 2;
+
+int PlayerInputPins[nbj_max];
+int PlayerOutputPins[nbj_max];
+
+//Time variables
+unsigned long TimeStart;
+
+bool SkipSetup=false;
+int Tone_Frequency;
+
+//Variables globales
+int nbj=5;
+int nbj_raw=4;
+int vitesse=10;
+int vitesse_raw=9;
+int Game_Mode=1;
+int InputState[nbj_max];
+int OutputState[nbj_max];
+int Equipes[10];
+int NbEquipes;
+int NbJoueursEq1;
+int NbJoueursEq2;
+
+int const ParamChansons=3;
+int const NbNoteMax=42;
+
+//Pour Chaque chanson:
+//0 => Freq
+//1 => Temps Actif
+//2 => Temps Silence Après
+float MaChanson[ParamChansons][NbNoteMax];
+//Pour Chaque joueur: Silence,puis Musique.
+float LeurTemps[ParamChansons-1][NbNoteMax];
+float Scores[2];
+int OrdreJoueurs[NbNoteMax];
+int RandomMin;
+int RandomMax;
 
 
 ////Chansons.
@@ -76,43 +110,6 @@ int const NombreChansons=9;
     };
 ////
 
-int PlayerInputPins[nbj_max];
-int PlayerOutputPins[nbj_max];
-
-//Time variables
-unsigned long TimeStart;
-
-bool SkipSetup=false;
-int Tone_Frequency;
-
-//Variables globales
-int nbj=4;
-int nbj_raw=3;
-int vitesse=10;
-int vitesse_raw=9;
-int Game_Mode=1;
-int InputState[nbj_max];
-int OutputState[nbj_max];
-int Equipes[10];
-int NbEquipes;
-int NbJoueursEq1;
-int NbJoueursEq2;
-
-int const ParamChansons=3;
-int const NbNoteMax=42;
-
-//Pour Chaque chanson:
-//0 => Freq
-//1 => Temps Actif
-//2 => Temps Silence Après
-float MaChanson[ParamChansons][NbNoteMax];
-//Pour Chaque joueur: Silence,puis Musique.
-float LeurTemps[ParamChansons-1][NbNoteMax];
-float Scores[2];
-int OrdreJoueurs[NbNoteMax];
-int RandomMin;
-int RandomMax;
-
 //One-time setup:
 //Define input/output
 //Set NBJ
@@ -121,7 +118,7 @@ void setup()
 {
   int Pin;
 
-  
+  ///ENLEVER
   Serial.begin(9600);
   
   //Initialize random sequence based on floating value from an unconnected pin.
@@ -185,6 +182,7 @@ void setup()
 //Setup complete.  MAIN loop.
 void loop() 
 { 
+  
   WaitForAllNonActive(nbj_raw);
 
   TurnOffAllLights();
