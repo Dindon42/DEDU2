@@ -181,15 +181,19 @@ void setup()
 
 //Setup complete.  MAIN loop.
 void loop() 
-{ 
+{
+  int r;
   
   WaitForAllNonActive(nbj_raw);
 
   TurnOffAllLights();
   
-  delay(100);
-  
-  Delay_Fraudeur();
+  if (!SkipDelay)
+  {
+    //FacteurVitesse
+    r = random(25,50) + (12 - vitesse) * random(100);
+    Delay_Fraudeur(r);
+  }
   
   TurnOffAllLights();
   

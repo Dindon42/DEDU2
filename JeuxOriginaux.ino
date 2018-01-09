@@ -1,10 +1,8 @@
-void Delay_Fraudeur()
+void Delay_Fraudeur(int r)
 {
   //Debut DELAY et TESTFRAUDEUR --------------------------------------
   //Délai entre les jeux.
   //Pendant ce temps, si un joueur appuie sur sa manette, sa lumière rouge allume.  Même chose pour les voisins.
-  
-  int r = 50 + (12 - vitesse) * random(100); 
   int LoopsToGo=20;
   bool AtLeastOneActive = false;
   bool TriggerEnd = false;
@@ -19,7 +17,7 @@ void Delay_Fraudeur()
       TriggerEnd=true;
       x=1;
       //Play tone and raise flag.
-      tone(Tone_Pin, 1500, 750);
+      tone(Tone_Pin, 1500, 400);
       myservo.write(70);
     }
     if (TriggerEnd == true)
@@ -37,7 +35,8 @@ void Delay_Fraudeur()
     delay(500);
     myservo.write(Servo_LowPos);
     delay(500);
-    //loop();
+    TurnOffAllLights();
+    Delay_Fraudeur(random(25,70));
   }
 }
 
