@@ -1,0 +1,26 @@
+DEDU
+PQP -> intensité full vary de vert.
+DQP/2 -> RANDOM tout le monde allumé
+TROMPE -> random vary vert initial
+MIN -> plus de temps après pour donner
+ULTIMATE -> enregistrer loosers pendant le jeu principal
+PATATE -> TEMPS DE REACTION
+
+ALL RANDOM -> mieux identifier les conditions de victoire, clic clic vers le perdant
+ALL RANDOM -> chance qu'il y ait qqn qui contrôle le DEDU
+
+DeDuel -> Signature sonore pour démarrer le jeu
+DeDuel -> TRANSFERT DE HONTE avec bruit et lumière
+
+
+NEW MODEs:
+équipes consécutives, 1-2-3 ou 3-2-1 si 1-2-1, revient...
+SI IMPAIR: HONTE choisit le sens
+Deduel equipe2: Dedu orig: PQP;DQP1/2;TROMPE
+
+MidiToDedu: 
+Nouveau format avec progmem
+Ajouter chansons:
+-What is love?
+-ScatMan
+-Bananaphone
