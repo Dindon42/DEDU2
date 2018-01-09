@@ -240,7 +240,26 @@ float ServoAnglePercent()
 }
 
 
+void ReadySound(int SoundTime)
+{
+  tone(Tone_Pin, 1700,SoundTime);
+  delay(2*SoundTime);
+  tone(Tone_Pin, 1700,SoundTime);
+  delay(2*SoundTime);
+  tone(Tone_Pin, 2800,SoundTime*1.5);
+  delay(SoundTime*1.5);
+}
 
-
+void WinnerSound()
+{
+  for (int i = 1; i <= 120; i++)
+  {
+    Tone_Frequency = 500 + 30 * i;
+    tone(Tone_Pin, Tone_Frequency, 3);
+    delay(3);
+  }
+  noTone(Tone_Pin);
+  delay (500);
+}
 
 
