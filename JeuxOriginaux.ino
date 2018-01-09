@@ -87,7 +87,7 @@ void PQP()
   }
 }
 
-void MarqueurHonte()
+int MarqueurHonte()
 {
   //Joueur chanceux
   int Winner = random(nbj);
@@ -125,7 +125,7 @@ void MarqueurHonte()
   //Blue off.
   DeactivateBlueLED();
 
-  //loop();
+  return Winner;
  }
 
 void TrompeOeil()
@@ -229,7 +229,7 @@ void DQP()
 void FFA()
 {
   float myRand1 = random(280,400)/100;
-  int myRand2 = random(28,42);
+  int myRand2 = random(25,32);
   int r;
 
   if (Game_Mode==1)
