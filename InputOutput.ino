@@ -72,10 +72,12 @@ int ToggleOutput(int iPlayer)
   if(Outputstate==HIGH)
   {
     DeactivateRedLight(iPlayer);
+    Outputstate=LOW;
   }
   else
   {
     ActivateRedLight(iPlayer);
+    Outputstate=HIGH;
   }
   return Outputstate;
 }
