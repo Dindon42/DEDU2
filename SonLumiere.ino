@@ -179,6 +179,20 @@ void TurnOnAllLights()
   ActivateBlueLED(100);
 }
 
+void ControlAllLights(bool RedState, int BlueLevel, int GreenLevel)
+{
+  if (BlueLevel>100) BlueLevel=100;
+  if (BlueLevel<0) BlueLevel=0;
+  if (GreenLevel>100) GreenLevel=100;
+  if (GreenLevel<0) GreenLevel=0;
+
+  if (RedState) TurnOnAllRedLights();
+  else TurnOffAllRedLights();
+  
+  ActivateGreenLED(GreenLevel);
+  ActivateBlueLED(BlueLevel);
+}
+
 void IlluminateTeamRedLights(int Team)
 {
   for(int i=0 ; i<=nbj_raw ; i++)
