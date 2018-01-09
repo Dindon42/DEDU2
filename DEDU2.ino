@@ -2,13 +2,72 @@
 #include <avr/pgmspace.h>
 Servo myservo;
 
+//DEBUG
+//COMMENT BELOW LINE FOR PROD UPLOAD.
+//#define ENABLE_LOGGING
+bool SkipSetup=false;
+bool nosound=false;
+bool SkipDelay=false;
+bool SkipGame=false;
+bool SkipGameDelay=false;
+bool SkipLights=false;
+//SETUP IF SKIPPED:
+int nbj=5;
+int vitesse=10;
+int Game_Mode=1;
+//DEBUGEND
+
+
+//Prob, Jeux
+int const NumberOfRoundsForFullProb=6;
+int const NbJeux = 12;
+int CountJeux[NbJeux]={0,0,0,0,0,0,0,0,0,0,0,0};
+int TotalNbJeux=0;
+//Index_Jeux
+int const ProbIndivJeux[NbJeux]={
+95,   /*0  PQP*/
+21,   /*1  DQP*/
+21,   /*2  TrompeOeil*/
+30,   /*3  FFA*/
+50,   /*4  MarqueurHonte*/
+42,   /*5  DQP2*/
+66,   /*6  MIN*/
+42,   /*7  JeuChanson*/
+66,   /*8  PatateChaude*/
+66,   /*9  AllRandom*/
+66,   /*10 UltimateChallenge*/
+99};  /*11 DeDuel*/
+
+
+#ifdef ENABLE_LOGGING
+bool ActiveGameLogging[NbJeux]={
+  false,   /*0  PQP*/
+  false,   /*1  DQP*/
+  false,   /*2  TrompeOeil*/
+  false,   /*3  FFA*/
+  false,   /*4  MarqueurHonte*/
+  false,   /*5  DQP2*/
+  false,   /*6  MIN*/
+  false,   /*7  JeuChanson*/
+  false,   /*8  PatateChaude*/
+  false,   /*9  AllRandom*/
+  false,   /*10 UltimateChallenge*/
+  false};  /*11 DeDuel*/
+
+  #define LOG_GAME(i,a) if( ActiveGameLogging[i] ) Serial.print(a);
+  #define LOG_GENERAL(a) Serial.print(a);
+#else
+  #define LOG_GAME(i,a)
+  #define LOG_GENERAL(a)
+#endif
+
 //Definitions
 //Pins
 int const myRandPin=0; //To initialize the random function
 int const G = 3; //Green LED ALL
 int const B = 2; //Blue LED ALL
 
-int const Tone_Pin = 52; //Tone
+int Tone_Pin=52;
 
 //Position à l'arrêt du Servo (bâton rentré)
 int const Servo_LowPos = 40;
@@ -21,28 +80,26 @@ int const OutPinStart = 31;
 int const OutPinInterval = 2;
 int const InPinStart = 24;
 int const InPinInterval = 2;
+int nbj_raw;
+int vitesse_raw;
 
+int ProbIndivJeuxCurrent[NbJeux];
 int PlayerInputPins[nbj_max];
 int PlayerOutputPins[nbj_max];
 
 //Time variables
 unsigned long TimeStart;
 
-bool SkipSetup=false;
 int Tone_Frequency;
 
-//Variables globales
-int nbj=5;
-int nbj_raw=4;
-int vitesse=10;
-int vitesse_raw=9;
-int Game_Mode=1;
+//Globales.
 int InputState[nbj_max];
 int OutputState[nbj_max];
 int Equipes[10];
 int NbEquipes;
 int NbJoueursEq1;
 int NbJoueursEq2;
+int JoueurHonte=-1;
 
 int const ParamChansons=3;
 int const NbNoteMax=42;
@@ -52,6 +109,7 @@ int const NbNoteMax=42;
 //1 => Temps Actif
 //2 => Temps Silence Après
 float MaChanson[ParamChansons][NbNoteMax];
+float ChansonMod[ParamChansons][NbNoteMax];
 //Pour Chaque joueur: Silence,puis Musique.
 float LeurTemps[ParamChansons-1][NbNoteMax];
 float Scores[2];
@@ -114,12 +172,38 @@ int const NombreChansons=9;
 //Define input/output
 //Set NBJ
 //Set vitesse
-void setup() 
+void setup()
 {
   int Pin;
-
-  ///ENLEVER
+  
+#ifdef ENABLE_LOGGING
   Serial.begin(9600);
+#endif
+
+  LOG_GENERAL("SETUP STARTING\n");
+  //TONE
+  if (nosound)
+  {
+    Tone_Pin = 9999;
+  }
+  else
+  {
+    Tone_Pin = 52; //Tone
+  }
+
+
+  //If Skipsetup
+  nbj_raw=nbj-1;
+  vitesse_raw=vitesse-1;
+  
+
+
+  for (int i ; i<NbJeux; i++)
+  {
+    ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
+  }
+  //MarqueurHonte initial élevé
+  ProbIndivJeuxCurrent[4]=424;
   
   //Initialize random sequence based on floating value from an unconnected pin.
   randomSeed(analogRead(myRandPin));
@@ -199,7 +283,6 @@ void loop()
   
   if(Game_Mode == 0)
   {
-    
     RepartiteurOriginal();
   }
   else
