@@ -86,9 +86,6 @@ void PQP()
     delay(500);
     analogWrite(G, 0);
   }
-  
-  //Back to MAIN!
-  //loop();
 }
 
 void MarqueurHonte()
@@ -183,8 +180,6 @@ void TrompeOeil()
   //Game End
   delay(250);
   TurnOffAllRedLights();
-
-  //loop();
 }
 
 
@@ -228,8 +223,6 @@ void DQP()
   TurnOffAllRedLights();
   DeactivateBlueLED();
   delay(500);
-  
-  //loop();
 }
 
   //Debut FFA
@@ -269,6 +262,4 @@ void FFA()
   TurnOffAllRedLights();
   myservo.write(Servo_LowPos);
   delay(500);
-  
-  //loop();
 }
