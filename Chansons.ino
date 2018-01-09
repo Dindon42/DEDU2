@@ -110,7 +110,7 @@ int SelectionChanson(int Numero)
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      RandomMin = 120;
+      RandomMin = 130;
       RandomMax = 180;
       return NombreDeNotes;
     case 6:
@@ -149,8 +149,8 @@ int SelectionChanson(int Numero)
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      RandomMin = 100;
-      RandomMax = 200;
+      RandomMin = 90;
+      RandomMax = 166;
       return NombreDeNotes;
     default:
       return 0;
