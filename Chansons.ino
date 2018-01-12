@@ -152,9 +152,48 @@ int SelectionChanson(int Numero)
       RandomMin = 90;
       RandomMax = 150;
       return NombreDeNotes;
-  case 9:
-    pf = (float*)WhatIsLove;
-    NombreDeNotes = sizeof(WhatIsLove[0]) / sizeof(float);
+    case 9:
+      pf = (float*)WhatIsLove;
+      NombreDeNotes = sizeof(WhatIsLove[0]) / sizeof(float);
+      for (int i = 0; i < ParamChansons; i++)
+      {
+          for (int j = 0; j < NombreDeNotes; j++)
+          {
+              MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
+          }
+      }
+      RandomMin = 100;
+      RandomMax = 185;
+      return NombreDeNotes;
+    case 10:
+      pf = (float*)SWTheme;
+      NombreDeNotes = sizeof(SWTheme[0]) / sizeof(float);
+      for (int i = 0; i < ParamChansons; i++)
+      {
+          for (int j = 0; j < NombreDeNotes; j++)
+          {
+              MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
+          }
+      }
+      RandomMin = 90;
+      RandomMax = 150;
+      return NombreDeNotes;
+    case 11:
+      pf = (float*)Cantina;
+      NombreDeNotes = sizeof(Cantina[0]) / sizeof(float);
+      for (int i = 0; i < ParamChansons; i++)
+      {
+          for (int j = 0; j < NombreDeNotes; j++)
+          {
+              MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
+          }
+      }
+      RandomMin = 95;
+      RandomMax = 125;
+      return NombreDeNotes;
+  case 12:
+    pf = (float*)Scatman1;
+    NombreDeNotes = sizeof(Scatman1[0]) / sizeof(float);
     for (int i = 0; i < ParamChansons; i++)
     {
         for (int j = 0; j < NombreDeNotes; j++)
@@ -162,9 +201,25 @@ int SelectionChanson(int Numero)
             MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
         }
     }
-    RandomMin = 100;
-    RandomMax = 185;
+    RandomMin = 95;
+    RandomMax = 120;
     return NombreDeNotes;
+  case 13:
+    pf = (float*)Scatman2;
+    NombreDeNotes = sizeof(Scatman2[0]) / sizeof(float);
+    for (int i = 0; i < ParamChansons; i++)
+    {
+        for (int j = 0; j < NombreDeNotes; j++)
+        {
+            MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
+        }
+    }
+    RandomMin = 95;
+    RandomMax = 120;
+    return NombreDeNotes;
+
+
+    
     default:
       return 0;
   }
