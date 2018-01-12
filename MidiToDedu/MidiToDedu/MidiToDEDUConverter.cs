@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MidiToDedu
 {
-    class Program
+    class MidiToDEDUConverter
     {
         static void Main(string[] args)
         {
@@ -18,7 +18,7 @@ namespace MidiToDedu
             double DoubleFromText;
             bool LastWasDelay = false;
 
-            char[] commaSeparator = new char[] {'(', ',', ')' };
+            char[] commaSeparator = new char[] { '(', ',', ')' };
 
             string line;
             string substring;
@@ -27,15 +27,15 @@ namespace MidiToDedu
             int DataCounter = 0;
             int index;
 
-            double[,] MyValues = new double[100,3];
+            double[,] MyValues = new double[100, 3];
 
             // Read the file and display it line by line.  
             string BaseDir = "C:\\temp\\TEST\\";
-            string File = "Menuet";
+            string File = "WhatIsLove";
             string Ext = ".txt";
 
-            System.IO.StreamReader Infile = new System.IO.StreamReader(BaseDir+File+Ext);
-            System.IO.StreamWriter Outfile = new System.IO.StreamWriter(BaseDir+File+"_converted"+ Ext);
+            System.IO.StreamReader Infile = new System.IO.StreamReader(BaseDir + File + Ext);
+            System.IO.StreamWriter Outfile = new System.IO.StreamWriter(BaseDir + File + "_converted" + Ext);
 
             //InputFormat
             /*
@@ -90,7 +90,7 @@ namespace MidiToDedu
                 {
                     index = line.IndexOf(delay);
                     System.Console.WriteLine("Index: {0}", index);
-                    
+
                     substring = line.Substring(index);
                     stringcomponents = substring.Split(commaSeparator);
                     foreach (string str in stringcomponents)
@@ -99,18 +99,18 @@ namespace MidiToDedu
                         if (double.TryParse(str, out DoubleFromText))
                         {
 
-                            if(LastWasDelay==true)
+                            if (LastWasDelay == true)
                             {
                                 Console.WriteLine(str);
                                 Console.WriteLine(DoubleFromText);
-                                MyValues[DataTripletCounter-1, 2] += DoubleFromText;
+                                MyValues[DataTripletCounter - 1, 2] += DoubleFromText;
                                 DataCounter = 0; ;
                             }
                             else
                             {
                                 Console.WriteLine(str);
                                 Console.WriteLine(DoubleFromText);
-                                MyValues[DataTripletCounter , DataCounter] = DoubleFromText-MyValues[DataTripletCounter, DataCounter-1];
+                                MyValues[DataTripletCounter, DataCounter] = DoubleFromText - MyValues[DataTripletCounter, DataCounter - 1];
                                 DataCounter++;
                                 if (DataCounter == MaxDataCnt)
                                 {
@@ -125,14 +125,14 @@ namespace MidiToDedu
             }
 
             Outfile.WriteLine("");
-            Outfile.WriteLine("float " + File + "[" + MaxDataCnt + "][" + DataTripletCounter + "] = {");
+            Outfile.WriteLine("const PROGMEM float " + File + "[" + MaxDataCnt + "][" + DataTripletCounter + "] = {");
             Outfile.Write("    {");
             for (int i = 0; i < DataTripletCounter; i++)
             {
                 if (i < DataTripletCounter - 1)
-                Outfile.Write(Math.Round(MyValues[i, 0], 1) + ",");
+                    Outfile.Write(Math.Round(MyValues[i, 0], 1) + ",");
                 else
-                Outfile.Write(Math.Round(MyValues[i, 0], 1));
+                    Outfile.Write(Math.Round(MyValues[i, 0], 1));
             }
             Outfile.Write("},\n");
             Outfile.Write("    {");
@@ -164,16 +164,17 @@ namespace MidiToDedu
             Outfile.WriteLine("");
             Outfile.WriteLine("");
             Outfile.WriteLine("case XXXX:");
+            Outfile.WriteLine("  pf = (float*)" + File + ";");
             Outfile.WriteLine("  NombreDeNotes = sizeof(" + File + "[0]) / sizeof(float);");
             Outfile.WriteLine("  for (int i = 0; i < ParamChansons; i++)");
             Outfile.WriteLine("  {");
             Outfile.WriteLine("      for (int j = 0; j < NombreDeNotes; j++)");
             Outfile.WriteLine("      {");
-            Outfile.WriteLine("          MaChanson[i][j] = "+ File + "[i][j];");
+            Outfile.WriteLine("          MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);");
             Outfile.WriteLine("      }");
             Outfile.WriteLine("  }");
-            Outfile.WriteLine("  RandomMin = 100;");
-            Outfile.WriteLine("  RandomMax = 300;");
+            Outfile.WriteLine("  RandomMin = XXXX;");
+            Outfile.WriteLine("  RandomMax = XXXX;");
             Outfile.WriteLine("  return NombreDeNotes;");
 
             Infile.Close();

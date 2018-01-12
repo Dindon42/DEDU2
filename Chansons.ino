@@ -152,6 +152,19 @@ int SelectionChanson(int Numero)
       RandomMin = 90;
       RandomMax = 150;
       return NombreDeNotes;
+  case 9:
+    pf = (float*)WhatIsLove;
+    NombreDeNotes = sizeof(WhatIsLove[0]) / sizeof(float);
+    for (int i = 0; i < ParamChansons; i++)
+    {
+        for (int j = 0; j < NombreDeNotes; j++)
+        {
+            MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
+        }
+    }
+    RandomMin = 100;
+    RandomMax = 185;
+    return NombreDeNotes;
     default:
       return 0;
   }
