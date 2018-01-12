@@ -6,7 +6,10 @@ void ModeMusique(int idChanson, bool ModVitesse)
   
   NombreNotes=SelectionChanson(idChanson);
   
-
+  LOG_GENERAL("NombreNotes:");
+  LOG_GENERAL(NombreNotes);
+  LOG_GENERAL("\n");
+  
   if (ModVitesse)
   {
     myRand= random(RandomMin,RandomMax);
@@ -16,6 +19,11 @@ void ModeMusique(int idChanson, bool ModVitesse)
   {
     FacteurVitesse=1;
   }
+
+
+  LOG_GENERAL("FacteurVitesse:");
+  LOG_GENERAL(FacteurVitesse);
+  LOG_GENERAL("\n");
 
   for (int n=0 ; n< NombreNotes ; n++)
   {
