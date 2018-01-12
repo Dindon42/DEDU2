@@ -5,12 +5,14 @@ Servo myservo;
 //DEBUG
 //COMMENT BELOW LINE FOR PROD UPLOAD.
 //#define ENABLE_LOGGING
-bool SkipSetup=false;
+bool SkipSetup=true;
 bool nosound=false;
-bool SkipDelay=false;
-bool SkipGame=false;
+bool SkipDelay=true;
+bool SkipGame=true;
 bool SkipGameDelay=false;
 bool SkipLights=false;
+bool MusicMode=false;
+bool MusicFactVit=false;
 //SETUP IF SKIPPED:
 int nbj=5;
 int vitesse=10;
@@ -29,14 +31,14 @@ int const ProbIndivJeux[NbJeux]={
 21,   /*1  DQP*/
 21,   /*2  TrompeOeil*/
 30,   /*3  FFA*/
-50,   /*4  MarqueurHonte*/
+55,   /*4  MarqueurHonte*/
 42,   /*5  DQP2*/
 66,   /*6  MIN*/
 42,   /*7  JeuChanson*/
 66,   /*8  PatateChaude*/
 66,   /*9  AllRandom*/
 66,   /*10 UltimateChallenge*/
-99};  /*11 DeDuel*/
+66};  /*11 DeDuel*/
 
 
 #ifdef ENABLE_LOGGING
@@ -267,27 +269,35 @@ void setup()
 void loop() 
 {
   int r;
-  
-  WaitForAllNonActive(nbj_raw);
 
-  TurnOffAllLights();
-  
-  if (!SkipDelay)
+  if(MusicMode)
   {
-    //FacteurVitesse
-    r = random(25,50) + (12 - vitesse) * random(100);
-    Delay_Fraudeur(r);
-  }
-  
-  TurnOffAllLights();
-  
-  if(Game_Mode == 0)
-  {
-    RepartiteurOriginal();
+    r = random(NombreChansons);
+    ModeMusique(r,MusicFactVit);
   }
   else
   {
-    Repartiteur();
+    WaitForAllNonActive(nbj_raw);
+
+    TurnOffAllLights();
+    
+    if (!SkipDelay)
+    {
+      //FacteurVitesse
+      r = random(25,50) + (12 - vitesse) * random(100);
+      Delay_Fraudeur(r);
+    }
+    
+    TurnOffAllLights();
+    
+    if(Game_Mode == 0)
+    {
+      RepartiteurOriginal();
+    }
+    else
+    {
+      Repartiteur();
+    } 
   }
 }
 

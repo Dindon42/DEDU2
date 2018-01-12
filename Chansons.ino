@@ -150,7 +150,7 @@ int SelectionChanson(int Numero)
           }
       }
       RandomMin = 90;
-      RandomMax = 166;
+      RandomMax = 150;
       return NombreDeNotes;
     default:
       return 0;
