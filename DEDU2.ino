@@ -14,7 +14,7 @@ bool SkipLights=false;
 bool MusicMode=false;
 bool MusicFactVit=false;
 //SETUP IF SKIPPED:
-int nbj=5;
+int nbj=10;
 int vitesse=10;
 int Game_Mode=1;
 int SelectMusic=-1;
