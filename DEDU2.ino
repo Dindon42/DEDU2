@@ -4,15 +4,15 @@ Servo myservo;
 
 //DEBUG
 //COMMENT BELOW LINE FOR PROD UPLOAD.
-#define ENABLE_LOGGING
-bool SkipSetup=true;
+//#define ENABLE_LOGGING
+bool SkipSetup=false;
 bool nosound=false;
-bool SkipDelay=true;
-bool SkipGame=true;
+bool SkipDelay=false;
+bool SkipGame=false;
 bool SkipGameDelay=false;
 bool SkipLights=false;
-bool MusicMode=true;
-bool MusicFactVit=true;
+bool MusicMode=false;
+bool MusicFactVit=false;
 //SETUP IF SKIPPED:
 int nbj=5;
 int vitesse=10;
