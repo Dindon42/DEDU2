@@ -17,7 +17,7 @@ bool MusicFactVit=false;
 int nbj=5;
 int vitesse=10;
 int Game_Mode=1;
-int SelectMusic=13;
+int SelectMusic=-1;
 //DEBUGEND
 
 
