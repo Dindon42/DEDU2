@@ -752,6 +752,7 @@ void MIN()
   bool allloosers;
   bool noloosers=false;
   int DeclaredLoosers[nbj_max];
+  int LightDelay=800;
   for (int i=0; i<=nbj_raw_max;i++)
   {
     DeclaredLoosers[i]=0;
@@ -825,9 +826,9 @@ void MIN()
     for(int i=0 ; i<4 ; i++)
     {
       DeactivateGreenLED();
-      delay(500);
+      delay(LightDelay);
       ActivateGreenLED(100);
-      delay(500);
+      delay(LightDelay);
     }
     
     TurnOffAllLights();
@@ -848,14 +849,14 @@ void MIN()
           ActivateRedLight(i);
       }
       DeactivateGreenLED();
-      delay(700);
+      delay(LightDelay);
       for (int i=0; i<=nbj_raw;i++)
       {
         if (DeclaredLoosers[i]==0)
           DeactivateRedLight(i);
       }
       ActivateGreenLED(20);
-      delay(700);
+      delay(LightDelay);
     }
   }
   else if(noloosers==false && allloosers==true)
@@ -868,10 +869,10 @@ void MIN()
       tone(Tone_Pin,800,700);
       DeactivateBlueLED();
       TurnOnAllRedLights();
-      delay(700);
+      delay(LightDelay);
       TurnOffAllRedLights();
       ActivateBlueLED(20);
-      delay(700);
+      delay(LightDelay);
     }
   }
   TurnOffAllLights();
