@@ -1184,10 +1184,18 @@ void PatateChaude()
 
   unsigned long basetime=4242;
   unsigned long maxrandtime=10242;
-  int TimeDec=300;
+  int TimeDecMin=50;
+  int TimeDecMax=300;
   unsigned long GameTimeMillis = basetime+random(maxrandtime);
+  unsigned long GameCounter=0;
   bool ReadyToSwitch=false;
-  
+  int ReactTimeMin=100;
+  int ReactTimeMax=250;
+
+  LOG_PATATE("GameTimeMillis:");
+  LOG_PATATE(GameTimeMillis);
+  LOG_PATATE("\n");
+  GameCounter=0;
   TurnOffAllLights();
   //Lights Setup
   ActivateBlueLED(21);
@@ -1210,7 +1218,6 @@ void PatateChaude()
   delay(500);
   ActivateRedLight(LuckyPlayer);
   
-  TakeTime();
   do
   {
     if(ReadPlayerInput(LuckyPlayer)==LOW)
@@ -1220,9 +1227,35 @@ void PatateChaude()
 
     if(ReadPlayerInput(LuckyPlayer)==HIGH && ReadyToSwitch==true)
     {
+      LOG_PATATE("SwitchingPlayer!!");
+      LOG_PATATE("\n");
+      LOG_PATATE("GameTimeMillisIN:");
+      LOG_PATATE(GameTimeMillis);
+      LOG_PATATE("\n");
+      LOG_PATATE("GameCounter:");
+      LOG_PATATE(GameCounter);
+      LOG_PATATE("\n");
+      
       //Deactivate my Light;
       DeactivateRedLight(LuckyPlayer);
-      GameTimeMillis-=(random(50,TimeDec));
+
+      LOG_PATATE("REDUCING TIME!!");
+      LOG_PATATE("\n");
+      GameTimeMillis-=(random(TimeDecMin,TimeDecMax));
+
+      //AddTimeToAllowReaction
+      if (GameTimeMillis-GameCounter<ReactTimeMin)
+      {
+        LOG_PATATE("\n");
+        LOG_PATATE("GIVING MORE TIME!!");
+        LOG_PATATE("\n");
+        GameTimeMillis+=(random(ReactTimeMin,ReactTimeMax));
+      }
+      
+      LOG_PATATE("GameTimeMillisAFTER:");
+      LOG_PATATE(GameTimeMillis);
+      LOG_PATATE("\n");
+      
       //GoToNextPlayer
       LuckyPlayer+=NextPlayer;
       if (LuckyPlayer>nbj_raw)
@@ -1242,6 +1275,10 @@ void PatateChaude()
     
     if (random(10000)>9996)
     {
+      
+      LOG_PATATE("SwitchingSIDE!!");
+      LOG_PATATE("\n");
+      
       if (NextPlayer == 1)
       {
         NextPlayer=-1;
@@ -1257,7 +1294,8 @@ void PatateChaude()
       }
     }
     delay(1);
-  }while(TimeDiff()<GameTimeMillis);
+    GameCounter++;
+  }while(GameCounter<GameTimeMillis);
 
   ActivateBlueLED(5);
   
@@ -1302,7 +1340,9 @@ void AllRandom()
   int OutputSum;
   int Looser=-1;
   int DEDUmaster=-1;
-  int DEDUmasterProb=5;
+  int DEDUmasterProb=4;
+  long RandomProb=30000;
+  long RandomProbThr=29900;
 
   LOG_RANDOM("ALLRANDOM\n");
   
@@ -1313,7 +1353,7 @@ void AllRandom()
   ActivateGreenLED(22);
   delay(1300);
 
-  if(random(DEDUmasterProb)==DEDUmasterProb-1)
+  if((int)random(DEDUmasterProb)==DEDUmasterProb-1)
   {
     DEDUmaster=random(nbj);
     LOG_RANDOM("DEDUMASTER:");
@@ -1421,18 +1461,22 @@ void AllRandom()
     //Change win condition randomly
     if(DEDUmaster==-1)
     {
-      if(random(30000)>29900)
-      {
+      if(random(RandomProb)>RandomProbThr)
+      { 
+        LOG_RANDOM("Changing WinCond:");
         if(random(2)==0)
         {
+          LOG_RANDOM("LOW");
           Wincondition=1;
           MoveDEDUFlag(0);
         }
         else
         {
+          LOG_RANDOM("HIGH");
           Wincondition=nbj-1;
           MoveDEDUFlag(100);
         }
+        LOG_RANDOM("\n");
       }
     }
     OutputSum=0;
