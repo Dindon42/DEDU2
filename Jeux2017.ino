@@ -1174,9 +1174,20 @@ void JeuChanson()
 
 
 
-
+#ifdef ENABLE_LOGGING
+  #define LOG_PATATE(a) LOG_GAME(8,a)
+#else
+  #define LOG_PATATE(a)
+#endif
 void PatateChaude()
 {
+
+  unsigned long basetime=4242;
+  unsigned long maxrandtime=10242;
+  int TimeDec=300;
+  unsigned long GameTimeMillis = basetime+random(maxrandtime);
+  bool ReadyToSwitch=false;
+  
   TurnOffAllLights();
   //Lights Setup
   ActivateBlueLED(21);
@@ -1194,14 +1205,11 @@ void PatateChaude()
     NextPlayer=-1;
   }
 
-  unsigned long basetime=4242;
-  unsigned long maxrandtime=10242;
-  int TimeDec=300;
-  unsigned long GameTimeMillis = basetime+random(maxrandtime);
-  bool ReadyToSwitch=false;
+
   MoveDEDUFlag(((float)GameTimeMillis/(float)(basetime+maxrandtime)*random(50,75)));
   delay(500);
   ActivateRedLight(LuckyPlayer);
+  
   TakeTime();
   do
   {
