@@ -31,7 +31,7 @@ namespace MidiToDedu
 
             // Read the file and display it line by line.  
             string BaseDir = "C:\\temp\\TEST\\";
-            string File = "Scatman2";
+            string File = "Boten2";
             string Ext = ".txt";
 
             System.IO.StreamReader Infile = new System.IO.StreamReader(BaseDir + File + Ext);
