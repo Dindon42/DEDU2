@@ -97,8 +97,7 @@ void PQP()
     delay(500);
     ActivateGreenLED(0);
   }
-
-  ControlAllLights(false,0,0);
+  TurnOffAllLights();
   delay(125);
   
 }
