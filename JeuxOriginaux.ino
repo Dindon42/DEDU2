@@ -40,21 +40,33 @@ void Delay_Fraudeur(int r)
   }
 }
 
+#ifdef ENABLE_LOGGING
+  #define LOG_PQP(a) LOG_GAME(0,a)
+#else
+  #define LOG_PQP(a)
+#endif
 void PQP()
 {
   int Winner = -1;
   int r = random(5);
-  //int NumWin = 0;
+  int r2=random(2,100);
+  
+  LOG_PQP("r:");
+  LOG_PQP(r);
+  LOG_PQP("\n");
+  LOG_PQP("r2:");
+  LOG_PQP(r2);
+  LOG_PQP("\n");
 
   //Init lights as GREEN.
   //Random Low intensity green from time to time.
   if (r == 4) 
   {
-    analogWrite(G, 1);
+    ActivateGreenLED(1);
   }
   else 
   {
-    analogWrite(G, 100);
+    ActivateGreenLED(r2);
   }
   
   do 
@@ -62,12 +74,12 @@ void PQP()
     Winner=FirstActive(nbj_raw);
   }while (Winner == -1);
 
-  analogWrite(G, 0);
+  ActivateGreenLED(0);
 
   //Winner found, lights on/off!
   for (int a = 1 ; a <= 3 ; a++)  
   {
-    digitalWrite(PlayerOutputPins[Winner],HIGH);
+    ActivateRedLight(Winner);
     
     for (int i = 1; i <= 120; i++)
     {
@@ -81,10 +93,14 @@ void PQP()
     
     TurnOffAllRedLights();
     
-    analogWrite(G, 20);
+    ActivateGreenLED(20);
     delay(500);
-    analogWrite(G, 0);
+    ActivateGreenLED(0);
   }
+
+  ControlAllLights(false,0,0);
+  delay(125);
+  
 }
 
 int MarqueurHonte()
@@ -128,11 +144,38 @@ int MarqueurHonte()
   return Winner;
  }
 
+#ifdef ENABLE_LOGGING
+  #define LOG_TROMPE(a) LOG_GAME(2,a)
+#else
+  #define LOG_TROMPE(a)
+#endif
 void TrompeOeil()
 {
+  LOG_TROMPE("TROMPE");
+  LOG_TROMPE("\n");
+  
   int NumActive = -1;
-  int maxIter = random(1500,5000);
-  int maxIter_Sheep = 3000;
+  int maxIter = random(2500,4500);
+  int maxIter_Sheep = 2500;
+  int IterVert = random(30,80);
+  bool SwitchColor=false;
+  bool SwitchToRed = false;
+  int ToRED = IterVert+50;
+  bool GreenFirst = (((int)random(6)>4) && Game_Mode==1);
+  
+  LOG_TROMPE("Game_Mode:");
+  LOG_TROMPE(Game_Mode);
+  LOG_TROMPE("\n");
+  LOG_TROMPE("GreenFirst:");
+  LOG_TROMPE(GreenFirst);
+  LOG_TROMPE("\n");
+  LOG_TROMPE("maxIter:");
+  LOG_TROMPE(maxIter);
+  LOG_TROMPE("\n");  
+  LOG_TROMPE("IterVert:");
+  LOG_TROMPE(IterVert);
+  LOG_TROMPE("\n");  
+  
   int Looser=-1;
 
   //Initialize Loosers Array
@@ -141,15 +184,44 @@ void TrompeOeil()
   {
     Loosers[i]=0;
   }
-
-  //Init lights as red!
-  TurnOnAllRedLights();
+  
+  if(GreenFirst)
+  {
+    //Init lights as green!
+    ActivateGreenLED(random(1,5));
+  }
+  else
+  {
+    //Init lights as red!
+    TurnOnAllRedLights();
+  }
 
   for (int i = 0; i <= maxIter; i++)
   {
+
+    if(SwitchColor==false && i>IterVert && GreenFirst)
+    {
+      SwitchColor=true;
+      ActivateGreenLED(0);
+      LOG_TROMPE("SWITCHING OFF GREEN");
+      LOG_TROMPE("\n");  
+    }
+
+    if(SwitchToRed==false && i>ToRED && GreenFirst)
+    {
+      SwitchToRed=true;
+      TurnOnAllRedLights();
+      LOG_TROMPE("SWITCHING TO RED");
+      LOG_TROMPE("\n");  
+    }
+    
     Looser=FirstActive(nbj_raw);
     if (Looser >= 0) 
     {
+      TurnOffAllRedLights();
+      ActivateGreenLED(0);
+      tone(Tone_Pin, 1500, 200);
+      ActivateRedLight(Looser);
       Loosers[Looser]=1;
       break;
     }
@@ -157,10 +229,7 @@ void TrompeOeil()
   }
 
   if (Looser >= 0)
-  {
-    TurnOffNonActiveRedLights();
-    tone(Tone_Pin, 1500, 200);
-    
+  { 
     for (int j = 0; j <= maxIter_Sheep; j++)
     {
       for (int i=0 ; i<=nbj_raw;i++)
@@ -177,8 +246,8 @@ void TrompeOeil()
   }
 
   //Game End
-  delay(250);
   TurnOffAllRedLights();
+  delay(250);
 }
 
 
