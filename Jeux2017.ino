@@ -361,6 +361,7 @@ void UltimateChallenge()
     {
       LightCounterPlayer[i]=0;
     }
+    
     //Check if people press
     do
     {
@@ -563,6 +564,12 @@ void UltimateChallenge()
         //UpdateHasReleased;
         for (int i=0; i<nbj;i++)
         {
+          //Check if players not in game press...
+          if (PlayerState[i]!=Looser && PlayerState[i]!=InGame && ReadPlayerInput(i)==HIGH)
+          {
+            PlayerState[i]=Looser;
+            ActivateRedLight(i);
+          }
           if(PlayerState[i]==InGame && ReadPlayerInput(i)==LOW && HasReleased[i]==false)
           {
             HasReleased[i]=true;
