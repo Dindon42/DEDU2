@@ -189,11 +189,6 @@ void Repartiteur()
       delay(2500);
     }
   }
-
-  //JOUEURHONTE
-  LOG_GENERAL("JoueurHonte");
-  LOG_GENERAL(JoueurHonte);
-  LOG_GENERAL("\n");
   
   
   TotalNbJeux++;
@@ -237,7 +232,10 @@ void Repartiteur()
   LOG_GENERAL(CountJeux[11]);
   LOG_GENERAL("\n");
 
-  
+  //JOUEURHONTE
+  LOG_GENERAL("JoueurHonte:");
+  LOG_GENERAL(JoueurHonte);
+  LOG_GENERAL("\n");
 }
 
 

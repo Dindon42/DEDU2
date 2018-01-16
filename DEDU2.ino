@@ -14,7 +14,7 @@ bool SkipLights=false;
 bool MusicMode=false;
 bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
-int JoueurHonte=-1;
+int JoueurHonte=0;
 int nbj=5;
 int vitesse=10;
 int Game_Mode=1;
@@ -305,6 +305,29 @@ void setup()
       delay(125);
     }
   }
+
+  LOG_GENERAL("GameMode:");
+  LOG_GENERAL(Game_Mode);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("nbj:");
+  LOG_GENERAL(nbj);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("nbj_raw:");
+  LOG_GENERAL(nbj_raw);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("vitesse:");
+  LOG_GENERAL(vitesse);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("vitesse_raw:");
+  LOG_GENERAL(vitesse_raw);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("JoueurHonte:");
+  LOG_GENERAL(JoueurHonte);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("\n");
+  LOG_GENERAL("SETUP COMPLETE");
+  LOG_GENERAL("\n");
+  
 }
 
 //Setup complete.  MAIN loop.

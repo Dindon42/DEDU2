@@ -14,7 +14,7 @@ void DeDuel()
   bool HasReleased[2]={false,false};
   float Score=50;
   float ScoreFactor=1;
-  float ScoreIncrease=0.28;
+  float ScoreIncrease=0.27;
   int FinalCtd1ID=15;
   int FinalCtd2ID=16;
   int Chanson=FinalCtd1ID;
@@ -347,9 +347,13 @@ void DeDuel()
   {
     ///BRUIT ET TRANSFERT HONTE
     LooserSoundAndLight(Joueurs[0]);
-    JoueurHonte=MarqueurHonte(Joueurs[0],70);
+    JoueurHonte=MarqueurHonte(Joueurs[0],90 - nbj * 7);
     //Reset Prob
     ProbIndivJeuxCurrent[4]=0;
+    
+    LOG_DEDUEL("Nouveau JoueurHonte:");
+    LOG_DEDUEL(JoueurHonte);
+    LOG_DEDUEL("\n");
   }
 }
 
