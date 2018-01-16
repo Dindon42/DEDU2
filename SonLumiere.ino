@@ -262,4 +262,35 @@ void WinnerSound()
   delay (500);
 }
 
+void OneUp()
+{
+  tone(Tone_Pin,1319,125);
+  delay(130);
+  tone(Tone_Pin,1568,125);
+  delay(130);
+  tone(Tone_Pin,2637,125);
+  delay(130);
+  tone(Tone_Pin,2093,125);
+  delay(130);
+  tone(Tone_Pin,2349,125);
+  delay(130);
+  tone(Tone_Pin,3136,125);
+  delay(125);
+  noTone(Tone_Pin);
+}
+
+void LooserSoundAndLight(int iPlayer)
+{
+  for(int i=0 ; i<2 ; i++)
+  {
+    ActivateRedLight(iPlayer);
+    tone(Tone_Pin,500,500);
+    delay(500);
+    DeactivateRedLight(iPlayer);
+    delay(500);
+  }
+}
+
+
+
 

@@ -102,12 +102,30 @@ void PQP()
   
 }
 
-int MarqueurHonte()
+int MarqueurHonte(int iJoueurChanceux, int iSpinDelay)
 {
   //Joueur chanceux
-  int Winner = random(nbj);
+  int Winner;
+  int SpinDelay;
+  
+  if(iJoueurChanceux==-1)
+  {
+    Winner=random(nbj);
+  }
+  else
+  {
+    Winner=iJoueurChanceux;
+  }
   //Délai entre chaque clignotement
-  int SpinDelay = 160 - nbj * 7;
+  if(iSpinDelay==-1)
+  {
+    SpinDelay = 160 - nbj * 7;
+  }
+  else
+  {
+    SpinDelay = iSpinDelay;
+  }
+  
   //Tout bleu pour commencer
   ActivateBlueLED(80);
 

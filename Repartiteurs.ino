@@ -99,7 +99,7 @@ void Repartiteur()
     CountJeux[4]++;
     if(!SkipGame)
     {
-      JoueurHonte=MarqueurHonte();
+      JoueurHonte=MarqueurHonte(-1,-1);
     }
     ProbIndivJeuxCurrent[4]=0;
   }
@@ -233,7 +233,7 @@ void Repartiteur()
   LOG_GENERAL("10 UltimateChallenge:\t");
   LOG_GENERAL(CountJeux[10]);
   LOG_GENERAL("\n");
-  LOG_GENERAL("11 DeDuel:\t");
+  LOG_GENERAL("11 DeDuel:\t\t");
   LOG_GENERAL(CountJeux[11]);
   LOG_GENERAL("\n");
 
@@ -290,6 +290,6 @@ void RepartiteurOriginal()
     FFA();
   }
   else {
-    MarqueurHonte();
+    MarqueurHonte(-1,-1);
   }
 }

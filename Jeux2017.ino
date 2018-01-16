@@ -11,26 +11,51 @@ void DeDuel()
   long ClicCount[2]={0,0};
   int Winner=-1;
   int DeltaClic=0;
-  int NewDeltaClic=0;
   bool HasReleased[2]={false,false};
   float Score=50;
   float ScoreFactor=1;
-  float ScoreIncrease=0.3;
-  unsigned long GameCounter=0;
-  unsigned long ScoreIncreaseIter=200;
+  float ScoreIncrease=0.28;
+  int FinalCtd1ID=15;
+  int FinalCtd2ID=16;
+  int Chanson=FinalCtd1ID;
+  long MusicCounter=0;
+  long NextMusicEventCtr=-1;
+  int MusicEventId=0;
+  int DelayBetweenSongs=300;
+  unsigned long ScoreIncCounter=0;
+  unsigned long ScoreIncreaseIter=950;
+  int ReactionDelay=1;
   int LightDelay=350;
   int ForLightDelay=13;
   int SoundTime=500;
+  int NombreNotes;
+  int myRand;
+  int myRandMin=200;
+  int myRandMax=225;
+  float MusicIncrease=0.04;
+  float FactVit;
+  bool TransfertHonte=false;
+  int TransfertHonteProb=2;
+
 
   if(JoueurHonte!=-1)
   {
     LOG_DEDUEL("HONTE EXISTANTE");
     LOG_DEDUEL("\n");
     Joueurs[1]=JoueurHonte;
+    
+    LOG_DEDUEL("JoueurHonte:");
+    LOG_DEDUEL(JoueurHonte);
+    LOG_DEDUEL("\n");
     do
     {
       Joueurs[0]=random(nbj);
     }while (Joueurs[0]==Joueurs[1] || Joueurs[0]==-1);
+    
+    TransfertHonte=((int)random(TransfertHonteProb)==0);
+    LOG_DEDUEL("TransfertHonte:");
+    LOG_DEDUEL(TransfertHonte);
+    LOG_DEDUEL("\n");
   }
   else
   {
@@ -60,7 +85,7 @@ void DeDuel()
   if (!SkipLights)
   {
     MoveDEDUFlag(50);
-    JoueChanson(15,2,false);
+    //JoueChanson(15,2,false);
     for (int i=1; i <50 ; i++)
     {
       ActivateGreenLED(i);
@@ -96,18 +121,66 @@ void DeDuel()
     ControlAllLights(false,0,0);
   }
   
+  NombreNotes=SelectionChanson(Chanson);
+  myRand= random(myRandMin,myRandMax);
+  FactVit=(float) myRand/100;
+  LOG_DEDUEL("FactVit:");
+  LOG_DEDUEL(FactVit);
+  LOG_DEDUEL("\n");
+
   
   ActivateRedLight(Joueurs[0]);
   ActivateRedLight(Joueurs[1]);
   ReadySound(SoundTime);
+  delay(500);
   DeactivateRedLight(Joueurs[0]);
   DeactivateRedLight(Joueurs[1]);
 
+
+  LOG_DEDUEL("MusicCounter:");
+  LOG_DEDUEL(MusicCounter);
+  LOG_DEDUEL("\n");
+  LOG_DEDUEL("NextMusicEventCtr:");
+  LOG_DEDUEL(NextMusicEventCtr);
+  LOG_DEDUEL("\n");
   
   //MainGame
   do
   {
-    GameCounter++;
+
+    //PLAY NOTES
+    if (MusicCounter>NextMusicEventCtr)
+    {
+      
+      LOG_DEDUEL("JOUE UNE NOTE!");
+      LOG_DEDUEL("\n");
+      LOG_DEDUEL("MusicEventId:");
+      LOG_DEDUEL(MusicEventId);
+      LOG_DEDUEL("\n");
+      tone(Tone_Pin, MaChanson[0][MusicEventId], MaChanson[1][MusicEventId]/FactVit);
+      NextMusicEventCtr=MaChanson[1][MusicEventId]/FactVit+MaChanson[2][MusicEventId]/FactVit;
+
+      
+      MusicCounter=0;
+      MusicEventId++;
+      if (MusicEventId==NombreNotes)
+      {
+        NextMusicEventCtr+=DelayBetweenSongs/FactVit;
+        MusicEventId=0;
+        
+        if(Chanson==FinalCtd1ID)
+        {
+          Chanson=FinalCtd2ID;
+        }
+        else
+        {
+          Chanson=FinalCtd1ID;
+        }
+        NombreNotes=SelectionChanson(Chanson);
+      }
+    }
+    
+    
     //UpdateHasReleased
     for (int i=0; i<=1 ;i++)
     {
@@ -129,7 +202,7 @@ void DeDuel()
       {
         HasReleased[i]=true;
       }
-      delay(5);
+      delay(ReactionDelay);
       if(HasReleased[i]==true && ReadPlayerInput(Joueurs[i])==HIGH)
       {
         HasReleased[i]=false;
@@ -141,13 +214,18 @@ void DeDuel()
       }
     }
 
-    if(GameCounter>ScoreIncreaseIter)
+    if(ScoreIncCounter>ScoreIncreaseIter && ScoreFactor<50)
     {
-      GameCounter=0;
+      ScoreIncCounter=0;
       ScoreFactor=ScoreFactor*(ScoreIncrease+1);
-        LOG_DEDUEL("New Score Factor");
-        LOG_DEDUEL(ScoreFactor);
-        LOG_DEDUEL("\n");
+      LOG_DEDUEL("New Score Factor:");
+      LOG_DEDUEL(ScoreFactor);
+      LOG_DEDUEL("\n");
+
+      FactVit=FactVit*(MusicIncrease+1);
+      LOG_DEDUEL("New FactVit:");
+      LOG_DEDUEL(FactVit);
+      LOG_DEDUEL("\n");
     }
     
     DeltaClic=ClicCount[0]-ClicCount[1];
@@ -180,6 +258,10 @@ void DeDuel()
     {
       Winner=Joueurs[1];
     }
+
+    
+    MusicCounter++;
+    ScoreIncCounter++;
     
     /*
     LOG_DEDUEL("GameCounter:");
@@ -252,11 +334,23 @@ void DeDuel()
       ActivateBlueLED(0);
     }
   }
+
+  
+  
   delay(300);
   MoveDEDUFlag(0);
   delay(1000);
   ControlAllLights(false,0,0);
   delay(500);
+  
+  if(TransfertHonte && Winner==Joueurs[1])
+  {
+    ///BRUIT ET TRANSFERT HONTE
+    LooserSoundAndLight(Joueurs[0]);
+    JoueurHonte=MarqueurHonte(Joueurs[0],70);
+    //Reset Prob
+    ProbIndivJeuxCurrent[4]=0;
+  }
 }
 
 #ifdef ENABLE_LOGGING
