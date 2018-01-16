@@ -33,10 +33,10 @@ int const ProbIndivJeux[NbJeux]={
 21,   /*1  DQP*/
 21,   /*2  TrompeOeil*/
 30,   /*3  FFA*/
-55,   /*4  MarqueurHonte*/
+42,   /*4  MarqueurHonte*/
 42,   /*5  DQP2*/
 66,   /*6  MIN*/
-42,   /*7  JeuChanson*/
+55,   /*7  JeuChanson*/
 66,   /*8  PatateChaude*/
 66,   /*9  AllRandom*/
 66,   /*10 UltimateChallenge*/
