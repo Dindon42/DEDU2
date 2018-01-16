@@ -14,6 +14,7 @@ bool SkipLights=false;
 bool MusicMode=false;
 bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
+int JoueurHonte=-1;
 int nbj=5;
 int vitesse=10;
 int Game_Mode=1;
@@ -102,7 +103,6 @@ int Equipes[10];
 int NbEquipes;
 int NbJoueursEq1;
 int NbJoueursEq2;
-int JoueurHonte=-1;
 
 int const ParamChansons=3;
 int const NbNoteMax=42;
@@ -122,7 +122,7 @@ int RandomMax;
 
 
 ////Chansons.
-int const NombreChansons=16;
+int const NombreChansons=17;
 //float MaChanson[3][100];
   const PROGMEM float ChansonDEDU[3][18] = {
     {196,196,196,247,247,261,261,349,247,196,196,294,247,196,330,294,247,261},
@@ -204,6 +204,11 @@ int const NombreChansons=16;
     {89.7,89.7,387.7,516.9,89.7,89.7,89.7,89.7,775.4,89.7,89.7,473.8,516.9,89.7,89.7,89.7,89.7,89.7,89.7,775.4},
     {59.8,64.1,227.7,688.2,64.1,64.1,217.9,217.9,763.1,64.1,64.1,141.5,624.1,64.1,64.1,217.9,217.9,217.9,217.9,247.8},
     };
+  const PROGMEM float ctd2[3][37] = {
+    {554,493,554,369,587,554,587,554,493,587,554,587,369,493,440,493,440,415,493,440,415,440,493,440,493,554,493,440,415,369,587,554,554,587,554,493,554},
+    {76.6,76.6,494.4,621.2,76.6,76.6,76.6,76.6,748.1,76.6,76.6,498.8,498.8,76.6,76.6,76.6,76.6,76.6,76.6,625.6,76.6,76.6,748.1,76.6,76.6,207.8,192.5,203.4,183.8,492.2,444.1,1375.9,91.9,91.9,91.9,91.9,1400},
+    {71.9,74.5,104.6,524.6,74.5,69.3,225.5,225.5,629.5,69.3,74.5,100.2,506.5,74.5,74.5,225.5,220.3,225.5,220.3,275.4,74.5,74.5,152.9,69.3,74.5,94.3,104.4,98.6,118.3,106.8,154.9,426.1,54,59.2,59.2,59.2,235.5},
+    };
 ////
 
 //One-time setup:
@@ -272,6 +277,8 @@ void setup()
 
   if (!SkipSetup && !MusicMode)
   {
+    JoueurHonte=-1;
+    
     WaitForAllNonActive(nbj_raw_max);
     
     // NBJ - Nombre de Joueurs

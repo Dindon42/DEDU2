@@ -29,24 +29,6 @@ void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse)
   }
 }
 
-
-void OneUp()
-{
-  tone(Tone_Pin,1319,125);
-  delay(130);
-  tone(Tone_Pin,1568,125);
-  delay(130);
-  tone(Tone_Pin,2637,125);
-  delay(130);
-  tone(Tone_Pin,2093,125);
-  delay(130);
-  tone(Tone_Pin,2349,125);
-  delay(130);
-  tone(Tone_Pin,3136,125);
-  delay(125);
-  noTone(Tone_Pin);
-}
-
 //Returns the size to read;
 int SelectionChanson(int Numero)
 {
@@ -264,6 +246,23 @@ int SelectionChanson(int Numero)
     RandomMin = 105;
     RandomMax = 155;
     return NombreDeNotes;
+  case 16:
+    pf = (float*)ctd2;
+    NombreDeNotes = sizeof(ctd2[0]) / sizeof(float);
+    for (int i = 0; i < ParamChansons; i++)
+    {
+        for (int j = 0; j < NombreDeNotes; j++)
+        {
+            MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
+        }
+    }
+    RandomMin = 100;
+    RandomMax = 155;
+    return NombreDeNotes;
+
+
+
+
     
     default:
       return 0;
