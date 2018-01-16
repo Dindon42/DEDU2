@@ -1,3 +1,35 @@
+void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse)
+{
+  int NombreNotes=SelectionChanson(Chanson);
+  int myRand;
+  float FactVit=FacteurVitesse;
+  
+  LOG_GENERAL("NombreNotes:");
+  LOG_GENERAL(NombreNotes);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("RandVitesse:");
+  LOG_GENERAL(RandVitesse);
+  LOG_GENERAL("\n");
+
+  if(RandVitesse)
+  {
+    myRand= random(RandomMin,RandomMax);
+    FactVit=(float) myRand/100;
+  }
+  
+  
+  LOG_GENERAL("FactVit:");
+  LOG_GENERAL(FactVit);
+  LOG_GENERAL("\n");
+  
+  for (int n=0 ; n<NombreNotes ; n++)
+  {
+    //PlayNote(int Tone_Pin, float Freq, float PlayTime, float WaitTime)
+    PlayNote(Tone_Pin, MaChanson[0][n], MaChanson[1][n]/FactVit, MaChanson[2][n]/FactVit);
+  }
+}
+
+
 void OneUp()
 {
   tone(Tone_Pin,1319,125);
@@ -14,17 +46,6 @@ void OneUp()
   delay(125);
   noTone(Tone_Pin);
 }
-
-void JoueChansonDEDU(float FacteurVitesse)
-{
-  int NombreNotes=SelectionChanson(0);
-  for (int n=0 ; n<NombreNotes ; n++)
-  {
-    //PlayNote(int Tone_Pin, float Freq, float PlayTime, float WaitTime)
-    PlayNote(Tone_Pin, MaChanson[0][n], MaChanson[1][n]/FacteurVitesse, MaChanson[2][n]/FacteurVitesse);
-  }
-}
-
 
 //Returns the size to read;
 int SelectionChanson(int Numero)
@@ -230,7 +251,19 @@ int SelectionChanson(int Numero)
     RandomMin = 100;
     RandomMax = 150;
     return NombreDeNotes;
-
+  case 15:
+    pf = (float*)ctd1;
+    NombreDeNotes = sizeof(ctd1[0]) / sizeof(float);
+    for (int i = 0; i < ParamChansons; i++)
+    {
+        for (int j = 0; j < NombreDeNotes; j++)
+        {
+            MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
+        }
+    }
+    RandomMin = 105;
+    RandomMax = 155;
+    return NombreDeNotes;
     
     default:
       return 0;

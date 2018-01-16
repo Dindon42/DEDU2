@@ -60,7 +60,7 @@ void DeDuel()
   if (!SkipLights)
   {
     MoveDEDUFlag(50);
-    delay(1000);
+    JoueChanson(15,2,false);
     for (int i=1; i <50 ; i++)
     {
       ActivateGreenLED(i);
@@ -204,7 +204,7 @@ void DeDuel()
   }while(Winner==-1);
 
 
-  WinnerSound();
+  OneUp();
   //GAGNANT TROUVÉ
   LOG_DEDUEL("Winner:");
   LOG_DEDUEL(Winner);
@@ -254,7 +254,9 @@ void DeDuel()
   }
   delay(300);
   MoveDEDUFlag(0);
+  delay(1000);
   ControlAllLights(false,0,0);
+  delay(500);
 }
 
 #ifdef ENABLE_LOGGING

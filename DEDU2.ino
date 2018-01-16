@@ -12,7 +12,7 @@ bool SkipGame=false;
 bool SkipGameDelay=false;
 bool SkipLights=false;
 bool MusicMode=false;
-bool MusicFactVit=false;
+bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int nbj=5;
 int vitesse=10;
@@ -122,7 +122,7 @@ int RandomMax;
 
 
 ////Chansons.
-int const NombreChansons=15;
+int const NombreChansons=16;
 //float MaChanson[3][100];
   const PROGMEM float ChansonDEDU[3][18] = {
     {196,196,196,247,247,261,261,349,247,196,196,294,247,196,330,294,247,261},
@@ -199,6 +199,11 @@ int const NombreChansons=15;
     {315,378.4,732.8,87.5,238.4,105,343.4,203.4,330.3,124.7,225.1,135.6,586.2,234.1,94.1,175,317.2,330.3,109.4,175,142.2,470.3,203.4,111.6,328.1,185.9,374.1,310.6,67.8,196.9,417.8,181.6,124.7,98.4,317.2,374.1,94.1,225.3,94.1,496.6},
     {185,132,259.4,81.8,94.9,66.9,156.6,124.7,169.7,104.5,60.3,90.9,773.1,99.3,114.3,160.9,177.6,195.7,59.9,145.3,66.1,821.4,129.9,60.3,171.9,142.2,125.9,189.4,104.1,131.2,748.9,151.8,47.2,229.7,182.8,125.9,72.6,108,114.3,216.7},
     };
+  const PROGMEM float ctd1[3][20] = {
+    {554,493,554,369,587,554,587,554,493,587,554,587,369,493,440,493,440,415,493,440},
+    {89.7,89.7,387.7,516.9,89.7,89.7,89.7,89.7,775.4,89.7,89.7,473.8,516.9,89.7,89.7,89.7,89.7,89.7,89.7,775.4},
+    {59.8,64.1,227.7,688.2,64.1,64.1,217.9,217.9,763.1,64.1,64.1,141.5,624.1,64.1,64.1,217.9,217.9,217.9,217.9,247.8},
+    };
 ////
 
 //One-time setup:
@@ -224,8 +229,7 @@ void setup()
     Tone_Pin = 52; //Tone
   }
 
-
-  //If Skipsetup
+  //In case setup was skipped.
   nbj_raw=nbj-1;
   vitesse_raw=vitesse-1;
   
@@ -266,7 +270,7 @@ void setup()
     PlayerInputPins[i]=Pin;
   }
 
-  if (SkipSetup==false)
+  if (!SkipSetup && !MusicMode)
   {
     WaitForAllNonActive(nbj_raw_max);
     
@@ -290,7 +294,7 @@ void setup()
     GameMode();
     if (Game_Mode == 1)
     {
-      JoueChansonDEDU(3);
+      JoueChanson(0,3,false);
       delay(125);
     }
   }
@@ -311,7 +315,8 @@ void loop()
     {
       r=SelectMusic;
     }
-    ModeMusique(r,MusicFactVit);
+    JoueChanson(r, 1, MusicRandFactVit);
+    delay(2500);
   }
   else
   {

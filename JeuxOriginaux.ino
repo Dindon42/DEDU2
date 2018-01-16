@@ -302,7 +302,7 @@ void FFA()
 
   if (Game_Mode==1)
   {
-    JoueChansonDEDU(myRand1);
+    JoueChanson(0,myRand1,false);
   }
   
   for (int e = 1; e <= myRand2; e++) {
