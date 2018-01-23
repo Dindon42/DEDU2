@@ -3,7 +3,6 @@
 Servo myservo;
 
 //DEBUG
-//COMMENT BELOW LINE FOR PROD UPLOAD.
 //#define ENABLE_LOGGING
 bool SkipSetup=false;
 bool nosound=false;
@@ -15,7 +14,7 @@ bool MusicMode=false;
 bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int JoueurHonte=0;
-int nbj=5;
+int nbj=4;
 int vitesse=10;
 int Game_Mode=1;
 int SelectMusic=-1;
@@ -334,7 +333,7 @@ void setup()
 void loop() 
 {
   int r;
-  
+
   if(MusicMode)
   {
     if (SelectMusic==-1)

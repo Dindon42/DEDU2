@@ -1002,21 +1002,36 @@ void JeuChanson()
   float IndivScore;
   float ScorePlay[2];
   float ScoreWait[2];
-  float ScoreWeightPlay=0.75;
+  float ScoreWeightPlay=0.66;
   float ScoreWeightWait=1-ScoreWeightPlay;
-  //Set White Lights
-  ActivateBlueLED(100);
-  ActivateGreenLED(100);
-  TurnOnAllRedLights();
-  delay(2500);
+  bool LengthScoreFactor=true;
+  float PlayTotal;
+  float WaitTotal;
+  float ScoreWeight;
+  float CumulativeWait;
+  float CumulativePlay;
   
   NombreNotes=SelectionChanson(random(NombreChansons));
   
   AllocateTwoTeams(nbj);
 
+  //Set White Lights
+  ActivateBlueLED(100);
+  ActivateGreenLED(100);
+  TurnOnAllRedLights();
+  delay(2000);
+
   //Répéter pour chaque équipe
   for (int e = 0; e<NbEquipes ; e++)
   {
+    if(LengthScoreFactor)
+    {
+      PlayTotal=0;
+      WaitTotal=0;
+      CumulativeWait=0;
+      CumulativePlay=0;
+    }
+    
     //OrdreJoueurs
     DefinirOrdreJoueurs(e,NombreNotes);
 
@@ -1033,6 +1048,15 @@ void JeuChanson()
       ChansonMod[1][n]=MaChanson[1][n]/FacteurVitesse;
       ChansonMod[2][n]=MaChanson[2][n]/FacteurVitesse;
 
+      if(LengthScoreFactor)
+      {
+        PlayTotal+=ChansonMod[1][n];
+        if (n<NombreNotes-1)
+        {
+          WaitTotal+=ChansonMod[2][n];
+        }
+      }
+      
       LOG_CHANSON(n);
       LOG_CHANSON(":  OrigPlay:");
       LOG_CHANSON(MaChanson[1][n]);
@@ -1045,28 +1069,33 @@ void JeuChanson()
       LOG_CHANSON("\n");
     }
     
+    LOG_CHANSON("PlayTotal:");
+    LOG_CHANSON(PlayTotal);
+    LOG_CHANSON("\n");
+    LOG_CHANSON("WaitTotal:");
+    LOG_CHANSON(WaitTotal);
+    LOG_CHANSON("\n");
     LOG_CHANSON("FacteurVitesse:");
     LOG_CHANSON(FacteurVitesse);
     LOG_CHANSON("\n");
-
     
     TurnOffAllRedLights();
     DeactivateBlueLED();
     DeactivateGreenLED();
-    delay(1200);
+    delay(1000);
     
     for(int i=0 ; i<=nbj_raw ; i++)
     {
       if(Equipes[i]==e)
       {
         ActivateRedLight(i);
-        delay(800);
+        delay(400);
       }
     }
 
-    delay(500);
-    TurnOffAllRedLights();
     delay(1500);
+    TurnOffAllRedLights();
+    delay(1200);
 
     //Show the Player
     for(int n=0; n<NombreNotes; n++)
@@ -1109,6 +1138,7 @@ void JeuChanson()
     LOG_CHANSON("TEMPS ORIGINAL");
     LOG_CHANSON("\n");
 
+    /*
     for (int n=0; n<NombreNotes; n++)
     {
       //WAIT
@@ -1117,7 +1147,7 @@ void JeuChanson()
       LOG_CHANSON(LeurTemps[0][n]);
       LOG_CHANSON("  WaitSong:  ");
       LOG_CHANSON(ChansonMod[2][n]);
-      LOG_CHANSON("  Score:  ");
+      LOG_CHANSON("  RelativeScore:  ");
       LOG_CHANSON(RelativeError(LeurTemps[0][n],ChansonMod[2][n]));
       LOG_CHANSON("\n");
 
@@ -1128,41 +1158,106 @@ void JeuChanson()
       LOG_CHANSON(LeurTemps[1][n]);
       LOG_CHANSON("  PressSong:  ");
       LOG_CHANSON(ChansonMod[1][n]);
-      LOG_CHANSON("  Score:  ");
+      LOG_CHANSON("  RelativeScore:  ");
       LOG_CHANSON(RelativeError(LeurTemps[1][n],ChansonMod[1][n]));
       LOG_CHANSON("\n");
     }
+    */
     
     //ResetScore
     Scores[e]=0;
     ScorePlay[e]=0;
     ScoreWait[e]=0;
+    
     for (int n=0; n<NombreNotes; n++)
     {
       if (n!=0)
       {
         //WaitTime
         IndivScore=RelativeError(LeurTemps[0][n],ChansonMod[2][n-1]);
-        ScoreWait[e]+=IndivScore;
+        
+        CumulativeWait+=ChansonMod[2][n-1];
+        
+        if(LengthScoreFactor)
+        {
+          ScoreWeight=ChansonMod[2][n-1]/WaitTotal;
+        }
+        else
+        {
+          ScoreWeight=1/(NombreNotes-1);
+        }
+
+        ScoreWait[e]+=IndivScore*ScoreWeight;
+        
+        //WAIT LOG
+        LOG_CHANSON(n);
+        LOG_CHANSON(":  WaitPlayer:");
+        LOG_CHANSON(LeurTemps[0][n]);
+        LOG_CHANSON("  WaitSong:  ");
+        LOG_CHANSON(ChansonMod[2][n-1]);
+        LOG_CHANSON("  IndivScore:  ");
+        LOG_CHANSON(IndivScore);
+        LOG_CHANSON("  ScoreWeight:  ");
+        LOG_CHANSON(ScoreWeight);
+        LOG_CHANSON("  CumulativeWait:  ");
+        LOG_CHANSON(CumulativeWait);
+        LOG_CHANSON("\n");
+        
       }
       
       //PlayTime
       IndivScore=RelativeError(LeurTemps[1][n],ChansonMod[1][n]);
-      ScorePlay[e]+=IndivScore;
+
+      CumulativePlay+=ChansonMod[1][n];
+      
+      if(LengthScoreFactor)
+      {
+        ScoreWeight=ChansonMod[1][n]/PlayTotal;
+      }
+      else
+      {
+        ScoreWeight=1/NombreNotes;
+      }
+
+      ScorePlay[e]+=IndivScore*ScoreWeight;
+
+        //PLAY LOG
+        LOG_CHANSON(n);
+        LOG_CHANSON(":  PressPlayer:");
+        LOG_CHANSON(LeurTemps[1][n]);
+        LOG_CHANSON("  PressSong:  ");
+        LOG_CHANSON(ChansonMod[1][n]);
+        LOG_CHANSON("  IndivScore:  ");
+        LOG_CHANSON(IndivScore);
+        LOG_CHANSON("  ScoreWeight:  ");
+        LOG_CHANSON(ScoreWeight);
+        LOG_CHANSON("  CumulativePlay:  ");
+        LOG_CHANSON(CumulativePlay);
     }
-    ScoreWait[e]=ScoreWait[e]/(NombreNotes-1);
-    ScorePlay[e]=ScorePlay[e]/NombreNotes;
     
     Scores[e]=ScoreWait[e]*ScoreWeightWait + ScorePlay[e]*ScoreWeightPlay;
     
+    LOG_CHANSON("\n");
+    LOG_CHANSON("\n");
     LOG_CHANSON("Equipe:");
     LOG_CHANSON(e);
     LOG_CHANSON("  Score:");
     LOG_CHANSON(Scores[e]);
-    LOG_CHANSON("  Wait:");
+    LOG_CHANSON("  ScoreWait:");
     LOG_CHANSON(ScoreWait[e]);
-    LOG_CHANSON("  Play:");
+    LOG_CHANSON("  ScorePlay:");
     LOG_CHANSON(ScorePlay[e]);
+    LOG_CHANSON("  CumulativeWait:  ");
+    LOG_CHANSON(CumulativeWait);
+    LOG_CHANSON("  WaitTotal:  ");
+    LOG_CHANSON(WaitTotal);
+    LOG_CHANSON("  CumulativePlay:  ");
+    LOG_CHANSON(CumulativePlay);
+    LOG_CHANSON("  PlayTotal:  ");
+    LOG_CHANSON(PlayTotal);
+    
+    LOG_CHANSON("\n");
+    LOG_CHANSON("\n");
     LOG_CHANSON("\n");
   }
 
@@ -1176,9 +1271,9 @@ void JeuChanson()
   LOG_CHANSON("\n");
   
   //
-  LOG_CHANSON("FinalScore 0:");
+  LOG_CHANSON("FinalScoreBeforeMod 0:");
   LOG_CHANSON(Scores[0]);
-  LOG_CHANSON("\nFinalScore 1:");
+  LOG_CHANSON("\nFinalScoreBeforeMod 1:");
   LOG_CHANSON(Scores[1]);
   LOG_CHANSON("\n");
   
