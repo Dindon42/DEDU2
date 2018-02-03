@@ -10,16 +10,19 @@ void Repartiteur()
     else ProbAccumuleeJeux[i]=ProbAccumuleeJeux[i-1]+ProbIndivJeuxCurrent[i];
 
     //Update for next round
-    if (ProbIndivJeuxCurrent[i]<ProbIndivJeux[i])
+    ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
+      
+    //Special case pour DEDUEL qui ne devrait pas augmenter tant que joueurhonte = -1
+    if (i==11 && JoueurHonte==-1)
     {
-      ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
-
-
-      if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=4)
-      {
-        ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
-      }
+      ProbIndivJeuxCurrent[i]=0;
     }
+
+    if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=4 && NotMoreThanMaxProb)
+    {
+      ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
+    }
+    //Special case for marqueurhonte qui peut monter au-dessus de sa limite peu importe...
     else if (i==4)
     {
       ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
@@ -100,6 +103,10 @@ void Repartiteur()
     if(!SkipGame)
     {
       JoueurHonte=MarqueurHonte(-1,-1);
+    }
+    else
+    {
+      JoueurHonte=random(nbj);
     }
     ProbIndivJeuxCurrent[4]=0;
   }

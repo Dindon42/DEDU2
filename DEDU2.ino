@@ -13,7 +13,7 @@ bool SkipLights=false;
 bool MusicMode=false;
 bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
-int JoueurHonte=0;
+int JoueurHonte=-1;
 int nbj=4;
 int vitesse=10;
 int Game_Mode=1;
@@ -26,20 +26,21 @@ int const NumberOfRoundsForFullProb=6;
 int const NbJeux = 12;
 int CountJeux[NbJeux]={0,0,0,0,0,0,0,0,0,0,0,0};
 int TotalNbJeux=0;
+bool NotMoreThanMaxProb=true;
 //Index_Jeux
 int const ProbIndivJeux[NbJeux]={
 95,   /*0  PQP*/
 21,   /*1  DQP*/
 21,   /*2  TrompeOeil*/
-30,   /*3  FFA*/
-42,   /*4  MarqueurHonte*/
+32,   /*3  FFA*/
+30,   /*4  MarqueurHonte*/
 42,   /*5  DQP2*/
 66,   /*6  MIN*/
 55,   /*7  JeuChanson*/
-66,   /*8  PatateChaude*/
-66,   /*9  AllRandom*/
-66,   /*10 UltimateChallenge*/
-66};  /*11 DeDuel*/
+75,   /*8  PatateChaude*/
+75,   /*9  AllRandom*/
+75,   /*10 UltimateChallenge*/
+75};  /*11 DeDuel*/
 
 
 #ifdef ENABLE_LOGGING
@@ -243,8 +244,10 @@ void setup()
   {
     ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
   }
-  //MarqueurHonte initial élevé
+  //MarqueurHonte initial élevé, DEDUEL 0, FFA 0
+  ProbIndivJeuxCurrent[3]=0;
   ProbIndivJeuxCurrent[4]=424;
+  ProbIndivJeuxCurrent[11]=0;
   
   //Initialize random sequence based on floating value from an unconnected pin.
   randomSeed(analogRead(myRandPin));
