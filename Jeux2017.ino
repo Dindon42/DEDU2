@@ -1735,7 +1735,7 @@ void AllRandom()
       }
     }
     
-    delay(15);
+    delay(5);
   }while(Looser==-1);
 
 
