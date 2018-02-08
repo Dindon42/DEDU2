@@ -15,8 +15,8 @@ void DeDuel()
   float Score=50;
   float ScoreFactor=1;
   float ScoreIncrease=0.27;
-  int FinalCtd1ID=15;
-  int FinalCtd2ID=16;
+  int FinalCtd1ID=11;
+  int FinalCtd2ID=12;
   int Chanson=FinalCtd1ID;
   long MusicCounter=0;
   long NextMusicEventCtr=-1;
@@ -30,8 +30,8 @@ void DeDuel()
   int SoundTime=500;
   int NombreNotes;
   int myRand;
-  int myRandMin=200;
-  int myRandMax=225;
+  int myRandMin=260;
+  int myRandMax=280;
   float MusicIncrease=0.04;
   float FactVit;
   bool TransfertHonte=false;
@@ -862,7 +862,7 @@ void MIN()
   ActivateGreenLED(100);
   TurnOnAllRedLights();
   
-  int RandTimer=3+random(12);
+  int RandTimer=5+random(9);
 
   float TimeInterval = 900;
   float TimeDelta;
@@ -878,11 +878,11 @@ void MIN()
 
     TimeInterval-=(float)(random(300,900)/RandTimer);
   }
-  CheckAllActive(nbj_raw);
-  
   TurnOffAllRedLights();
   DeactivateGreenLED();
-  delay(1000);
+  delay(500);
+  CheckAllActive(nbj_raw);
+  delay(500);
 
   for (int i=0; i<=nbj_raw ; i++)
   {
