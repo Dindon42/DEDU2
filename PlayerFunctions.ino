@@ -83,6 +83,34 @@ void DefinirOrdreJoueurs(int equipe,int NombreActions)
   }
 }
 
+int ProchainJoueur(int iJoueurActuel,int iNombrePlaces,int iDirection)
+{
+  int wProchain = -1;
+  int wNombrePlaces=iNombrePlaces%nbj_raw;
+  
+  //Protection
+  if((iDirection == 1 || iDirection == -1) && (iJoueurActuel>=0 && iJoueurActuel <= nbj_raw))
+  {
+    wProchain=iJoueurActuel + wNombrePlaces * iDirection;
+  
+    //Wrap-Around?
+    if (wProchain < 0)
+    {
+      wProchain = nbj_raw - wProchain;
+    }
+    else if(wProchain > nbj_raw)
+    {
+      wProchain = wProchain - nbj_raw;
+    }
+  
+    return wProchain;
+  }
+  else
+  {
+    return -1;
+  }
+}
+
 
 
 
