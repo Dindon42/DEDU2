@@ -174,11 +174,12 @@ void TrompeOeil()
   int NumActive = -1;
   int maxIter = random(2500,4500);
   int maxIter_Sheep = 2500;
-  int IterVert = random(30,80);
+  int IterVert = random(30,35);
   bool SwitchColor=false;
   bool SwitchToRed = false;
   int ToRED = IterVert+50;
-  bool GreenFirst = (((int)random(6)>4) && Game_Mode==1);
+  int ProbVert=4;
+  bool GreenFirst = ((random(ProbVert)==0) && Game_Mode==1);
   
   LOG_TROMPE("Game_Mode:");
   LOG_TROMPE(Game_Mode);

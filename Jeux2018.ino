@@ -5,10 +5,11 @@
 #endif
 void Patate2()
 {
-  int TimeDecMin=50;
-  int TimeDecMax=300;
-  int ReactTimeMin=100;
-  int ReactTimeMax=250;
+  
+  unsigned long basetime=12242;
+  unsigned long maxrandtime=4242;
+  unsigned long GameTimeMillis = basetime+random(maxrandtime);
+  unsigned long GameCounter=0;
   int InitSpread=nbj/2;
   bool ReadyToSwitch[2]={false,false};
   bool PlayerIsPressing[2]={false,false};
@@ -58,6 +59,13 @@ void Patate2()
   LuckyPlayer[0]=random(nbj);
   LuckyPlayer[1]=ProchainJoueur(LuckyPlayer[0],InitSpread,DirectionNextPlayer[0]);
   
+  LOG_PATATE2("\n");
+  LOG_PATATE2("PATATE2");
+  LOG_PATATE2("\n");
+  LOG_PATATE2("\n");
+  LOG_PATATE2("GameTimeMillis:");
+  LOG_PATATE2(GameTimeMillis);
+  LOG_PATATE2("\n");
   LOG_PATATE2("InitSpread:");
   LOG_PATATE2(InitSpread);
   LOG_PATATE2("\n");
@@ -87,6 +95,7 @@ void Patate2()
   do
   {
     ChangeCounter++;
+    GameCounter++;
     for (int i=0 ; i<=1 ; i++)
     {
       /*
@@ -211,6 +220,10 @@ void Patate2()
     //Check change DIR
     if (random(10000)>9992 &&  ChangeCounter>MinChangeCounter)
     {
+      
+      LOG_PATATE2("GameCounter:");
+      LOG_PATATE2(GameCounter);
+      LOG_PATATE2("\n");
       LOG_PATATE2("SwitchingSIDE!!");
       LOG_PATATE2("\n");
       
@@ -259,15 +272,11 @@ void Patate2()
         DirectionNextPlayer[1] = -1;
         DEDUPosition=BothMinus;
       }
-      
-      
       MoveDEDUFlag(DEDUPosition);
-      
     }
-    
-  }while(LuckyPlayer[0] != LuckyPlayer[1]);
+  }while((LuckyPlayer[0] != LuckyPlayer[1]) && (GameCounter<GameTimeMillis));
 
-  //BOTH SAME: PLAYER FOUND.
+  //Both LED on same player OR Game Timeout.
   LOG_PATATE2("GAME OVER");
   LOG_PATATE2("\n");
   
@@ -285,8 +294,10 @@ void Patate2()
   //Identify the Looser
   for (int e = 1; e <= 4; e++) {
     ActivateRedLight(LuckyPlayer[0]);
+    ActivateRedLight(LuckyPlayer[1]);
     delay(500);
     DeactivateRedLight(LuckyPlayer[0]);
+    DeactivateRedLight(LuckyPlayer[1]);
     delay(500);
   }
 

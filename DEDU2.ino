@@ -14,7 +14,7 @@ bool MusicMode=false;
 bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
-int nbj=8;
+int nbj=10;
 int vitesse=10;
 int Game_Mode=1;
 int SelectMusic=-1;

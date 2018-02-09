@@ -1376,13 +1376,12 @@ void JeuChanson()
 #endif
 void PatateChaude()
 {
-
   unsigned long basetime=4242;
   unsigned long maxrandtime=10242;
   unsigned long GameTimeMillis = basetime+random(maxrandtime);
+  unsigned long GameCounter=0;
   int TimeDecMin=50;
   int TimeDecMax=300;
-  unsigned long GameCounter=0;
   bool ReadyToSwitch=false;
   int ReactTimeMin=100;
   int ReactTimeMax=250;
