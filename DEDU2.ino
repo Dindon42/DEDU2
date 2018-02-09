@@ -3,8 +3,8 @@
 Servo myservo;
 
 //DEBUG
-#define ENABLE_LOGGING
-bool SkipSetup=true;
+//#define ENABLE_LOGGING
+bool SkipSetup=false;
 bool nosound=false;
 bool SkipDelay=false;
 bool SkipGame=false;
@@ -14,7 +14,7 @@ bool MusicMode=false;
 bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
-int nbj=4;
+int nbj=8;
 int vitesse=10;
 int Game_Mode=1;
 int SelectMusic=-1;
@@ -22,25 +22,26 @@ int SelectMusic=-1;
 
 
 //Prob, Jeux
-int const NumberOfRoundsForFullProb=6;
-int const NbJeux = 12;
-int CountJeux[NbJeux]={0,0,0,0,0,0,0,0,0,0,0,0};
+int const NumberOfRoundsForFullProb=8;
+int const NbJeux = 13;
+int CountJeux[NbJeux]={0,0,0,0,0,0,0,0,0,0,0,0,0};
 int TotalNbJeux=0;
 bool NotMoreThanMaxProb=true;
 //Index_Jeux
 int const ProbIndivJeux[NbJeux]={
-95,   /*0  PQP*/
-21,   /*1  DQP*/
-21,   /*2  TrompeOeil*/
-32,   /*3  FFA*/
-30,   /*4  MarqueurHonte*/
-42,   /*5  DQP2*/
-66,   /*6  MIN*/
-55,   /*7  JeuChanson*/
-75,   /*8  PatateChaude*/
-75,   /*9  AllRandom*/
-75,   /*10 UltimateChallenge*/
-75};  /*11 DeDuel*/
+  95,   /*0  PQP*/
+  21,   /*1  DQP*/
+  21,   /*2  TrompeOeil*/
+  21,   /*3  FFA*/
+  25,   /*4  MarqueurHonte*/
+  42,   /*5  DQP2*/
+  66,   /*6  MIN*/
+  55,   /*7  JeuChanson*/
+  75,   /*8  PatateChaude*/
+  75,   /*9  AllRandom*/
+  75,   /*10 UltimateChallenge*/
+  75,   /*11 DeDuel*/
+  75};  /*12 Patate2*/
 
 
 #ifdef ENABLE_LOGGING
@@ -56,7 +57,8 @@ bool ActiveGameLogging[NbJeux]={
   false,   /*8  PatateChaude*/
   false,   /*9  AllRandom*/
   false,   /*10 UltimateChallenge*/
-  false};  /*11 DeDuel*/
+  false,   /*11 DeDuel*/
+  false};  /*12 Patate2*/
 
   #define LOG_GAME(i,a) if( ActiveGameLogging[i] ) Serial.print(a);
   #define LOG_GENERAL(a) Serial.print(a);
@@ -237,17 +239,6 @@ void setup()
   nbj_raw=nbj-1;
   vitesse_raw=vitesse-1;
   
-
-
-  for (int i ; i<NbJeux; i++)
-  {
-    ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
-  }
-  //MarqueurHonte initial élevé, DEDUEL 0, FFA 0
-  ProbIndivJeuxCurrent[3]=0;
-  ProbIndivJeuxCurrent[4]=424;
-  ProbIndivJeuxCurrent[11]=0;
-  
   //Initialize random sequence based on floating value from an unconnected pin.
   randomSeed(analogRead(myRandPin));
 
@@ -307,6 +298,9 @@ void setup()
     }
   }
 
+  //Ajustement initial des prob pour les jeux.  Quelques cas spéciaux.
+  AjustementProbJeuxInit();
+  
   LOG_GENERAL("GameMode:");
   LOG_GENERAL(Game_Mode);
   LOG_GENERAL("\n");
@@ -335,11 +329,6 @@ void setup()
 void loop() 
 {
   int r;
-
-///ENLEVER
-Patate2();
-loop();
-  
 
   if(MusicMode)
   {

@@ -87,3 +87,17 @@ void GameMode()
   TurnOffAllRedLights();
   delay(500);
 }
+
+void AjustementProbJeuxInit()
+{
+  for (int i ; i<NbJeux; i++)
+  {
+    ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
+  }
+  //MarqueurHonte initial élevé, DEDUEL 0, FFA 0
+  ProbIndivJeuxCurrent[3]=0;
+  ProbIndivJeuxCurrent[4]=424;
+  ProbIndivJeuxCurrent[11]=0;
+  if (nbj<=5) ProbIndivJeuxCurrent[12]=0;
+}
+

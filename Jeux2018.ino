@@ -1,13 +1,10 @@
 #ifdef ENABLE_LOGGING
-  #define LOG_PATATE2(a) LOG_GENERAL(a)
+  #define LOG_PATATE2(a) LOG_GAME(12,a)
 #else
   #define LOG_PATATE2(a)
 #endif
 void Patate2()
 {
-  unsigned long basetime=4242;
-  unsigned long maxrandtime=10242;
-  unsigned long GameTimeMillis = basetime+random(maxrandtime);
   int TimeDecMin=50;
   int TimeDecMax=300;
   int ReactTimeMin=100;
@@ -16,27 +13,36 @@ void Patate2()
   bool ReadyToSwitch[2]={false,false};
   bool PlayerIsPressing[2]={false,false};
   unsigned long PressCounter[2]={0,0};
-  const int PressRev=15;
-  const int PressStall=30;
-  unsigned long GameCounter=0;
-
+  const int PressRev=150;
+  const int PressStall=300;
   int LuckyPlayer[2];
-  int DirectionNextPlayer=0;
+  int DirectionNextPlayer[2]={0,0};
+  int ProbOppDir=3;
+  unsigned long MinChangeCounter=1500;
+  unsigned long ChangeCounter=0;
+
+  //Positions of DEDU for different configs.
+  int BothPlus = 80;
+  int OppDir1 = 60;
+  int OppDir2 = 40;
+  int BothMinus = 20;
+  int DEDUPosition=0;
   
-  LOG_PATATE2("GameTimeMillis:");
-  LOG_PATATE2(GameTimeMillis);
-  LOG_PATATE2("\n");
-  GameCounter=0;
+  
   TurnOffAllLights();
   
   //Initialize direction of turn
   if(random(2)==0)
   {
-     DirectionNextPlayer=1;
+     DirectionNextPlayer[0]=1;
+     DirectionNextPlayer[1]=1;
+     DEDUPosition=BothPlus;
   }
   else
   {
-    DirectionNextPlayer=-1;
+    DirectionNextPlayer[0]=-1;
+    DirectionNextPlayer[1]=-1;
+    DEDUPosition=BothMinus;
   }
 
   if(nbj%2!=0)
@@ -50,19 +56,17 @@ void Patate2()
 
   //Start the players furthest apart.
   LuckyPlayer[0]=random(nbj);
+  LuckyPlayer[1]=ProchainJoueur(LuckyPlayer[0],InitSpread,DirectionNextPlayer[0]);
   
-  LOG_PATATE2("LuckyPlayer[0]:");
-  LOG_PATATE2(LuckyPlayer[0]);
-  LOG_PATATE2("\n");
   LOG_PATATE2("InitSpread:");
   LOG_PATATE2(InitSpread);
   LOG_PATATE2("\n");
-  LOG_PATATE2("DirectionNextPlayer:");
-  LOG_PATATE2(DirectionNextPlayer);
+  LOG_PATATE2("DirectionNextPlayer[0]:");
+  LOG_PATATE2(DirectionNextPlayer[0]);
   LOG_PATATE2("\n");
-  
-  LuckyPlayer[1]=ProchainJoueur(LuckyPlayer[0],InitSpread,DirectionNextPlayer);
-
+  LOG_PATATE2("DirectionNextPlayer[1]:");
+  LOG_PATATE2(DirectionNextPlayer[1]);
+  LOG_PATATE2("\n");
   LOG_PATATE2("LuckyPlayer[0]:");
   LOG_PATATE2(LuckyPlayer[0]);
   LOG_PATATE2("\n");
@@ -73,7 +77,7 @@ void Patate2()
   //Lights/DEDU INIT Setup
   ActivateBlueLED(21);
   delay(1500);
-  MoveDEDUFlag(50+DirectionNextPlayer*25);
+  MoveDEDUFlag(DEDUPosition);
   delay(500);
   for(int i=0; i<=1 ; i++)
   {
@@ -82,6 +86,7 @@ void Patate2()
 
   do
   {
+    ChangeCounter++;
     for (int i=0 ; i<=1 ; i++)
     {
       /*
@@ -140,7 +145,7 @@ void Patate2()
           LOG_PATATE2(LuckyPlayer[i]);
           LOG_PATATE2("\n");
           LOG_PATATE2("DirectionNextPlayer:");
-          LOG_PATATE2(DirectionNextPlayer);
+          LOG_PATATE2(DirectionNextPlayer[i]);
           LOG_PATATE2("\n");
           LOG_PATATE2("PressCounter:");
           LOG_PATATE2(PressCounter[i]);
@@ -151,7 +156,8 @@ void Patate2()
             LOG_PATATE2("NORMAL DIR!");
             LOG_PATATE2("\n");
             DeactivateRedLight(LuckyPlayer[i]);
-            LuckyPlayer[i]+=DirectionNextPlayer;
+            LuckyPlayer[i]+=DirectionNextPlayer[i];
+            tone(Tone_Pin, 800, 15);
           }
           //REV DIR
           else if (PressCounter[i]>=PressRev && PressCounter[i] < PressStall)
@@ -159,13 +165,15 @@ void Patate2()
             LOG_PATATE2("REV DIR!");
             LOG_PATATE2("\n");
             DeactivateRedLight(LuckyPlayer[i]);
-            LuckyPlayer[i]-=DirectionNextPlayer;
+            LuckyPlayer[i]-=DirectionNextPlayer[i];
+            tone(Tone_Pin, 1200, 15);
           }
           else
           {
             //STALL ON PLAYER, TOO LONG PRESS
             LOG_PATATE2("STALL");
             LOG_PATATE2("\n");
+            tone(Tone_Pin, 200+LuckyPlayer[i]*25, 150);
           }
           
           //Reset Counters and player ID
@@ -187,15 +195,103 @@ void Patate2()
           LOG_PATATE2(LuckyPlayer[i]);
           LOG_PATATE2("\n");
           
-          //Deactivate my Light;
+          //Activate new light;
           ActivateRedLight(LuckyPlayer[i]);
         }
       }
+      delay(1);
+      
+      //Check Win condition between players.
+      if(LuckyPlayer[0] == LuckyPlayer[1])
+      {
+        break;
+      }
     }
-    delay(1);
+
+    //Check change DIR
+    if (random(10000)>9992 &&  ChangeCounter>MinChangeCounter)
+    {
+      LOG_PATATE2("SwitchingSIDE!!");
+      LOG_PATATE2("\n");
+      
+      ChangeCounter=0;
+      
+      //MAIN DIRECTION
+      if (DirectionNextPlayer[0] == 1)
+      {
+        DirectionNextPlayer[0]=-1;
+      }
+      else
+      {
+        DirectionNextPlayer[0]=1;
+      }
+
+      //Second Direction
+      if(random(ProbOppDir)==0)
+      {
+        LOG_PATATE2("Opp Directions!!");
+        LOG_PATATE2("\n");
+        DirectionNextPlayer[1]=-DirectionNextPlayer[0];
+      }
+      else
+      {
+        LOG_PATATE2("Same Direction");
+        LOG_PATATE2("\n");
+        DirectionNextPlayer[1]=DirectionNextPlayer[0];
+      }
+
+      //Directions
+      if(DirectionNextPlayer[0] == 1 && DirectionNextPlayer[1]==1)
+      {
+        DEDUPosition=BothPlus;
+      }
+      else if(DirectionNextPlayer[0] == 1 && DirectionNextPlayer[1]==-1)
+      {
+        DEDUPosition=OppDir1;
+      }
+      else if(DirectionNextPlayer[0] == -1 && DirectionNextPlayer[1]==1)
+      {
+        DEDUPosition=OppDir2;
+      }
+      else
+      {
+        DirectionNextPlayer[0] = -1;
+        DirectionNextPlayer[1] = -1;
+        DEDUPosition=BothMinus;
+      }
+      
+      
+      MoveDEDUFlag(DEDUPosition);
+      
+    }
+    
   }while(LuckyPlayer[0] != LuckyPlayer[1]);
 
   //BOTH SAME: PLAYER FOUND.
   LOG_PATATE2("GAME OVER");
   LOG_PATATE2("\n");
+  
+  //Loose Stage
+  ActivateBlueLED(5);
+
+  for (int i = 1; i <= 80; i++)
+  {
+    Tone_Frequency = 2000 - 20 * i;
+    tone(Tone_Pin, Tone_Frequency);
+    delay(10);
+  }
+  noTone(Tone_Pin);
+  
+  //Identify the Looser
+  for (int e = 1; e <= 4; e++) {
+    ActivateRedLight(LuckyPlayer[0]);
+    delay(500);
+    DeactivateRedLight(LuckyPlayer[0]);
+    delay(500);
+  }
+
+  //FIN  
+  TurnOffAllLights();
+  MoveDEDUFlag(0);
+  delay(1200);
 }

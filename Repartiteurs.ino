@@ -17,13 +17,18 @@ void Repartiteur()
     {
       ProbIndivJeuxCurrent[i]=0;
     }
-
-    if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=4 && NotMoreThanMaxProb)
+    //Special case pour Patate2 qui ne devrait pas être joué si nbj<=5.  DEDU ne devrait tout simplement pas être joué avec nbj <=5 :D
+    if (i==12 && nbj<=5)
+    {
+      ProbIndivJeuxCurrent[i]=0;
+    }
+    
+    if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=4 && i!=3 && NotMoreThanMaxProb)
     {
       ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
     }
-    //Special case for marqueurhonte qui peut monter au-dessus de sa limite peu importe...
-    else if (i==4)
+    //Special case for marqueurhonte et DEDU qui peuvent monter au-dessus de leur limite peu importe...
+    else if (i==4 || i==3)
     {
       ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
     }
@@ -176,7 +181,7 @@ void Repartiteur()
     }
     ProbIndivJeuxCurrent[10]=0;
   }
-  else
+  else if (r < ProbAccumuleeJeux[11])
   {
     LOG_GENERAL("DeDuel");
     LOG_GENERAL("\n");
@@ -186,6 +191,17 @@ void Repartiteur()
       DeDuel();
     }
     ProbIndivJeuxCurrent[11]=0;
+  }
+  else
+  {
+    LOG_GENERAL("Patate2");
+    LOG_GENERAL("\n");
+    CountJeux[12]++;
+    if(!SkipGame)
+    {
+      Patate2();
+    }
+    ProbIndivJeuxCurrent[12]=0;
   }
 
   
@@ -237,6 +253,9 @@ void Repartiteur()
   LOG_GENERAL("\n");
   LOG_GENERAL("11 DeDuel:\t\t");
   LOG_GENERAL(CountJeux[11]);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("12 Patate2:\t\t");
+  LOG_GENERAL(CountJeux[12]);
   LOG_GENERAL("\n");
 
   //JOUEURHONTE
