@@ -87,21 +87,50 @@ int ProchainJoueur(int iJoueurActuel,int iNombrePlaces,int iDirection)
 {
   int wProchain = -1;
   int wNombrePlaces=iNombrePlaces%nbj_raw;
+
+  LOG_GENERAL("\n");
+  LOG_GENERAL("IN:");
+  LOG_GENERAL("\n");
+  LOG_GENERAL("iJoueurActuel:");
+  LOG_GENERAL(iJoueurActuel);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("iNombrePlaces:");
+  LOG_GENERAL(iNombrePlaces);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("wNombrePlaces:");
+  LOG_GENERAL(wNombrePlaces);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("nbj_raw:");
+  LOG_GENERAL(nbj_raw);
+  LOG_GENERAL("\n");
+  
   
   //Protection
   if((iDirection == 1 || iDirection == -1) && (iJoueurActuel>=0 && iJoueurActuel <= nbj_raw))
   {
     wProchain=iJoueurActuel + wNombrePlaces * iDirection;
   
+    LOG_GENERAL("wProchainInterim:");
+    LOG_GENERAL(wProchain);
+    LOG_GENERAL("\n");
+    
     //Wrap-Around?
     if (wProchain < 0)
     {
-      wProchain = nbj_raw - wProchain;
+      wProchain = nbj_raw + wProchain+1;
     }
     else if(wProchain > nbj_raw)
     {
-      wProchain = wProchain - nbj_raw;
+      wProchain = wProchain - nbj_raw-1;
     }
+
+    
+    LOG_GENERAL("wProchain:");
+    LOG_GENERAL(wProchain);
+    LOG_GENERAL("\n");
+    LOG_GENERAL("OUT:");
+    LOG_GENERAL("\n");
+    LOG_GENERAL("\n");
   
     return wProchain;
   }

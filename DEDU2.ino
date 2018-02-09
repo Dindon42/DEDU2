@@ -3,8 +3,8 @@
 Servo myservo;
 
 //DEBUG
-//#define ENABLE_LOGGING
-bool SkipSetup=false;
+#define ENABLE_LOGGING
+bool SkipSetup=true;
 bool nosound=false;
 bool SkipDelay=false;
 bool SkipGame=false;
@@ -14,7 +14,7 @@ bool MusicMode=false;
 bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
-int nbj=10;
+int nbj=4;
 int vitesse=10;
 int Game_Mode=1;
 int SelectMusic=-1;
@@ -336,6 +336,9 @@ void loop()
 {
   int r;
 
+///ENLEVER
+Patate2();
+loop();
   
 
   if(MusicMode)
