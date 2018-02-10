@@ -111,8 +111,19 @@ int ProchainJoueur(int iJoueurActuel,int iNombrePlaces,int iDirection)
   }
 }
 
-
-
+int WrapAround(int iPlayer)
+{
+  int wPlayer=iPlayer;
+  if (wPlayer>nbj_raw)
+  {
+    wPlayer=0;
+  }
+  else if (wPlayer < 0)
+  {
+    wPlayer=nbj_raw;
+  }
+  return wPlayer;
+}
 
 
 

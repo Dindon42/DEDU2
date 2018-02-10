@@ -12,8 +12,8 @@ void Repartiteur()
     //Update for next round
     ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
       
-    //Special case pour DEDUEL qui ne devrait pas augmenter tant que joueurhonte = -1
-    if (i==11 && JoueurHonte==-1)
+    //Special case pour DEDUEL et Tourniquet qui ne devrait pas augmenter tant que joueurhonte = -1
+    if ((i==11 || i==13) && JoueurHonte==-1)
     {
       ProbIndivJeuxCurrent[i]=0;
     }
@@ -77,6 +77,7 @@ void Repartiteur()
       DQP();
     }
     ProbIndivJeuxCurrent[1]=0;
+    ProbIndivJeuxCurrent[5]=0;
   }
   else if (r < ProbAccumuleeJeux[2])
   {
@@ -114,6 +115,7 @@ void Repartiteur()
       JoueurHonte=random(nbj);
     }
     ProbIndivJeuxCurrent[4]=0;
+    ProbIndivJeuxCurrent[13]=0;
   }
   else if (r < ProbAccumuleeJeux[5])
   {
@@ -124,6 +126,7 @@ void Repartiteur()
     {
       DQP2();
     }
+    ProbIndivJeuxCurrent[1]=0;
     ProbIndivJeuxCurrent[5]=0;
   }
   else if (r < ProbAccumuleeJeux[6])
@@ -192,7 +195,7 @@ void Repartiteur()
     }
     ProbIndivJeuxCurrent[11]=0;
   }
-  else
+  else if (r < ProbAccumuleeJeux[12])
   {
     LOG_GENERAL("Patate2");
     LOG_GENERAL("\n");
@@ -203,11 +206,23 @@ void Repartiteur()
     }
     ProbIndivJeuxCurrent[12]=0;
   }
+  else
+  {
+    LOG_GENERAL("Tourniquet");
+    LOG_GENERAL("\n");
+    CountJeux[13]++;
+    if(!SkipGame)
+    {
+      Tourniquet();
+    }
+    ProbIndivJeuxCurrent[4]=0;
+    ProbIndivJeuxCurrent[13]=0;
+  }
 
   
   if (SkipGame)
   {
-    if(SkipGameDelay)
+    if(DelayIfSkipGame)
     {
       delay(2500);
     }
@@ -256,6 +271,9 @@ void Repartiteur()
   LOG_GENERAL("\n");
   LOG_GENERAL("12 Patate2:\t\t");
   LOG_GENERAL(CountJeux[12]);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("13 Tourniquet:\t\t");
+  LOG_GENERAL(CountJeux[13]);
   LOG_GENERAL("\n");
 
   //JOUEURHONTE

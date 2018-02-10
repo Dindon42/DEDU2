@@ -1,4 +1,148 @@
 #ifdef ENABLE_LOGGING
+  #define LOG_TOURNIQUET(a) LOG_GAME(13,a)
+#else
+  #define LOG_TOURNIQUET(a)
+#endif
+void Tourniquet()
+{
+  int LightDelay=3;
+  int LightDelayIncrement=1;
+  int CurrentCounter=0;
+  int LastPlayer=random(nbj);
+  int CurrentPlayer=0;
+  int DirectionNextPlayer=0;
+  bool PlayersState[nbj_max]={true,true,true,true,true,true,true,true,true,true};
+  int NumActivePlayers=nbj;
+  int Looser=-1;
+  bool ReadyToPress=false;
+  bool PlayerIsPressing=false;
+  bool ReadytoIncreaseIncrement=false;
+
+  if(random(2)==0)
+  {
+    DirectionNextPlayer=1;
+  }
+  else
+  {
+    DirectionNextPlayer=-1;
+  }
+  CurrentPlayer=WrapAround(LastPlayer+DirectionNextPlayer);
+  
+  //Tout vert pour commencer+Une Lumière
+  ActivateRedLight(CurrentPlayer);
+  delay(200);
+  ActivateBlueLED(20);
+  
+  //Spin the wheel!
+  do
+  {
+    //For the active player, monitor the transitions.  
+    //1: ToLow
+    //2: ToHigh
+    //3: ToLow
+    //If this happens during the time the player is active, Good, you are not the looser.
+    
+    //Monitor initial transition to LOW
+    if(ReadPlayerInput(CurrentPlayer)==LOW && ReadyToPress==false)
+    {
+      ReadyToPress=true;
+    }
+    
+    //Monitor subsequent transition to HIGH
+    if(ReadPlayerInput(CurrentPlayer)==HIGH && ReadyToPress==true && PlayerIsPressing==false)
+    {
+      PlayerIsPressing=true;
+    }
+    
+    //Monitor subsequent transition to HIGH
+    if(ReadPlayerInput(CurrentPlayer)==LOW && PlayerIsPressing==true)
+    {
+      //YOU ARE SAFE.
+      if(PlayersState[CurrentPlayer]==true)
+      {
+        NumActivePlayers--;
+        PlayersState[CurrentPlayer]=false;
+
+        ReadyToPress=false;
+        PlayerIsPressing=false;
+
+        //Change Last Player if Current Player
+        if(CurrentPlayer==LastPlayer)
+        {
+          do
+          {
+            LastPlayer=WrapAround(LastPlayer+DirectionNextPlayer);
+          }while(PlayersState[LastPlayer]==false);
+        }
+      }
+    }
+    delay(1);
+    //Find spammers and make them pay.
+    for(int i=0; i<=nbj_raw ; i++)
+    {
+      if(PlayersState[i]==false && ReadPlayerInput(i)==HIGH)
+      {
+        PlayersState[i]=true;
+        NumActivePlayers++;
+        DeactivateRedLight(i);
+      }
+    }
+    
+    //Enougn time on this guy...  Switch
+    if(CurrentCounter>=LightDelay)
+    {
+      CurrentCounter=0;
+      ReadyToPress=false;
+      PlayerIsPressing=false;
+      //If we reach the last guy, increment lightdelay
+      if (CurrentPlayer==LastPlayer)
+      {
+        LightDelay+=LightDelayIncrement;
+        LightDelayIncrement++;
+        /*
+        if(ReadytoIncreaseIncrement==true)
+        {
+          LightDelayIncrement++;
+          ReadytoIncreaseIncrement=false;
+        }
+        */
+      }
+      //Keep winners lights active
+      if(PlayersState[CurrentPlayer]==true)
+      {
+        DeactivateRedLight(CurrentPlayer);
+      }
+      tone(Tone_Pin, 3500, 3);
+      //Find an active player
+      do
+      {
+        CurrentPlayer=WrapAround(CurrentPlayer+DirectionNextPlayer);
+      }while(PlayersState[CurrentPlayer]==false);
+      
+      ActivateRedLight(CurrentPlayer);
+    }
+    
+    CurrentCounter++;
+    delay(2);
+  }while(NumActivePlayers>1);
+
+  for(int i=0; i<=nbj_raw ; i++)
+  {
+    if(PlayersState[i]==true)
+    {
+      Looser=i;
+    }
+  }
+
+  //Low intensity
+  delay(700);
+  TurnOffAllLights();
+
+  JoueurHonte=MarqueurHonte(Looser,90 - nbj * 7);
+}
+
+
+#ifdef ENABLE_LOGGING
   #define LOG_PATATE2(a) LOG_GAME(12,a)
 #else
   #define LOG_PATATE2(a)
@@ -190,15 +334,7 @@ void Patate2()
           PlayerIsPressing[i]=false;
           PressCounter[i]=0;
           
-          //WRAP AROUND?
-          if (LuckyPlayer[i]>nbj_raw)
-          {
-            LuckyPlayer[i]=0;
-          }
-          else if (LuckyPlayer[i] < 0)
-          {
-            LuckyPlayer[i]=nbj_raw;
-          }
+          LuckyPlayer[i]=WrapAround(LuckyPlayer[i]);
 
           LOG_PATATE2("New Player:");
           LOG_PATATE2(LuckyPlayer[i]);

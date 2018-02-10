@@ -94,10 +94,11 @@ void AjustementProbJeuxInit()
   {
     ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
   }
-  //MarqueurHonte initial élevé, DEDUEL 0, FFA 0
+  //MarqueurHonte initial élevé, DEDUEL 0, FFA 0, Tourniquet 0, Patate2 0 si pas suffisament de joueurs
   ProbIndivJeuxCurrent[3]=0;
   ProbIndivJeuxCurrent[4]=424;
   ProbIndivJeuxCurrent[11]=0;
   if (nbj<=5) ProbIndivJeuxCurrent[12]=0;
+  ProbIndivJeuxCurrent[13]=0;
 }
 

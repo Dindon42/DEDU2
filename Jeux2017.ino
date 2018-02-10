@@ -1452,14 +1452,8 @@ void PatateChaude()
       
       //GoToNextPlayer
       LuckyPlayer+=NextPlayer;
-      if (LuckyPlayer>nbj_raw)
-      {
-        LuckyPlayer=0;
-      }
-      else if (LuckyPlayer < 0)
-      {
-        LuckyPlayer=nbj_raw;
-      }
+
+      LuckyPlayer=WrapAround(LuckyPlayer);
       
       //Activate new lucky Player
       ActivateRedLight(LuckyPlayer);

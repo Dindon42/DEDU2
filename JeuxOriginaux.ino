@@ -127,7 +127,7 @@ int MarqueurHonte(int iJoueurChanceux, int iSpinDelay)
   }
   
   //Tout bleu pour commencer
-  ActivateBlueLED(80);
+  ActivateBlueLED(20);
 
   //Spin the wheel!
   for (SpinDelay ; SpinDelay >= 1; SpinDelay -= 5)
