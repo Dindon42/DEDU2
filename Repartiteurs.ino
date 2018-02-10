@@ -161,6 +161,7 @@ void Repartiteur()
       PatateChaude();
     }
     ProbIndivJeuxCurrent[8]=0;
+    ProbIndivJeuxCurrent[12]=0;
   }
   else if (r < ProbAccumuleeJeux[9])
   {
@@ -204,6 +205,7 @@ void Repartiteur()
     {
       Patate2();
     }
+    ProbIndivJeuxCurrent[8]=0;
     ProbIndivJeuxCurrent[12]=0;
   }
   else

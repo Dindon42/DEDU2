@@ -138,6 +138,7 @@ void Tourniquet()
   delay(700);
   TurnOffAllLights();
 
+  LooserSoundAndLight(Looser);
   JoueurHonte=MarqueurHonte(Looser,90 - nbj * 7);
 }
 

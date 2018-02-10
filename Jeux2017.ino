@@ -339,7 +339,7 @@ void DeDuel()
   
   delay(300);
   MoveDEDUFlag(0);
-  delay(1000);
+  delay(500);
   ControlAllLights(false,0,0);
   delay(500);
   
