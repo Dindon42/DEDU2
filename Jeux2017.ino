@@ -35,7 +35,7 @@ void DeDuel()
   float MusicIncrease=0.04;
   float FactVit;
   bool TransfertHonte=false;
-  int TransfertHonteProb=2;
+  int TransfertHonteProb=3;
 
 
   if(JoueurHonte!=-1)
@@ -746,7 +746,7 @@ void UltimateChallenge()
 
   //Flash Ultimatewinner light, move the flag.
   ControlAllLights(false,0,0);
-  delay(1500);
+  delay(500);
   CurrentIntensity=0;
   for (int i=0 ; i<NumSteps ; i++)
   {

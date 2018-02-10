@@ -14,7 +14,7 @@ bool MusicMode=false;
 bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
-int nbj=8;
+int nbj=10;
 int vitesse=10;
 int Game_Mode=1;
 int SelectMusic=-1;
@@ -331,7 +331,7 @@ void setup()
 void loop() 
 {
   int r;
-
+  
   if(MusicMode)
   {
     LOG_GENERAL("\n");
@@ -361,7 +361,7 @@ void loop()
     if (!SkipFraudeur)
     {
       //FacteurVitesse
-      r = random(25,50) + (12 - vitesse) * random(100);
+      r = random(25,50) + (11 - vitesse) * random(100);
       Delay_Fraudeur(r);
     }
     

@@ -17,6 +17,7 @@ void Tourniquet()
   bool ReadyToPress=false;
   bool PlayerIsPressing=false;
   bool ReadytoIncreaseIncrement=false;
+  bool IgnorePresses=false;
 
   if(random(2)==0)
   {
@@ -41,77 +42,120 @@ void Tourniquet()
     //2: ToHigh
     //3: ToLow
     //If this happens during the time the player is active, Good, you are not the looser.
-    
+    LOG_TOURNIQUET("CurrentPlayer:");
+    LOG_TOURNIQUET(CurrentPlayer);
+    LOG_TOURNIQUET("\n");
+    LOG_TOURNIQUET("ReadyToPress:");
+    LOG_TOURNIQUET(ReadyToPress);
+    LOG_TOURNIQUET("\n");
+    LOG_TOURNIQUET("PlayerIsPressing:");
+    LOG_TOURNIQUET(PlayerIsPressing);
+    LOG_TOURNIQUET("\n");
     //Monitor initial transition to LOW
-    if(ReadPlayerInput(CurrentPlayer)==LOW && ReadyToPress==false)
+    
+    if(ReadPlayerInput(CurrentPlayer)==LOW && ReadyToPress==false && IgnorePresses==false)
     {
+      LOG_TOURNIQUET("Changing RTP!");
+      LOG_TOURNIQUET("\n");
       ReadyToPress=true;
     }
     
     //Monitor subsequent transition to HIGH
-    if(ReadPlayerInput(CurrentPlayer)==HIGH && ReadyToPress==true && PlayerIsPressing==false)
+    if(ReadPlayerInput(CurrentPlayer)==HIGH && ReadyToPress==true && PlayerIsPressing==false && IgnorePresses==false)
     {
+      LOG_TOURNIQUET("Changing PIP!")
+      LOG_TOURNIQUET("\n");
       PlayerIsPressing=true;
     }
     
     //Monitor subsequent transition to HIGH
-    if(ReadPlayerInput(CurrentPlayer)==LOW && PlayerIsPressing==true)
+    if(ReadPlayerInput(CurrentPlayer)==LOW && PlayerIsPressing==true && IgnorePresses==false)
     {
+      LOG_TOURNIQUET("Player SAFE!")
+      LOG_TOURNIQUET("\n");
       //YOU ARE SAFE.
       if(PlayersState[CurrentPlayer]==true)
       {
         NumActivePlayers--;
         PlayersState[CurrentPlayer]=false;
-
-        ReadyToPress=false;
-        PlayerIsPressing=false;
+        IgnorePresses=true;
 
         //Change Last Player if Current Player
         if(CurrentPlayer==LastPlayer)
         {
+          LOG_TOURNIQUET("Player was last and is now safe!")
+          LOG_TOURNIQUET("\n");
+          LOG_TOURNIQUET("Changing LAST PLAYER to:")
           do
           {
             LastPlayer=WrapAround(LastPlayer+DirectionNextPlayer);
           }while(PlayersState[LastPlayer]==false);
+          LOG_TOURNIQUET(LastPlayer);
+          LOG_TOURNIQUET("\n");
         }
       }
     }
+    
     delay(1);
-    //Find spammers and make them pay.
+    
+    //Find spammers and bring them back in the game.
     for(int i=0; i<=nbj_raw ; i++)
     {
       if(PlayersState[i]==false && ReadPlayerInput(i)==HIGH)
       {
+        LOG_TOURNIQUET("SPAM PLAYER:");
+        LOG_TOURNIQUET(i);
+        LOG_TOURNIQUET("\n");
+        
         PlayersState[i]=true;
         NumActivePlayers++;
         DeactivateRedLight(i);
       }
     }
     
-    //Enougn time on this guy...  Switch
-    if(CurrentCounter>=LightDelay)
+    delay(1);
+
+    if(NumActivePlayers<=1) 
     {
+      break;
+    }
+    
+    //Enougn time on this guy...  Switch
+    if(CurrentCounter>LightDelay)
+    {
+      
       CurrentCounter=0;
       ReadyToPress=false;
       PlayerIsPressing=false;
+      IgnorePresses=false;
+      
       //If we reach the last guy, increment lightdelay
       if (CurrentPlayer==LastPlayer)
       {
         LightDelay+=LightDelayIncrement;
-        LightDelayIncrement++;
-        /*
+        //LightDelayIncrement++;
+        
         if(ReadytoIncreaseIncrement==true)
         {
-          LightDelayIncrement++;
+          if (random(4)==0)
+          {
+            LightDelayIncrement++;
+          }
           ReadytoIncreaseIncrement=false;
         }
-        */
+        else
+        {
+          ReadytoIncreaseIncrement=true;
+        }
       }
-      //Keep winners lights active
+      
+      delay(1);
+      //Keep winners lights active, Deactivate my light if im still in this game.
       if(PlayersState[CurrentPlayer]==true)
       {
         DeactivateRedLight(CurrentPlayer);
       }
+      
       tone(Tone_Pin, 3500, 3);
       //Find an active player
       do
@@ -120,10 +164,11 @@ void Tourniquet()
       }while(PlayersState[CurrentPlayer]==false);
       
       ActivateRedLight(CurrentPlayer);
+      
     }
     
     CurrentCounter++;
-    delay(2);
+    delay(1);
   }while(NumActivePlayers>1);
 
   for(int i=0; i<=nbj_raw ; i++)
