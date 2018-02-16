@@ -17,7 +17,7 @@ void TeamDeDuel()
   float BaseScore=50;
   float Score=BaseScore;
   float ScoreFactor=1;
-  float ScoreIncrease=0.27;
+  float ScoreIncrease=0.42;
   unsigned long ScoreIncCounter=0;
   unsigned long ScoreIncreaseIter=950;
   bool HasReleased[2]={false,false};
@@ -25,7 +25,7 @@ void TeamDeDuel()
   int SoundTime=500;
   int Direction = 1;
   int FraudulentTeam;
-  int GameDelay=2;
+  int GameDelay=1;
 
   if(random(2)==0)
   {
@@ -196,12 +196,12 @@ void TeamDeDuel()
     MoveDEDUFlag(Score);
     if (Score>50)
     {
-      ActivateGreenLED((Score-50)/3);
+      ActivateGreenLED((Score-50)/1.5);
       ActivateBlueLED(0);
     }
     else if (Score<50)
     {
-      ActivateBlueLED((50-Score)/3);
+      ActivateBlueLED((50-Score)/1.5);
       ActivateGreenLED(0);
     }
     else
