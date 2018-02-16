@@ -85,7 +85,8 @@ void DeDuel()
   if (!SkipLights)
   {
     MoveDEDUFlag(50);
-    //JoueChanson(15,2,false);
+    delay(500);
+    
     for (int i=1; i <50 ; i++)
     {
       ActivateGreenLED(i);
@@ -132,10 +133,6 @@ void DeDuel()
   ActivateRedLight(Joueurs[0]);
   ActivateRedLight(Joueurs[1]);
   ReadySound(SoundTime);
-  delay(500);
-  DeactivateRedLight(Joueurs[0]);
-  DeactivateRedLight(Joueurs[1]);
-
 
   LOG_DEDUEL("MusicCounter:");
   LOG_DEDUEL(MusicCounter);
@@ -285,7 +282,8 @@ void DeDuel()
     */
   }while(Winner==-1);
 
-
+  DeactivateRedLight(Joueurs[0]);
+  DeactivateRedLight(Joueurs[1]);
   OneUp();
   //GAGNANT TROUVÉ
   LOG_DEDUEL("Winner:");
@@ -348,7 +346,7 @@ void DeDuel()
     ///BRUIT ET TRANSFERT HONTE
     LooserSoundAndLight(Joueurs[0]);
     JoueurHonte=MarqueurHonte(Joueurs[0],90 - nbj * 7);
-    //Reset Prob
+    //Reset Prob de la honte puisque nouvellement transférée.
     ProbIndivJeuxCurrent[4]=0;
     
     LOG_DEDUEL("Nouveau JoueurHonte:");
@@ -1010,10 +1008,29 @@ void JeuChanson()
   float ScoreWeight;
   float CumulativeWait;
   float CumulativePlay;
+  bool FactorTeamSize = true;
+  float TeamSizeScoreRatio[2]={1,1};
+  float TeamSizeModifier=1.03;
   
   NombreNotes=SelectionChanson(random(NombreChansons));
   
   AllocateTwoTeams(nbj);
+  
+  if(NbJoueursEq1>NbJoueursEq2 && FactorTeamSize==true)
+  {
+    TeamSizeScoreRatio[0]=TeamSizeModifier;
+  }
+  else if(NbJoueursEq2>NbJoueursEq1 && FactorTeamSize==true)
+  {
+    TeamSizeScoreRatio[1]=TeamSizeModifier;
+  }
+
+  LOG_CHANSON("TeamSizeScoreRatio[0]:");
+  LOG_CHANSON(TeamSizeScoreRatio[0]);
+  LOG_CHANSON("\n");
+  LOG_CHANSON("TeamSizeScoreRatio[1]:");
+  LOG_CHANSON(TeamSizeScoreRatio[1]);
+  LOG_CHANSON("\n");
 
   //Set White Lights
   ActivateBlueLED(100);
@@ -1235,7 +1252,7 @@ void JeuChanson()
         LOG_CHANSON(CumulativePlay);
     }
     
-    Scores[e]=ScoreWait[e]*ScoreWeightWait + ScorePlay[e]*ScoreWeightPlay;
+    Scores[e]=(ScoreWait[e]*ScoreWeightWait + ScorePlay[e]*ScoreWeightPlay)*TeamSizeScoreRatio[e];
     
     LOG_CHANSON("\n");
     LOG_CHANSON("\n");
