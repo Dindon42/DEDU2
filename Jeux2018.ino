@@ -1,4 +1,146 @@
 #ifdef ENABLE_LOGGING
+  #define LOG_TEAMDEDUEL(a) LOG_GENERAL(a)
+#else
+  #define LOG_TEAMDEDUEL(a)
+#endif
+void TeamDeDuel()
+{
+  int LightDelay=350;
+  int ForLightDelay=13;
+  int Winner=-1;
+  float FactorTeamSize[2]={1,1};
+  int Player[2];
+  int InitPlayer[2];
+  int Delta=0;
+  float Score=50;
+  float ScoreFactor=1;
+  float ScoreIncrease=0.27;
+  unsigned long ScoreIncCounter=0;
+  unsigned long ScoreIncreaseIter=950;
+  bool HasReleased[2]={false,false};
+  bool IsPressing[2]={false,false};
+  int SoundTime=500;
+  
+  
+  AllocateTwoConsecutiveTeams();
+
+  if(NbJoueursEq1>NbJoueursEq2)
+  {
+    FactorTeamSize[0]=(float)NbJoueursEq1/(float)NbJoueursEq2;
+  }
+  else if(NbJoueursEq2>NbJoueursEq1)
+  {
+    FactorTeamSize[1]=(float)NbJoueursEq2/(float)NbJoueursEq1;
+  }
+
+  LOG_TEAMDEDUEL("FactorTeamSize[0]:");
+  LOG_TEAMDEDUEL(FactorTeamSize[0]);
+  LOG_TEAMDEDUEL("\n");
+  LOG_TEAMDEDUEL("FactorTeamSize[1]:");
+  LOG_TEAMDEDUEL(FactorTeamSize[1]);
+  LOG_TEAMDEDUEL("\n");
+  
+  
+  if (!SkipLights)
+  {
+    MoveDEDUFlag(50);
+    delay(500);
+    
+    for (int i=1; i <50 ; i++)
+    {
+      ActivateGreenLED(i);
+      delay(ForLightDelay);
+    }
+    delay(LightDelay);
+    for(int i=0 ; i<2 ; i++)
+    {
+      for (int j=0 ; j<nbj ; j++)
+      {
+        if(Equipes[j]==0)
+        {
+          ActivateRedLight(j);
+        }
+      }
+      ActivateGreenLED(0);
+      delay(LightDelay);
+      TurnOffAllRedLights();
+      ActivateGreenLED(100);
+      delay(LightDelay);
+    }
+    ControlAllLights(false,0,0);
+    delay(2*LightDelay);
+    for (int i=1; i <50 ; i++)
+    {
+      ActivateBlueLED(i);
+      delay(ForLightDelay);
+    }
+    delay(LightDelay);
+    for(int i=0 ; i<2 ; i++)
+    {
+      for (int j=0 ; j<nbj ; j++)
+      {
+        if(Equipes[j]==1)
+        {
+          ActivateRedLight(j);
+        }
+      }
+      ActivateBlueLED(0);
+      delay(LightDelay);
+      TurnOffAllRedLights();
+      ActivateBlueLED(100);
+      delay(LightDelay);
+    }
+    ControlAllLights(false,0,0);
+  }
+
+  //Remember first player from each team
+  InitPlayer[0]=0;
+  InitPlayer[1]=NbJoueursEq1;
+
+  //Init Player to first player from each team
+  Player[0]=InitPlayer[0];
+  Player[1]=InitPlayer[1];
+
+  ActivateRedLight(Player[0]);
+  ActivateRedLight(Player[1]);
+  ReadySound(SoundTime);
+  
+  do
+  {
+    for(int i=0 ; i<=1 ; i++)
+    {
+      //Check for Release
+      if(ReadPlayerInput(Player[i])==LOW && HasReleased[i]==false)
+      {
+        HasReleased[i]=true;
+      }
+
+      //Check for Press after release
+      if(ReadPlayerInput(Player[i])==HIGH && HasReleased[i]==true)
+      {
+        IsPressing[i]=true;
+      }
+
+      //Check for release to switch to nextplayer
+      if(ReadPlayerInput(Player[i])==LOW && IsPressing[i]==true)
+      {
+        
+      }
+      
+      
+    }
+    
+  }while(Winner==-1);
+
+  //END
+  MoveDEDUFlag(0);
+  ControlAllLights(false,0,0);
+  delay(2500);
+  
+}
+
+
+#ifdef ENABLE_LOGGING
   #define LOG_TOURNIQUET(a) LOG_GAME(13,a)
 #else
   #define LOG_TOURNIQUET(a)

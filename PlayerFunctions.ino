@@ -1,4 +1,4 @@
-void AllocateTwoTeams(int nbj)
+void AllocateTwoTeams()
 {
   int NbjAlloueEq1=0;
   int NbjAlloueEq2=0;
@@ -45,6 +45,59 @@ void AllocateTwoTeams(int nbj)
       Equipes[i]=0;
       NbjAlloueEq1++;
     }
+  }
+}
+
+void AllocateTwoConsecutiveTeams()
+{
+  //init at -1
+  for (int i=0; i<=nbj_raw_max ; i++)
+  {
+    Equipes[i]=-1;
+  }
+  
+  NbEquipes=2;
+  if(nbj%2==0)
+  {
+    NbJoueursEq1=nbj/2;
+    NbJoueursEq2=NbJoueursEq1;
+  }
+  else
+  {
+    if(random(2)==0)
+    {
+      NbJoueursEq1=(nbj+1)/2;
+      NbJoueursEq2=nbj-NbJoueursEq1;
+    }
+    else
+    {
+      NbJoueursEq1=(nbj-1)/2;
+      NbJoueursEq2=nbj-NbJoueursEq1;
+    }
+  }
+  LOG_GENERAL("NbJoueursEq1:");
+  LOG_GENERAL(NbJoueursEq1);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("NbJoueursEq2:");
+  LOG_GENERAL(NbJoueursEq2);
+  LOG_GENERAL("\n");
+  
+  for(int i=0 ; i<=nbj_raw ; i++)
+  {
+    if(i<NbJoueursEq1)
+    {
+      Equipes[i]=0;
+    }
+    else
+    {
+      Equipes[i]=1;
+    }
+  }
+
+  for (int i=0; i<=nbj_raw_max ; i++)
+  {
+    LOG_GENERAL(Equipes[i]);
+    LOG_GENERAL("\n");
   }
 }
 

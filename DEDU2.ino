@@ -3,8 +3,8 @@
 Servo myservo;
 
 //DEBUG
-//#define ENABLE_LOGGING
-bool SkipSetup=false;
+#define ENABLE_LOGGING
+bool SkipSetup=true;
 bool nosound=false;
 bool SkipFraudeur=false;
 bool SkipGame=false;
@@ -14,7 +14,7 @@ bool MusicMode=false;
 bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
-int nbj=10;
+int nbj=5;
 int vitesse=10;
 int Game_Mode=1;
 int SelectMusic=-1;
@@ -44,6 +44,7 @@ int const ProbIndivJeux[NbJeux]={
   75,   /*12 Patate2*/
   42};  /*13 Tourniquet*/
 
+  
 
 #ifdef ENABLE_LOGGING
 bool ActiveGameLogging[NbJeux]={
@@ -54,7 +55,7 @@ bool ActiveGameLogging[NbJeux]={
   false,   /*4  MarqueurHonte*/
   false,   /*5  DQP2*/
   false,   /*6  MIN*/
-  false,   /*7  JeuChanson*/
+  true,   /*7  JeuChanson*/
   false,   /*8  PatateChaude*/
   false,   /*9  AllRandom*/
   false,   /*10 UltimateChallenge*/
@@ -331,6 +332,8 @@ void setup()
 void loop() 
 {
   int r;
+TeamDeDuel();
+loop();
   
   if(MusicMode)
   {
