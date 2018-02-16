@@ -119,7 +119,7 @@ int MarqueurHonte(int iJoueurChanceux, int iSpinDelay)
   //Délai entre chaque clignotement
   if(iSpinDelay==-1)
   {
-    SpinDelay = 160 - nbj * 7;
+    SpinDelay = DelaiHonte;
   }
   else
   {

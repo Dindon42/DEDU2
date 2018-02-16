@@ -37,12 +37,12 @@ int const ProbIndivJeux[NbJeux]={
   42,   /*5  DQP2*/
   66,   /*6  MIN*/
   55,   /*7  JeuChanson*/
-  75,   /*8  PatateChaude*/
-  75,   /*9  AllRandom*/
-  75,   /*10 UltimateChallenge*/
-  75,   /*11 DeDuel*/
-  75,   /*12 Patate2*/
-  55,  /*13 Tourniquet*/
+  70,   /*8  PatateChaude*/
+  70,   /*9  AllRandom*/
+  70,   /*10 UltimateChallenge*/
+  70,   /*11 DeDuel*/
+  70,   /*12 Patate2*/
+  60,  /*13 Tourniquet*/
   55};  /*14 TeamDeDuel*/
 
   
@@ -113,6 +113,9 @@ int NbJoueursEq2;
 
 int const ParamChansons=3;
 int const NbNoteMax=42;
+
+int DelaiPetiteHonte;
+int DelaiHonte;
 
 //Pour Chaque chanson:
 //0 => Freq
@@ -305,6 +308,8 @@ void setup()
 
   //Ajustement initial des prob pour les jeux.  Quelques cas spéciaux.
   AjustementProbJeuxInit();
+  //Ajustement du délai pour Honte
+  AjustementDelaiHonte();
   
   LOG_GENERAL("GameMode:");
   LOG_GENERAL(Game_Mode);
@@ -334,7 +339,7 @@ void setup()
 void loop() 
 {
   int r;
-
+  
   if(MusicMode)
   {
     LOG_GENERAL("\n");

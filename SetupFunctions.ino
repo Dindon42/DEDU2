@@ -100,5 +100,12 @@ void AjustementProbJeuxInit()
   ProbIndivJeuxCurrent[11]=0;
   if (nbj<=5) ProbIndivJeuxCurrent[12]=0;
   ProbIndivJeuxCurrent[13]=0;
+  ProbIndivJeuxCurrent[14]=0;
+}
+
+void AjustementDelaiHonte()
+{
+  DelaiPetiteHonte=90 - nbj * 5;
+  DelaiHonte=160 - nbj * 7;
 }
 

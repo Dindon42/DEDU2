@@ -344,7 +344,7 @@ void DeDuel()
   {
     ///BRUIT ET TRANSFERT HONTE
     LooserSoundAndLight(Joueurs[0]);
-    JoueurHonte=MarqueurHonte(Joueurs[0],90 - nbj * 5);
+    JoueurHonte=MarqueurHonte(Joueurs[0],DelaiPetiteHonte);
     //Reset Prob de la honte puisque nouvellement transférée.
     ProbIndivJeuxCurrent[4]=0;
     

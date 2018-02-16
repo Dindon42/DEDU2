@@ -466,7 +466,7 @@ void Tourniquet()
   TurnOffAllLights();
 
   LooserSoundAndLight(Looser);
-  JoueurHonte=MarqueurHonte(Looser,90 - nbj * 5);
+  JoueurHonte=MarqueurHonte(Looser,DelaiPetiteHonte);
 }
 
 
