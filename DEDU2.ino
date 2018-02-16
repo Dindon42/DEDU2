@@ -3,7 +3,7 @@
 Servo myservo;
 
 //DEBUG
-#define ENABLE_LOGGING
+//#define ENABLE_LOGGING
 bool SkipSetup=true;
 bool nosound=false;
 bool SkipFraudeur=false;
@@ -14,7 +14,7 @@ bool MusicMode=false;
 bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
-int nbj=5;
+int nbj=6;
 int vitesse=10;
 int Game_Mode=1;
 int SelectMusic=-1;
@@ -55,7 +55,7 @@ bool ActiveGameLogging[NbJeux]={
   false,   /*4  MarqueurHonte*/
   false,   /*5  DQP2*/
   false,   /*6  MIN*/
-  true,   /*7  JeuChanson*/
+  false,   /*7  JeuChanson*/
   false,   /*8  PatateChaude*/
   false,   /*9  AllRandom*/
   false,   /*10 UltimateChallenge*/

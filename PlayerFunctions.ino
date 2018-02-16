@@ -178,6 +178,29 @@ int WrapAround(int iPlayer)
   return wPlayer;
 }
 
+int NextPlayerInTeam(int CurrentPlayer,int iTeam,int iDirection)
+{
+  int Player;
+  for(int i=1 ; i<nbj ; i++)
+  {
+    Player=CurrentPlayer+iDirection*i;
+    
+    if(Player>=nbj)
+    {
+      Player-=nbj;
+    }
+    else if(Player<0)
+    {
+      Player+=nbj;
+    }
+
+    if(Equipes[Player]==iTeam)
+    {
+      return Player;
+    }
+  }
+  return -1;
+}
 
 
 

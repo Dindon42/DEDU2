@@ -8,11 +8,14 @@ void TeamDeDuel()
   int LightDelay=350;
   int ForLightDelay=13;
   int Winner=-1;
+  unsigned int Count[2]={0,0};
   float FactorTeamSize[2]={1,1};
+  float BigTeamFactor=1.03;
   int Player[2];
   int InitPlayer[2];
   int Delta=0;
-  float Score=50;
+  float BaseScore=50;
+  float Score=BaseScore;
   float ScoreFactor=1;
   float ScoreIncrease=0.27;
   unsigned long ScoreIncCounter=0;
@@ -20,17 +23,29 @@ void TeamDeDuel()
   bool HasReleased[2]={false,false};
   bool IsPressing[2]={false,false};
   int SoundTime=500;
+  int Direction = 1;
+  int FraudulentTeam;
+  int GameDelay=2;
+
+  if(random(2)==0)
+  {
+    Direction=1;
+  }
+  else
+  {
+    Direction=-1;
+  }
   
   
   AllocateTwoConsecutiveTeams();
 
   if(NbJoueursEq1>NbJoueursEq2)
   {
-    FactorTeamSize[0]=(float)NbJoueursEq1/(float)NbJoueursEq2;
+    FactorTeamSize[0]=((float)NbJoueursEq1/(float)NbJoueursEq2)*BigTeamFactor;
   }
   else if(NbJoueursEq2>NbJoueursEq1)
   {
-    FactorTeamSize[1]=(float)NbJoueursEq2/(float)NbJoueursEq1;
+    FactorTeamSize[1]=((float)NbJoueursEq2/(float)NbJoueursEq1)*BigTeamFactor;
   }
 
   LOG_TEAMDEDUEL("FactorTeamSize[0]:");
@@ -54,13 +69,7 @@ void TeamDeDuel()
     delay(LightDelay);
     for(int i=0 ; i<2 ; i++)
     {
-      for (int j=0 ; j<nbj ; j++)
-      {
-        if(Equipes[j]==0)
-        {
-          ActivateRedLight(j);
-        }
-      }
+      IlluminateTeamRedLights(0);
       ActivateGreenLED(0);
       delay(LightDelay);
       TurnOffAllRedLights();
@@ -77,13 +86,7 @@ void TeamDeDuel()
     delay(LightDelay);
     for(int i=0 ; i<2 ; i++)
     {
-      for (int j=0 ; j<nbj ; j++)
-      {
-        if(Equipes[j]==1)
-        {
-          ActivateRedLight(j);
-        }
-      }
+      IlluminateTeamRedLights(1);
       ActivateBlueLED(0);
       delay(LightDelay);
       TurnOffAllRedLights();
@@ -94,19 +97,48 @@ void TeamDeDuel()
   }
 
   //Remember first player from each team
-  InitPlayer[0]=0;
-  InitPlayer[1]=NbJoueursEq1;
+  if(Direction==1)
+  {
+    InitPlayer[0]=0;
+    InitPlayer[1]=NbJoueursEq1;
+  }
+  else
+  {
+    InitPlayer[0]=NbJoueursEq1-1;
+    InitPlayer[1]=nbj_raw;
+  }
 
   //Init Player to first player from each team
   Player[0]=InitPlayer[0];
   Player[1]=InitPlayer[1];
 
+  ReadySound(SoundTime);
   ActivateRedLight(Player[0]);
   ActivateRedLight(Player[1]);
-  ReadySound(SoundTime);
   
   do
   {
+    ScoreIncCounter++;
+    //Check for Fraudulent pressers
+    for(int i=0 ; i<nbj ; i++)
+    {
+      if(ReadPlayerInput(i)==HIGH && (i != Player[0] && i != Player[1]))
+      {
+        FraudulentTeam=Equipes[i];
+        
+        //Reset Player to first.
+        DeactivateRedLight(Player[FraudulentTeam]);
+        HasReleased[FraudulentTeam]=false;
+        IsPressing[FraudulentTeam]=false;
+
+        Player[FraudulentTeam]=InitPlayer[FraudulentTeam];
+        
+        ActivateRedLight(Player[FraudulentTeam]);
+      }
+    }
+
+    delay(GameDelay);
+    
     for(int i=0 ; i<=1 ; i++)
     {
       //Check for Release
@@ -124,18 +156,128 @@ void TeamDeDuel()
       //Check for release to switch to nextplayer
       if(ReadPlayerInput(Player[i])==LOW && IsPressing[i]==true)
       {
+        //Turn off light
+        DeactivateRedLight(Player[i]);
+        HasReleased[i]=false;
+        IsPressing[i]=false;
+
+        Player[i]=NextPlayerInTeam(Player[i],i,Direction);
         
+        //Activate Next Player Light
+        ActivateRedLight(Player[i]);
+
+        //Increase score if back to first player for team.
+        if(Player[i]==InitPlayer[i])
+        {
+          Count[i]++;
+          LOG_TEAMDEDUEL("Score:");
+          LOG_TEAMDEDUEL(Score);
+          LOG_TEAMDEDUEL("\n");
+        }
       }
-      
-      
+    }
+
+    delay(GameDelay);
+    
+    if(ScoreIncCounter>ScoreIncreaseIter && ScoreFactor<50)
+    {
+      ScoreIncCounter=0;
+      ScoreFactor=ScoreFactor*(ScoreIncrease+1);
+      LOG_TEAMDEDUEL("New Score Factor:");
+      LOG_TEAMDEDUEL(ScoreFactor);
+      LOG_TEAMDEDUEL("\n");
+      LOG_TEAMDEDUEL("Score:");
+      LOG_TEAMDEDUEL(Score);
+      LOG_TEAMDEDUEL("\n");
+    }
+
+    //Update the score based on count for each team
+    Score=BaseScore + ((float)Count[0]*FactorTeamSize[0]*ScoreFactor) - ((float)Count[1]*FactorTeamSize[1]*ScoreFactor);
+    MoveDEDUFlag(Score);
+    if (Score>50)
+    {
+      ActivateGreenLED((Score-50)/3);
+      ActivateBlueLED(0);
+    }
+    else if (Score<50)
+    {
+      ActivateBlueLED((50-Score)/3);
+      ActivateGreenLED(0);
+    }
+    else
+    {
+      ActivateBlueLED(0);
+      ActivateGreenLED(0);
+    }
+
+    if (Score>99)
+    {
+      Winner=0;
+    }
+    else if (Score <1)
+    {
+      Winner=1;
     }
     
   }while(Winner==-1);
 
-  //END
+  LOG_TEAMDEDUEL("Winner:");
+  LOG_TEAMDEDUEL(Winner);
+  LOG_TEAMDEDUEL("\n");
+
+  TurnOffAllRedLights();
+  OneUp();
+  
+  if (Winner==0)
+  {
+    for (int i=1; i <50 ; i++)
+    {
+      ActivateGreenLED(i);
+      delay(20);
+    }
+    delay(LightDelay);
+    ActivateGreenLED(0);
+    IlluminateTeamRedLights(Winner);
+    for(int i=0 ; i<2 ; i++)
+    {
+      WinnerSound();
+      delay(LightDelay);
+      TurnOffAllRedLights();
+      ActivateGreenLED(100);
+      delay(LightDelay);
+      IlluminateTeamRedLights(Winner);
+      ActivateGreenLED(0);
+    }
+  }
+  else
+  {
+    for (int i=1; i <50 ; i++)
+    {
+      ActivateBlueLED(i);
+      delay(20);
+    }
+    delay(LightDelay);
+    ActivateBlueLED(0);
+    IlluminateTeamRedLights(Winner);
+    for(int i=0 ; i<2 ; i++)
+    {
+      WinnerSound();
+      delay(LightDelay);
+      TurnOffAllRedLights();
+      ActivateBlueLED(100);
+      delay(LightDelay);
+      IlluminateTeamRedLights(Winner);
+      ActivateBlueLED(0);
+    }
+  }
+
+  
+  
+  delay(300);
   MoveDEDUFlag(0);
+  delay(500);
   ControlAllLights(false,0,0);
-  delay(2500);
+  delay(500);
   
 }
 

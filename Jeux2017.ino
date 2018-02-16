@@ -8,7 +8,7 @@ void DeDuel()
   //Joueur 0 = VERT
   //Joueur 1 = BLEU
   int Joueurs[2]={-1,-1};
-  long ClicCount[2]={0,0};
+  unsigned long ClicCount[2]={0,0};
   int Winner=-1;
   int DeltaClic=0;
   bool HasReleased[2]={false,false};
@@ -129,10 +129,9 @@ void DeDuel()
   LOG_DEDUEL(FactVit);
   LOG_DEDUEL("\n");
 
-  
+  ReadySound(SoundTime);
   ActivateRedLight(Joueurs[0]);
   ActivateRedLight(Joueurs[1]);
-  ReadySound(SoundTime);
 
   LOG_DEDUEL("MusicCounter:");
   LOG_DEDUEL(MusicCounter);
