@@ -12,13 +12,18 @@ void Repartiteur()
     //Update for next round
     ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
       
-    //Special case pour DEDUEL et Tourniquet qui ne devrait pas augmenter tant que joueurhonte = -1
-    if ((i==11 || i==13) && JoueurHonte==-1)
+    //Special case pour DEDUEL, TeamDeDuel et Tourniquet qui ne devrait pas augmenter tant que joueurhonte = -1
+    if ((i==11 || i==13 || i==14) && JoueurHonte==-1)
     {
       ProbIndivJeuxCurrent[i]=0;
     }
     //Special case pour Patate2 qui ne devrait pas être joué si nbj<=5.  DEDU ne devrait tout simplement pas être joué avec nbj <=5 :D
     if (i==12 && nbj<=5)
+    {
+      ProbIndivJeuxCurrent[i]=0;
+    }
+    //Special case pour TeamDeDuel qui ne devrait pas être joué si nbj<4.
+    if (i==14 && nbj<4)
     {
       ProbIndivJeuxCurrent[i]=0;
     }
