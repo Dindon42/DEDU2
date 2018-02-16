@@ -51,7 +51,6 @@ void Repartiteur()
   
   // Debut REPARTITEUR
   r = random(max_prob+1);
-
   
   LOG_GENERAL("R:");
   LOG_GENERAL(r);
@@ -61,7 +60,7 @@ void Repartiteur()
   LOG_GENERAL(max_prob);
   LOG_GENERAL("\n");
 
-  if (r < ProbAccumuleeJeux[0])
+  if (r <= ProbAccumuleeJeux[0])
   {
     LOG_GENERAL("PQP");
     LOG_GENERAL("\n");
@@ -72,7 +71,7 @@ void Repartiteur()
     }
     ProbIndivJeuxCurrent[0]=0;
   }
-  else if (r < ProbAccumuleeJeux[1])
+  else if (r <= ProbAccumuleeJeux[1])
   {
     LOG_GENERAL("DQP");
     LOG_GENERAL("\n");
@@ -84,7 +83,7 @@ void Repartiteur()
     ProbIndivJeuxCurrent[1]=0;
     ProbIndivJeuxCurrent[5]=0;
   }
-  else if (r < ProbAccumuleeJeux[2])
+  else if (r <= ProbAccumuleeJeux[2])
   {
     LOG_GENERAL("Trompe");
     LOG_GENERAL("\n");
@@ -95,7 +94,7 @@ void Repartiteur()
     }
     ProbIndivJeuxCurrent[2]=0;
   }
-  else if (r < ProbAccumuleeJeux[3])
+  else if (r <= ProbAccumuleeJeux[3])
   {
     LOG_GENERAL("DEDU");
     LOG_GENERAL("\n");
@@ -106,7 +105,7 @@ void Repartiteur()
     }
     ProbIndivJeuxCurrent[3]=0;
   }
-  else if (r < ProbAccumuleeJeux[4])
+  else if (r <= ProbAccumuleeJeux[4])
   {
     LOG_GENERAL("HONTE");
     LOG_GENERAL("\n");
@@ -122,7 +121,7 @@ void Repartiteur()
     ProbIndivJeuxCurrent[4]=0;
     ProbIndivJeuxCurrent[13]=0;
   }
-  else if (r < ProbAccumuleeJeux[5])
+  else if (r <= ProbAccumuleeJeux[5])
   {
     LOG_GENERAL("DQP2");
     LOG_GENERAL("\n");
@@ -134,7 +133,7 @@ void Repartiteur()
     ProbIndivJeuxCurrent[1]=0;
     ProbIndivJeuxCurrent[5]=0;
   }
-  else if (r < ProbAccumuleeJeux[6])
+  else if (r <= ProbAccumuleeJeux[6])
   {
     LOG_GENERAL("MINORITE");
     LOG_GENERAL("\n");
@@ -145,7 +144,7 @@ void Repartiteur()
     }
     ProbIndivJeuxCurrent[6]=0;
   }
-  else if (r < ProbAccumuleeJeux[7])
+  else if (r <= ProbAccumuleeJeux[7])
   {
     LOG_GENERAL("Chanson");
     LOG_GENERAL("\n");
@@ -156,7 +155,7 @@ void Repartiteur()
     }
     ProbIndivJeuxCurrent[7]=0;
   }
-  else if (r < ProbAccumuleeJeux[8])
+  else if (r <= ProbAccumuleeJeux[8])
   {
     LOG_GENERAL("Patate");
     LOG_GENERAL("\n");
@@ -168,7 +167,7 @@ void Repartiteur()
     ProbIndivJeuxCurrent[8]=0;
     ProbIndivJeuxCurrent[12]=0;
   }
-  else if (r < ProbAccumuleeJeux[9])
+  else if (r <= ProbAccumuleeJeux[9])
   {
     LOG_GENERAL("Random");
     LOG_GENERAL("\n");
@@ -179,7 +178,7 @@ void Repartiteur()
     }
     ProbIndivJeuxCurrent[9]=0;
   }
-  else if (r < ProbAccumuleeJeux[10])
+  else if (r <= ProbAccumuleeJeux[10])
   {
     LOG_GENERAL("Ulti");
     LOG_GENERAL("\n");
@@ -190,7 +189,7 @@ void Repartiteur()
     }
     ProbIndivJeuxCurrent[10]=0;
   }
-  else if (r < ProbAccumuleeJeux[11])
+  else if (r <= ProbAccumuleeJeux[11])
   {
     LOG_GENERAL("DeDuel");
     LOG_GENERAL("\n");
@@ -201,7 +200,7 @@ void Repartiteur()
     }
     ProbIndivJeuxCurrent[11]=0;
   }
-  else if (r < ProbAccumuleeJeux[12])
+  else if (r <= ProbAccumuleeJeux[12])
   {
     LOG_GENERAL("Patate2");
     LOG_GENERAL("\n");
@@ -213,7 +212,7 @@ void Repartiteur()
     ProbIndivJeuxCurrent[8]=0;
     ProbIndivJeuxCurrent[12]=0;
   }
-  else if (r < ProbAccumuleeJeux[13])
+  else if (r <= ProbAccumuleeJeux[13])
   {
     LOG_GENERAL("Tourniquet");
     LOG_GENERAL("\n");
@@ -234,6 +233,7 @@ void Repartiteur()
     {
       TeamDeDuel();
     }
+    ProbIndivJeuxCurrent[14]=0;
   }
 
   
