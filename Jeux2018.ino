@@ -19,13 +19,19 @@ void TeamDeDuel()
   float ScoreFactor=1;
   float ScoreIncrease=0.27;
   unsigned long ScoreIncCounter=0;
-  unsigned long ScoreIncreaseIter=1000;
+  unsigned long ScoreIncreaseIter=750;
   bool HasReleased[2]={false,false};
   bool IsPressing[2]={false,false};
   int SoundTime=500;
   int Direction = 1;
   int FraudulentTeam;
-  int GameDelay=1;
+  int GameDelay=2;
+  int Fails[nbj_max]={0,0,0,0,0,0,0,0,0,0};
+  int FailsMax=0;
+  int NumPlayersMaxFail=0;
+  int FailPlayerSequenceId=-1;
+  int PlayerFound=-1;
+  int FailPlayer=-1;
 
   if(random(2)==0)
   {
@@ -125,15 +131,31 @@ void TeamDeDuel()
       if(ReadPlayerInput(i)==HIGH && (i != Player[0] && i != Player[1]))
       {
         FraudulentTeam=Equipes[i];
-        
-        //Reset Player to first.
-        DeactivateRedLight(Player[FraudulentTeam]);
-        HasReleased[FraudulentTeam]=false;
-        IsPressing[FraudulentTeam]=false;
+        LOG_TEAMDEDUEL("FraudulentTeam:");
+        LOG_TEAMDEDUEL(FraudulentTeam);
+        LOG_TEAMDEDUEL("\n");
 
-        Player[FraudulentTeam]=InitPlayer[FraudulentTeam];
+        //Log fail if player not first.
+        if(Player[FraudulentTeam]!=InitPlayer[FraudulentTeam])
+        {
+          Fails[i]++;
+          LOG_TEAMDEDUEL("FailPlayer:");
+          LOG_TEAMDEDUEL(i);
+          LOG_TEAMDEDUEL("\n");
+          LOG_TEAMDEDUEL("Fails[i]:");
+          LOG_TEAMDEDUEL(Fails[i]);
+          LOG_TEAMDEDUEL("\n");
+          
+          //Reset Player to first.
+          DeactivateRedLight(Player[FraudulentTeam]);
+          HasReleased[FraudulentTeam]=false;
+          IsPressing[FraudulentTeam]=false;
+  
+          Player[FraudulentTeam]=InitPlayer[FraudulentTeam];
+          
+          ActivateRedLight(Player[FraudulentTeam]);
+        }
         
-        ActivateRedLight(Player[FraudulentTeam]);
       }
     }
 
@@ -276,6 +298,64 @@ void TeamDeDuel()
   delay(500);
   ControlAllLights(false,0,0);
   delay(500);
+
+  //Logic for HonteTransfer
+  //Trouver le joueur avec le plus grand nombre de fail dans l'équipe perdante.
+  for (int i=0 ; i<nbj ; i++)
+  {
+    if(Fails[i]>FailsMax && Equipes[i]!=Winner)
+    {
+      FailsMax=Fails[i];
+      NumPlayersMaxFail=1;
+    }
+    else if (Fails[i]==FailsMax && Equipes[i]!=Winner)
+    {
+      NumPlayersMaxFail++;
+    }
+    LOG_TEAMDEDUEL("[i]=");
+    LOG_TEAMDEDUEL(i);
+    LOG_TEAMDEDUEL(" - Fails[i]:");
+    LOG_TEAMDEDUEL(Fails[i]);
+    LOG_TEAMDEDUEL("\n");
+  }
+  LOG_TEAMDEDUEL("FailsMax:");
+  LOG_TEAMDEDUEL(FailsMax);
+  LOG_TEAMDEDUEL("\n");
+  LOG_TEAMDEDUEL("NumPlayersMaxFail:");
+  LOG_TEAMDEDUEL(NumPlayersMaxFail);
+  LOG_TEAMDEDUEL("\n");
+
+  
+  if(FailsMax!=0)
+  {
+    FailPlayerSequenceId=random(NumPlayersMaxFail);
+    LOG_TEAMDEDUEL("FailPlayerSequenceId:");
+    LOG_TEAMDEDUEL(FailPlayerSequenceId);
+    LOG_TEAMDEDUEL("\n");
+    for (int i=0 ; i<nbj ; i++)
+    {
+      if(Fails[i]==FailsMax && Equipes[i]!=Winner)
+      {
+        PlayerFound++;
+      }
+      if(PlayerFound==FailPlayerSequenceId)
+      {
+        FailPlayer=i;
+        break;
+      }
+    }
+    
+    ///BRUIT ET TRANSFERT HONTE
+    LooserSoundAndLight(FailPlayer);
+    JoueurHonte=MarqueurHonte(FailPlayer,DelaiPetiteHonte);
+    //Reset Prob de la honte puisque nouvellement transférée.
+    ProbIndivJeuxCurrent[4]=0;
+    
+    LOG_TEAMDEDUEL("Nouveau JoueurHonte:");
+    LOG_TEAMDEDUEL(JoueurHonte);
+    LOG_TEAMDEDUEL("\n");
+    
+  }
 }
 
 
