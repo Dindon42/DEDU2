@@ -232,12 +232,12 @@ void DeDuel()
     MoveDEDUFlag(Score);
     if (Score>50)
     {
-      ActivateGreenLED(2*(Score-50));
+      ActivateGreenLED((Score-50));
       ActivateBlueLED(0);
     }
     else if (Score<50)
     {
-      ActivateBlueLED(2*(50-Score));
+      ActivateBlueLED((50-Score));
       ActivateGreenLED(0);
     }
     else
