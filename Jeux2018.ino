@@ -17,9 +17,9 @@ void TeamDeDuel()
   float BaseScore=50;
   float Score=BaseScore;
   float ScoreFactor=1;
-  float ScoreIncrease=0.42;
+  float ScoreIncrease=0.27;
   unsigned long ScoreIncCounter=0;
-  unsigned long ScoreIncreaseIter=950;
+  unsigned long ScoreIncreaseIter=1000;
   bool HasReleased[2]={false,false};
   bool IsPressing[2]={false,false};
   int SoundTime=500;

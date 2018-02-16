@@ -334,7 +334,7 @@ void setup()
 void loop() 
 {
   int r;
-  
+
   if(MusicMode)
   {
     LOG_GENERAL("\n");
