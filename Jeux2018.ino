@@ -1,5 +1,5 @@
 #ifdef ENABLE_LOGGING
-  #define LOG_TEAMDEDUEL(a) LOG_GENERAL(a)
+  #define LOG_TEAMDEDUEL(a) LOG_GAME(14,a)
 #else
   #define LOG_TEAMDEDUEL(a)
 #endif
@@ -270,15 +270,12 @@ void TeamDeDuel()
       ActivateBlueLED(0);
     }
   }
-
-  
   
   delay(300);
   MoveDEDUFlag(0);
   delay(500);
   ControlAllLights(false,0,0);
   delay(500);
-  
 }
 
 
@@ -302,6 +299,7 @@ void Tourniquet()
   bool PlayerIsPressing=false;
   bool ReadytoIncreaseIncrement=false;
   bool IgnorePresses=false;
+  int IncrementProb=3;
 
   if(random(2)==0)
   {
@@ -421,7 +419,7 @@ void Tourniquet()
         
         if(ReadytoIncreaseIncrement==true)
         {
-          if (random(4)==0)
+          if (random(IncrementProb)==0)
           {
             LightDelayIncrement++;
           }
@@ -468,7 +466,7 @@ void Tourniquet()
   TurnOffAllLights();
 
   LooserSoundAndLight(Looser);
-  JoueurHonte=MarqueurHonte(Looser,90 - nbj * 7);
+  JoueurHonte=MarqueurHonte(Looser,90 - nbj * 5);
 }
 
 
@@ -493,7 +491,7 @@ void Patate2()
   int LuckyPlayer[2];
   int DirectionNextPlayer[2]={0,0};
   int ProbOppDir=3;
-  unsigned long MinChangeCounter=1500;
+  unsigned long MinChangeCounter=3500;
   unsigned long ChangeCounter=0;
 
   //Positions of DEDU for different configs.
@@ -558,7 +556,7 @@ void Patate2()
   
   //Lights/DEDU INIT Setup
   ActivateBlueLED(21);
-  delay(1500);
+  delay(1200);
   MoveDEDUFlag(DEDUPosition);
   delay(500);
   for(int i=0; i<=1 ; i++)
@@ -684,7 +682,7 @@ void Patate2()
     }
 
     //Check change DIR
-    if (random(10000)>9992 &&  ChangeCounter>MinChangeCounter)
+    if (random(10000)>9995 &&  ChangeCounter>MinChangeCounter)
     {
       
       LOG_PATATE2("GameCounter:");

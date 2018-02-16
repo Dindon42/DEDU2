@@ -4,7 +4,7 @@ Servo myservo;
 
 //DEBUG
 //#define ENABLE_LOGGING
-bool SkipSetup=true;
+bool SkipSetup=false;
 bool nosound=false;
 bool SkipFraudeur=false;
 bool SkipGame=false;
@@ -14,7 +14,7 @@ bool MusicMode=false;
 bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
-int nbj=6;
+int nbj=10;
 int vitesse=10;
 int Game_Mode=1;
 int SelectMusic=-1;
@@ -23,8 +23,8 @@ int SelectMusic=-1;
 
 //Prob, Jeux
 int const NumberOfRoundsForFullProb=8;
-int const NbJeux = 14;
-int CountJeux[NbJeux]={0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int const NbJeux = 15;
+int CountJeux[NbJeux]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 int TotalNbJeux=0;
 bool NotMoreThanMaxProb=true;
 //Index_Jeux
@@ -33,7 +33,7 @@ int const ProbIndivJeux[NbJeux]={
   30,   /*1  DQP*/
   21,   /*2  TrompeOeil*/
   21,   /*3  FFA*/
-  27,   /*4  MarqueurHonte*/
+  32,   /*4  MarqueurHonte*/
   42,   /*5  DQP2*/
   66,   /*6  MIN*/
   55,   /*7  JeuChanson*/
@@ -42,7 +42,8 @@ int const ProbIndivJeux[NbJeux]={
   75,   /*10 UltimateChallenge*/
   75,   /*11 DeDuel*/
   75,   /*12 Patate2*/
-  42};  /*13 Tourniquet*/
+  55,  /*13 Tourniquet*/
+  55};  /*14 TeamDeDuel*/
 
   
 
@@ -61,7 +62,8 @@ bool ActiveGameLogging[NbJeux]={
   false,   /*10 UltimateChallenge*/
   false,   /*11 DeDuel*/
   false,   /*12 Patate2*/
-  false};  /*13 Tourniquet*/
+  false,   /*13 Tourniquet*/
+  false};  /*14 TeamDeDuel*/
 
   #define LOG_GAME(i,a) if( ActiveGameLogging[i] ) Serial.print(a);
   #define LOG_GENERAL(a) Serial.print(a);
@@ -332,8 +334,6 @@ void setup()
 void loop() 
 {
   int r;
-TeamDeDuel();
-loop();
   
   if(MusicMode)
   {

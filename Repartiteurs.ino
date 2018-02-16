@@ -208,7 +208,7 @@ void Repartiteur()
     ProbIndivJeuxCurrent[8]=0;
     ProbIndivJeuxCurrent[12]=0;
   }
-  else
+  else if (r < ProbAccumuleeJeux[13])
   {
     LOG_GENERAL("Tourniquet");
     LOG_GENERAL("\n");
@@ -219,6 +219,16 @@ void Repartiteur()
     }
     ProbIndivJeuxCurrent[4]=0;
     ProbIndivJeuxCurrent[13]=0;
+  }
+  else
+  {
+    LOG_GENERAL("TeamDeDuel");
+    LOG_GENERAL("\n");
+    CountJeux[14]++;
+    if(!SkipGame)
+    {
+      TeamDeDuel();
+    }
   }
 
   
@@ -276,6 +286,9 @@ void Repartiteur()
   LOG_GENERAL("\n");
   LOG_GENERAL("13 Tourniquet:\t\t");
   LOG_GENERAL(CountJeux[13]);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("14 TeamDeDuel:\t\t");
+  LOG_GENERAL(CountJeux[14]);
   LOG_GENERAL("\n");
 
   //JOUEURHONTE

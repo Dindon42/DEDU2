@@ -344,7 +344,7 @@ void DeDuel()
   {
     ///BRUIT ET TRANSFERT HONTE
     LooserSoundAndLight(Joueurs[0]);
-    JoueurHonte=MarqueurHonte(Joueurs[0],90 - nbj * 7);
+    JoueurHonte=MarqueurHonte(Joueurs[0],90 - nbj * 5);
     //Reset Prob de la honte puisque nouvellement transférée.
     ProbIndivJeuxCurrent[4]=0;
     
@@ -1393,14 +1393,14 @@ void JeuChanson()
 void PatateChaude()
 {
   unsigned long basetime=4242;
-  unsigned long maxrandtime=10242;
+  unsigned long maxrandtime=12242;
   unsigned long GameTimeMillis = basetime+random(maxrandtime);
   unsigned long GameCounter=0;
-  int TimeDecMin=50;
-  int TimeDecMax=300;
+  int TimeDecMin=42;
+  int TimeDecMax=242;
   bool ReadyToSwitch=false;
-  int ReactTimeMin=100;
-  int ReactTimeMax=250;
+  int ReactTimeMin=84;
+  int ReactTimeMax=2420;
 
   LOG_PATATE("GameTimeMillis:");
   LOG_PATATE(GameTimeMillis);
@@ -1409,7 +1409,7 @@ void PatateChaude()
   TurnOffAllLights();
   //Lights Setup
   ActivateBlueLED(21);
-  delay(1500);
+  delay(1200);
 
   int LuckyPlayer = random(nbj);
   int NextPlayer;
