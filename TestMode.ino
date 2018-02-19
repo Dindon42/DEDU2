@@ -1,11 +1,8 @@
 
 void TestMode()
 {
-  
-  PlayNote(Tone_Pin,2500,200,20);
-  PlayNote(Tone_Pin,1000,200,20);
-  PlayNote(Tone_Pin,2500,200,20);
-  PlayNote(Tone_Pin,1000,200,20);
+  LOG_GENERAL("TEST MODE\n");
+  SonTestMode();
   
   while (1)
   {
@@ -20,44 +17,87 @@ void TestMode()
         DeactivateRedLight(i);
       }
     }
+    delay(1);
   }
 }
 
 
 void DemoMode()
 {
-  bool AllPressing;
+  bool GoToNext;
+  int NumActOut;
+  unsigned long Counter;
+  int IndivDelay=2;
+  int DelayGame=25;
+  unsigned const long CounterPlaySame=3000/DelayGame;
+  int PrevInputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
 
+  LOG_GENERAL("DEMO MODE\n");
   //Tone
-  PlayNote(Tone_Pin,2500,200,20);
-  PlayNote(Tone_Pin,1000,200,20);
-  PlayNote(Tone_Pin,2500,200,20);
-  PlayNote(Tone_Pin,1000,200,20);
-  delay(1000);
+  SonTestMode();
+  delay(500);
   NombreJoueurs();
-  
-  for(int i=0 ; i<NbJeux;i++)
+  delay(500);
+
+  do
   {
-    //Demo the game once
-    PlayGame(i);
-    
-    do
+    for(int i=0 ; i<NbJeux;i++)
     {
-      AllPressing=true;
-      for(int j=0 ; j<nbj ;j++)
+      do
       {
-        if(ReadPlayerInput(j)==HIGH)
+        WaitForAllNonActive(nbj_raw);
+        delay(1000);
+        
+        //Demo the game once
+        PlayGame(i);
+  
+        Counter=0;
+        do
         {
-          ActivateRedLight(i);
-        }
-        else
-        {
-          AllPressing=false;
-          DeactivateRedLight(i);
-        }
-      }
-      delay(1);
-    }while(AllPressing==false);
-  }
+          Counter++;
+          GoToNext=false;
+          for(int j=0 ; j<nbj ;j++)
+          {
+            if(ReadPlayerInput(j)==HIGH)
+            {
+              if(PrevInputState[j]==LOW)
+              {
+                Counter=0;
+                LOG_GENERAL("TOGGLE:");
+                LOG_GENERAL(j);
+                LOG_GENERAL("\n");
+                LOG_GENERAL("ReadPlayerInput(j):");
+                LOG_GENERAL(ReadPlayerInput(j));
+                LOG_GENERAL("\n");
+                LOG_GENERAL("PrevInputState[j]:");
+                LOG_GENERAL(PrevInputState[j]);
+                LOG_GENERAL("\n");
+                
+                PrevInputState[j]=HIGH;
+                ToggleOutput(j);
+              }
+            }
+            else
+            {
+              PrevInputState[j]=LOW;
+            }
+            delay(IndivDelay);
+          }
+          delay(DelayGame);
+          NumActOut=CheckAllActiveOutputs(nbj_raw);
+          if(NumActOut==nbj)
+          {
+            GoToNext=true;
+          }
+          
+        }while(GoToNext==false && Counter<CounterPlaySame);
+        
+        delay(500);
+        TurnOffAllLights();
+        delay(250);
+        
+      }while(GoToNext==false);
+    }
+  }while(1);
 }
 

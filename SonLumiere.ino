@@ -291,6 +291,12 @@ void LooserSoundAndLight(int iPlayer)
   }
 }
 
-
+void SonTestMode()
+{
+  PlayNote(Tone_Pin,2500,200,20);
+  PlayNote(Tone_Pin,1000,200,20);
+  PlayNote(Tone_Pin,2500,200,20);
+  PlayNote(Tone_Pin,1000,200,20);
+}
 
 

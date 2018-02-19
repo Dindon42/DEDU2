@@ -62,6 +62,16 @@ int SelectGame(int r)
   }
 }
 
+void PrepareGame(int game_id)
+{
+  if(game_id==Game_id_JC)
+  {
+    int c=CountJeux[Game_id_JC]%NombreChansons;
+    BesoinOrdreChansons(c);
+    ChansonPourJeu=OrdreChansons[c];
+  }
+}
+
 void PlayGame(int game_id)
 {
   if(game_id==Game_id_PQP)
@@ -94,12 +104,7 @@ void PlayGame(int game_id)
   }
   else if (game_id==Game_id_JC)
   {
-    int c=CountJeux[Game_id_JC]%NombreChansons;
-    LOG_GENERAL("C:");
-    LOG_GENERAL(c);
-    LOG_GENERAL("\n");
-    BesoinOrdreChansons(c);
-    JeuChanson(OrdreChansons[c]);
+    JeuChanson(ChansonPourJeu);
   }
   else if (game_id==Game_id_PC)
   {

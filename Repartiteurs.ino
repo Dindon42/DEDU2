@@ -61,8 +61,8 @@ void Repartiteur()
   LOG_GENERAL("\n");
 
   Jeu = SelectGame(r);
-
   LogGameName(Jeu);
+  PrepareGame(Jeu);
   if(!SkipGame)
   {
     PlayGame(Jeu);
@@ -70,11 +70,6 @@ void Repartiteur()
   else if(Jeu==Game_id_MH)
   {
     JoueurHonte=random(nbj);
-  }
-  else if(Jeu==Game_id_JC)
-  {
-    int c=CountJeux[Game_id_JC]%NombreChansons;
-    BesoinOrdreChansons(c);
   }
   ResetProbAfterGame(Jeu);
   CountJeux[Jeu]++;

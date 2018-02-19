@@ -18,9 +18,9 @@ int const Game_id_TDD=14;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-#define ENABLE_LOGGING
-bool SkipSetup=true;
-bool nosound=true;
+//#define ENABLE_LOGGING
+bool SkipSetup=false;
+bool nosound=false;
 bool SkipFraudeur=false;
 bool SkipGame=false;
 bool DelayIfSkipGame=false;
@@ -131,8 +131,8 @@ int NbJoueursEq2;
 int const ParamChansons=3;
 int const NbNoteMax=42;
 
-int DelaiPetiteHonte;
-int DelaiHonte;
+int DelaiPetiteHonte=1;
+int DelaiHonte=1;
 
 //Pour Chaque chanson:
 //0 => Freq
@@ -150,6 +150,7 @@ int RandomMax;
 
 ////Chansons.
 int const NombreChansons=13;
+int ChansonPourJeu=0;
 int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
   const PROGMEM float ChansonDEDU[3][18] = {
     {196,196,196,247,247,261,261,349,247,196,196,294,247,196,330,294,247,261},
@@ -293,6 +294,9 @@ void setup()
     PlayerInputPins[i]=Pin;
   }
 
+  //Ajustement du délai pour Honte
+  AjustementDelaiHonte();
+
   if (!SkipSetup && !MusicMode)
   {
     JoueurHonte=-1;
@@ -330,8 +334,6 @@ void setup()
 
   //Ajustement initial des prob pour les jeux.  Quelques cas spéciaux.
   AjustementProbJeuxInit();
-  //Ajustement du délai pour Honte
-  AjustementDelaiHonte();
 
   LogSetupParams();
 }
