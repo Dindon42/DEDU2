@@ -349,7 +349,7 @@ void TeamDeDuel()
     LooserSoundAndLight(FailPlayer);
     JoueurHonte=MarqueurHonte(FailPlayer,DelaiPetiteHonte);
     //Reset Prob de la honte puisque nouvellement transférée.
-    ProbIndivJeuxCurrent[4]=0;
+    ResetGameProb(Game_id_MH);
     
     LOG_TEAMDEDUEL("Nouveau JoueurHonte:");
     LOG_TEAMDEDUEL(JoueurHonte);

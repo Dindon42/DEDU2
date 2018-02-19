@@ -11,14 +11,24 @@ void TestMode()
   {
     for (int i=0; i<=nbj_raw_max;i++)
     {
-      if (digitalRead(InPinStart+InPinInterval*i) == HIGH)
+      if (ReadPlayerInput(i) == HIGH)
       {
-        digitalWrite(OutPinStart+OutPinInterval*i, HIGH);
+        ActivateRedLight(i);
       }
       else
       {
-        digitalWrite(OutPinStart+OutPinInterval*i, LOW);
+        DeactivateRedLight(i);
       }
     }
   }
 }
+
+
+void DemoMode()
+{
+  do
+  {
+    
+  }while(1);
+}
+

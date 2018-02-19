@@ -94,13 +94,15 @@ void AjustementProbJeuxInit()
   {
     ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
   }
-  //MarqueurHonte initial élevé, DEDUEL 0, FFA 0, Tourniquet 0, Patate2 0 si pas suffisament de joueurs
-  ProbIndivJeuxCurrent[3]=0;
-  ProbIndivJeuxCurrent[4]=242;
-  ProbIndivJeuxCurrent[11]=0;
-  if (nbj<=5) ProbIndivJeuxCurrent[12]=0;
-  ProbIndivJeuxCurrent[13]=0;
-  ProbIndivJeuxCurrent[14]=0;
+  //MarqueurHonte initial élevé
+  //Quelques jeux nuls initialement
+  //Patate2 0 si pas suffisament de joueurs
+  ProbIndivJeuxCurrent[Game_id_FFA]=0;
+  ProbIndivJeuxCurrent[Game_id_MH]=242;
+  ProbIndivJeuxCurrent[Game_id_Duel]=0;
+  if (nbj<=5) ProbIndivJeuxCurrent[Game_id_PC2]=0;
+  ProbIndivJeuxCurrent[Game_id_Tourn]=0;
+  ProbIndivJeuxCurrent[Game_id_TDD]=0;
 }
 
 void AjustementDelaiHonte()

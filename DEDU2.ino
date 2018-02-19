@@ -1,8 +1,22 @@
 #include <Servo.h>
 #include <avr/pgmspace.h>
-Servo myservo;
+int const Game_id_PQP=0;
+int const Game_id_DQP=1;
+int const Game_id_TO=2;
+int const Game_id_FFA=3;
+int const Game_id_MH=4;
+int const Game_id_DQP2=5;
+int const Game_id_MIN=6;
+int const Game_id_JC=7;
+int const Game_id_PC=8;
+int const Game_id_AR=9;
+int const Game_id_UC=10;
+int const Game_id_Duel=11;
+int const Game_id_PC2=12;
+int const Game_id_Tourn=13;
+int const Game_id_TDD=14;
 
-//DEBUG
+//DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //#define ENABLE_LOGGING
 bool SkipSetup=false;
 bool nosound=false;
@@ -12,13 +26,15 @@ bool DelayIfSkipGame=false;
 bool SkipLights=false;
 bool MusicMode=false;
 bool MusicRandFactVit=false;
+bool ExclusiveGame=false;
+int ExclusiveGame_ID=Game_id_TDD;
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
 int nbj=10;
 int vitesse=10;
 int Game_Mode=1;
 int SelectMusic=-1;
-//DEBUGEND
+//DEBUG END
 
 
 //Prob, Jeux
@@ -28,6 +44,7 @@ int CountJeux[NbJeux]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 int TotalNbJeux=0;
 bool NotMoreThanMaxProb=true;
 //Index_Jeux
+int ProbAccumuleeJeux[NbJeux];
 int const ProbIndivJeux[NbJeux]={
   95,   /*0  PQP*/
   30,   /*1  DQP*/
@@ -42,10 +59,8 @@ int const ProbIndivJeux[NbJeux]={
   70,   /*10 UltimateChallenge*/
   70,   /*11 DeDuel*/
   70,   /*12 Patate2*/
-  60,  /*13 Tourniquet*/
+  60,   /*13 Tourniquet*/
   55};  /*14 TeamDeDuel*/
-
-  
 
 #ifdef ENABLE_LOGGING
 bool ActiveGameLogging[NbJeux]={
@@ -80,6 +95,7 @@ int const B = 2; //Blue LED ALL
 
 int Tone_Pin=52;
 
+Servo Servo_BrasDEDU;
 //Position à l'arrêt du Servo (bâton rentré)
 int const Servo_LowPos = 40;
 int const Servo_HighPos = 154;
@@ -251,8 +267,8 @@ void setup()
   randomSeed(analogRead(myRandPin));
 
   //Attach to servo and move it to initial position
-  myservo.attach(Servo_Pin);
-  myservo.write(Servo_LowPos);
+  Servo_BrasDEDU.attach(Servo_Pin);
+  Servo_BrasDEDU.write(Servo_LowPos);
 
   //Pin definitions
   //LED ROUGE des joueurs
@@ -291,7 +307,11 @@ void setup()
     {
       TestMode();
     }
-  
+    else if(nbj_raw==1)
+    {
+      DemoMode();
+    }
+    
     //Debut VITESSE
     // Attend que les joueurs choisissent la vitesse du jeu.
     // 1 = lent, 10 = vite
@@ -339,7 +359,15 @@ void setup()
 void loop() 
 {
   int r;
-  
+
+  //Special exclusivegamemode loop
+  if(ExclusiveGame)
+  {
+    PlayGame(ExclusiveGame_ID);
+    loop();
+  }
+
+  //Special MusicModeLoop
   if(MusicMode)
   {
     LOG_GENERAL("\n");
@@ -359,30 +387,31 @@ void loop()
     LOG_GENERAL("\n");
     JoueChanson(r, 1, MusicRandFactVit);
     delay(2500);
+    loop();
+  }
+  
+
+  //Normal loop starts here.
+  WaitForAllNonActive(nbj_raw);
+
+  TurnOffAllLights();
+  
+  if (!SkipFraudeur)
+  {
+    //FacteurVitesse
+    r = random(25,50) + (11 - vitesse) * random(100);
+    Delay_Fraudeur(r);
+  }
+  
+  TurnOffAllLights();
+  
+  if(Game_Mode == 0)
+  {
+    RepartiteurOriginal();
   }
   else
   {
-    WaitForAllNonActive(nbj_raw);
-
-    TurnOffAllLights();
-    
-    if (!SkipFraudeur)
-    {
-      //FacteurVitesse
-      r = random(25,50) + (11 - vitesse) * random(100);
-      Delay_Fraudeur(r);
-    }
-    
-    TurnOffAllLights();
-    
-    if(Game_Mode == 0)
-    {
-      RepartiteurOriginal();
-    }
-    else
-    {
-      Repartiteur();
-    } 
+    Repartiteur();
   }
 }
 

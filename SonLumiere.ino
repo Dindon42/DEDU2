@@ -220,12 +220,12 @@ void MoveDEDUFlag(float PercTravel)
   int MinPos=Servo_LowPos;
   int MaxPos=Servo_HighPos;
   int Delta=MaxPos-MinPos;
-  myservo.write(MinPos + (PercTravel/100)*Delta);
+  Servo_BrasDEDU.write(MinPos + (PercTravel/100)*Delta);
 }
 
 int ServoAngle()
 {
-  return myservo.read();
+  return Servo_BrasDEDU.read();
 }
 
 
@@ -235,7 +235,7 @@ float ServoAnglePercent()
   float MinPos=Servo_LowPos;
   float MaxPos=Servo_HighPos;
 
-  float Percent = ((float)myservo.read()-MinPos)/(MaxPos-MinPos);
+  float Percent = ((float)Servo_BrasDEDU.read()-MinPos)/(MaxPos-MinPos);
   return Percent*100;
 }
 

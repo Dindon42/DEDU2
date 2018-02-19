@@ -1,8 +1,8 @@
 void Repartiteur()
 {
-  int ProbAccumuleeJeux[NbJeux];
-  int max_prob=0;
+  int max_prob;
   int r;
+  int Jeu;
 
   for (int i=0 ; i<NbJeux ; i++)
   {
@@ -13,45 +13,45 @@ void Repartiteur()
     ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
       
     //Special case pour DEDUEL, TeamDeDuel et Tourniquet qui ne devrait pas augmenter tant que joueurhonte = -1
-    if ((i==11 || i==13 || i==14) && JoueurHonte==-1)
+    if ((i==Game_id_Duel || i==Game_id_Tourn || i==Game_id_TDD) && JoueurHonte==-1)
     {
       ProbIndivJeuxCurrent[i]=0;
     }
     //Special case pour Patate2 qui ne devrait pas être joué si nbj<=5.  DEDU ne devrait tout simplement pas être joué avec nbj <=5 :D
-    if (i==12 && nbj<=5)
+    if (i==Game_id_PC2 && nbj<=5)
     {
       ProbIndivJeuxCurrent[i]=0;
     }
     //Special case pour TeamDeDuel qui ne devrait pas être joué si nbj<4.
-    if (i==14 && nbj<4)
+    if (i==Game_id_TDD && nbj<4)
     {
       ProbIndivJeuxCurrent[i]=0;
     }
     
-    if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=4 && i!=3 && NotMoreThanMaxProb)
+    //Logique si le flag NotMoreThanMaxProb est ON.  Exclusion pour Honte et DEDU
+    if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=Game_id_FFA && i!=Game_id_MH && NotMoreThanMaxProb)
     {
       ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
     }
     //Special case for marqueurhonte et DEDU qui peuvent monter au-dessus de leur limite peu importe...
-    else if (i==4 || i==3)
+    else if (i==Game_id_FFA || i==Game_id_MH)
     {
       ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
     }
-
-      
-      LOG_GENERAL("I:");
-      LOG_GENERAL(i);
-      LOG_GENERAL("  PROB INDIV:");
-      LOG_GENERAL(ProbIndivJeuxCurrent[i]);
-      LOG_GENERAL("  PROB ACC:");
-      LOG_GENERAL(ProbAccumuleeJeux[i]);
-      LOG_GENERAL("\n");
+    
+    LOG_GENERAL("I:");
+    LOG_GENERAL(i);
+    LOG_GENERAL("  PROB INDIV:");
+    LOG_GENERAL(ProbIndivJeuxCurrent[i]);
+    LOG_GENERAL("  PROB ACC:");
+    LOG_GENERAL(ProbAccumuleeJeux[i]);
+    LOG_GENERAL("\n");
   }
   max_prob=ProbAccumuleeJeux[NbJeux-1];
   
   // Debut REPARTITEUR
   r = random(max_prob+1);
-  
+
   LOG_GENERAL("R:");
   LOG_GENERAL(r);
   LOG_GENERAL("\n");
@@ -60,182 +60,19 @@ void Repartiteur()
   LOG_GENERAL(max_prob);
   LOG_GENERAL("\n");
 
-  if (r <= ProbAccumuleeJeux[0])
-  {
-    LOG_GENERAL("PQP");
-    LOG_GENERAL("\n");
-    CountJeux[0]++;
-    if(!SkipGame)
-    {
-      PQP();
-    }
-    ProbIndivJeuxCurrent[0]=0;
-  }
-  else if (r <= ProbAccumuleeJeux[1])
-  {
-    LOG_GENERAL("DQP");
-    LOG_GENERAL("\n");
-    CountJeux[1]++;
-    if(!SkipGame)
-    {
-      DQP();
-    }
-    ProbIndivJeuxCurrent[1]=0;
-    ProbIndivJeuxCurrent[5]=0;
-  }
-  else if (r <= ProbAccumuleeJeux[2])
-  {
-    LOG_GENERAL("Trompe");
-    LOG_GENERAL("\n");
-    CountJeux[2]++;
-    if(!SkipGame)
-    {
-      TrompeOeil();
-    }
-    ProbIndivJeuxCurrent[2]=0;
-  }
-  else if (r <= ProbAccumuleeJeux[3])
-  {
-    LOG_GENERAL("DEDU");
-    LOG_GENERAL("\n");
-    CountJeux[3]++;
-    if(!SkipGame)
-    {
-      FFA();
-    }
-    ProbIndivJeuxCurrent[3]=0;
-  }
-  else if (r <= ProbAccumuleeJeux[4])
-  {
-    LOG_GENERAL("HONTE");
-    LOG_GENERAL("\n");
-    CountJeux[4]++;
-    if(!SkipGame)
-    {
-      JoueurHonte=MarqueurHonte(-1,-1);
-    }
-    else
-    {
-      JoueurHonte=random(nbj);
-    }
-    ProbIndivJeuxCurrent[4]=0;
-    ProbIndivJeuxCurrent[13]=0;
-  }
-  else if (r <= ProbAccumuleeJeux[5])
-  {
-    LOG_GENERAL("DQP2");
-    LOG_GENERAL("\n");
-    CountJeux[5]++;
-    if(!SkipGame)
-    {
-      DQP2();
-    }
-    ProbIndivJeuxCurrent[1]=0;
-    ProbIndivJeuxCurrent[5]=0;
-  }
-  else if (r <= ProbAccumuleeJeux[6])
-  {
-    LOG_GENERAL("MINORITE");
-    LOG_GENERAL("\n");
-    CountJeux[6]++;
-    if(!SkipGame)
-    {
-      MIN();
-    }
-    ProbIndivJeuxCurrent[6]=0;
-  }
-  else if (r <= ProbAccumuleeJeux[7])
-  {
-    LOG_GENERAL("Chanson");
-    LOG_GENERAL("\n");
-    CountJeux[7]++;
-    if(!SkipGame)
-    {
-      JeuChanson();
-    }
-    ProbIndivJeuxCurrent[7]=0;
-  }
-  else if (r <= ProbAccumuleeJeux[8])
-  {
-    LOG_GENERAL("Patate");
-    LOG_GENERAL("\n");
-    CountJeux[8]++;
-    if(!SkipGame)
-    {
-      PatateChaude();
-    }
-    ProbIndivJeuxCurrent[8]=0;
-    ProbIndivJeuxCurrent[12]=0;
-  }
-  else if (r <= ProbAccumuleeJeux[9])
-  {
-    LOG_GENERAL("Random");
-    LOG_GENERAL("\n");
-    CountJeux[9]++;
-    if(!SkipGame)
-    {
-      AllRandom();
-    }
-    ProbIndivJeuxCurrent[9]=0;
-  }
-  else if (r <= ProbAccumuleeJeux[10])
-  {
-    LOG_GENERAL("Ulti");
-    LOG_GENERAL("\n");
-    CountJeux[10]++;
-    if(!SkipGame)
-    {
-      UltimateChallenge();
-    }
-    ProbIndivJeuxCurrent[10]=0;
-  }
-  else if (r <= ProbAccumuleeJeux[11])
-  {
-    LOG_GENERAL("DeDuel");
-    LOG_GENERAL("\n");
-    CountJeux[11]++;
-    if(!SkipGame)
-    {
-      DeDuel();
-    }
-    ProbIndivJeuxCurrent[11]=0;
-  }
-  else if (r <= ProbAccumuleeJeux[12])
-  {
-    LOG_GENERAL("Patate2");
-    LOG_GENERAL("\n");
-    CountJeux[12]++;
-    if(!SkipGame)
-    {
-      Patate2();
-    }
-    ProbIndivJeuxCurrent[8]=0;
-    ProbIndivJeuxCurrent[12]=0;
-  }
-  else if (r <= ProbAccumuleeJeux[13])
-  {
-    LOG_GENERAL("Tourniquet");
-    LOG_GENERAL("\n");
-    CountJeux[13]++;
-    if(!SkipGame)
-    {
-      Tourniquet();
-    }
-    ProbIndivJeuxCurrent[4]=0;
-    ProbIndivJeuxCurrent[13]=0;
-  }
-  else
-  {
-    LOG_GENERAL("TeamDeDuel");
-    LOG_GENERAL("\n");
-    CountJeux[14]++;
-    if(!SkipGame)
-    {
-      TeamDeDuel();
-    }
-    ProbIndivJeuxCurrent[14]=0;
-  }
+  Jeu = SelectGame(r);
 
+  LogGameName(Jeu);
+  CountJeux[Jeu]++;
+  if(!SkipGame)
+  {
+    PlayGame(Jeu);
+  }
+  else if(Jeu==Game_id_MH)
+  {
+    JoueurHonte=random(nbj);
+  }
+  ResetProbAfterGame(Jeu);
   
   if (SkipGame)
   {
@@ -245,57 +82,9 @@ void Repartiteur()
     }
   }
   
-  
   TotalNbJeux++;
-  LOG_GENERAL("TOTAL DE JEUX:");
-  LOG_GENERAL(TotalNbJeux);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("0  PQP:\t\t\t");
-  LOG_GENERAL(CountJeux[0]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("1  DQP:\t\t\t");
-  LOG_GENERAL(CountJeux[1]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("2  TrompeOeil:\t\t");
-  LOG_GENERAL(CountJeux[2]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("3  FFA:\t\t\t");
-  LOG_GENERAL(CountJeux[3]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("4  MarqueurHonte:\t");
-  LOG_GENERAL(CountJeux[4]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("5  DQP2:\t\t");
-  LOG_GENERAL(CountJeux[5]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("6  MIN:\t\t\t");
-  LOG_GENERAL(CountJeux[6]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("7  JeuChanson:\t\t");
-  LOG_GENERAL(CountJeux[7]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("8  PatateChaude:\t");
-  LOG_GENERAL(CountJeux[8]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("9  AllRandom:\t\t");
-  LOG_GENERAL(CountJeux[9]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("10 UltimateChallenge:\t");
-  LOG_GENERAL(CountJeux[10]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("11 DeDuel:\t\t");
-  LOG_GENERAL(CountJeux[11]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("12 Patate2:\t\t");
-  LOG_GENERAL(CountJeux[12]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("13 Tourniquet:\t\t");
-  LOG_GENERAL(CountJeux[13]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("14 TeamDeDuel:\t\t");
-  LOG_GENERAL(CountJeux[14]);
-  LOG_GENERAL("\n");
-
+  LogGameCounts();
+  
   //JOUEURHONTE
   LOG_GENERAL("JoueurHonte:");
   LOG_GENERAL(JoueurHonte);
@@ -351,7 +140,8 @@ void RepartiteurOriginal()
   {
     FFA();
   }
-  else {
+  else
+  {
     MarqueurHonte(-1,-1);
   }
 }

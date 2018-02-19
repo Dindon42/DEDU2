@@ -18,7 +18,7 @@ void Delay_Fraudeur(int r)
       x=1;
       //Play tone and raise flag.
       tone(Tone_Pin, 1500, 400);
-      myservo.write(70);
+      MoveDEDUFlag(25);
     }
     if (TriggerEnd == true)
     {
@@ -33,7 +33,7 @@ void Delay_Fraudeur(int r)
   if (x > 0)
   {
     delay(500);
-    myservo.write(Servo_LowPos);
+    MoveDEDUFlag(0);
     delay(500);
     TurnOffAllLights();
     Delay_Fraudeur(random(25,70));
@@ -326,7 +326,7 @@ void FFA()
   
   for (int e = 1; e <= myRand2; e++) {
 
-    myservo.write(Servo_HighPos - random(20));
+    MoveDEDUFlag(100-random(20));
 
     TurnOnAllRedLights();
     delay(60 + random(200));
@@ -346,6 +346,6 @@ void FFA()
   DeactivateBlueLED();
   DeactivateGreenLED();
   TurnOffAllRedLights();
-  myservo.write(Servo_LowPos);
+  MoveDEDUFlag(0);
   delay(500);
 }
