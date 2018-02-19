@@ -17,9 +17,10 @@ int const Game_id_Tourn=13;
 int const Game_id_TDD=14;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
-//#define ENABLE_LOGGING
-bool SkipSetup=false;
-bool nosound=false;
+//Comment out the following line too.
+#define ENABLE_LOGGING
+bool SkipSetup=true;
+bool nosound=true;
 bool SkipFraudeur=false;
 bool SkipGame=false;
 bool DelayIfSkipGame=false;
@@ -27,7 +28,7 @@ bool SkipLights=false;
 bool MusicMode=false;
 bool MusicRandFactVit=false;
 bool ExclusiveGame=false;
-int ExclusiveGame_ID=Game_id_TDD;
+int ExclusiveGame_ID=Game_id_PC;
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
 int nbj=10;
@@ -45,7 +46,7 @@ int TotalNbJeux=0;
 bool NotMoreThanMaxProb=true;
 //Index_Jeux
 int ProbAccumuleeJeux[NbJeux];
-int const ProbIndivJeux[NbJeux]={
+unsigned int const ProbIndivJeux[NbJeux]={
   95,   /*0  PQP*/
   30,   /*1  DQP*/
   21,   /*2  TrompeOeil*/
@@ -149,6 +150,7 @@ int RandomMax;
 
 ////Chansons.
 int const NombreChansons=13;
+int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
   const PROGMEM float ChansonDEDU[3][18] = {
     {196,196,196,247,247,261,261,349,247,196,196,294,247,196,330,294,247,261},
     {150,150,150,300,300,300,300,600,150,150,150,150,150,150,600,150,150,600},
@@ -330,29 +332,8 @@ void setup()
   AjustementProbJeuxInit();
   //Ajustement du délai pour Honte
   AjustementDelaiHonte();
-  
-  LOG_GENERAL("GameMode:");
-  LOG_GENERAL(Game_Mode);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("nbj:");
-  LOG_GENERAL(nbj);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("nbj_raw:");
-  LOG_GENERAL(nbj_raw);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("vitesse:");
-  LOG_GENERAL(vitesse);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("vitesse_raw:");
-  LOG_GENERAL(vitesse_raw);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("JoueurHonte:");
-  LOG_GENERAL(JoueurHonte);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("\n");
-  LOG_GENERAL("SETUP COMPLETE");
-  LOG_GENERAL("\n");
-  
+
+  LogSetupParams();
 }
 
 //Setup complete.  MAIN loop.
@@ -363,6 +344,9 @@ void loop()
   //Special exclusivegamemode loop
   if(ExclusiveGame)
   {
+    LOG_GENERAL("\n");
+    LOG_GENERAL("EXCLUSIVE MODE");
+    LOG_GENERAL("\n");
     PlayGame(ExclusiveGame_ID);
     loop();
   }

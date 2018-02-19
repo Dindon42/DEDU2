@@ -982,7 +982,7 @@ void MIN()
   #define LOG_CHANSON(a)
 #endif
 
-void JeuChanson()
+void JeuChanson(int id_chanson)
 {
   LOG_CHANSON("CHANSON START");
   LOG_CHANSON("\n");
@@ -1011,8 +1011,7 @@ void JeuChanson()
   float TeamSizeScoreRatio[2]={1,1};
   float TeamSizeModifier=1.03;
   
-  NombreNotes=SelectionChanson(random(NombreChansons));
-  
+  NombreNotes=SelectionChanson(id_chanson);
   AllocateTwoTeams();
   
   if(NbJoueursEq1>NbJoueursEq2 && FactorTeamSize==true)

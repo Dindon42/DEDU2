@@ -94,7 +94,12 @@ void PlayGame(int game_id)
   }
   else if (game_id==Game_id_JC)
   {
-    JeuChanson();
+    int c=CountJeux[Game_id_JC]%NombreChansons;
+    LOG_GENERAL("C:");
+    LOG_GENERAL(c);
+    LOG_GENERAL("\n");
+    BesoinOrdreChansons(c);
+    JeuChanson(OrdreChansons[c]);
   }
   else if (game_id==Game_id_PC)
   {

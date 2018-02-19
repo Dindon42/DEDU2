@@ -111,3 +111,27 @@ void AjustementDelaiHonte()
   DelaiHonte=160 - nbj * 7;
 }
 
+void LogSetupParams()
+{
+  LOG_GENERAL("GameMode:");
+  LOG_GENERAL(Game_Mode);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("nbj:");
+  LOG_GENERAL(nbj);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("nbj_raw:");
+  LOG_GENERAL(nbj_raw);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("vitesse:");
+  LOG_GENERAL(vitesse);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("vitesse_raw:");
+  LOG_GENERAL(vitesse_raw);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("JoueurHonte:");
+  LOG_GENERAL(JoueurHonte);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("\n");
+  LOG_GENERAL("SETUP COMPLETE");
+  LOG_GENERAL("\n");
+}

@@ -26,9 +26,38 @@ void TestMode()
 
 void DemoMode()
 {
-  do
+  bool AllPressing;
+
+  //Tone
+  PlayNote(Tone_Pin,2500,200,20);
+  PlayNote(Tone_Pin,1000,200,20);
+  PlayNote(Tone_Pin,2500,200,20);
+  PlayNote(Tone_Pin,1000,200,20);
+  delay(1000);
+  NombreJoueurs();
+  
+  for(int i=0 ; i<NbJeux;i++)
   {
+    //Demo the game once
+    PlayGame(i);
     
-  }while(1);
+    do
+    {
+      AllPressing=true;
+      for(int j=0 ; j<nbj ;j++)
+      {
+        if(ReadPlayerInput(j)==HIGH)
+        {
+          ActivateRedLight(i);
+        }
+        else
+        {
+          AllPressing=false;
+          DeactivateRedLight(i);
+        }
+      }
+      delay(1);
+    }while(AllPressing==false);
+  }
 }
 

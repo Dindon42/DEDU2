@@ -1,3 +1,53 @@
+void BesoinOrdreChansons(int c)
+{
+  LOG_GENERAL("C:");
+  LOG_GENERAL(c);
+  LOG_GENERAL("\n");
+  if(c==0)
+  {
+    DefinirOrdreChansons();
+  }
+}
+void DefinirOrdreChansons()
+{
+  bool NotGood=false;
+  
+  LOG_GENERAL("ORDRE");
+  LOG_GENERAL("\n");
+  for(int i=0;i<NombreChansons;i++)
+  {
+    do
+    {
+      NotGood=false;
+      OrdreChansons[i]=random(NombreChansons);
+      if (i==0)
+      {
+        if(OrdreChansons[i]==OrdreChansons[NombreChansons-1])
+        {
+          NotGood=true;
+        }
+      }
+      else
+      {
+        for(int j=0 ; j<i ; j++)
+        {
+          if(OrdreChansons[i]==OrdreChansons[j])
+          {
+            NotGood=true;
+            break;
+          }
+        }
+      }
+    }while(NotGood);
+    LOG_GENERAL("i:");
+    LOG_GENERAL(i);
+    LOG_GENERAL(" OrdreChansons:");
+    LOG_GENERAL(OrdreChansons[i]);
+    LOG_GENERAL("\n");
+  }
+  LOG_GENERAL("\n");
+}
+
 void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse)
 {
   int NombreNotes=SelectionChanson(Chanson);
@@ -29,7 +79,7 @@ void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse)
   }
 }
 
-//Returns the size to read;
+//Returns the number of notes.
 int SelectionChanson(int Numero)
 {
   float *pf;
@@ -193,7 +243,7 @@ int SelectionChanson(int Numero)
       RandomMin = 105;
       RandomMax = 155;
       return NombreDeNotes;
-    case 12:
+    default:
       pf = (float*)ctd2;
       NombreDeNotes = sizeof(ctd2[0]) / sizeof(float);
       for (int i = 0; i < ParamChansons; i++)
@@ -206,9 +256,6 @@ int SelectionChanson(int Numero)
       RandomMin = 100;
       RandomMax = 155;
       return NombreDeNotes;
-      
-    default:
-      return 0;
 
 /*
 case 3:
