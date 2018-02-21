@@ -291,6 +291,22 @@ void LooserSoundAndLight(int iPlayer)
   }
 }
 
+void WinnerSoundAndLight(int iPlayer)
+{
+  ActivateGreenLED(0);
+  ActivateRedLight(iPlayer);
+  for(int i=0 ; i<2 ; i++)
+  {
+    WinnerSound();
+    delay(350);
+    DeactivateRedLight(iPlayer);
+    ActivateGreenLED(100);
+    delay(350);
+    ActivateRedLight(iPlayer);
+    ActivateGreenLED(0);
+  }
+}
+
 void SonTestMode()
 {
   PlayNote(Tone_Pin,2500,200,20);

@@ -83,6 +83,11 @@ void PlayGame(int game_id)
   {
     TeamDeDuel();
   }
+  else if (game_id==Game_id_TV)
+  {
+    TourVic();
+  }
+  
 }
 
 void LogGameName(int game_id, bool NewLine)
@@ -147,6 +152,10 @@ void LogGameName(int game_id, bool NewLine)
   {
     LOG_GENERAL("TeamDeDuel  ");
   }
+  else if (game_id==Game_id_TV)
+  {
+    LOG_GENERAL("TourVic     ");
+  }
   if(NewLine) LOG_GENERAL("\n");
 }
 
@@ -156,37 +165,13 @@ void ResetProbAfterGame(int game_id)
   ResetGameProb(game_id);
 
   //Check specific games and reset links.
-  if(game_id==Game_id_PQP)
-  {
-    
-  }
-  else if (game_id==Game_id_DQP)
+  if (game_id==Game_id_DQP)
   {
     ResetGameProb(Game_id_DQP2);
   }
   else if (game_id==Game_id_DQP2)
   {
     ResetGameProb(Game_id_DQP);
-  }
-  else if (game_id==Game_id_TO)
-  {
-    
-  }
-  else if (game_id==Game_id_FFA)
-  {
-    
-  }
-  else if (game_id==Game_id_MH)
-  {
-    ResetProbHonte();
-  }
-  else if (game_id==Game_id_MIN)
-  {
-    
-  }
-  else if (game_id==Game_id_JC)
-  {
-    
   }
   else if (game_id==Game_id_PC)
   {
@@ -196,23 +181,11 @@ void ResetProbAfterGame(int game_id)
   {
     DivideGameProb(Game_id_PC,2);
   }
-  else if (game_id==Game_id_AR)
+  else if (game_id==Game_id_MH)
   {
-    
-  }
-  else if (game_id==Game_id_UC)
-  {
-    
+    ResetProbHonte();
   }
   else if (game_id==Game_id_TH)
-  {
-    ResetProbHonte();
-  }
-  else if (game_id==Game_id_Duel)
-  {
-    ResetProbHonte();
-  }
-  else if (game_id==Game_id_TDD)
   {
     ResetProbHonte();
   }
@@ -230,12 +203,10 @@ void DivideGameProb(int game_id,int divisor)
 
 void ResetProbHonte()
 {
-  ResetGameProb(Game_id_MH);
   ResetGameProb(Game_id_TH);
+  ResetGameProb(Game_id_MH);
   DivideGameProb(Game_id_Duel,2);
   DivideGameProb(Game_id_TDD,2);
-//  ResetGameProb(Game_id_Duel);
-//  ResetGameProb(Game_id_TDD);
 }
 
 void LogGameCounts()

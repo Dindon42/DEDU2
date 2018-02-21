@@ -3,7 +3,8 @@ void Repartiteur()
   int max_prob;
   int r;
   int Jeu;
-
+  LOG_GENERAL("DEBUT REPARTITEUR\n");
+  
   for (int i=0 ; i<NbJeux ; i++)
   {
     if (i==0)ProbAccumuleeJeux[i]=ProbIndivJeuxCurrent[i];
@@ -13,22 +14,6 @@ void Repartiteur()
 
     //Update for next round
     ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
-      
-    //Special case pour DEDUEL, TeamDeDuel et Tourniquet qui ne devrait pas augmenter tant que joueurhonte = -1
-    if ((i==Game_id_Duel || i==Game_id_TH || i==Game_id_TDD) && JoueurHonte==-1)
-    {
-      ProbIndivJeuxCurrent[i]=0;
-    }
-    //Special case pour Patate2 qui ne devrait pas être joué si nbj<=5.  DEDU ne devrait tout simplement pas être joué avec nbj <=5 :D
-    if (i==Game_id_PC2 && nbj<=5)
-    {
-      ProbIndivJeuxCurrent[i]=0;
-    }
-    //Special case pour TeamDeDuel qui ne devrait pas être joué si nbj<4.
-    if (i==Game_id_TDD && nbj<4)
-    {
-      ProbIndivJeuxCurrent[i]=0;
-    }
     
     //Logique si le flag NotMoreThanMaxProb est ON.  Exclusion pour Honte et DEDU
     if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=Game_id_FFA && i!=Game_id_MH && NotMoreThanMaxProb)
@@ -41,7 +26,18 @@ void Repartiteur()
       ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
     }
   }
+  
   max_prob=ProbAccumuleeJeux[NbJeux-1];
+
+  //Check for Min/Max of ProbAcc
+  if(max_prob<MinProbAcc)
+  {
+    MinProbAcc=max_prob;
+  }
+  if(max_prob>MaxProbAcc)
+  {
+    MaxProbAcc=max_prob;
+  }
   
   // Debut REPARTITEUR
   r = random(1,max_prob+1);
@@ -55,7 +51,12 @@ void Repartiteur()
   LOG_GENERAL("\n");
 
   Jeu = SelectGame(r);
+  
+  LOG_GENERAL("================\n");
+  LOG_GENERAL("JEU:");
   LogGameName(Jeu,true);
+  LOG_GENERAL("================\n");
+  
   PrepareGame(Jeu);
   if(!SkipGame)
   {
@@ -78,10 +79,27 @@ void Repartiteur()
   
   TotalNbJeux++;
   LogGameCounts();
+
+  //Reset Prob for special conditions
+  LowPlayersProbResets();
+  NoHonteProbResets();
+
+  
+  LOG_GENERAL("MinProbAcc:");
+  LOG_GENERAL(MinProbAcc);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("MaxProbAcc:");
+  LOG_GENERAL(MaxProbAcc);
+  LOG_GENERAL("\n");
   
   //JOUEURHONTE
   LOG_GENERAL("JoueurHonte:");
   LOG_GENERAL(JoueurHonte);
+  LOG_GENERAL("\n");
+  
+  
+  LOG_GENERAL("FIN REPARTITEUR\n");
+  LOG_GENERAL("===============\n");
   LOG_GENERAL("\n");
 }
 

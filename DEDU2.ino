@@ -11,24 +11,25 @@ int const Game_id_UC=7;
 int const Game_id_AR=8;
 int const Game_id_MH=9;
 int const Game_id_TH=10;
-int const Game_id_Duel=11;
-int const Game_id_TDD=12;
-int const Game_id_JC=13;
-int const Game_id_FFA=14;
+int const Game_id_TV=11;
+int const Game_id_Duel=12;
+int const Game_id_TDD=13;
+int const Game_id_JC=14;
+int const Game_id_FFA=15;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-//#define ENABLE_LOGGING
-bool SkipSetup=false;
+#define ENABLE_LOGGING
+bool SkipSetup=true;
 bool nosound=false;
-bool SkipFraudeur=false;
-bool SkipGame=false;
+bool SkipFraudeur=true;
+bool SkipGame=true;
 bool DelayIfSkipGame=false;
 bool SkipLights=false;
 bool MusicMode=false;
 bool MusicRandFactVit=false;
 bool ExclusiveGame=false;
-int ExclusiveGame_ID=Game_id_PC;
+int ExclusiveGame_ID=Game_id_TV;
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
 int nbj=10;
@@ -39,17 +40,19 @@ int SelectMusic=-1;
 
 
 //Prob, Jeux
-int const NumberOfRoundsForFullProb=8;
-int const NbJeux = 15;
-int CountJeux[NbJeux]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int const NumberOfRoundsForFullProb=12;
+int const NbJeux = 16;
+int CountJeux[NbJeux]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 int TotalNbJeux=0;
 bool NotMoreThanMaxProb=true;
 //Index_Jeux
 int ProbAccumuleeJeux[NbJeux];
 unsigned int ProbIndivJeux[NbJeux];
+int MinProbAcc=9999;
+int MaxProbAcc=0;
 
 #ifdef ENABLE_LOGGING
-bool ActiveGameLogging[NbJeux]={false,false,false,false,false,false,false,false,false,false,false,false,false,false,false};
+bool ActiveGameLogging[NbJeux]={false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false};
   #define LOG_GAME(i,a) if( ActiveGameLogging[i] ) Serial.print(a);
   #define LOG_GENERAL(a) Serial.print(a);
 #else
@@ -313,7 +316,7 @@ void setup()
 void loop() 
 {
   int r;
-
+  
   //Special exclusivegamemode loop
   if(ExclusiveGame)
   {

@@ -297,18 +297,7 @@ void DeDuel()
       delay(20);
     }
     delay(LightDelay);
-    ActivateGreenLED(0);
-    ActivateRedLight(Joueurs[0]);
-    for(int i=0 ; i<2 ; i++)
-    {
-      WinnerSound();
-      delay(LightDelay);
-      DeactivateRedLight(Joueurs[0]);
-      ActivateGreenLED(100);
-      delay(LightDelay);
-      ActivateRedLight(Joueurs[0]);
-      ActivateGreenLED(0);
-    }
+    WinnerSoundAndLight(Joueurs[0]);
   }
   else
   {

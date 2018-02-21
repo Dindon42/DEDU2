@@ -1,4 +1,167 @@
 #ifdef ENABLE_LOGGING
+  #define LOG_TOURVIC(a) LOG_GAME(Game_id_TV,a)
+#else
+  #define LOG_TOURVIC(a)
+#endif
+void TourVic()
+{
+  int LightDelay=7;
+  int LightDelayIncrement=1;
+  int IncrementProb=15;
+  int CurrentCounter=0;
+  int LastPlayer=random(nbj);
+  int CurrentPlayer=0;
+  int DirectionNextPlayer=0;
+  int Winner=-1;
+  bool ReadyToPress=false;
+  bool PlayerIsPressing=false;
+  bool ReadytoIncreaseIncrement=false;
+  bool IgnorePresses=false;
+  bool PlayerHasWon=false;
+  int SpamCheckDelay=55;
+
+  if(random(2)==0)
+  {
+    DirectionNextPlayer=1;
+  }
+  else
+  {
+    DirectionNextPlayer=-1;
+  }
+  CurrentPlayer=WrapAround(LastPlayer+DirectionNextPlayer);
+  LOG_TOURVIC("CurrentPlayer:");
+  LOG_TOURVIC(CurrentPlayer);
+  LOG_TOURVIC("\n");
+  LOG_TOURVIC("LastPlayer:");
+  LOG_TOURVIC(LastPlayer);
+  LOG_TOURVIC("\n");
+  LOG_TOURVIC("DirectionNextPlayer:");
+  LOG_TOURVIC(DirectionNextPlayer);
+  LOG_TOURVIC("\n");
+  //Tout vert pour commencer+Une Lumière
+  ActivateRedLight(CurrentPlayer);
+  ActivateGreenLED(20);
+  
+  //Spin the wheel!
+  do
+  {
+    //For the active player, monitor the transitions.  
+    //1: ToLow
+    //2: ToHigh
+    //3: ToLow
+    //If this happens during the time the player is active, Good, you are the winner.
+    
+    /*
+    LOG_TOURVIC("CurrentPlayer:");
+    LOG_TOURVIC(CurrentPlayer);
+    LOG_TOURVIC("\n");
+    LOG_TOURVIC("ReadyToPress:");
+    LOG_TOURVIC(ReadyToPress);
+    LOG_TOURVIC("\n");
+    LOG_TOURVIC("PlayerIsPressing:");
+    LOG_TOURVIC(PlayerIsPressing);
+    LOG_TOURVIC("\n");
+    */
+    //Monitor initial transition to LOW
+    if(ReadPlayerInput(CurrentPlayer)==LOW && ReadyToPress==false && IgnorePresses==false)
+    {
+      LOG_TOURVIC("Changing RTP!");
+      LOG_TOURVIC("\n");
+      ReadyToPress=true;
+    }
+    
+    //Monitor subsequent transition to HIGH
+    if(ReadPlayerInput(CurrentPlayer)==HIGH && ReadyToPress==true && PlayerIsPressing==false && IgnorePresses==false)
+    {
+      LOG_TOURVIC("Changing PIP!")
+      LOG_TOURVIC("\n");
+      PlayerIsPressing=true;
+    }
+    
+    //Monitor subsequent transition to LOW
+    if(ReadPlayerInput(CurrentPlayer)==LOW && PlayerIsPressing==true && IgnorePresses==false)
+    {
+      LOG_TOURVIC("Player SAFE!")
+      LOG_TOURVIC("\n");
+      //YOU ARE SAFE.
+      IgnorePresses=true;
+      PlayerHasWon=true;
+      CurrentCounter-=SpamCheckDelay;
+    }
+    
+    delay(1);
+
+    //Check if current player has won and is pressing again.  If so, make him loose.
+    if(PlayerHasWon==true && ReadPlayerInput(CurrentPlayer)==HIGH)
+    {
+      LOG_TOURVIC("Player LOOSES!")
+      LOG_TOURVIC("\n");
+      PlayerHasWon=false;
+    }
+    
+    //Enougn time on this guy...  Switch
+    if(CurrentCounter>LightDelay)
+    {
+      if(PlayerHasWon)
+      {
+        Winner=CurrentPlayer;
+      }
+      else
+      {
+        CurrentCounter=0;
+        ReadyToPress=false;
+        PlayerIsPressing=false;
+        IgnorePresses=false;
+        PlayerHasWon=false;
+        
+        
+        //If we reach the last guy, increment lightdelay
+        if (CurrentPlayer==LastPlayer)
+        {
+          LightDelay+=LightDelayIncrement;
+          LOG_TOURVIC("Increasing LightDelay:")
+          LOG_TOURVIC(LightDelay);
+          LOG_TOURVIC("\n");
+          
+          if(ReadytoIncreaseIncrement==true)
+          {
+            if (random(IncrementProb)==0)
+            {
+              LightDelayIncrement++;
+              LOG_TOURVIC("Increasing Increment:")
+              LOG_TOURVIC(LightDelayIncrement);
+              LOG_TOURVIC("\n");
+            }
+            ReadytoIncreaseIncrement=false;
+          }
+          else
+          {
+            ReadytoIncreaseIncrement=true;
+          }
+        }
+        
+        delay(1);
+        
+        DeactivateRedLight(CurrentPlayer);
+        tone(Tone_Pin, 3500, 3);
+        
+        //Find the next player
+        CurrentPlayer=WrapAround(CurrentPlayer+DirectionNextPlayer);
+        ActivateRedLight(CurrentPlayer);
+      }
+    }
+    CurrentCounter++;
+    delay(1);
+  }while(Winner==-1);
+
+  WinnerSoundAndLight(Winner);
+
+  //Low intensity
+  delay(700);
+  TurnOffAllLights();
+}
+
+#ifdef ENABLE_LOGGING
   #define LOG_TEAMDEDUEL(a) LOG_GAME(Game_id_TDD,a)
 #else
   #define LOG_TEAMDEDUEL(a)
@@ -391,9 +554,8 @@ void Tourniquet()
   }
   CurrentPlayer=WrapAround(LastPlayer+DirectionNextPlayer);
   
-  //Tout vert pour commencer+Une Lumière
+  //Tout bleu pour commencer+Une Lumière
   ActivateRedLight(CurrentPlayer);
-  delay(200);
   ActivateBlueLED(20);
   
   //Spin the wheel!
@@ -430,7 +592,7 @@ void Tourniquet()
       PlayerIsPressing=true;
     }
     
-    //Monitor subsequent transition to HIGH
+    //Monitor subsequent transition to LOW
     if(ReadPlayerInput(CurrentPlayer)==LOW && PlayerIsPressing==true && IgnorePresses==false)
     {
       LOG_TOURNIQUET("Player SAFE!")
@@ -495,13 +657,18 @@ void Tourniquet()
       if (CurrentPlayer==LastPlayer)
       {
         LightDelay+=LightDelayIncrement;
-        //LightDelayIncrement++;
+        LOG_TOURNIQUET("Increasing LightDelay:")
+        LOG_TOURNIQUET(LightDelay);
+        LOG_TOURNIQUET("\n");
         
         if(ReadytoIncreaseIncrement==true)
         {
           if (random(IncrementProb)==0)
           {
             LightDelayIncrement++;
+            LOG_TOURNIQUET("Increasing Increment:")
+            LOG_TOURNIQUET(LightDelayIncrement);
+            LOG_TOURNIQUET("\n");
           }
           ReadytoIncreaseIncrement=false;
         }
