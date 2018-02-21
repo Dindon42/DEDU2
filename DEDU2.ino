@@ -19,11 +19,11 @@ int const Game_id_FFA=15;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-#define ENABLE_LOGGING
-bool SkipSetup=true;
+//#define ENABLE_LOGGING
+bool SkipSetup=false;
 bool nosound=false;
-bool SkipFraudeur=true;
-bool SkipGame=true;
+bool SkipFraudeur=false;
+bool SkipGame=false;
 bool DelayIfSkipGame=false;
 bool SkipLights=false;
 bool MusicMode=false;
