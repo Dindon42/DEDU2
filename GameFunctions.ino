@@ -87,6 +87,10 @@ void PlayGame(int game_id)
   {
     TourVic();
   }
+  else if (game_id==Game_id_PQR)
+  {
+    PQR();
+  }
   
 }
 
@@ -155,6 +159,10 @@ void LogGameName(int game_id, bool NewLine)
   else if (game_id==Game_id_TV)
   {
     LOG_GENERAL("TourVic     ");
+  }
+  else if (game_id==Game_id_TV)
+  {
+    LOG_GENERAL("PQR         ");
   }
   if(NewLine) LOG_GENERAL("\n");
 }

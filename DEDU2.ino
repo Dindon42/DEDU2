@@ -1,21 +1,22 @@
 #include <Servo.h>
 #include <avr/pgmspace.h>
 int const Game_id_PQP=0;
-int const Game_id_TO=1;
-int const Game_id_DQP=2;
-int const Game_id_DQP2=3;
-int const Game_id_PC=4;
-int const Game_id_PC2=5;
-int const Game_id_MIN=6;
-int const Game_id_UC=7;
-int const Game_id_AR=8;
-int const Game_id_MH=9;
-int const Game_id_TH=10;
-int const Game_id_TV=11;
-int const Game_id_Duel=12;
-int const Game_id_TDD=13;
-int const Game_id_JC=14;
-int const Game_id_FFA=15;
+int const Game_id_PQR=1;
+int const Game_id_TO=2;
+int const Game_id_DQP=3;
+int const Game_id_DQP2=4;
+int const Game_id_PC=5;
+int const Game_id_PC2=6;
+int const Game_id_MIN=7;
+int const Game_id_UC=8;
+int const Game_id_AR=9;
+int const Game_id_MH=10;
+int const Game_id_TH=11;
+int const Game_id_TV=12;
+int const Game_id_Duel=13;
+int const Game_id_TDD=14;
+int const Game_id_JC=15;
+int const Game_id_FFA=16;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
@@ -25,14 +26,14 @@ bool nosound=false;
 bool SkipFraudeur=false;
 bool SkipGame=false;
 bool DelayIfSkipGame=false;
-bool SkipLights=false;
+bool ExclusiveGame=false;
+int ExclusiveGame_ID=Game_id_PQR;
 bool MusicMode=false;
 bool MusicRandFactVit=false;
-bool ExclusiveGame=false;
-int ExclusiveGame_ID=Game_id_TV;
+bool SkipLights=false;
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
-int nbj=10;
+int nbj=5;
 int vitesse=10;
 int Game_Mode=1;
 int SelectMusic=-1;
@@ -41,8 +42,8 @@ int SelectMusic=-1;
 
 //Prob, Jeux
 int const NumberOfRoundsForFullProb=12;
-int const NbJeux = 16;
-int CountJeux[NbJeux]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int const NbJeux = 17;
+int CountJeux[NbJeux]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 int TotalNbJeux=0;
 bool NotMoreThanMaxProb=true;
 //Index_Jeux
@@ -52,7 +53,7 @@ int MinProbAcc=9999;
 int MaxProbAcc=0;
 
 #ifdef ENABLE_LOGGING
-bool ActiveGameLogging[NbJeux]={false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false};
+bool ActiveGameLogging[NbJeux]={false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false};
   #define LOG_GAME(i,a) if( ActiveGameLogging[i] ) Serial.print(a);
   #define LOG_GENERAL(a) Serial.print(a);
 #else
@@ -93,8 +94,8 @@ unsigned long TimeStart;
 int Tone_Frequency;
 
 //Globales.
-int InputState[nbj_max];
-int OutputState[nbj_max];
+int InputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
+int OutputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
 int Equipes[10];
 int NbEquipes;
 int NbJoueursEq1;
@@ -316,7 +317,7 @@ void setup()
 void loop() 
 {
   int r;
-  
+
   //Special exclusivegamemode loop
   if(ExclusiveGame)
   {

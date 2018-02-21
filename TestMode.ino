@@ -6,17 +6,7 @@ void TestMode()
   
   while (1)
   {
-    for (int i=0; i<=nbj_raw_max;i++)
-    {
-      if (ReadPlayerInput(i) == HIGH)
-      {
-        ActivateRedLight(i);
-      }
-      else
-      {
-        DeactivateRedLight(i);
-      }
-    }
+    IlluminateActiveExtinguishNonActive(nbj_raw_max);
     delay(1);
   }
 }

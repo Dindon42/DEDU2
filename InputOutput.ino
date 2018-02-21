@@ -15,6 +15,28 @@ bool ReadInputActivateOutput(int NbInputs)
   return AtLeastOneHIGH;
 }
 
+int IlluminateActiveExtinguishNonActive(int NbInputs)
+{
+  int NumActive=0;
+  for (int i=0; i<=NbInputs ;i++)
+  {
+    if (ReadPlayerInput(i) == HIGH)
+    {
+      NumActive++;
+      ActivateRedLight(i);
+      InputState[i]=HIGH;
+      OutputState[i]=HIGH;
+    }
+    else
+    {
+      DeactivateRedLight(i);
+      InputState[i]=LOW;
+      OutputState[i]=LOW;
+    }
+  }
+  return NumActive;
+}
+
 //Reads all input pins, if HIGH, deactivate the OUTPUT. Return the number of output switched.
 int ReadInputDeactivateOutputIfActive(int NbInputs)
 {

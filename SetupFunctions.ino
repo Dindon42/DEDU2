@@ -1,11 +1,12 @@
 void DefineProbJeux()
 {
-  ProbIndivJeux[Game_id_PQP]=  95;
+  ProbIndivJeux[Game_id_PQP]=  75;
+  ProbIndivJeux[Game_id_PQR]=  50;
   ProbIndivJeux[Game_id_DQP]=  30;
-  ProbIndivJeux[Game_id_TO]=   21;
-  ProbIndivJeux[Game_id_FFA]=  25;
-  ProbIndivJeux[Game_id_MH]=   32;
-  ProbIndivJeux[Game_id_DQP2]= 42;
+  ProbIndivJeux[Game_id_TO]=   30;
+  ProbIndivJeux[Game_id_FFA]=  30;
+  ProbIndivJeux[Game_id_MH]=   35;
+  ProbIndivJeux[Game_id_DQP2]= 45;
   ProbIndivJeux[Game_id_MIN]=  66;
   ProbIndivJeux[Game_id_JC]=   55;
   ProbIndivJeux[Game_id_PC]=   70;
