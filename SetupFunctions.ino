@@ -88,6 +88,25 @@ void GameMode()
   delay(500);
 }
 
+void DefineProbJeux()
+{
+  ProbIndivJeux[Game_id_PQP]= 95;
+  ProbIndivJeux[Game_id_DQP]= 30;
+  ProbIndivJeux[Game_id_TO]=  21;
+  ProbIndivJeux[Game_id_FFA]= 21;
+  ProbIndivJeux[Game_id_MH]=  32;
+  ProbIndivJeux[Game_id_DQP2]=42;
+  ProbIndivJeux[Game_id_MIN]= 66;
+  ProbIndivJeux[Game_id_JC]=  55;
+  ProbIndivJeux[Game_id_PC]=  70;
+  ProbIndivJeux[Game_id_AR]=  70;
+  ProbIndivJeux[Game_id_UC]=  70;
+  ProbIndivJeux[Game_id_Duel]=60;
+  ProbIndivJeux[Game_id_PC2]= 70;
+  ProbIndivJeux[Game_id_TH]=  70;
+  ProbIndivJeux[Game_id_TDD]= 70;
+}
+
 void AjustementProbJeuxInit()
 {
   for (int i ; i<NbJeux; i++)
@@ -101,7 +120,7 @@ void AjustementProbJeuxInit()
   ProbIndivJeuxCurrent[Game_id_MH]=242;
   ProbIndivJeuxCurrent[Game_id_Duel]=0;
   if (nbj<=5) ProbIndivJeuxCurrent[Game_id_PC2]=0;
-  ProbIndivJeuxCurrent[Game_id_Tourn]=0;
+  ProbIndivJeuxCurrent[Game_id_TH]=0;
   ProbIndivJeuxCurrent[Game_id_TDD]=0;
 }
 

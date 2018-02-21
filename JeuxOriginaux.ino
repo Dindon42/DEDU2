@@ -41,7 +41,7 @@ void Delay_Fraudeur(int r)
 }
 
 #ifdef ENABLE_LOGGING
-  #define LOG_PQP(a) LOG_GAME(0,a)
+  #define LOG_PQP(a) LOG_GAME(Game_id_PQP,a)
 #else
   #define LOG_PQP(a)
 #endif
@@ -162,7 +162,7 @@ int MarqueurHonte(int iJoueurChanceux, int iSpinDelay)
  }
 
 #ifdef ENABLE_LOGGING
-  #define LOG_TROMPE(a) LOG_GAME(2,a)
+  #define LOG_TROMPE(a) LOG_GAME(Game_id_TO,a)
 #else
   #define LOG_TROMPE(a)
 #endif

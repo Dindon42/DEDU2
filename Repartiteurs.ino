@@ -9,11 +9,13 @@ void Repartiteur()
     if (i==0)ProbAccumuleeJeux[i]=ProbIndivJeuxCurrent[i];
     else ProbAccumuleeJeux[i]=ProbAccumuleeJeux[i-1]+ProbIndivJeuxCurrent[i];
 
+    LogGameProb(i);
+
     //Update for next round
     ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
       
     //Special case pour DEDUEL, TeamDeDuel et Tourniquet qui ne devrait pas augmenter tant que joueurhonte = -1
-    if ((i==Game_id_Duel || i==Game_id_Tourn || i==Game_id_TDD) && JoueurHonte==-1)
+    if ((i==Game_id_Duel || i==Game_id_TH || i==Game_id_TDD) && JoueurHonte==-1)
     {
       ProbIndivJeuxCurrent[i]=0;
     }
@@ -38,19 +40,11 @@ void Repartiteur()
     {
       ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
     }
-    
-    LOG_GENERAL("I:");
-    LOG_GENERAL(i);
-    LOG_GENERAL("  PROB INDIV:");
-    LOG_GENERAL(ProbIndivJeuxCurrent[i]);
-    LOG_GENERAL("  PROB ACC:");
-    LOG_GENERAL(ProbAccumuleeJeux[i]);
-    LOG_GENERAL("\n");
   }
   max_prob=ProbAccumuleeJeux[NbJeux-1];
   
   // Debut REPARTITEUR
-  r = random(max_prob+1);
+  r = random(1,max_prob+1);
 
   LOG_GENERAL("R:");
   LOG_GENERAL(r);
@@ -61,7 +55,7 @@ void Repartiteur()
   LOG_GENERAL("\n");
 
   Jeu = SelectGame(r);
-  LogGameName(Jeu);
+  LogGameName(Jeu,true);
   PrepareGame(Jeu);
   if(!SkipGame)
   {

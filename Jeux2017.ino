@@ -1,5 +1,5 @@
 #ifdef ENABLE_LOGGING
-  #define LOG_DEDUEL(a) LOG_GAME(11,a)
+  #define LOG_DEDUEL(a) LOG_GAME(Game_id_Duel,a)
 #else
   #define LOG_DEDUEL(a)
 #endif
@@ -345,8 +345,8 @@ void DeDuel()
     ///BRUIT ET TRANSFERT HONTE
     LooserSoundAndLight(Joueurs[0]);
     JoueurHonte=MarqueurHonte(Joueurs[0],DelaiPetiteHonte);
-    //Reset Prob de la honte puisque nouvellement transférée.
-    ResetGameProb(Game_id_MH);
+    //Reset jeux qui transfèrent la honte
+    ResetProbHonte();
     
     LOG_DEDUEL("Nouveau JoueurHonte:");
     LOG_DEDUEL(JoueurHonte);
@@ -355,7 +355,7 @@ void DeDuel()
 }
 
 #ifdef ENABLE_LOGGING
-  #define LOG_ULTI(a) LOG_GAME(10,a)
+  #define LOG_ULTI(a) LOG_GAME(Game_id_UC,a)
 #else
   #define LOG_ULTI(a)
 #endif
@@ -977,7 +977,7 @@ void MIN()
 
 
 #ifdef ENABLE_LOGGING
-  #define LOG_CHANSON(a) LOG_GAME(7,a)
+  #define LOG_CHANSON(a) LOG_GAME(Game_id_JC,a)
 #else
   #define LOG_CHANSON(a)
 #endif
@@ -1385,7 +1385,7 @@ void JeuChanson(int id_chanson)
 
 
 #ifdef ENABLE_LOGGING
-  #define LOG_PATATE(a) LOG_GAME(8,a)
+  #define LOG_PATATE(a) LOG_GAME(Game_id_PC,a)
 #else
   #define LOG_PATATE(a)
 #endif
@@ -1525,7 +1525,7 @@ void PatateChaude()
 
 
 #ifdef ENABLE_LOGGING
-  #define LOG_RANDOM(a) LOG_GAME(9,a)
+  #define LOG_RANDOM(a) LOG_GAME(Game_id_AR,a)
 #else
   #define LOG_RANDOM(a)
 #endif

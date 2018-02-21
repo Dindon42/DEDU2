@@ -41,13 +41,14 @@ void DemoMode()
 
   do
   {
+    
+    delay(1000);
     for(int i=0 ; i<NbJeux;i++)
     {
       do
       {
         WaitForAllNonActive(nbj_raw);
-        delay(1000);
-        
+        delay(250);
         //Demo the game once
         PlayGame(i);
   

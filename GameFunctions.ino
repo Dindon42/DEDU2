@@ -1,65 +1,14 @@
 int SelectGame(int r)
 {
-  if (r <= ProbAccumuleeJeux[Game_id_PQP])
+  for(int i=0 ; i<NbJeux ; i++)
   {
-    return Game_id_PQP;
+    if (r <= ProbAccumuleeJeux[i])
+    {
+      return i;
+    }
   }
-  else if (r <= ProbAccumuleeJeux[Game_id_DQP])
-  {
-    return Game_id_DQP;
-  }
-  else if (r <= ProbAccumuleeJeux[Game_id_TO])
-  {
-    return Game_id_TO;
-  }
-  else if (r <= ProbAccumuleeJeux[Game_id_FFA])
-  {
-    return Game_id_FFA;
-  }
-  else if (r <= ProbAccumuleeJeux[Game_id_MH])
-  {
-    return Game_id_MH;
-  }
-  else if (r <= ProbAccumuleeJeux[Game_id_DQP2])
-  {
-    return Game_id_DQP2;
-  }
-  else if (r <= ProbAccumuleeJeux[Game_id_MIN])
-  {
-    return Game_id_MIN;
-  }
-  else if (r <= ProbAccumuleeJeux[Game_id_JC])
-  {
-    return Game_id_JC;
-  }
-  else if (r <= ProbAccumuleeJeux[Game_id_PC])
-  {
-    return Game_id_PC;
-  }
-  else if (r <= ProbAccumuleeJeux[Game_id_AR])
-  {
-    return Game_id_AR;
-  }
-  else if (r <= ProbAccumuleeJeux[Game_id_UC])
-  {
-    return Game_id_UC;
-  }
-  else if (r <= ProbAccumuleeJeux[Game_id_Duel])
-  {
-    return Game_id_Duel;
-  }
-  else if (r <= ProbAccumuleeJeux[Game_id_PC2])
-  {
-    return Game_id_PC2;
-  }
-  else if (r <= ProbAccumuleeJeux[Game_id_Tourn])
-  {
-    return Game_id_Tourn;
-  }
-  else
-  {
-    return Game_id_TDD;
-  }
+  //Default => Should not happen.
+  return Game_id_PQP;
 }
 
 void PrepareGame(int game_id)
@@ -126,7 +75,7 @@ void PlayGame(int game_id)
   {
     Patate2();
   }
-  else if (game_id==Game_id_Tourn)
+  else if (game_id==Game_id_TH)
   {
     Tourniquet();
   }
@@ -136,69 +85,69 @@ void PlayGame(int game_id)
   }
 }
 
-void LogGameName(int game_id)
+void LogGameName(int game_id, bool NewLine)
 {
   if(game_id==Game_id_PQP)
   {
-    LOG_GENERAL("PQP");
+    LOG_GENERAL("PQP         ");
   }
   else if (game_id==Game_id_DQP)
   {
-    LOG_GENERAL("DQP");
+    LOG_GENERAL("DQP         ");
   }
   else if (game_id==Game_id_TO)
   {
-    LOG_GENERAL("Trompe");
+    LOG_GENERAL("Trompe      ");
   }
   else if (game_id==Game_id_FFA)
   {
-    LOG_GENERAL("DEDU");
+    LOG_GENERAL("DEDU        ");
   }
   else if (game_id==Game_id_MH)
   {
-    LOG_GENERAL("HONTE");
+    LOG_GENERAL("HONTE       ");
   }
   else if (game_id==Game_id_DQP2)
   {
-    LOG_GENERAL("DQP2");
+    LOG_GENERAL("DQP2        ");
   }
   else if (game_id==Game_id_MIN)
   {
-    LOG_GENERAL("MINORITE");
+    LOG_GENERAL("MINORITE    ");
   }
   else if (game_id==Game_id_JC)
   {
-    LOG_GENERAL("Chanson");
+    LOG_GENERAL("Chanson     ");
   }
   else if (game_id==Game_id_PC)
   {
-    LOG_GENERAL("Patate");
+    LOG_GENERAL("Patate      ");
   }
   else if (game_id==Game_id_AR)
   {
-    LOG_GENERAL("Random");
+    LOG_GENERAL("Random      ");
   }
   else if (game_id==Game_id_UC)
   {
-    LOG_GENERAL("Ulti");
+    LOG_GENERAL("Ulti        ");
   }
   else if (game_id==Game_id_Duel)
   {
-    LOG_GENERAL("DeDuel");
+    LOG_GENERAL("DeDuel      ");
   }
   else if (game_id==Game_id_PC2)
   {
-    LOG_GENERAL("Patate2");
+    LOG_GENERAL("Patate2     ");
   }
-  else if (game_id==Game_id_Tourn)
+  else if (game_id==Game_id_TH)
   {
-    LOG_GENERAL("Tourniquet");
+    LOG_GENERAL("Tourniquet  ");
   }
   else if (game_id==Game_id_TDD)
   {
-    LOG_GENERAL("TeamDeDuel");
+    LOG_GENERAL("TeamDeDuel  ");
   }
-  LOG_GENERAL("\n");
+  if(NewLine) LOG_GENERAL("\n");
 }
 
 void ResetProbAfterGame(int game_id)
@@ -215,6 +164,10 @@ void ResetProbAfterGame(int game_id)
   {
     ResetGameProb(Game_id_DQP2);
   }
+  else if (game_id==Game_id_DQP2)
+  {
+    ResetGameProb(Game_id_DQP);
+  }
   else if (game_id==Game_id_TO)
   {
     
@@ -225,11 +178,7 @@ void ResetProbAfterGame(int game_id)
   }
   else if (game_id==Game_id_MH)
   {
-    ResetGameProb(Game_id_Tourn);
-  }
-  else if (game_id==Game_id_DQP2)
-  {
-    ResetGameProb(Game_id_DQP);
+    ResetProbHonte();
   }
   else if (game_id==Game_id_MIN)
   {
@@ -241,7 +190,11 @@ void ResetProbAfterGame(int game_id)
   }
   else if (game_id==Game_id_PC)
   {
-    ResetGameProb(Game_id_PC2);
+    DivideGameProb(Game_id_PC2,2);
+  }
+  else if (game_id==Game_id_PC2)
+  {
+    DivideGameProb(Game_id_PC,2);
   }
   else if (game_id==Game_id_AR)
   {
@@ -251,21 +204,17 @@ void ResetProbAfterGame(int game_id)
   {
     
   }
+  else if (game_id==Game_id_TH)
+  {
+    ResetProbHonte();
+  }
   else if (game_id==Game_id_Duel)
   {
-    
-  }
-  else if (game_id==Game_id_PC2)
-  {
-    ResetGameProb(Game_id_PC);
-  }
-  else if (game_id==Game_id_Tourn)
-  {
-    ResetGameProb(Game_id_MH);
+    ResetProbHonte();
   }
   else if (game_id==Game_id_TDD)
   {
-    
+    ResetProbHonte();
   }
 }
 
@@ -274,56 +223,70 @@ void ResetGameProb(int game_id)
   ProbIndivJeuxCurrent[game_id]=0;
 }
 
+void DivideGameProb(int game_id,int divisor)
+{
+  ProbIndivJeuxCurrent[game_id]=ProbIndivJeuxCurrent[game_id]/divisor;
+}
+
+void ResetProbHonte()
+{
+  ResetGameProb(Game_id_MH);
+  ResetGameProb(Game_id_TH);
+  DivideGameProb(Game_id_Duel,2);
+  DivideGameProb(Game_id_TDD,2);
+//  ResetGameProb(Game_id_Duel);
+//  ResetGameProb(Game_id_TDD);
+}
+
 void LogGameCounts()
 {
   LOG_GENERAL("TOTAL DE JEUX:");
   LOG_GENERAL(TotalNbJeux);
   LOG_GENERAL("\n");
-  LOG_GENERAL("0  PQP:\t\t\t");
-  LOG_GENERAL(CountJeux[0]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("1  DQP:\t\t\t");
-  LOG_GENERAL(CountJeux[1]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("2  TrompeOeil:\t\t");
-  LOG_GENERAL(CountJeux[2]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("3  FFA:\t\t\t");
-  LOG_GENERAL(CountJeux[3]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("4  MarqueurHonte:\t");
-  LOG_GENERAL(CountJeux[4]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("5  DQP2:\t\t");
-  LOG_GENERAL(CountJeux[5]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("6  MIN:\t\t\t");
-  LOG_GENERAL(CountJeux[6]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("7  JeuChanson:\t\t");
-  LOG_GENERAL(CountJeux[7]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("8  PatateChaude:\t");
-  LOG_GENERAL(CountJeux[8]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("9  AllRandom:\t\t");
-  LOG_GENERAL(CountJeux[9]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("10 UltimateChallenge:\t");
-  LOG_GENERAL(CountJeux[10]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("11 DeDuel:\t\t");
-  LOG_GENERAL(CountJeux[11]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("12 Patate2:\t\t");
-  LOG_GENERAL(CountJeux[12]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("13 Tourniquet:\t\t");
-  LOG_GENERAL(CountJeux[13]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("14 TeamDeDuel:\t\t");
-  LOG_GENERAL(CountJeux[14]);
-  LOG_GENERAL("\n");
 
+  for(int i=0 ; i<NbJeux ; i++)
+  {
+    LOG_GENERAL("Id: ");
+    LOG_GENERAL(i);
+    LOG_GENERAL("\t");
+    LogGameName(i,false);
+    LOG_GENERAL(" ");
+    LOG_GENERAL(CountJeux[i]);
+    LOG_GENERAL("\n");
+  }
 }
 
+void LogGameProb(int game_id)
+{
+    #ifdef ENABLE_LOGGING
+    LOG_GENERAL("ID:");
+    LOG_GENERAL(game_id);
+    LOG_GENERAL("\t");
+    LogGameName(game_id,false);
+    LOG_GENERAL(" P.I.:");
+    if (ProbIndivJeuxCurrent[game_id]<10)
+    {
+      LOG_GENERAL("  ");
+    }
+    else if (ProbIndivJeuxCurrent[game_id]<100)
+    {
+      LOG_GENERAL(" ");
+    }
+    LOG_GENERAL(ProbIndivJeuxCurrent[game_id]);
+    LOG_GENERAL(" P.A.:");
+    if (ProbAccumuleeJeux[game_id]<10)
+    {
+      LOG_GENERAL("   ");
+    }
+    else if (ProbAccumuleeJeux[game_id]<100)
+    {
+      LOG_GENERAL("  ");
+    }
+    else if (ProbAccumuleeJeux[game_id]<1000)
+    {
+      LOG_GENERAL(" ");
+    }
+    LOG_GENERAL(ProbAccumuleeJeux[game_id]);
+    LOG_GENERAL("\n");
+    #endif
+}

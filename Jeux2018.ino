@@ -1,5 +1,5 @@
 #ifdef ENABLE_LOGGING
-  #define LOG_TEAMDEDUEL(a) LOG_GAME(14,a)
+  #define LOG_TEAMDEDUEL(a) LOG_GAME(Game_id_TDD,a)
 #else
   #define LOG_TEAMDEDUEL(a)
 #endif
@@ -348,8 +348,8 @@ void TeamDeDuel()
     ///BRUIT ET TRANSFERT HONTE
     LooserSoundAndLight(FailPlayer);
     JoueurHonte=MarqueurHonte(FailPlayer,DelaiPetiteHonte);
-    //Reset Prob de la honte puisque nouvellement transférée.
-    ResetGameProb(Game_id_MH);
+    //Reset des jeux qui transferent la honte.
+    ResetProbHonte();
     
     LOG_TEAMDEDUEL("Nouveau JoueurHonte:");
     LOG_TEAMDEDUEL(JoueurHonte);
@@ -360,7 +360,7 @@ void TeamDeDuel()
 
 
 #ifdef ENABLE_LOGGING
-  #define LOG_TOURNIQUET(a) LOG_GAME(13,a)
+  #define LOG_TOURNIQUET(a) LOG_GAME(Game_id_TH,a)
 #else
   #define LOG_TOURNIQUET(a)
 #endif
@@ -551,7 +551,7 @@ void Tourniquet()
 
 
 #ifdef ENABLE_LOGGING
-  #define LOG_PATATE2(a) LOG_GAME(12,a)
+  #define LOG_PATATE2(a) LOG_GAME(Game_id_PC2,a)
 #else
   #define LOG_PATATE2(a)
 #endif

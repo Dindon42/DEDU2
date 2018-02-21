@@ -1,20 +1,20 @@
 #include <Servo.h>
 #include <avr/pgmspace.h>
 int const Game_id_PQP=0;
-int const Game_id_DQP=1;
-int const Game_id_TO=2;
-int const Game_id_FFA=3;
-int const Game_id_MH=4;
-int const Game_id_DQP2=5;
+int const Game_id_TO=1;
+int const Game_id_DQP=2;
+int const Game_id_DQP2=3;
+int const Game_id_PC=4;
+int const Game_id_PC2=5;
 int const Game_id_MIN=6;
-int const Game_id_JC=7;
-int const Game_id_PC=8;
-int const Game_id_AR=9;
-int const Game_id_UC=10;
+int const Game_id_UC=7;
+int const Game_id_AR=8;
+int const Game_id_MH=9;
+int const Game_id_TH=10;
 int const Game_id_Duel=11;
-int const Game_id_PC2=12;
-int const Game_id_Tourn=13;
-int const Game_id_TDD=14;
+int const Game_id_TDD=12;
+int const Game_id_JC=13;
+int const Game_id_FFA=14;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
@@ -46,41 +46,10 @@ int TotalNbJeux=0;
 bool NotMoreThanMaxProb=true;
 //Index_Jeux
 int ProbAccumuleeJeux[NbJeux];
-unsigned int const ProbIndivJeux[NbJeux]={
-  95,   /*0  PQP*/
-  30,   /*1  DQP*/
-  21,   /*2  TrompeOeil*/
-  21,   /*3  FFA*/
-  32,   /*4  MarqueurHonte*/
-  42,   /*5  DQP2*/
-  66,   /*6  MIN*/
-  55,   /*7  JeuChanson*/
-  70,   /*8  PatateChaude*/
-  70,   /*9  AllRandom*/
-  70,   /*10 UltimateChallenge*/
-  70,   /*11 DeDuel*/
-  70,   /*12 Patate2*/
-  60,   /*13 Tourniquet*/
-  55};  /*14 TeamDeDuel*/
+unsigned int ProbIndivJeux[NbJeux];
 
 #ifdef ENABLE_LOGGING
-bool ActiveGameLogging[NbJeux]={
-  false,   /*0  PQP*/
-  false,   /*1  DQP*/
-  false,   /*2  TrompeOeil*/
-  false,   /*3  FFA*/
-  false,   /*4  MarqueurHonte*/
-  false,   /*5  DQP2*/
-  false,   /*6  MIN*/
-  false,   /*7  JeuChanson*/
-  false,   /*8  PatateChaude*/
-  false,   /*9  AllRandom*/
-  false,   /*10 UltimateChallenge*/
-  false,   /*11 DeDuel*/
-  false,   /*12 Patate2*/
-  false,   /*13 Tourniquet*/
-  false};  /*14 TeamDeDuel*/
-
+bool ActiveGameLogging[NbJeux]={false,false,false,false,false,false,false,false,false,false,false,false,false,false,false};
   #define LOG_GAME(i,a) if( ActiveGameLogging[i] ) Serial.print(a);
   #define LOG_GENERAL(a) Serial.print(a);
 #else
@@ -262,6 +231,8 @@ void setup()
     Tone_Pin = 52; //Tone
   }
 
+  DefineProbJeux();
+  
   //In case setup was skipped.
   nbj_raw=nbj-1;
   vitesse_raw=vitesse-1;
@@ -349,6 +320,9 @@ void loop()
     LOG_GENERAL("\n");
     LOG_GENERAL("EXCLUSIVE MODE");
     LOG_GENERAL("\n");
+    #ifdef ENABLE_LOGGING
+      ActiveGameLogging[ExclusiveGame_ID]=true;
+    #endif
     PlayGame(ExclusiveGame_ID);
     loop();
   }
