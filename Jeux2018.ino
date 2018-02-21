@@ -10,8 +10,8 @@ void PQR()
   bool InitialGreenComplete=false;
   int GreenTransMax=1200;
   int ReacTime;
-  int ReacTimeMin=1242;
-  int ReacTimeMax=2242;
+  int ReacTimeMin=1542;
+  int ReacTimeMax=4242;
   int Winner=-1;
   int PercB;
   int PercG;
