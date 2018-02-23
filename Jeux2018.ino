@@ -226,9 +226,9 @@ void PQR()
 #endif
 void TourVic()
 {
-  int LightDelay=7;
+  int LightDelay=18+nbj;
   int LightDelayIncrement=1;
-  int IncrementProb=15;
+  int IncrementProb=12-nbj/2;
   int CurrentCounter=0;
   int LastPlayer=random(nbj);
   int CurrentPlayer=0;

@@ -30,12 +30,11 @@ bool MusicMode=false;
 bool MusicRandFactVit=false;
 bool SkipLights=false;
 bool DoNotShowGameProb=false;
-bool LowFiLogging=false;
 bool ExclusiveGame=false;
-int ExclusiveGame_ID=Game_id_PQR;
+int ExclusiveGame_ID=Game_id_TV;
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
-int nbj=10;
+int nbj=4;
 int vitesse=10;
 int Game_Mode=1;
 int SelectMusic=-1;
@@ -223,14 +222,7 @@ void setup()
   int Pin;
   
 #ifdef ENABLE_LOGGING
-  if(LowFiLogging)
-  {
-    Serial.begin(1200);
-  }
-  else
-  {
-    Serial.begin(38400);
-  }
+  Serial.begin(38400);
 #endif
 
   LOG_GENERAL("SETUP STARTING\n");
