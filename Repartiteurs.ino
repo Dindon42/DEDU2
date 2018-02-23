@@ -3,6 +3,7 @@ void Repartiteur()
   int max_prob;
   int r;
   int Jeu;
+  bool ShowGameProb=!DoNotShowGameProb;
   LOG_GENERAL("DEBUT REPARTITEUR\n");
   
   for (int i=0 ; i<NbJeux ; i++)
@@ -10,20 +11,26 @@ void Repartiteur()
     if (i==0)ProbAccumuleeJeux[i]=ProbIndivJeuxCurrent[i];
     else ProbAccumuleeJeux[i]=ProbAccumuleeJeux[i-1]+ProbIndivJeuxCurrent[i];
 
-    LogGameProb(i);
+    if(ShowGameProb)
+    {
+      LogGameProb(i);
+    }
 
     //Update for next round
     ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
     
-    //Logique si le flag NotMoreThanMaxProb est ON.  Exclusion pour Honte et DEDU
-    if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=Game_id_FFA && i!=Game_id_MH && NotMoreThanMaxProb)
+    if(NotMoreThanMaxProb)
     {
-      ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
-    }
-    //Special case for marqueurhonte et DEDU qui peuvent monter au-dessus de leur limite peu importe...
-    else if (i==Game_id_FFA || i==Game_id_MH)
-    {
-      ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
+      //Logique si le flag NotMoreThanMaxProb est ON.  Exclusion pour Honte et DEDU
+      if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=Game_id_FFA && i!=Game_id_MH)
+      {
+        ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
+      }
+      //Special case for marqueurhonte et DEDU qui peuvent monter au-dessus de leur limite peu importe...
+      else if (i==Game_id_FFA || i==Game_id_MH)
+      {
+        ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
+      }
     }
   }
   

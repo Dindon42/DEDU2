@@ -1,22 +1,31 @@
 void DefineProbJeux()
 {
+  //Gagnant unique
   ProbIndivJeux[Game_id_PQP]=  75;
-  ProbIndivJeux[Game_id_PQR]=  50;
-  ProbIndivJeux[Game_id_DQP]=  30;
-  ProbIndivJeux[Game_id_TO]=   30;
-  ProbIndivJeux[Game_id_FFA]=  30;
-  ProbIndivJeux[Game_id_MH]=   35;
-  ProbIndivJeux[Game_id_DQP2]= 45;
-  ProbIndivJeux[Game_id_MIN]=  66;
-  ProbIndivJeux[Game_id_JC]=   55;
-  ProbIndivJeux[Game_id_PC]=   70;
-  ProbIndivJeux[Game_id_AR]=   70;
-  ProbIndivJeux[Game_id_UC]=   70;
+  ProbIndivJeux[Game_id_PQR]=  75;
   ProbIndivJeux[Game_id_Duel]= 60;
-  ProbIndivJeux[Game_id_PC2]=  70;
-  ProbIndivJeux[Game_id_TH]=   70;
-  ProbIndivJeux[Game_id_TDD]=  70;
-  ProbIndivJeux[Game_id_TV]=   70;
+  ProbIndivJeux[Game_id_TV]=   75;
+  ProbIndivJeux[Game_id_UC]=   75;
+
+  //Perdant unique
+  ProbIndivJeux[Game_id_DQP]=  55;
+  ProbIndivJeux[Game_id_DQP2]= 55;
+  ProbIndivJeux[Game_id_PC]=   60;
+  ProbIndivJeux[Game_id_PC2]=  60;
+  ProbIndivJeux[Game_id_AR]=   75;
+
+  //Evenements
+  ProbIndivJeux[Game_id_TO]=   30;
+  ProbIndivJeux[Game_id_FFA]=  42;
+
+  //Équipe
+  ProbIndivJeux[Game_id_MIN]=  60;
+  ProbIndivJeux[Game_id_JC]=   55;
+  ProbIndivJeux[Game_id_TDD]=  55;
+
+  //Honte
+  ProbIndivJeux[Game_id_MH]=   35;
+  ProbIndivJeux[Game_id_TH]=   45;
 }
 
 void AjustementProbJeuxInit()

@@ -26,14 +26,16 @@ bool nosound=false;
 bool SkipFraudeur=false;
 bool SkipGame=false;
 bool DelayIfSkipGame=false;
-bool ExclusiveGame=false;
-int ExclusiveGame_ID=Game_id_PQR;
 bool MusicMode=false;
 bool MusicRandFactVit=false;
 bool SkipLights=false;
+bool DoNotShowGameProb=false;
+bool LowFiLogging=false;
+bool ExclusiveGame=false;
+int ExclusiveGame_ID=Game_id_PQR;
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
-int nbj=5;
+int nbj=10;
 int vitesse=10;
 int Game_Mode=1;
 int SelectMusic=-1;
@@ -45,7 +47,7 @@ int const NumberOfRoundsForFullProb=12;
 int const NbJeux = 17;
 int CountJeux[NbJeux]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 int TotalNbJeux=0;
-bool NotMoreThanMaxProb=true;
+bool NotMoreThanMaxProb=false;
 //Index_Jeux
 int ProbAccumuleeJeux[NbJeux];
 unsigned int ProbIndivJeux[NbJeux];
@@ -221,7 +223,14 @@ void setup()
   int Pin;
   
 #ifdef ENABLE_LOGGING
-  Serial.begin(9600);
+  if(LowFiLogging)
+  {
+    Serial.begin(1200);
+  }
+  else
+  {
+    Serial.begin(38400);
+  }
 #endif
 
   LOG_GENERAL("SETUP STARTING\n");

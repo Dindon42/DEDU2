@@ -160,7 +160,7 @@ void LogGameName(int game_id, bool NewLine)
   {
     LOG_GENERAL("TourVic     ");
   }
-  else if (game_id==Game_id_TV)
+  else if (game_id==Game_id_PQR)
   {
     LOG_GENERAL("PQR         ");
   }
