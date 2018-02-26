@@ -25,8 +25,8 @@ int const Game_id_FFA=16;
 //#define ENABLE_LOGGING
 
 //Opt Gen
-bool SkipSetup=true;
-bool nosound=true;
+bool SkipSetup=false;
+bool nosound=false;
 bool SkipLights=false;
 
 //Opt Game
