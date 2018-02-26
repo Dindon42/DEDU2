@@ -1,5 +1,7 @@
 #include <Servo.h>
 #include <avr/pgmspace.h>
+int const NbJeux = 17;
+int const NbModes=3;
 int const Game_id_PQP=0;
 int const Game_id_PQR=1;
 int const Game_id_TO=2;
@@ -20,9 +22,9 @@ int const Game_id_FFA=16;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-//#define ENABLE_LOGGING
+#define ENABLE_LOGGING
 bool SkipSetup=false;
-bool nosound=false;
+bool nosound=true;
 bool SkipFraudeur=false;
 bool SkipGame=false;
 bool DelayIfSkipGame=false;
@@ -36,25 +38,24 @@ int ExclusiveGame_ID=Game_id_TV;
 int JoueurHonte=-1;
 int nbj=4;
 int vitesse=10;
-int Game_Mode=1;
+int Game_Mode=2;
 int SelectMusic=-1;
 //DEBUG END
 
 
 //Prob, Jeux
 int const NumberOfRoundsForFullProb=12;
-int const NbJeux = 17;
-int CountJeux[NbJeux]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int CountJeux[NbJeux] = {0};
 int TotalNbJeux=0;
 bool NotMoreThanMaxProb=false;
-//Index_Jeux
+int ProbIndivJeuxCurrent[NbJeux];
 int ProbAccumuleeJeux[NbJeux];
-unsigned int ProbIndivJeux[NbJeux];
+int ProbIndivJeux[NbJeux];
 int MinProbAcc=9999;
 int MaxProbAcc=0;
 
 #ifdef ENABLE_LOGGING
-bool ActiveGameLogging[NbJeux]={false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false};
+  bool ActiveGameLogging[NbJeux] = {false};
   #define LOG_GAME(i,a) if( ActiveGameLogging[i] ) Serial.print(a);
   #define LOG_GENERAL(a) Serial.print(a);
 #else
@@ -76,16 +77,17 @@ int const Servo_LowPos = 40;
 int const Servo_HighPos = 154;
 int const Servo_Pin = 53;
 
+//Pour setup
 int const nbj_max=10;
 int const nbj_raw_max=9;
+int nbj_raw;
+int vitesse_raw;
+
+//Pins
 int const OutPinStart = 31;
 int const OutPinInterval = 2;
 int const InPinStart = 24;
 int const InPinInterval = 2;
-int nbj_raw;
-int vitesse_raw;
-
-int ProbIndivJeuxCurrent[NbJeux];
 int PlayerInputPins[nbj_max];
 int PlayerOutputPins[nbj_max];
 
@@ -221,9 +223,9 @@ void setup()
 {
   int Pin;
   
-#ifdef ENABLE_LOGGING
-  Serial.begin(38400);
-#endif
+  #ifdef ENABLE_LOGGING
+    Serial.begin(38400);
+  #endif
 
   LOG_GENERAL("SETUP STARTING\n");
   //TONE
@@ -235,8 +237,6 @@ void setup()
   {
     Tone_Pin = 52; //Tone
   }
-
-  DefineProbJeux();
   
   //In case setup was skipped.
   nbj_raw=nbj-1;
@@ -272,7 +272,7 @@ void setup()
 
   //Ajustement du délai pour Honte
   AjustementDelaiHonte();
-
+  
   if (!SkipSetup && !MusicMode)
   {
     JoueurHonte=-1;
@@ -289,28 +289,18 @@ void setup()
     {
       TestMode();
     }
-    else if(nbj_raw==1)
-    {
-      DemoMode();
-    }
     
+    //Choix de complexité du jeu.
+    GameMode();
+
     //Debut VITESSE
     // Attend que les joueurs choisissent la vitesse du jeu.
     // 1 = lent, 10 = vite
     Vitesse();
-  
-    //Choix de Version Originale ou Améliorée.
-    GameMode();
-    if (Game_Mode == 1)
-    {
-      JoueChanson(0,3,false);
-      delay(125);
-    }
+
+    //Toune de DEDU pour initialiser la chose.
+    JoueChanson(0,3,false);
   }
-
-  //Ajustement initial des prob pour les jeux.  Quelques cas spéciaux.
-  AjustementProbJeuxInit();
-
   LogSetupParams();
 }
 
@@ -370,14 +360,7 @@ void loop()
   
   TurnOffAllLights();
   
-  if(Game_Mode == 0)
-  {
-    RepartiteurOriginal();
-  }
-  else
-  {
-    Repartiteur();
-  }
+  Repartiteur();
 }
 
 

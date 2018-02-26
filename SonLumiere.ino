@@ -95,15 +95,25 @@ void TurnOffNonActivePlayerRedLights()
 
 void ClignoteEtSon(int NbMax,int FreqStart, int FreqIncrease, int NbOffset)
 {
+  if(NbMax+NbOffset>9)
+  {
+    NbMax=9;
+    NbOffset=0;
+  }
   //Clignote + Son
-  for (int i = 0 + NbOffset; i <= NbMax; i++)
+  for (int i = 0; i <= NbMax; i++)
   {
     //Light and sound for valid players.
     ActivateRedLight(i);
+    ActivateRedLight(i+NbOffset);
     Tone_Frequency = FreqStart + FreqIncrease * i;
     tone(Tone_Pin, Tone_Frequency, 50);
     delay(100);
   }
+  
+  delay(500);
+  TurnOffAllRedLights();
+  delay(500);
 }
 
 void PlayNote(int Tone_Pin, float Freq, float PlayTime, float WaitTime)

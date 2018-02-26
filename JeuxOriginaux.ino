@@ -179,7 +179,7 @@ void TrompeOeil()
   bool SwitchToRed = false;
   int ToRED = IterVert+50;
   int ProbVert=4;
-  bool GreenFirst = ((random(ProbVert)==0) && Game_Mode==1);
+  bool GreenFirst = (random(ProbVert)==0);
   
   LOG_TROMPE("Game_Mode:");
   LOG_TROMPE(Game_Mode);
@@ -318,11 +318,8 @@ void FFA()
   float myRand1 = random(280,400)/100;
   int myRand2 = random(25,32);
   int r;
-
-  if (Game_Mode==1)
-  {
-    JoueChanson(0,myRand1,false);
-  }
+  
+  JoueChanson(0,myRand1,false);
   
   for (int e = 1; e <= myRand2; e++) {
 

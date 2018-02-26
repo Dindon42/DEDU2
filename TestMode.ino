@@ -12,7 +12,7 @@ void TestMode()
 }
 
 
-void DemoMode()
+void DemoMode(bool AllModes)
 {
   bool GoToNext;
   int NumActOut;
@@ -20,21 +20,17 @@ void DemoMode()
   int IndivDelay=2;
   int DelayGame=25;
   unsigned const long CounterPlaySame=3000/DelayGame;
-  int PrevInputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
+  int PrevInputState[nbj_max]={LOW};
 
   LOG_GENERAL("DEMO MODE\n");
   //Tone
   SonTestMode();
-  delay(500);
-  NombreJoueurs();
-  delay(500);
 
-  do
+  delay(1000);
+  for(int i=0 ; i<NbJeux;i++)
   {
-    
-    delay(1000);
-    for(int i=0 ; i<NbJeux;i++)
-    {
+    //If the game is in the mode or all modes  Also so check for delta between modes (i.e.) For Mode 1, check only games not in mode 0.
+    //{  
       do
       {
         WaitForAllNonActive(nbj_raw);
@@ -88,7 +84,7 @@ void DemoMode()
         delay(250);
         
       }while(GoToNext==false);
-    }
-  }while(1);
+    //}
+  }
 }
 
