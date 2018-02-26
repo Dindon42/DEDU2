@@ -22,21 +22,30 @@ int const Game_id_FFA=16;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-#define ENABLE_LOGGING
-bool SkipSetup=false;
+//#define ENABLE_LOGGING
+
+//Opt Gen
+bool SkipSetup=true;
 bool nosound=true;
+bool SkipLights=false;
+
+//Opt Game
+bool ExclusiveGame=false;
+int ExclusiveGame_ID=Game_id_TV;
+
+//Opt Repartiteur
 bool SkipFraudeur=false;
 bool SkipGame=false;
 bool DelayIfSkipGame=false;
+bool DoNotShowGameProb=false;
+
+//Opt Mus
 bool MusicMode=false;
 bool MusicRandFactVit=false;
-bool SkipLights=false;
-bool DoNotShowGameProb=false;
-bool ExclusiveGame=false;
-int ExclusiveGame_ID=Game_id_TV;
+
 //SETUP IF SKIPPED:
 int JoueurHonte=-1;
-int nbj=4;
+int nbj=10;
 int vitesse=10;
 int Game_Mode=2;
 int SelectMusic=-1;
@@ -225,7 +234,9 @@ void setup()
     Serial.begin(38400);
   #endif
 
+  LOG_GENERAL("==============\n");
   LOG_GENERAL("SETUP STARTING\n");
+  LOG_GENERAL("==============\n");
   //TONE
   if (nosound)
   {
@@ -300,6 +311,12 @@ void setup()
     JoueChanson(0,3,false);
   }
   LogSetupParams();
+
+  
+  LOG_GENERAL("==============\n");
+  LOG_GENERAL("  SETUP END   \n");
+  LOG_GENERAL("==============\n");
+  
 }
 
 //Setup complete.  MAIN loop.

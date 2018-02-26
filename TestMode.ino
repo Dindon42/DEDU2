@@ -1,7 +1,9 @@
 
 void TestMode()
 {
-  LOG_GENERAL("TEST MODE\n");
+  LOG_GENERAL("==============\n");
+  LOG_GENERAL("   TEST MODE  \n");
+  LOG_GENERAL("==============\n");
   SonTestMode();
   
   while (1)
@@ -22,7 +24,10 @@ void DemoMode(bool AllModes)
   unsigned const long CounterPlaySame=3000/DelayGame;
   int PrevInputState[nbj_max]={LOW};
 
-  LOG_GENERAL("DEMO MODE\n");
+
+  LOG_GENERAL("==============\n");
+  LOG_GENERAL("= DEMO MODE  =\n");
+  LOG_GENERAL("==============\n");
   //Tone
   SonTestMode();
 
@@ -92,5 +97,8 @@ void DemoMode(bool AllModes)
       }while(GoToNext==false);
     }
   }
+  LOG_GENERAL("==============\n");
+  LOG_GENERAL("=  DEMO FIN  =\n");
+  LOG_GENERAL("==============\n");
 }
 

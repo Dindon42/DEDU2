@@ -53,6 +53,12 @@ void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse)
   int NombreNotes=SelectionChanson(Chanson);
   int myRand;
   float FactVit=FacteurVitesse;
+
+
+
+  LOG_GENERAL("===============\n");
+  LOG_GENERAL("= JoueChanson =\n");
+  LOG_GENERAL("===============\n");
   
   LOG_GENERAL("NombreNotes:");
   LOG_GENERAL(NombreNotes);
@@ -77,6 +83,12 @@ void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse)
     //PlayNote(int Tone_Pin, float Freq, float PlayTime, float WaitTime)
     PlayNote(Tone_Pin, MaChanson[0][n], MaChanson[1][n]/FactVit, MaChanson[2][n]/FactVit);
   }
+
+  
+
+  LOG_GENERAL("===================\n");
+  LOG_GENERAL("= JoueChanson FIN =\n");
+  LOG_GENERAL("===================\n");
 }
 
 //Returns the number of notes.

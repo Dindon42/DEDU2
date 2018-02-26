@@ -8,14 +8,16 @@ void PQR()
   unsigned long GameCounter=0;
   unsigned long GreenCounter=0;
   bool InitialGreenComplete=false;
-  int GreenTransMax=1200;
+  int GreenTransMax=500;
   int ReacTime;
-  int ReacTimeMin=1542;
-  int ReacTimeMax=4242;
+  int ReacTimeMin=542;
+  int ReacTimeMax=1542;
   int Winner=-1;
   int PercB;
   int PercG;
-  int LightIntB=5;
+  int MinB=1;
+  int MinG=5;
+  int LightIntB=3;
   int LightIntG=42;
   int NumActive;
   int PrevNumActive=-1;
@@ -23,17 +25,11 @@ void PQR()
   int PreviousState[nbj_max];
   int PlayersInGame[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
   int StateChanges[nbj_max]={0,0,0,0,0,0,0,0,0,0};
-  int ChangeThr=12;
+  int ChangeThr=3;
   int PlayersActive;
   bool TriggerEndGame=false;
 
-
-  ReacTime=random(ReacTimeMin,ReacTimeMax);
   LOG_PQR("PREMIER QUI RELACHE\n");
-  LOG_PQR("ReacTime:");
-  LOG_PQR(ReacTime);
-  LOG_PQR("\n");
-
   
   //Init Based on number of players
   for (int i=0; i<=nbj_raw ;i++)
@@ -50,6 +46,9 @@ void PQR()
     LOG_PQR(PlayersInGame[i]);
     LOG_PQR("\n");
   }
+
+  ActivateGreenLED(MinG);
+  ActivateBlueLED(MinB);
   
   do
   {
@@ -57,6 +56,8 @@ void PQR()
     {
       PercG = ((float)GreenCounter/(float)GreenTransMax)*LightIntG;
       PercB = ((float)GreenCounter/(float)GreenTransMax)*LightIntB;
+      if(PercG<MinG) PercG=MinG;
+      if(PercB<MinB) PercB=MinB;
       ActivateGreenLED(PercG);
       ActivateBlueLED(PercB);
     }
@@ -108,9 +109,9 @@ void PQR()
         StateChanges[i]++;
       }
       
-      if(StateChanges[i]>ChangeThr)
+      if(StateChanges[i]>ChangeThr && !TriggerEndGame)
       {
-        LOG_PQR("Youre OUT\n");
+        LOG_PQR("You're OUT\n");
         PlayersInGame[i]=0;
         DeactivateRedLight(i);
         StateChanges[i]=0;
@@ -168,6 +169,11 @@ void PQR()
         LOG_PQR("\n");
         PrevNumActive=NumActive;
         GameCounter=0;
+        
+        ReacTime=random(ReacTimeMin,ReacTimeMax);
+        LOG_PQR("ReacTime:");
+        LOG_PQR(ReacTime);
+        LOG_PQR("\n");
       }
       
       if(GameCounter>ReacTime && NumActive>=1)
@@ -180,7 +186,8 @@ void PQR()
             PlayersInGame[i]=0;
           }
         }
-
+        
+        LOG_PQR("TRIGGER END!\n");
         LOG_PQR("PlayersInGame!\n");
         for (int i=0; i<=nbj_raw_max ;i++)
         {
@@ -226,9 +233,9 @@ void PQR()
 #endif
 void TourVic()
 {
-  int LightDelay=18+nbj;
+  int LightDelay=22+nbj;
   int LightDelayIncrement=1;
-  int IncrementProb=12-nbj/2;
+  int IncrementProb=10-nbj/2;
   int CurrentCounter=0;
   int LastPlayer=random(nbj);
   int CurrentPlayer=0;
