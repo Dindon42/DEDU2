@@ -29,8 +29,14 @@ void DemoMode(bool AllModes)
   delay(1000);
   for(int i=0 ; i<NbJeux;i++)
   {
-    //If the game is in the mode or all modes  Also so check for delta between modes (i.e.) For Mode 1, check only games not in mode 0.
-    //{  
+    //If the game mode is 0, play games that have non-0 Prob
+    //If the game mode is non-0, play games that did not exist in previous mode.
+    //If AllModes, Demo all modes.
+    if(
+      (Game_Mode==0 && ProbIndivJeux[i]!=0) ||
+      (Game_Mode > 0 && GameProb[i][Game_Mode]!=0 && GameProb[i][Game_Mode-1]==0 && ProbIndivJeux[i]!=0) ||
+      AllModes && ProbIndivJeux[i]!=0)
+    {  
       do
       {
         WaitForAllNonActive(nbj_raw);
@@ -84,7 +90,7 @@ void DemoMode(bool AllModes)
         delay(250);
         
       }while(GoToNext==false);
-    //}
+    }
   }
 }
 

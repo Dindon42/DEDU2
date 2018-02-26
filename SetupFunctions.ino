@@ -1,8 +1,6 @@
 void DefineProbJeux()
 {
-  int GameProb[NbJeux][NbModes]={0};
   int wMode;
-
   
   //Initialize Prob for the different games under different modes.
   wMode=0;
@@ -79,6 +77,20 @@ void DefineProbJeux()
   {
     ProbIndivJeux[i]=GameProb[i][Game_Mode];
   }
+
+  //Ajuster les prob Master de certains jeux si pas assez de joueurs.
+  if (nbj<=5)
+  {
+    ProbIndivJeux[Game_id_PC2]=0;
+    ProbIndivJeux[Game_id_TDD]=0;
+    ProbIndivJeux[Game_id_AR]=0;
+  }
+
+  //Log Prob.
+  for (int i =0 ; i<NbJeux ; i++)
+  {
+    LogBaseProb(i);
+  }
 }
 
 void AjustementProbJeuxInit()
@@ -91,19 +103,8 @@ void AjustementProbJeuxInit()
   ProbIndivJeuxCurrent[Game_id_FFA]=0;
   ProbIndivJeuxCurrent[Game_id_MH]=242;
 
-  //Certains reset particuliers en fonction du nombre de joueurs ou honte.
-  LowPlayersProbResets();
+  //Certains reset particuliers en fonction de la honte.
   NoHonteProbResets();
-}
-
-void LowPlayersProbResets()
-{
-  if (nbj<=5)
-  {
-    ProbIndivJeuxCurrent[Game_id_PC2]=0;
-    ProbIndivJeuxCurrent[Game_id_TDD]=0;
-    ProbIndivJeuxCurrent[Game_id_AR]=0;
-  }
 }
 
 void NoHonteProbResets()
@@ -209,6 +210,10 @@ void GameMode()
   {
     ClignoteEtSon(Game_Mode,500,200,0);
   }
+  else if(OriginalSel==9)
+  {
+    ClignoteEtSon(OriginalSel,500,200,0);
+  }
   else
   {
     ClignoteEtSon(Game_Mode,500,200,5);
@@ -220,14 +225,16 @@ void GameMode()
 
   if(EnterDemo)
   {
-    
+    DemoMode(AllModes);
+    //Reset joueurhonte après la démo.
+    JoueurHonte=-1;
   }
 }
 
 void AjustementDelaiHonte()
 {
-  DelaiPetiteHonte=90 - nbj * 5;
-  DelaiHonte=160 - nbj * 7;
+  DelaiPetiteHonte=80 - nbj * 5;
+  DelaiHonte=140 - nbj * 7;
 }
 
 void LogSetupParams()

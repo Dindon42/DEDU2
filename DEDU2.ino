@@ -48,6 +48,7 @@ int const NumberOfRoundsForFullProb=12;
 int CountJeux[NbJeux] = {0};
 int TotalNbJeux=0;
 bool NotMoreThanMaxProb=false;
+int GameProb[NbJeux][NbModes]={0};
 int ProbIndivJeuxCurrent[NbJeux];
 int ProbAccumuleeJeux[NbJeux];
 int ProbIndivJeux[NbJeux];
@@ -216,9 +217,6 @@ int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 ////
 
 //One-time setup:
-//Define input/output
-//Set NBJ
-//Set vitesse
 void setup()
 {
   int Pin;
@@ -290,13 +288,13 @@ void setup()
       TestMode();
     }
     
-    //Choix de complexité du jeu.
-    GameMode();
-
     //Debut VITESSE
     // Attend que les joueurs choisissent la vitesse du jeu.
     // 1 = lent, 10 = vite
     Vitesse();
+    
+    //Choix de complexité du jeu.
+    GameMode();
 
     //Toune de DEDU pour initialiser la chose.
     JoueChanson(0,3,false);

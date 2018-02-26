@@ -88,7 +88,6 @@ void Repartiteur()
   LogGameCounts();
 
   //Reset Prob for special conditions
-  LowPlayersProbResets();
   NoHonteProbResets();
 
   

@@ -234,10 +234,27 @@ void LogGameCounts()
     LOG_GENERAL("\n");
   }
 }
+void LogBaseProb(int game_id)
+{
+  LOG_GENERAL("ID:");
+  LOG_GENERAL(game_id);
+  LOG_GENERAL("\t");
+  LogGameName(game_id,false);
+  LOG_GENERAL(" ProbBase:");
+  if (ProbIndivJeux[game_id]<10)
+  {
+    LOG_GENERAL("  ");
+  }
+  else if (ProbIndivJeux[game_id]<100)
+  {
+    LOG_GENERAL(" ");
+  }
+  LOG_GENERAL(ProbIndivJeux[game_id]);
+  LOG_GENERAL("\n");
+}
 
 void LogGameProb(int game_id)
 {
-    #ifdef ENABLE_LOGGING
     LOG_GENERAL("ID:");
     LOG_GENERAL(game_id);
     LOG_GENERAL("\t");
@@ -267,5 +284,4 @@ void LogGameProb(int game_id)
     }
     LOG_GENERAL(ProbAccumuleeJeux[game_id]);
     LOG_GENERAL("\n");
-    #endif
 }
