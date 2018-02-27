@@ -10,30 +10,65 @@ void UpdateCountByType(int jeu)
   CountType[TempType]++;
 }
 
-void LogGameCountsByType()
+void LogTypeName(int type_id)
 {
   //0 GI
   //1 PI
   //2 Eq
   //3 Au
   //4 Ho
-  LOG_GENERAL("0 GI:");
-  LOG_GENERAL(CountType[0]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("1 PI:");
-  LOG_GENERAL(CountType[1]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("2 Eq:");
-  LOG_GENERAL(CountType[2]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("3 Au:");
-  LOG_GENERAL(CountType[3]);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("4 Ho:");
-  LOG_GENERAL(CountType[4]);
-  LOG_GENERAL("\n");
-
+  if(type_id==0)
+  {
+    LOG_GENERAL("GI:");
+  }
+  else if(type_id==1)
+  {
+    LOG_GENERAL("PI:");
+  }
+  else if(type_id==2)
+  {
+    LOG_GENERAL("Eq:");
+  }
+  else if(type_id==3)
+  {
+    LOG_GENERAL("Au:");
+  }
+  else if(type_id==4)
+  {
+    LOG_GENERAL("Ho:");
+  }
+}
+void LogGameCountsByType()
+{
   
+  LOG_GENERAL("COUNTS BY TYPE\n");
+  for(int i=0 ; i<NbGameTypes ; i++)
+  {
+    LOG_GENERAL("Id:");
+    LOG_GENERAL(i);
+    LOG_GENERAL(" ");
+    LogTypeName(i);
+    if(CountType[i]<10)
+    {
+      LOG_GENERAL("   ");
+    }
+    else if(CountType[i]<100)
+    {
+      LOG_GENERAL("  ");
+    }
+    else
+    {
+      LOG_GENERAL(" ");
+    }
+    LOG_GENERAL(CountType[i]);
+    LOG_GENERAL(" -> ");
+    if((float)CountType[i]/(float)TotalNbJeux<10)
+    {
+      LOG_GENERAL(" ");
+    }
+    LOG_GENERAL(100*(float)CountType[i]/(float)TotalNbJeux);
+    LOG_GENERAL("%\n");
+  }
 }
 
 int SelectGame(int r)

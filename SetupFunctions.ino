@@ -38,17 +38,17 @@ void DefineProbJeux()
   //Initialize Prob for the different games under different modes.
   wMode=0;
   //Gagnant Unique
-  GameProb[Game_id_PQP][wMode]=200;
+  GameProb[Game_id_PQP][wMode]=400;
 
   //Perdant Unique
-  GameProb[Game_id_DQP][wMode]=180;
+  GameProb[Game_id_DQP][wMode]=350;
 
   //Honte
   GameProb[Game_id_MH][wMode]=24;
 
   //Autres
-  GameProb[Game_id_TO][wMode]=32;
-  GameProb[Game_id_FFA][wMode]=20;
+  GameProb[Game_id_TO][wMode]=50;
+  GameProb[Game_id_FFA][wMode]=24;
 
   //===================//
   
@@ -199,8 +199,6 @@ void GameMode()
 {
   int Selection;
   int OriginalSel;
-  bool EnterDemo=false;
-  bool AllModes=false;
   
   ActivateGreenLED(100);
   ActivateBlueLED(100);
@@ -250,17 +248,6 @@ void GameMode()
   else
   {
     ClignoteEtSon(Game_Mode,500,200,5);
-  }
-
-  DefineProbJeux();
-  //Ajustement initial des prob pour les jeux.  Quelques cas spéciaux.
-  AjustementProbJeuxInit();
-
-  if(EnterDemo)
-  {
-    DemoMode(AllModes);
-    //Reset joueurhonte après la démo.
-    JoueurHonte=-1;
   }
 }
 

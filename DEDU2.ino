@@ -24,7 +24,7 @@ int const Game_id_FFA=16;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-#define ENABLE_LOGGING
+//#define ENABLE_LOGGING
 
 //Opt Gen
 bool SkipSetup=false;
@@ -43,14 +43,17 @@ bool DoNotShowGameProb=false;
 
 //Opt Mus
 bool MusicMode=false;
+int SelectMusic=-1;
 bool MusicRandFactVit=false;
 
 //SETUP IF SKIPPED:
-int JoueurHonte=-1;
 int nbj=10;
 int vitesse=10;
-int Game_Mode=2;
-int SelectMusic=-1;
+int Game_Mode=0;
+//Demo Mode
+bool EnterDemo=false;
+bool AllModes=false;
+int JoueurHonte=-1;
 //DEBUG END
 
 
@@ -312,12 +315,24 @@ void setup()
     
     //Choix de complexité du jeu.
     GameMode();
-
-    //Toune de DEDU pour initialiser la chose.
-    JoueChanson(0,3,false);
   }
   LogSetupParams();
 
+  DefineProbJeux();
+  //Ajustement initial des prob pour les jeux.  Quelques cas spéciaux.
+  AjustementProbJeuxInit();
+
+  if(EnterDemo)
+  {
+    DemoMode(AllModes);
+    //Reset joueurhonte après la démo.
+    JoueurHonte=-1;
+  }
+  else
+  {
+    //Toune de DEDU pour initialiser la chose.
+    JoueChanson(0,3,false);
+  }
   
   LOG_GENERAL("==============\n");
   LOG_GENERAL("  SETUP END   \n");
