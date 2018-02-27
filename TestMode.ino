@@ -21,9 +21,16 @@ void DemoMode(bool AllModes)
   unsigned long Counter;
   int IndivDelay=2;
   int DelayGame=25;
-  unsigned const long CounterPlaySame=3000/DelayGame;
+  unsigned const long CounterPlaySame=2500/DelayGame;
   int PrevInputState[nbj_max]={LOW};
+  bool Player1Controls=true;
+  int MaxP=nbj;
+  int GameDelay=1000;
 
+  if(Player1Controls)
+  {
+    MaxP=1;
+  }
 
   LOG_GENERAL("==============\n");
   LOG_GENERAL("= DEMO MODE  =\n");
@@ -31,7 +38,7 @@ void DemoMode(bool AllModes)
   //Tone
   SonTestMode();
 
-  delay(1000);
+  delay(GameDelay);
   for(int i=0 ; i<NbJeux;i++)
   {
     //If the game mode is 0, play games that have non-0 Prob
@@ -40,61 +47,73 @@ void DemoMode(bool AllModes)
     if(
       (Game_Mode==0 && ProbIndivJeux[i]!=0) ||
       (Game_Mode > 0 && GameProb[i][Game_Mode]!=0 && GameProb[i][Game_Mode-1]==0 && ProbIndivJeux[i]!=0) ||
-      AllModes && ProbIndivJeux[i]!=0)
+       AllModes && ProbIndivJeux[i]!=0)
     {  
-      do
+      
+      
+      
+      LOG_GENERAL("JEU:");
+      LogGameName(i,true);
+      if (!SkipGame)
       {
-        WaitForAllNonActive(nbj_raw);
-        delay(250);
-        //Demo the game once
-        PlayGame(i);
-  
-        Counter=0;
         do
         {
-          Counter++;
-          GoToNext=false;
-          for(int j=0 ; j<nbj ;j++)
+          WaitForAllNonActive(nbj_raw);
+          delay(GameDelay);
+          //Demo the game once
+          PlayGame(i);
+    
+          Counter=0;
+          do
           {
-            if(ReadPlayerInput(j)==HIGH)
+            Counter++;
+            GoToNext=false;
+            for(int j=0 ; j<MaxP ;j++)
             {
-              if(PrevInputState[j]==LOW)
+              if(ReadPlayerInput(j)==HIGH)
               {
-                Counter=0;
-                LOG_GENERAL("TOGGLE:");
-                LOG_GENERAL(j);
-                LOG_GENERAL("\n");
-                LOG_GENERAL("ReadPlayerInput(j):");
-                LOG_GENERAL(ReadPlayerInput(j));
-                LOG_GENERAL("\n");
-                LOG_GENERAL("PrevInputState[j]:");
-                LOG_GENERAL(PrevInputState[j]);
-                LOG_GENERAL("\n");
-                
-                PrevInputState[j]=HIGH;
-                ToggleOutput(j);
+                if(PrevInputState[j]==LOW)
+                {
+                  Counter=0;
+                  LOG_GENERAL("TOGGLE:");
+                  LOG_GENERAL(j);
+                  LOG_GENERAL("\n");
+                  LOG_GENERAL("ReadPlayerInput(j):");
+                  LOG_GENERAL(ReadPlayerInput(j));
+                  LOG_GENERAL("\n");
+                  LOG_GENERAL("PrevInputState[j]:");
+                  LOG_GENERAL(PrevInputState[j]);
+                  LOG_GENERAL("\n");
+                  
+                  PrevInputState[j]=HIGH;
+                  ToggleOutput(j);
+                }
               }
+              else
+              {
+                PrevInputState[j]=LOW;
+              }
+              delay(IndivDelay);
             }
-            else
+            delay(DelayGame);
+            NumActOut=CheckAllActiveOutputs(nbj_raw);
+            if(NumActOut==MaxP)
             {
-              PrevInputState[j]=LOW;
+              GoToNext=true;
             }
-            delay(IndivDelay);
-          }
-          delay(DelayGame);
-          NumActOut=CheckAllActiveOutputs(nbj_raw);
-          if(NumActOut==nbj)
-          {
-            GoToNext=true;
-          }
+            
+          }while(GoToNext==false && Counter<CounterPlaySame);
           
-        }while(GoToNext==false && Counter<CounterPlaySame);
-        
-        delay(500);
-        TurnOffAllLights();
-        delay(250);
-        
-      }while(GoToNext==false);
+          delay(500);
+          TurnOffAllLights();
+          delay(250);
+          
+        }while(GoToNext==false);
+      }
+      else
+      {
+        SimulateGame(i);
+      }
     }
   }
   LOG_GENERAL("==============\n");

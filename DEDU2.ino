@@ -2,6 +2,8 @@
 #include <avr/pgmspace.h>
 int const NbJeux = 17;
 int const NbModes=3;
+int const NbGameTypes=5;
+//Ordre utilisé pour le mode DÉMO  doit être consécutif de 0 à NbJeux-1.
 int const Game_id_PQP=0;
 int const Game_id_PQR=1;
 int const Game_id_TO=2;
@@ -22,7 +24,7 @@ int const Game_id_FFA=16;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-//#define ENABLE_LOGGING
+#define ENABLE_LOGGING
 
 //Opt Gen
 bool SkipSetup=false;
@@ -55,8 +57,10 @@ int SelectMusic=-1;
 //Prob, Jeux
 int const NumberOfRoundsForFullProb=12;
 int CountJeux[NbJeux] = {0};
+int CountType[NbGameTypes]={0};
 int TotalNbJeux=0;
 bool NotMoreThanMaxProb=false;
+int GameTypes[NbJeux] ={0};
 int GameProb[NbJeux][NbModes]={0};
 int ProbIndivJeuxCurrent[NbJeux];
 int ProbAccumuleeJeux[NbJeux];
@@ -279,6 +283,8 @@ void setup()
     PlayerInputPins[i]=Pin;
   }
 
+  DefineGameTypes();
+  
   //Ajustement du délai pour Honte
   AjustementDelaiHonte();
   

@@ -69,12 +69,13 @@ void Repartiteur()
   {
     PlayGame(Jeu);
   }
-  else if(Jeu==Game_id_MH)
+  else
   {
-    JoueurHonte=random(nbj);
+    SimulateGame(Jeu);
   }
   ResetProbAfterGame(Jeu);
   CountJeux[Jeu]++;
+  UpdateCountByType(Jeu);
   
   if (SkipGame)
   {
@@ -86,6 +87,7 @@ void Repartiteur()
   
   TotalNbJeux++;
   LogGameCounts();
+  LogGameCountsByType();
 
   //Reset Prob for special conditions
   NoHonteProbResets();

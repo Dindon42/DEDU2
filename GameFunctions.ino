@@ -1,3 +1,41 @@
+void UpdateCountByType(int jeu)
+{
+  int TempType=GameTypes[jeu];
+
+  if(TempType>=50)
+  {
+    CountType[4]++;
+    TempType-=50;
+  }
+  CountType[TempType]++;
+}
+
+void LogGameCountsByType()
+{
+  //0 GI
+  //1 PI
+  //2 Eq
+  //3 Au
+  //4 Ho
+  LOG_GENERAL("0 GI:");
+  LOG_GENERAL(CountType[0]);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("1 PI:");
+  LOG_GENERAL(CountType[1]);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("2 Eq:");
+  LOG_GENERAL(CountType[2]);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("3 Au:");
+  LOG_GENERAL(CountType[3]);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("4 Ho:");
+  LOG_GENERAL(CountType[4]);
+  LOG_GENERAL("\n");
+
+  
+}
+
 int SelectGame(int r)
 {
   for(int i=0 ; i<NbJeux ; i++)
@@ -18,6 +56,14 @@ void PrepareGame(int game_id)
     int c=CountJeux[Game_id_JC]%NombreChansons;
     BesoinOrdreChansons(c);
     ChansonPourJeu=OrdreChansons[c];
+  }
+}
+
+void SimulateGame(int game_id)
+{
+  if(game_id==Game_id_MH || game_id==Game_id_TDD || game_id==Game_id_TH)
+  {
+    JoueurHonte=random(nbj);
   }
 }
 

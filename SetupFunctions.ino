@@ -1,3 +1,36 @@
+void DefineGameTypes()
+{
+  //Types
+  //0=Gagnant Individuel
+  GameTypes[Game_id_PQP]=0;
+  GameTypes[Game_id_UC]=0;
+  GameTypes[Game_id_Duel]=0;
+  GameTypes[Game_id_PQR]=0;
+  GameTypes[Game_id_TV]=0;
+   
+  //1=Perdant individuel
+  GameTypes[Game_id_DQP]=1;
+  GameTypes[Game_id_PC]=1;
+  GameTypes[Game_id_DQP2]=1;
+  GameTypes[Game_id_PC2]=1;
+  GameTypes[Game_id_AR]=1;
+  
+  //2=Jeu d'équipe
+  GameTypes[Game_id_MIN]=2;
+  GameTypes[Game_id_JC]=2;
+  
+  //3=Autres
+  GameTypes[Game_id_TO]=3;
+  GameTypes[Game_id_FFA]=3;
+  
+  //51=Perdant indiv et honte
+  GameTypes[Game_id_MH]=51;
+  GameTypes[Game_id_TH]=51;
+  
+  //52=Équipe et honte
+  GameTypes[Game_id_TDD]=52;
+}
+
 void DefineProbJeux()
 {
   int wMode;
