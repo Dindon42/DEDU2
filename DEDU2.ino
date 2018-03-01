@@ -22,6 +22,10 @@ int const Game_id_TDD=14;
 int const Game_id_JC=15;
 int const Game_id_FFA=16;
 
+//=========================\\
+//==         DEDU        ==\\
+//=========================\\
+
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
 //#define ENABLE_LOGGING
@@ -55,7 +59,7 @@ bool EnterDemo=false;
 bool AllModes=false;
 int JoueurHonte=-1;
 //DEBUG END
-
+//=========================\\
 
 //Prob, Jeux
 int NumberOfRoundsForFullProb;
