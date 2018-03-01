@@ -6,8 +6,8 @@
 void PressBattle()
 {
   int Winner=-1;
-  #define GAME_TIME_MIN 1542
-  #define GAME_TIME_MAX 5242
+  #define GAME_TIME_MIN 2542
+  #define GAME_TIME_MAX 8242
   #define SOUND_TIME 500
   #define GAME_DELAY 5
   int Game_Time = (random(GAME_TIME_MIN,GAME_TIME_MAX)/GAME_DELAY);
