@@ -11,7 +11,7 @@ void DeDuel()
   unsigned long ClicCount[2]={0,0};
   int Winner=-1;
   int DeltaClic=0;
-  bool HasReleased[2]={false,false};
+  bool HasReleased[2]={false};
   float Score=50;
   float ScoreFactor=1;
   float ScoreIncrease=0.27;
@@ -179,21 +179,7 @@ void DeDuel()
     
     //UpdateHasReleased
     for (int i=0; i<=1 ;i++)
-    {
-      /*
-      LOG_DEDUEL("\n");
-      LOG_DEDUEL("i:");
-      LOG_DEDUEL(i);
-      LOG_DEDUEL("\n");
-      LOG_DEDUEL("Joueurs[]:");
-      LOG_DEDUEL(Joueurs[i]);
-      LOG_DEDUEL("\n");
-      LOG_DEDUEL("HasReleased[]:");
-      LOG_DEDUEL(HasReleased[i]);
-      LOG_DEDUEL("\n");
-      */
-
-      
+    { 
       if(ReadPlayerInput(Joueurs[i])==LOW && HasReleased[i]==false)
       {
         HasReleased[i]=true;
@@ -258,27 +244,7 @@ void DeDuel()
     
     MusicCounter++;
     ScoreIncCounter++;
-    
-    /*
-    LOG_DEDUEL("GameCounter:");
-    LOG_DEDUEL(GameCounter);
-    LOG_DEDUEL("\n");
-    LOG_DEDUEL("CLIC 0:");
-    LOG_DEDUEL(ClicCount[0]);
-    LOG_DEDUEL("\n");
-    LOG_DEDUEL("CLIC 1:");
-    LOG_DEDUEL(ClicCount[1]);
-    LOG_DEDUEL("\n");
-    LOG_DEDUEL("Delta Clic:");
-    LOG_DEDUEL(DeltaClic);
-    LOG_DEDUEL("\n");
-    LOG_DEDUEL("Score");
-    LOG_DEDUEL(Score);
-    LOG_DEDUEL("\n");
-    LOG_DEDUEL("ScoreFactor:");
-    LOG_DEDUEL(ScoreFactor);
-    LOG_DEDUEL("\n");
-    */
+
   }while(Winner==-1);
 
   DeactivateRedLight(Joueurs[0]);
@@ -1141,32 +1107,6 @@ void JeuChanson(int id_chanson)
     
     LOG_CHANSON("TEMPS ORIGINAL");
     LOG_CHANSON("\n");
-
-    /*
-    for (int n=0; n<NombreNotes; n++)
-    {
-      //WAIT
-      LOG_CHANSON(n);
-      LOG_CHANSON(":  WaitPlayer:");
-      LOG_CHANSON(LeurTemps[0][n]);
-      LOG_CHANSON("  WaitSong:  ");
-      LOG_CHANSON(ChansonMod[2][n]);
-      LOG_CHANSON("  RelativeScore:  ");
-      LOG_CHANSON(RelativeError(LeurTemps[0][n],ChansonMod[2][n]));
-      LOG_CHANSON("\n");
-
-      
-      //PLAY
-      LOG_CHANSON(n);
-      LOG_CHANSON(":  PressPlayer:");
-      LOG_CHANSON(LeurTemps[1][n]);
-      LOG_CHANSON("  PressSong:  ");
-      LOG_CHANSON(ChansonMod[1][n]);
-      LOG_CHANSON("  RelativeScore:  ");
-      LOG_CHANSON(RelativeError(LeurTemps[1][n],ChansonMod[1][n]));
-      LOG_CHANSON("\n");
-    }
-    */
     
     //ResetScore
     Scores[e]=0;
@@ -1521,13 +1461,13 @@ void PatateChaude()
 void AllRandom()
 {
   int Wincondition;
-  int NewAssignment[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+  int NewAssignment[nbj_max]={-1};
   bool NumAlreadyAllocated=false;
   int PosAssigned=0;
   int r;
   int r2;
-  int PreviousState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
-  int LightState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
+  int PreviousState[nbj_max]={LOW};
+  int LightState[nbj_max]={LOW};
   int OutputSum;
   int Looser=-1;
   int DEDUmaster=-1;

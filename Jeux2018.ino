@@ -411,13 +411,13 @@ void TeamDeDuel()
   float ScoreIncrease=0.27;
   unsigned long ScoreIncCounter=0;
   unsigned long ScoreIncreaseIter=750;
-  bool HasReleased[2]={false,false};
-  bool IsPressing[2]={false,false};
+  bool HasReleased[2]={false};
+  bool IsPressing[2]={false};
   int SoundTime=500;
   int Direction = 1;
   int FraudulentTeam;
   int GameDelay=2;
-  int Fails[nbj_max]={0,0,0,0,0,0,0,0,0,0};
+  int Fails[nbj_max]={0};
   int FailsMax=0;
   int NumPlayersMaxFail=0;
   int FailPlayerSequenceId=-1;
