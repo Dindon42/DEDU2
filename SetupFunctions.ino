@@ -1,3 +1,124 @@
+void DefineProbJeux()
+{
+  int wMode;
+  
+  //Initialize Prob for the different games under different modes.
+  wMode=0;
+  //Gagnant Unique
+  GameProb[Game_id_PQP][wMode]=210;
+
+  //Perdant Unique
+  GameProb[Game_id_DQP][wMode]=190;
+
+  //Honte
+  GameProb[Game_id_MH][wMode]=35;
+
+  //Autres
+  GameProb[Game_id_TO][wMode]=50;
+  GameProb[Game_id_FFA][wMode]=40;
+
+  //===================//
+  
+  wMode=1;
+  //Gagnant Unique
+  GameProb[Game_id_PQP][wMode]=120;
+  GameProb[Game_id_UC][wMode]=75;
+  GameProb[Game_id_Duel][wMode]=80;
+  
+  //Perdant Unique
+  GameProb[Game_id_DQP][wMode]=40;
+  GameProb[Game_id_PC][wMode]=90;
+  GameProb[Game_id_DQP2][wMode]=50;
+  
+  //Honte
+  GameProb[Game_id_MH][wMode]=30;
+
+  //Équipe
+  GameProb[Game_id_MIN][wMode]=60;
+  GameProb[Game_id_TDD][wMode]=55;
+  
+  //Autres
+  GameProb[Game_id_TO][wMode]=30;
+  GameProb[Game_id_FFA][wMode]=45;
+
+  //===================//
+  
+  wMode=2;
+  //Gagnant Unique
+  GameProb[Game_id_PQP][wMode]=180;
+  GameProb[Game_id_UC][wMode]=150;
+  GameProb[Game_id_Duel][wMode]=150;
+  GameProb[Game_id_PQR][wMode]=100;
+  GameProb[Game_id_TV][wMode]=100;
+  
+  //Perdant Unique
+  GameProb[Game_id_DQP][wMode]=80;
+  GameProb[Game_id_DQP2][wMode]=80;
+  GameProb[Game_id_PC][wMode]=120;
+  GameProb[Game_id_PC2][wMode]=120;
+  GameProb[Game_id_AR][wMode]=150;
+  
+  //Honte
+  GameProb[Game_id_MH][wMode]=70;
+  GameProb[Game_id_TH][wMode]=90;
+
+  //Équipe
+  GameProb[Game_id_MIN][wMode]=120;
+  GameProb[Game_id_TDD][wMode]=110;
+  GameProb[Game_id_JC][wMode]=110;
+  
+  //Autres
+  GameProb[Game_id_TO][wMode]=60;
+  GameProb[Game_id_FFA][wMode]=84;
+
+  
+  //Initialize all games at 0, then check chosen game mode and act accordingly.
+  for (int i =0 ; i<NbJeux ; i++)
+  {
+    ProbIndivJeux[i]=GameProb[i][Game_Mode];
+  }
+
+  //Ajuster les prob Master de certains jeux si pas assez de joueurs.
+  if (nbj<=5)
+  {
+    ProbIndivJeux[Game_id_PC2]=0;
+    ProbIndivJeux[Game_id_TDD]=0;
+    ProbIndivJeux[Game_id_AR]=0;
+  }
+
+  //Log Prob.
+  for (int i =0 ; i<NbJeux ; i++)
+  {
+    LogBaseProb(i);
+  }
+}
+
+void AjustementProbJeuxInit()
+{
+  for (int i ; i<NbJeux; i++)
+  {
+    ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
+  }
+  //MarqueurHonte initial élevé, FFA 0
+  ProbIndivJeuxCurrent[Game_id_FFA]=0;
+  if(Game_Mode!=0)
+  {
+    ProbIndivJeuxCurrent[Game_id_MH]=424;
+  }
+  //Certains reset particuliers en fonction de la honte.
+  NoHonteProbResets();
+}
+
+void NoHonteProbResets()
+{
+  if(JoueurHonte==-1)
+  {
+    ProbIndivJeuxCurrent[Game_id_Duel]=0;
+    ProbIndivJeuxCurrent[Game_id_TH]=0;
+    ProbIndivJeuxCurrent[Game_id_TDD]=0;
+  }
+}
+
 void DefineGameTypes()
 {
   //Types
@@ -31,123 +152,11 @@ void DefineGameTypes()
   GameTypes[Game_id_TDD]=52;
 }
 
-void DefineProbJeux()
+void AdjustNumRoundsFullProb()
 {
-  int wMode;
-  
-  //Initialize Prob for the different games under different modes.
-  wMode=0;
-  //Gagnant Unique
-  GameProb[Game_id_PQP][wMode]=400;
-
-  //Perdant Unique
-  GameProb[Game_id_DQP][wMode]=350;
-
-  //Honte
-  GameProb[Game_id_MH][wMode]=24;
-
-  //Autres
-  GameProb[Game_id_TO][wMode]=50;
-  GameProb[Game_id_FFA][wMode]=24;
-
-  //===================//
-  
-  wMode=1;
-  //Gagnant Unique
-  GameProb[Game_id_PQP][wMode]=120;
-  GameProb[Game_id_UC][wMode]=75;
-  GameProb[Game_id_Duel][wMode]=75;
-  
-  //Perdant Unique
-  GameProb[Game_id_DQP][wMode]=55;
-  GameProb[Game_id_PC][wMode]=60;
-  GameProb[Game_id_DQP2][wMode]=55;
-  
-  //Honte
-  GameProb[Game_id_MH][wMode]=35;
-
-  //Équipe
-  GameProb[Game_id_MIN][wMode]=60;
-  GameProb[Game_id_TDD][wMode]=55;
-  
-  //Autres
-  GameProb[Game_id_TO][wMode]=30;
-  GameProb[Game_id_FFA][wMode]=42;
-
-  //===================//
-  
-  wMode=2;
-  //Gagnant Unique
-  GameProb[Game_id_PQP][wMode]=90;
-  GameProb[Game_id_UC][wMode]=75;
-  GameProb[Game_id_Duel][wMode]=75;
-  GameProb[Game_id_PQR][wMode]=50;
-  GameProb[Game_id_TV][wMode]=50;
-  
-  //Perdant Unique
-  GameProb[Game_id_DQP][wMode]=55;
-  GameProb[Game_id_PC][wMode]=60;
-  GameProb[Game_id_DQP2][wMode]=55;
-  GameProb[Game_id_PC2][wMode]=60;
-  GameProb[Game_id_AR][wMode]=75;
-  
-  //Honte
-  GameProb[Game_id_MH][wMode]=35;
-  GameProb[Game_id_TH][wMode]=45;
-
-  //Équipe
-  GameProb[Game_id_MIN][wMode]=60;
-  GameProb[Game_id_TDD][wMode]=55;
-  GameProb[Game_id_JC][wMode]=55;
-  
-  //Autres
-  GameProb[Game_id_TO][wMode]=30;
-  GameProb[Game_id_FFA][wMode]=42;
-
-  
-  //Initialize all games at 0, then check chosen game mode and act accordingly.
-  for (int i =0 ; i<NbJeux ; i++)
-  {
-    ProbIndivJeux[i]=GameProb[i][Game_Mode];
-  }
-
-  //Ajuster les prob Master de certains jeux si pas assez de joueurs.
-  if (nbj<=5)
-  {
-    ProbIndivJeux[Game_id_PC2]=0;
-    ProbIndivJeux[Game_id_TDD]=0;
-    ProbIndivJeux[Game_id_AR]=0;
-  }
-
-  //Log Prob.
-  for (int i =0 ; i<NbJeux ; i++)
-  {
-    LogBaseProb(i);
-  }
-}
-
-void AjustementProbJeuxInit()
-{
-  for (int i ; i<NbJeux; i++)
-  {
-    ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
-  }
-  //MarqueurHonte initial élevé, FFA 0
-  ProbIndivJeuxCurrent[Game_id_FFA]=0;
-  ProbIndivJeuxCurrent[Game_id_MH]=242;
-
-  //Certains reset particuliers en fonction de la honte.
-  NoHonteProbResets();
-}
-
-void NoHonteProbResets()
-{
-  if(JoueurHonte==-1)
-  {
-    ProbIndivJeuxCurrent[Game_id_Duel]=0;
-    ProbIndivJeuxCurrent[Game_id_TH]=0;
-    ProbIndivJeuxCurrent[Game_id_TDD]=0;
-  }
+  if(Game_Mode==0)      NumberOfRoundsForFullProb=5;
+  else if(Game_Mode==1) NumberOfRoundsForFullProb=8;
+  else if(Game_Mode==2) NumberOfRoundsForFullProb=12;
 }
 
 void NombreJoueurs()

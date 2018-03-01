@@ -49,7 +49,7 @@ bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int nbj=10;
 int vitesse=10;
-int Game_Mode=0;
+int Game_Mode=2;
 //Demo Mode
 bool EnterDemo=false;
 bool AllModes=false;
@@ -58,7 +58,7 @@ int JoueurHonte=-1;
 
 
 //Prob, Jeux
-int const NumberOfRoundsForFullProb=12;
+int NumberOfRoundsForFullProb;
 int CountJeux[NbJeux] = {0};
 int CountType[NbGameTypes]={0};
 int TotalNbJeux=0;
@@ -238,7 +238,7 @@ void setup()
   int Pin;
   
   #ifdef ENABLE_LOGGING
-    Serial.begin(38400);
+    Serial.begin(500000);
   #endif
 
   LOG_GENERAL("==============\n");
@@ -318,6 +318,8 @@ void setup()
   }
   LogSetupParams();
 
+  AdjustNumRoundsFullProb();
+  
   DefineProbJeux();
   //Ajustement initial des prob pour les jeux.  Quelques cas spéciaux.
   AjustementProbJeuxInit();
@@ -328,7 +330,7 @@ void setup()
     //Reset joueurhonte après la démo.
     JoueurHonte=-1;
   }
-  else
+  else if(!SkipSetup)
   {
     //Toune de DEDU pour initialiser la chose.
     JoueChanson(0,3,false);

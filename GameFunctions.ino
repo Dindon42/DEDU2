@@ -282,7 +282,14 @@ void ResetProbAfterGame(int game_id)
 
 void ResetGameProb(int game_id)
 {
-  ProbIndivJeuxCurrent[game_id]=0;
+  if(Game_Mode==0)
+  {
+    DivideGameProb(game_id,2);
+  }
+  else
+  {
+    ProbIndivJeuxCurrent[game_id]=0;
+  }
 }
 
 void DivideGameProb(int game_id,int divisor)
