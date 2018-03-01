@@ -1528,13 +1528,17 @@ void AllRandom()
   int r2;
   int PreviousState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
   int LightState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
-  int PrevLightState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
   int OutputSum;
   int Looser=-1;
   int DEDUmaster=-1;
-  int DEDUmasterProb=4;
+  int DEDUmasterProb=3;
+  int DEDUmasterChangeProb=6;
+  int DEDUmasterPressCounter=0;
+  int DEDUmasterNextChange=random(1,DEDUmasterChangeProb);
+  bool Toggle;
   long RandomProb=30000;
   long RandomProbThr=29900;
+  
 
   LOG_RANDOM("ALLRANDOM\n");
   
@@ -1550,6 +1554,10 @@ void AllRandom()
     DEDUmaster=random(nbj);
     LOG_RANDOM("DEDUMASTER:");
     LOG_RANDOM(DEDUmaster);
+    LOG_RANDOM("\n");
+    
+    LOG_RANDOM("DEDUmasterNextChange:");
+    LOG_RANDOM(DEDUmasterNextChange);
     LOG_RANDOM("\n");
   }
   
@@ -1599,7 +1607,6 @@ void AllRandom()
     {
       ActivateRedLight(NewAssignment[i]);
       LightState[i]=HIGH;
-      PrevLightState[i]=HIGH;
     }
     LOG_RANDOM("Player:");
     LOG_RANDOM(i);
@@ -1607,37 +1614,17 @@ void AllRandom()
     LOG_RANDOM(NewAssignment[i]);
     LOG_RANDOM("\n");
   }
-
   
-  //WinCondition will be checked by a sum of lightstates.
-
-  if(DEDUmaster==-1)
+  if(random(2)==0)
   {
-    if(random(2)==0)
-    {
-      Wincondition=1;
-      MoveDEDUFlag(0);
-    }
-    else
-    {
-      Wincondition=nbj-1;
-      MoveDEDUFlag(100);
-    }
+    Wincondition=1;
+    MoveDEDUFlag(0);
   }
   else
   {
-    if(ReadPlayerOutput(NewAssignment[DEDUmaster])==LOW)
-    {
-      Wincondition=1;
-      MoveDEDUFlag(0);
-    }
-    else
-    {
-      Wincondition=nbj-1;
-      MoveDEDUFlag(100);
-    }
+    Wincondition=nbj-1;
+    MoveDEDUFlag(100);
   }
-
 
   int d3=500;
   tone(Tone_Pin, 1700,d3);
@@ -1674,26 +1661,47 @@ void AllRandom()
     OutputSum=0;
     for (int i=0 ; i<=nbj_raw ; i++)
     {
-      
+      Toggle=false;
       //IF PLAYER IS HIGH AND PREV IS LOW, Toggle his light
       if (ReadPlayerInput(i)==HIGH && PreviousState[i]==LOW)
       {
+        Toggle=true;
         LightState[i]=ToggleOutput(NewAssignment[i]);
       }
       PreviousState[i]=ReadPlayerInput(i);
       OutputSum+=LightState[i];
 
-      if(i==DEDUmaster)
+      if(i==DEDUmaster && Toggle)
       {
-        if(ReadPlayerOutput(NewAssignment[DEDUmaster])==LOW)
+        LOG_RANDOM("DEDUmasterPressCounter:");
+        LOG_RANDOM(DEDUmasterPressCounter);
+        LOG_RANDOM("\n");
+        if(DEDUmasterPressCounter==DEDUmasterNextChange)
         {
-          Wincondition=1;
-          MoveDEDUFlag(0);
+          LOG_RANDOM("Change FLAG:");
+          LOG_RANDOM("\n");
+          if(Wincondition==1)
+          {
+            Wincondition=nbj-1;
+            MoveDEDUFlag(100);
+          }
+          else
+          {
+            Wincondition=1;
+            MoveDEDUFlag(0);
+          }
+          DEDUmasterNextChange=random(0,DEDUmasterChangeProb);
+          DEDUmasterPressCounter=0;
+          LOG_RANDOM("DEDUmasterPressCounter:");
+          LOG_RANDOM(DEDUmasterPressCounter);
+          LOG_RANDOM("\n");
+          LOG_RANDOM("DEDUmasterNextChange:");
+          LOG_RANDOM(DEDUmasterNextChange);
+          LOG_RANDOM("\n");
         }
         else
         {
-          Wincondition=nbj-1;
-          MoveDEDUFlag(100);
+          DEDUmasterPressCounter++;
         }
       }
     }
@@ -1724,14 +1732,6 @@ void AllRandom()
         }
       }
     }
-    else
-    {
-      for (int i=0 ; i<=nbj_raw ; i++)
-      {
-        PrevLightState[i]=LightState[i];
-      }
-    }
-    
     delay(5);
   }while(Looser==-1);
 
