@@ -1471,8 +1471,8 @@ void AllRandom()
   int OutputSum;
   int Looser=-1;
   int DEDUmaster=-1;
-  int DEDUmasterProb=3;
-  int DEDUmasterChangeProb=6;
+  int DEDUmasterProb=2;
+  int DEDUmasterChangeProb=4;
   int DEDUmasterPressCounter=0;
   int DEDUmasterNextChange=random(1,DEDUmasterChangeProb);
   bool Toggle;
@@ -1489,17 +1489,20 @@ void AllRandom()
   ActivateGreenLED(22);
   delay(1300);
 
-  if((int)random(DEDUmasterProb)==DEDUmasterProb-1)
+  if(random(DEDUmasterProb)==0)
   {
     DEDUmaster=random(nbj);
-    LOG_RANDOM("DEDUMASTER:");
-    LOG_RANDOM(DEDUmaster);
-    LOG_RANDOM("\n");
-    
     LOG_RANDOM("DEDUmasterNextChange:");
     LOG_RANDOM(DEDUmasterNextChange);
     LOG_RANDOM("\n");
+    RandomProbThr=29950;
   }
+  LOG_RANDOM("DEDUMASTER:");
+  LOG_RANDOM(DEDUmaster);
+  LOG_RANDOM("\n");
+  LOG_RANDOM("RandomProbThr:");
+  LOG_RANDOM(RandomProbThr);
+  LOG_RANDOM("\n");
   
   //Initial Lights setup: 50/50 Lit vs Not Lit
   AllocateTwoTeams();
@@ -1566,38 +1569,30 @@ void AllRandom()
     MoveDEDUFlag(100);
   }
 
-  int d3=500;
-  tone(Tone_Pin, 1700,d3);
-  delay(2*d3);
-  tone(Tone_Pin, 1700,d3);
-  delay(2*d3);
-  tone(Tone_Pin, 2800,d3*1.5);
-  delay(d3*1.5);
+  ReadySound(500);
 
   //Main game.
   do
   {
-    //Change win condition randomly
-    if(DEDUmaster==-1)
-    {
-      if(random(RandomProb)>RandomProbThr)
-      { 
-        LOG_RANDOM("Changing WinCond:");
-        if(random(2)==0)
-        {
-          LOG_RANDOM("LOW");
-          Wincondition=1;
-          MoveDEDUFlag(0);
-        }
-        else
-        {
-          LOG_RANDOM("HIGH");
-          Wincondition=nbj-1;
-          MoveDEDUFlag(100);
-        }
-        LOG_RANDOM("\n");
+    //Change win condition randomly regardless of DEDUMASTER
+    if(random(RandomProb)>RandomProbThr)
+    { 
+      LOG_RANDOM("Changing WinCond:");
+      if(random(2)==0)
+      {
+        LOG_RANDOM("LOW");
+        Wincondition=1;
+        MoveDEDUFlag(0);
       }
+      else
+      {
+        LOG_RANDOM("HIGH");
+        Wincondition=nbj-1;
+        MoveDEDUFlag(100);
+      }
+      LOG_RANDOM("\n");
     }
+    
     OutputSum=0;
     for (int i=0 ; i<=nbj_raw ; i++)
     {
