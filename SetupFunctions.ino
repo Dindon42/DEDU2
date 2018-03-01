@@ -253,8 +253,8 @@ void GameMode()
 
 void AjustementDelaiHonte()
 {
-  DelaiPetiteHonte=80 - nbj * 5;
-  DelaiHonte=140 - nbj * 7;
+  DelaiPetiteHonte=90 - nbj * 5;
+  DelaiHonte=158 - nbj * 7;
 }
 
 void LogSetupParams()
