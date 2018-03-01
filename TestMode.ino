@@ -22,7 +22,7 @@ void DemoMode(bool AllModes)
   int IndivDelay=2;
   int DelayGame=25;
   unsigned const long CounterPlaySame=2500/DelayGame;
-  int PrevInputState[nbj_max]={LOW};
+  int PrevInputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
   bool Player1Controls=true;
   int MaxP=nbj;
   int GameDelay=1000;

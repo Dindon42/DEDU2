@@ -13,10 +13,10 @@ void PressBattle()
   int Game_Time = (random(GAME_TIME_MIN,GAME_TIME_MAX)/GAME_DELAY);
   unsigned long Game_Timer=0;
   int ClicCount[nbj_max]={0};
-  int PreviousState[nbj_max]={LOW};
+  int PreviousState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
   int FlagPerc=100;
   bool PlayersTied;
-  int PlayerState[nbj_max]={-1};
+  int PlayerState[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
   int MaxClic;
   int NumPlayersMaxClic;
   int PotentialWinner;
@@ -154,7 +154,7 @@ void PQR()
   int WinCondition=-1;
   int PreviousState[nbj_max];
   int PlayersInGame[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
-  int StateChanges[nbj_max]={0,0,0,0,0,0,0,0,0,0};
+  int StateChanges[nbj_max]={0};
   int ChangeThr=3;
   int PlayersActive;
   bool TriggerEndGame=false;
@@ -529,7 +529,7 @@ void TeamDeDuel()
   int LightDelay=350;
   int ForLightDelay=13;
   int Winner=-1;
-  unsigned int Count[2]={0,0};
+  unsigned int Count[2]={0};
   float FactorTeamSize[2]={1,1};
   float BigTeamFactor=1.03;
   int Player[2];

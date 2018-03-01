@@ -1461,13 +1461,13 @@ void PatateChaude()
 void AllRandom()
 {
   int Wincondition;
-  int NewAssignment[nbj_max]={-1};
+  int NewAssignment[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
   bool NumAlreadyAllocated=false;
   int PosAssigned=0;
   int r;
   int r2;
-  int PreviousState[nbj_max]={LOW};
-  int LightState[nbj_max]={LOW};
+  int PreviousState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
+  int LightState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
   int OutputSum;
   int Looser=-1;
   int DEDUmaster=-1;
