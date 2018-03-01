@@ -32,12 +32,12 @@ int const Game_id_FFA=17;
 //#define ENABLE_LOGGING
 
 //Opt Gen
-bool SkipSetup=true;
+bool SkipSetup=false;
 bool nosound=false;
 bool SkipLights=false;
 
 //Opt Game
-bool ExclusiveGame=true;
+bool ExclusiveGame=false;
 int ExclusiveGame_ID=Game_id_AR;
 
 //Opt Repartiteur
