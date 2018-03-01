@@ -1,4 +1,134 @@
 #ifdef ENABLE_LOGGING
+  #define LOG_PB(a) LOG_GAME(Game_id_PB,a)
+#else
+  #define LOG_PB(a)
+#endif
+void PressBattle()
+{
+  int Winner=-1;
+  #define GAME_TIME_MIN 1542
+  #define GAME_TIME_MAX 5242
+  #define SOUND_TIME 500
+  #define GAME_DELAY 5
+  int Game_Time = (random(GAME_TIME_MIN,GAME_TIME_MAX)/GAME_DELAY);
+  unsigned long Game_Timer=0;
+  int ClicCount[nbj_max]={0};
+  int PreviousState[nbj_max]={LOW};
+  int FlagPerc=100;
+  bool PlayersTied;
+  int PlayerState[nbj_max]={-1};
+  int MaxClic;
+  int NumPlayersMaxClic;
+  int PotentialWinner;
+  
+  LOG_PB("PRESS BATTLE!\n");
+  LOG_PB("Game_Time:");
+  LOG_PB(Game_Time);
+  LOG_PB("\n");
+  
+  WaitForAllNonActive(nbj_raw_max);
+  
+  //LIGHT SETUP
+  MoveDEDUFlag(FlagPerc);
+  delay(500);
+  for (int i=0; i<2 ; i++)
+  {
+    TurnOnAllRedLights();
+    delay(300);
+    TurnOffAllRedLights();
+    delay(300);
+  }
+  ReadySound(SOUND_TIME);
+  
+  //Prepare
+  for(int i=0 ; i<nbj ; i++)
+  {
+    PlayerState[i]=0;
+  }
+
+  //MAIN GAME
+  do
+  {
+    if(Game_Timer<Game_Time)
+    {
+      Game_Timer++;
+      FlagPerc=(float)(Game_Time-Game_Timer)/(float)Game_Time*100; 
+    }
+    else
+    {
+      FlagPerc=0;
+    }   
+    MoveDEDUFlag(FlagPerc);
+
+    for (int i=0 ; i<nbj ; i++)
+    {
+      if(PreviousState[i]==LOW && ReadPlayerInput(i)==HIGH)
+      {
+        ClicCount[i]++;
+        LOG_PB("i:");
+        LOG_PB(i);
+        LOG_PB("  count:");
+        LOG_PB(ClicCount[i]);
+        LOG_PB("\n");
+      }
+      PreviousState[i]=ReadPlayerInput(i);
+    }
+
+    //Check who's in front
+    PlayersTied=false;
+    MaxClic=0;
+    NumPlayersMaxClic=0;
+    PotentialWinner=-1;
+    //First Check What's the max number of clics.
+    for (int i=0 ; i<nbj ; i++)
+    {
+      if(ClicCount[i]>MaxClic)
+      {
+        MaxClic=ClicCount[i];
+      }
+    }
+    //Then identify players that have the max cliccount.
+    for (int i=0 ; i<nbj ; i++)
+    {
+      if(ClicCount[i]==MaxClic)
+      {
+        if(PotentialWinner!=-1)
+        {
+          PlayersTied=true;
+        }
+        PotentialWinner=i;
+        ActivateRedLight(i);
+      }
+      else
+      {
+        DeactivateRedLight(i);
+      }
+    }
+    
+    //Check Win Condition if Game Timer is greater than Game_Time and no ties and a potential winner;
+    if(Game_Timer>=Game_Time && !PlayersTied && PotentialWinner!=-1)
+    {
+      Winner=PotentialWinner;
+    }
+    
+    delay(GAME_DELAY);
+  }while(Winner==-1);
+  
+  //WINNER
+  delay(500);
+
+  TurnOffAllLights();
+
+  //Identify winner
+  WinnerSoundAndLight(Winner);
+  
+  //Reset
+  delay(700);
+  MoveDEDUFlag(0);
+  TurnOffAllLights();
+}
+
+#ifdef ENABLE_LOGGING
   #define LOG_PQR(a) LOG_GAME(Game_id_PQR,a)
 #else
   #define LOG_PQR(a)

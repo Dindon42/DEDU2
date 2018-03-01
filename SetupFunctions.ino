@@ -24,6 +24,7 @@ void DefineProbJeux()
   GameProb[Game_id_PQP][wMode]=120;
   GameProb[Game_id_UC][wMode]=75;
   GameProb[Game_id_Duel][wMode]=80;
+  GameProb[Game_id_PB][wMode]=80;
   
   //Perdant Unique
   GameProb[Game_id_DQP][wMode]=40;
@@ -48,6 +49,7 @@ void DefineProbJeux()
   GameProb[Game_id_PQP][wMode]=180;
   GameProb[Game_id_UC][wMode]=150;
   GameProb[Game_id_Duel][wMode]=150;
+  GameProb[Game_id_PB][wMode]=120;
   GameProb[Game_id_PQR][wMode]=100;
   GameProb[Game_id_TV][wMode]=100;
   
@@ -128,6 +130,7 @@ void DefineGameTypes()
   GameTypes[Game_id_Duel]=0;
   GameTypes[Game_id_PQR]=0;
   GameTypes[Game_id_TV]=0;
+  GameTypes[Game_id_PB]=0;
    
   //1=Perdant individuel
   GameTypes[Game_id_DQP]=1;

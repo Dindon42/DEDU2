@@ -172,6 +172,10 @@ void PlayGame(int game_id)
   {
     PQR();
   }
+  else if (game_id==Game_id_PB)
+  {
+    PressBattle();
+  }
   
 }
 
@@ -244,6 +248,10 @@ void LogGameName(int game_id, bool NewLine)
   else if (game_id==Game_id_PQR)
   {
     LOG_GENERAL("PQR         ");
+  }
+  else if (game_id==Game_id_PB)
+  {
+    LOG_GENERAL("PressBatt   ");
   }
   if(NewLine) LOG_GENERAL("\n");
 }
