@@ -1487,7 +1487,6 @@ void AllRandom()
   
   ActivateBlueLED(10);
   ActivateGreenLED(22);
-  delay(1300);
 
   if(random(DEDUmasterProb)==0)
   {
@@ -1558,6 +1557,7 @@ void AllRandom()
     LOG_RANDOM("\n");
   }
   
+  delay(800);
   if(random(2)==0)
   {
     Wincondition=1;
@@ -1569,6 +1569,7 @@ void AllRandom()
     MoveDEDUFlag(100);
   }
 
+  delay(800);
   ReadySound(500);
 
   //Main game.
