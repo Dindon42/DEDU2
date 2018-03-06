@@ -1,4 +1,138 @@
 #ifdef ENABLE_LOGGING
+  #define LOG_PPV(a) LOG_GAME(Game_id_PPV,a)
+#else
+  #define LOG_PPV(a)
+#endif
+void PPV()
+{
+  int Winner=-1;
+  int WinNumPress=8;
+  unsigned long Game_Timer=0;
+  unsigned long PreviousTotalPressTime[nbj_max]={0};
+  unsigned long PressTime[nbj_max]={0};
+  unsigned long TotalPressTime;
+  int NumPress[nbj_max]={0};
+  bool RecordPress;
+  int MinimumDiff=25;
+  #define LIGHTDELAY 15
+  int PreviousState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
+  int CurrentState;
+
+  //Lights: Crossover from blue to green, then all RED.
+  WaitForAllNonActive(nbj_raw_max);
+
+  for(int i=0; i<=100 ; i++)
+  {
+    ControlAllLights(false,100-i,i);
+    delay(LIGHTDELAY);
+  }
+
+  delay(1000);
+  ControlAllLights(true,0,0);
+  ReadySound(500);
+  
+  //MAIN GAME
+  do
+  {
+    for (int i=0 ; i<nbj ; i++)
+    {
+      CurrentState=ReadPlayerInput(i);
+      //Record the START PRESS TIMER on trans from LOW to HIGH
+      if(PreviousState[i]==LOW && CurrentState==HIGH)
+      {
+        PressTime[i]=Game_Timer;
+        LOG_PPV("i:");
+        LOG_PPV(i);
+        LOG_PPV(" PressTime[i]");
+        LOG_PPV(PressTime[i]);
+        LOG_PPV("\n");
+      }
+      //Record the END PRESS TIMER on trans from HIGH to LOW
+      else if(PreviousState[i]==HIGH && CurrentState==LOW)
+      {
+        RecordPress=true;
+        TotalPressTime=Game_Timer-PressTime[i];
+
+        
+        LOG_PPV("i:");
+        LOG_PPV(i);
+        LOG_PPV(" TotalPressTime:");
+        LOG_PPV(TotalPressTime);
+        LOG_PPV("\n");
+        
+        if(NumPress[i]!=0)
+        {
+          //Reset Sequence if this press time is greater than the previous
+          if(TotalPressTime+MinimumDiff>=PreviousTotalPressTime[i])
+          {
+            
+            LOG_PPV("i:");
+            LOG_PPV(i);
+            LOG_PPV(" ResetSeq:");
+            LOG_PPV(TotalPressTime);
+            LOG_PPV(" vs ");
+            LOG_PPV(PreviousTotalPressTime[i]);
+            LOG_PPV("\n");
+            
+            RecordPress=false;
+            NumPress[i]=0;
+          }
+        }
+        
+        if(RecordPress)
+        {
+          LOG_PPV("i:");
+          LOG_PPV(i);
+          LOG_PPV(" RecordPress:");
+          LOG_PPV(NumPress[i]);
+          LOG_PPV("\n");
+          PreviousTotalPressTime[i]=TotalPressTime;
+          NumPress[i]++;
+        }
+      }
+      PreviousState[i]=CurrentState;
+
+      
+      //Update Light State
+      if(NumPress[i]==0)
+      {
+        ActivateRedLight(i);
+      }
+      else
+      {
+        DeactivateRedLight(i);
+      }
+      
+      //Update Winner
+      if(NumPress[i]>=WinNumPress)
+      {
+        Winner=i;
+        LOG_PPV("i:");
+        LOG_PPV(i);
+        LOG_PPV(" WINNER FOUND:");
+        LOG_PPV(Winner);
+        LOG_PPV("\n");
+      }
+    }
+    
+    //Increment GameTime
+    delay(1);
+    Game_Timer++;
+    
+  }while(Winner==-1);
+
+  
+  TurnOffAllLights();
+  
+  delay(500);
+
+  //Identify winner
+  WinnerSoundAndLight(Winner);
+  
+}
+
+
+#ifdef ENABLE_LOGGING
   #define LOG_PB(a) LOG_GAME(Game_id_PB,a)
 #else
   #define LOG_PB(a)

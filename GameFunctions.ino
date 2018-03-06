@@ -176,6 +176,10 @@ void PlayGame(int game_id)
   {
     PressBattle();
   }
+  else if (game_id==Game_id_PPV)
+  {
+    PPV();
+  }
   
 }
 
@@ -252,6 +256,10 @@ void LogGameName(int game_id, bool NewLine)
   else if (game_id==Game_id_PB)
   {
     LOG_GENERAL("PressBatt   ");
+  }
+  else if (game_id==Game_id_PPV)
+  {
+    LOG_GENERAL("PPV         ");
   }
   if(NewLine) LOG_GENERAL("\n");
 }
