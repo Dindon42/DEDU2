@@ -60,9 +60,13 @@ void DemoMode(bool AllModes)
         {
           WaitForAllNonActive(nbj_raw);
           delay(GameDelay);
+          
           //Demo the game once
           PlayGame(i);
-    
+
+          WaitForAllNonActive(nbj_raw);
+          delay(120);
+          
           Counter=0;
           do
           {
@@ -96,7 +100,9 @@ void DemoMode(bool AllModes)
               delay(IndivDelay);
             }
             delay(DelayGame);
+            
             NumActOut=CheckAllActiveOutputs(nbj_raw);
+            
             if(NumActOut==MaxP)
             {
               GoToNext=true;

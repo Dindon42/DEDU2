@@ -3,47 +3,43 @@ void DefineProbJeux()
   int wMode;
   
   //Initialize Prob for the different games under different modes.
-  wMode=0;
-  //Gagnant Unique
-  GameProb[Game_id_PQP][wMode]=210;
-
-  //Perdant Unique
-  GameProb[Game_id_DQP][wMode]=190;
-
-  //Honte
-  GameProb[Game_id_MH][wMode]=35;
-
-  //Autres
-  GameProb[Game_id_TO][wMode]=50;
-  GameProb[Game_id_FFA][wMode]=40;
-
+  
   //===================//
   
-  wMode=1;
+  //Mode EXPÉRIMENTAL.  Les nouveaux jeux passent par ici.
+  wMode=3;
   //Gagnant Unique
   GameProb[Game_id_PQP][wMode]=120;
-  GameProb[Game_id_UC][wMode]=75;
-  GameProb[Game_id_Duel][wMode]=80;
-  GameProb[Game_id_PB][wMode]=80;
+  GameProb[Game_id_UC][wMode]=120;
+  GameProb[Game_id_Duel][wMode]=120;
+  GameProb[Game_id_PB][wMode]=120;
+  GameProb[Game_id_PQR][wMode]=120;
+  GameProb[Game_id_TV][wMode]=120;
+  GameProb[Game_id_PPV][wMode]=120;
   
   //Perdant Unique
-  GameProb[Game_id_DQP][wMode]=40;
-  GameProb[Game_id_PC][wMode]=90;
-  GameProb[Game_id_DQP2][wMode]=50;
+  GameProb[Game_id_DQP][wMode]=120;
+  GameProb[Game_id_DQP2][wMode]=120;
+  GameProb[Game_id_PC][wMode]=120;
+  GameProb[Game_id_PC2][wMode]=120;
+  GameProb[Game_id_AR][wMode]=150;
   
   //Honte
-  GameProb[Game_id_MH][wMode]=30;
+  GameProb[Game_id_MH][wMode]=70;
+  GameProb[Game_id_TH][wMode]=90;
 
   //Équipe
-  GameProb[Game_id_MIN][wMode]=60;
-  GameProb[Game_id_TDD][wMode]=55;
+  GameProb[Game_id_MIN][wMode]=120;
+  GameProb[Game_id_TDD][wMode]=110;
+  GameProb[Game_id_JC][wMode]=110;
   
   //Autres
-  GameProb[Game_id_TO][wMode]=30;
-  GameProb[Game_id_FFA][wMode]=45;
+  GameProb[Game_id_TO][wMode]=60;
+  GameProb[Game_id_FFA][wMode]=84;
 
   //===================//
   
+  //Mode le plus avancé. Avec qualité démontrée.
   wMode=2;
   //Gagnant Unique
   GameProb[Game_id_PQP][wMode]=180;
@@ -72,9 +68,53 @@ void DefineProbJeux()
   //Autres
   GameProb[Game_id_TO][wMode]=60;
   GameProb[Game_id_FFA][wMode]=84;
-
   
-  //Initialize all games at 0, then check chosen game mode and act accordingly.
+  //===================//
+  
+  //Mode plus avancé, mais pas trop complexe.
+  wMode=1;
+  //Gagnant Unique
+  GameProb[Game_id_PQP][wMode]=120;
+  GameProb[Game_id_UC][wMode]=75;
+  GameProb[Game_id_Duel][wMode]=80;
+  GameProb[Game_id_PB][wMode]=80;
+  
+  //Perdant Unique
+  GameProb[Game_id_DQP][wMode]=40;
+  GameProb[Game_id_PC][wMode]=90;
+  GameProb[Game_id_DQP2][wMode]=50;
+  
+  //Honte
+  GameProb[Game_id_MH][wMode]=30;
+
+  //Équipe
+  GameProb[Game_id_MIN][wMode]=60;
+  GameProb[Game_id_TDD][wMode]=55;
+  
+  //Autres
+  GameProb[Game_id_TO][wMode]=30;
+  GameProb[Game_id_FFA][wMode]=45;
+
+  //===================//
+  
+  //ORIGINAL DEDU D'ERIC
+  wMode=0;
+  //Gagnant Unique
+  GameProb[Game_id_PQP][wMode]=210;
+
+  //Perdant Unique
+  GameProb[Game_id_DQP][wMode]=190;
+
+  //Honte
+  GameProb[Game_id_MH][wMode]=35;
+
+  //Autres
+  GameProb[Game_id_TO][wMode]=50;
+  GameProb[Game_id_FFA][wMode]=40;
+  
+  //===================//
+  
+  //Initialization des Prob de base des jeux en fn du mode sélectionné.
   for (int i =0 ; i<NbJeux ; i++)
   {
     ProbIndivJeux[i]=GameProb[i][Game_Mode];
@@ -232,18 +272,14 @@ void GameMode()
   //Check for DEMO mode.
   if (Selection>4)
   {
-    if(Selection==9)
-    {
-      AllModes=true;
-    }
     Selection-=5;
     EnterDemo=true;
   }
 
   //Now check game mode.
-  if (Selection>2 && Selection<5)
+  if (Selection>NbModes-1 && Selection<5)
   {
-    Game_Mode=2;
+    Game_Mode=NbModes-1;
   }
   else
   {
@@ -254,14 +290,21 @@ void GameMode()
   {
     ClignoteEtSon(Game_Mode,500,200,0);
   }
-  else if(OriginalSel==9)
-  {
-    ClignoteEtSon(OriginalSel,500,200,0);
-  }
   else
   {
     ClignoteEtSon(Game_Mode,500,200,5);
   }
+
+  if(EnterDemo)
+  {
+    delay(750);
+    if(ReadPlayerInput(OriginalSel)==HIGH)
+    {
+      AllModes=true;
+      ClignoteEtSon(Game_Mode,500,200,5);
+    }
+  }
+  
 }
 
 void AjustementDelaiHonte()

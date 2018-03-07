@@ -123,12 +123,15 @@ void PPV()
 
   
   TurnOffAllLights();
-  
   delay(500);
 
   //Identify winner
   WinnerSoundAndLight(Winner);
-  
+
+  //Reset
+  delay(700);
+  TurnOffAllLights();
+  delay(25);
 }
 
 
@@ -260,6 +263,7 @@ void PressBattle()
   delay(700);
   MoveDEDUFlag(0);
   TurnOffAllLights();
+  delay(25);
 }
 
 #ifdef ENABLE_LOGGING
@@ -488,6 +492,7 @@ void PQR()
   WinnerSoundAndLight(Winner);
   delay(700);
   TurnOffAllLights();
+  delay(25);
 }
 
 #ifdef ENABLE_LOGGING
@@ -651,6 +656,7 @@ void TourVic()
   //Low intensity
   delay(700);
   TurnOffAllLights();
+  delay(25);
 }
 
 #ifdef ENABLE_LOGGING
