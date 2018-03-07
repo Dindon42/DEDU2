@@ -46,17 +46,16 @@ void DefineProbJeux()
   
   wMode=2;
   //Gagnant Unique
-  GameProb[Game_id_PQP][wMode]=150;
+  GameProb[Game_id_PQP][wMode]=180;
   GameProb[Game_id_UC][wMode]=150;
   GameProb[Game_id_Duel][wMode]=150;
-  GameProb[Game_id_PB][wMode]=100;
+  GameProb[Game_id_PB][wMode]=120;
   GameProb[Game_id_PQR][wMode]=100;
   GameProb[Game_id_TV][wMode]=100;
-  GameProb[Game_id_PPV][wMode]=100;
   
   //Perdant Unique
-  GameProb[Game_id_DQP][wMode]=120;
-  GameProb[Game_id_DQP2][wMode]=120;
+  GameProb[Game_id_DQP][wMode]=80;
+  GameProb[Game_id_DQP2][wMode]=80;
   GameProb[Game_id_PC][wMode]=120;
   GameProb[Game_id_PC2][wMode]=120;
   GameProb[Game_id_AR][wMode]=150;
