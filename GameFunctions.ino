@@ -180,7 +180,6 @@ void PlayGame(int game_id)
   {
     PPV();
   }
-  
 }
 
 void LogGameName(int game_id, bool NewLine)
