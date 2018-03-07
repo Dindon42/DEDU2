@@ -55,7 +55,7 @@ bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int nbj=10;
 int vitesse=10;
-int Game_Mode=2;
+int Game_Mode=3;
 //Demo Mode
 bool EnterDemo=false;
 bool AllModes=false;
@@ -64,7 +64,7 @@ int JoueurHonte=-1;
 //=========================\\
 
 //Prob, Jeux
-int NumberOfRoundsForFullProb;
+int NumberOfRoundsForFullProb=4;
 int CountJeux[NbJeux]={0};
 int CountType[NbGameTypes]={0};
 int TotalNbJeux=0;

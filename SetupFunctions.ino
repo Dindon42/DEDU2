@@ -201,6 +201,8 @@ void AdjustNumRoundsFullProb()
   if(Game_Mode==0)      NumberOfRoundsForFullProb=5;
   else if(Game_Mode==1) NumberOfRoundsForFullProb=8;
   else if(Game_Mode==2) NumberOfRoundsForFullProb=12;
+  else if(Game_Mode==3) NumberOfRoundsForFullProb=12;
+  else NumberOfRoundsForFullProb=4;
 }
 
 void NombreJoueurs()
