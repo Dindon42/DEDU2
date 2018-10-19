@@ -1,7 +1,7 @@
 #include <Servo.h>
 #include <avr/pgmspace.h>
 int const NbJeux = 19;
-int const NbModes=4;
+int const NbModes=3;
 int const NbGameTypes=5;
 //Ordre utilisé pour le mode DÉMO  doit être consécutif de 0 à NbJeux-1.
 int const Game_id_PQP=0;
@@ -55,7 +55,7 @@ bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int nbj=10;
 int vitesse=10;
-int Game_Mode=3;
+int Game_Mode=2;
 //Demo Mode
 bool EnterDemo=false;
 bool AllModes=false;

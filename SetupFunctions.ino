@@ -3,71 +3,23 @@ void DefineProbJeux()
   int wMode;
   
   //Initialize Prob for the different games under different modes.
-  
-  //===================//
-  
-  //Mode EXPÉRIMENTAL.  Les nouveaux jeux passent par ici.
-  wMode=3;
-  //Gagnant Unique
-  GameProb[Game_id_PQP][wMode]=120;
-  GameProb[Game_id_UC][wMode]=120;
-  GameProb[Game_id_Duel][wMode]=120;
-  GameProb[Game_id_PB][wMode]=120;
-  GameProb[Game_id_PQR][wMode]=120;
-  GameProb[Game_id_TV][wMode]=120;
-  GameProb[Game_id_PPV][wMode]=120;
-  
-  //Perdant Unique
-  GameProb[Game_id_DQP][wMode]=120;
-  GameProb[Game_id_DQP2][wMode]=120;
-  GameProb[Game_id_PC][wMode]=120;
-  GameProb[Game_id_PC2][wMode]=120;
-  GameProb[Game_id_AR][wMode]=150;
-  
-  //Honte
-  GameProb[Game_id_MH][wMode]=70;
-  GameProb[Game_id_TH][wMode]=90;
-
-  //Équipe
-  GameProb[Game_id_MIN][wMode]=120;
-  GameProb[Game_id_TDD][wMode]=110;
-  GameProb[Game_id_JC][wMode]=110;
-  
-  //Autres
-  GameProb[Game_id_TO][wMode]=60;
-  GameProb[Game_id_FFA][wMode]=84;
 
   //===================//
   
-  //Mode le plus avancé. Avec qualité démontrée.
-  wMode=2;
+  //ORIGINAL DEDU D'ERIC - 5 jeux
+  wMode=0;
   //Gagnant Unique
-  GameProb[Game_id_PQP][wMode]=180;
-  GameProb[Game_id_UC][wMode]=150;
-  GameProb[Game_id_Duel][wMode]=150;
-  GameProb[Game_id_PB][wMode]=120;
-  GameProb[Game_id_PQR][wMode]=100;
-  GameProb[Game_id_TV][wMode]=100;
-  
-  //Perdant Unique
-  GameProb[Game_id_DQP][wMode]=80;
-  GameProb[Game_id_DQP2][wMode]=80;
-  GameProb[Game_id_PC][wMode]=120;
-  GameProb[Game_id_PC2][wMode]=120;
-  GameProb[Game_id_AR][wMode]=150;
-  
-  //Honte
-  GameProb[Game_id_MH][wMode]=70;
-  GameProb[Game_id_TH][wMode]=90;
+  GameProb[Game_id_PQP][wMode]=210;
 
-  //Équipe
-  GameProb[Game_id_MIN][wMode]=120;
-  GameProb[Game_id_TDD][wMode]=110;
-  GameProb[Game_id_JC][wMode]=110;
-  
+  //Perdant Unique
+  GameProb[Game_id_DQP][wMode]=190;
+
+  //Honte
+  GameProb[Game_id_MH][wMode]=35;
+
   //Autres
-  GameProb[Game_id_TO][wMode]=60;
-  GameProb[Game_id_FFA][wMode]=84;
+  GameProb[Game_id_TO][wMode]=50;
+  GameProb[Game_id_FFA][wMode]=40;
   
   //===================//
   
@@ -94,23 +46,51 @@ void DefineProbJeux()
   //Autres
   GameProb[Game_id_TO][wMode]=30;
   GameProb[Game_id_FFA][wMode]=45;
-
+    
   //===================//
   
-  //ORIGINAL DEDU D'ERIC
-  wMode=0;
+  //Mode le plus avancé. Avec qualité démontrée.
+  wMode=2;
   //Gagnant Unique
-  GameProb[Game_id_PQP][wMode]=210;
-
+  GameProb[Game_id_PQP][wMode]=180;
+  GameProb[Game_id_UC][wMode]=150;
+  GameProb[Game_id_Duel][wMode]=150;
+  GameProb[Game_id_PB][wMode]=80;
+  GameProb[Game_id_PQR][wMode]=100;
+  GameProb[Game_id_TV][wMode]=100;
+  GameProb[Game_id_PPV][wMode]=100;
+  
   //Perdant Unique
-  GameProb[Game_id_DQP][wMode]=190;
-
+  GameProb[Game_id_DQP][wMode]=80;
+  GameProb[Game_id_DQP2][wMode]=80;
+  GameProb[Game_id_PC][wMode]=120;
+  GameProb[Game_id_PC2][wMode]=120;
+  GameProb[Game_id_AR][wMode]=150;
+  
   //Honte
-  GameProb[Game_id_MH][wMode]=35;
+  GameProb[Game_id_MH][wMode]=70;
+  GameProb[Game_id_TH][wMode]=90;
 
+  //Équipe
+  GameProb[Game_id_MIN][wMode]=120;
+  GameProb[Game_id_TDD][wMode]=110;
+  GameProb[Game_id_JC][wMode]=110;
+  
   //Autres
-  GameProb[Game_id_TO][wMode]=50;
-  GameProb[Game_id_FFA][wMode]=40;
+  GameProb[Game_id_TO][wMode]=0;
+  GameProb[Game_id_FFA][wMode]=84;
+  //===================//
+  
+  //Mode EXPÉRIMENTAL.  Les nouveaux jeux passent par ici.
+  //wMode=3;
+
+  //Set Game Probs to previous mode.
+  //for (int i=0 ; i<NbJeux ; i++)
+  //{
+  //  GameProb[i][wMode]=GameProb[i][wMode-1];
+  //}
+  //Add experimental modes here:
+  //GameProb[Game_id_PPV][wMode]=120;
   
   //===================//
   
