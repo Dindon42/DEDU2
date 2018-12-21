@@ -526,6 +526,7 @@ void TourVic()
     DirectionNextPlayer=-1;
   }
   CurrentPlayer=WrapAround(LastPlayer+DirectionNextPlayer);
+  
   LOG_TOURVIC("CurrentPlayer:");
   LOG_TOURVIC(CurrentPlayer);
   LOG_TOURVIC("\n");
@@ -535,6 +536,7 @@ void TourVic()
   LOG_TOURVIC("DirectionNextPlayer:");
   LOG_TOURVIC(DirectionNextPlayer);
   LOG_TOURVIC("\n");
+  
   //Tout vert pour commencer+Une Lumière
   ActivateRedLight(CurrentPlayer);
   ActivateGreenLED(20);
