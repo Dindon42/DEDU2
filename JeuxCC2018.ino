@@ -15,6 +15,9 @@ void JeanDit()
   //À chaque fois que Jean change le DEDU d'état, laisser un temps de réaction.
   //Éliminer le dernier à changer d'état.
   //Donner un temps minimum à Jean pour faire son action.  Graduellement réduire les lumières Vert/Bleu pendant ce temps d'attente.
+
+  //Signature lumineuse/sonore
+
   
   do
   {
