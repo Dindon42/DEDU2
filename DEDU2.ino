@@ -31,12 +31,12 @@ int const Game_id_FFA=19;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-//#define ENABLE_LOGGING
+#define ENABLE_LOGGING
 
 //Opt Gen
-bool SkipSetup=false;
-bool nosound=false;
-bool SkipLights=false;
+bool SkipSetup=true;
+bool nosound=true;
+bool SkipLights=true;
 
 //Opt Game
 bool ExclusiveGame=true;
