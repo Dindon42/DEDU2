@@ -82,7 +82,7 @@ void JeanDit()
     {
       ActivateGreenLED((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2);
       CounterDisableJean++;
-      if(CounterDisableJean>MaxCounterDisableJean || (int)(CounterDisableJean*DisableJeanLightFactor)>98)
+      if(CounterDisableJean>MaxCounterDisableJean || (int)(CounterDisableJean*DisableJeanLightFactor)>99)
       {
         DisableJean=false;
         CounterDisableJean=0;
