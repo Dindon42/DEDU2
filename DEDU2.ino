@@ -39,8 +39,8 @@ bool nosound=false;
 bool SkipLights=false;
 
 //Opt Game
-bool ExclusiveGame=false;
-int ExclusiveGame_ID=Game_id_PPV;
+bool ExclusiveGame=true;
+int ExclusiveGame_ID=Game_id_JD;
 
 //Opt Repartiteur
 bool SkipFraudeur=false;
@@ -56,7 +56,7 @@ bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int nbj=10;
 int vitesse=10;
-int Game_Mode=2;
+int Game_Mode=3;
 //Demo Mode
 bool EnterDemo=false;
 bool AllModes=false;
