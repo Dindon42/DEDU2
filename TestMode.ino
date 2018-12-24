@@ -13,7 +13,7 @@ void TestMode()
     delay(1);
     if(NumAct!=PrevNumAct)
     {
-      tone(200*NumAct,200);
+      tone(200*NumAct+500,200);
     }
     ActivateGreenLED((100/nbj_raw_max)*(nbj_raw_max-NumAct));
     ActivateBlueLED((100/nbj_raw_max)*(NumAct));
