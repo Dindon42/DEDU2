@@ -180,6 +180,10 @@ void PlayGame(int game_id)
   {
     PPV();
   }
+  else if (game_id==Game_id_JD)
+  {
+    JeanDit();
+  }
 }
 
 void LogGameName(int game_id, bool NewLine)
@@ -259,6 +263,10 @@ void LogGameName(int game_id, bool NewLine)
   else if (game_id==Game_id_PPV)
   {
     LOG_GENERAL("PPV         ");
+  }
+  else if (game_id==Game_id_JD)
+  {
+    LOG_GENERAL("JeanDit     ");
   }
   if(NewLine) LOG_GENERAL("\n");
 }

@@ -82,15 +82,15 @@ void DefineProbJeux()
   //===================//
   
   //Mode EXPÉRIMENTAL.  Les nouveaux jeux passent par ici.
-  //wMode=3;
+  wMode=3;
 
   //Set Game Probs to previous mode.
-  //for (int i=0 ; i<NbJeux ; i++)
-  //{
-  //  GameProb[i][wMode]=GameProb[i][wMode-1];
-  //}
+  for (int i=0 ; i<NbJeux ; i++)
+  {
+    GameProb[i][wMode]=GameProb[i][wMode-1];
+  }
   //Add experimental modes here:
-  //GameProb[Game_id_PPV][wMode]=120;
+  GameProb[Game_id_JD][wMode]=120;
   
   //===================//
   
@@ -106,6 +106,7 @@ void DefineProbJeux()
     ProbIndivJeux[Game_id_PC2]=0;
     ProbIndivJeux[Game_id_TDD]=0;
     ProbIndivJeux[Game_id_AR]=0;
+    ProbIndivJeux[Game_id_JD]=0;
   }
 
   //Log Prob.
@@ -126,6 +127,7 @@ void DefineGameTypes()
   GameTypes[Game_id_TV]=0;
   GameTypes[Game_id_PB]=0;
   GameTypes[Game_id_PPV]=0;
+  GameTypes[Game_id_JD]=0;
    
   //1=Perdant individuel
   GameTypes[Game_id_DQP]=1;

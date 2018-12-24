@@ -5,11 +5,19 @@ void TestMode()
   LOG_GENERAL("   TEST MODE  \n");
   LOG_GENERAL("==============\n");
   SonTestMode();
-  
+  int NumAct=0;
+  int PrevNumAct=0;
   while (1)
   {
-    IlluminateActiveExtinguishNonActive(nbj_raw_max);
+    NumAct=IlluminateActiveExtinguishNonActive(nbj_raw_max);
     delay(1);
+    if(NumAct!=PrevNumAct)
+    {
+      tone(200*NumAct,200);
+    }
+    ActivateGreenLED((100/nbj_raw_max)*(nbj_raw_max-NumAct));
+    ActivateBlueLED((100/nbj_raw_max)*(NumAct));
+    PrevNumAct=NumAct;
   }
 }
 

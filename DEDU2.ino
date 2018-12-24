@@ -1,7 +1,7 @@
 #include <Servo.h>
 #include <avr/pgmspace.h>
-int const NbJeux = 19;
-int const NbModes=3;
+int const NbJeux = 20;
+int const NbModes=4;
 int const NbGameTypes=5;
 //Ordre utilisé pour le mode DÉMO  doit être consécutif de 0 à NbJeux-1.
 int const Game_id_PQP=0;
@@ -13,16 +13,17 @@ int const Game_id_PC=5;
 int const Game_id_PC2=6;
 int const Game_id_MIN=7;
 int const Game_id_UC=8;
-int const Game_id_AR=9;
-int const Game_id_MH=10;
-int const Game_id_TH=11;
-int const Game_id_TV=12;
-int const Game_id_PB=13;
-int const Game_id_Duel=14;
-int const Game_id_PPV=15;
-int const Game_id_TDD=16;
-int const Game_id_JC=17;
-int const Game_id_FFA=18;
+int const Game_id_JD=9;
+int const Game_id_AR=10;
+int const Game_id_MH=11;
+int const Game_id_TH=12;
+int const Game_id_TV=13;
+int const Game_id_PB=14;
+int const Game_id_Duel=15;
+int const Game_id_PPV=16;
+int const Game_id_TDD=17;
+int const Game_id_JC=18;
+int const Game_id_FFA=19;
 
 //=========================\\
 //==         DEDU        ==\\
@@ -30,16 +31,17 @@ int const Game_id_FFA=18;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-//#define ENABLE_LOGGING
+#define ENABLE_LOGGING
 
 //Opt Gen
-bool SkipSetup=false;
+bool SkipSetup=true;
 bool nosound=false;
-bool SkipLights=false;
+bool SkipLights=true;
 
 //Opt Game
-bool ExclusiveGame=false;
-int ExclusiveGame_ID=Game_id_PPV;
+bool ExclusiveGame=true;
+int ExclusiveGame_ID=Game_id_JD;
+int ExclusiveGameDelay=2000;
 
 //Opt Repartiteur
 bool SkipFraudeur=false;
@@ -55,7 +57,7 @@ bool MusicRandFactVit=false;
 //SETUP IF SKIPPED:
 int nbj=10;
 int vitesse=10;
-int Game_Mode=2;
+int Game_Mode=3;
 //Demo Mode
 bool EnterDemo=false;
 bool AllModes=false;
@@ -342,6 +344,7 @@ void loop()
       ActiveGameLogging[ExclusiveGame_ID]=true;
     #endif
     PlayGame(ExclusiveGame_ID);
+    delay(ExclusiveGameDelay);
     loop();
   }
 
