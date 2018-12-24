@@ -19,7 +19,7 @@ void JeanDit()
   Jean=5;
   bool PreviousState[nbj];
   bool CurrentState[nbj];
-  const int FlagDelay=15;
+  const int FlagDelay=10;
   bool DisableJean=true;
   int CounterDisableJean=0;
   float DisableJeanLightFactor=(float)100/(float)MaxCounterDisableJean;
