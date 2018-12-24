@@ -4,19 +4,26 @@ void TestMode()
   LOG_GENERAL("==============\n");
   LOG_GENERAL("   TEST MODE  \n");
   LOG_GENERAL("==============\n");
+  MoveDEDUFlag(10);
   SonTestMode();
+  MoveDEDUFlag(0);
   int NumAct=0;
   int PrevNumAct=0;
+  bool DeduFlag=false;
   while (1)
   {
     NumAct=IlluminateActiveExtinguishNonActive(nbj_raw_max);
     delay(1);
-    if(NumAct!=PrevNumAct)
+    if(NumAct<5)
     {
-      tone(200*NumAct+500,200);
+      ActivateGreenLED(20);
+      ActivateBlueLED(0);
     }
-    ActivateGreenLED((100/nbj_raw_max)*(nbj_raw_max-NumAct));
-    ActivateBlueLED((100/nbj_raw_max)*(NumAct));
+    else
+    {
+      ActivateGreenLED(0);
+      ActivateBlueLED(20);
+    }
     PrevNumAct=NumAct;
   }
 }
