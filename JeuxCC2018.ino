@@ -30,11 +30,24 @@ void JeanDit()
     if(i!=Jean) PlayersInGame[i]=true;
   }
   int GameCounter=0;
-  bool JeanAPerdu=false;
+  bool JeanPerd=false;
+  bool JeanGagne=false;
   
   //À chaque fois que Jean change le DEDU d'état, laisser un temps de réaction.
   //Éliminer le dernier à changer d'état.
   //Donner un temps minimum à Jean pour faire son action.  Graduellement réduire les lumières Vert/Bleu pendant ce temps d'attente.
+
+  //Permettre à chaque joueur de toggler ON/OFF.
+  //Au premier pèse, le joueur est safe.
+  //Au 2e pese, il perd.
+
+  //Attendre le permier des 2 évènements:
+  //1. Jean toggle
+  //2. Tous les joueurs sauf 1 sont safe.
+  //2.1 Si c'est le cas, dire à Jean qu'il peut jouer.
+
+  //Lorsque Jean toggle
+  //Éliminer tous ceux qui sont pas safe.
   
   LOG_JD("DisableJeanLightFactor:");
   LOG_JD(DisableJeanLightFactor)
@@ -82,7 +95,7 @@ void JeanDit()
     {
       ActivateGreenLED((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2);
       CounterDisableJean++;
-      if(CounterDisableJean>MaxCounterDisableJean || (int)(CounterDisableJean*DisableJeanLightFactor)>99)
+      if(CounterDisableJean>MaxCounterDisableJean || ((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2)<1)
       {
         DisableJean=false;
         CounterDisableJean=0;
@@ -121,20 +134,24 @@ void JeanDit()
     //Check Winner or JeanPerd
     if(GameCounter>CounterJeanPerd)
     {
-      JeanAPerdu=true;
+      JeanPerd=true;
     }
     
     
     GameCounter++;
-  }while(Winner==-1 && !JeanAPerdu);
+  }while(Winner==-1 && !JeanPerd && !JeanGagne);
 
   TurnOffAllLights();
   delay(500);
 
-  if(JeanAPerdu)
+  if(JeanPerd)
   {
     LooserSoundAndLight(Jean);
     JoueurHonte=MarqueurHonte(Jean,DelaiPetiteHonte);
+  }
+  else if(JeanGagne)
+  {
+    WinnerSoundAndLight(Jean);
   }
   else
   {
