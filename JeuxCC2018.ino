@@ -14,6 +14,7 @@ void JeanDit()
   int MaxCounterDisableJean=300;
   
   int Winner=-1;
+  int Players=nbj;
   int Jean=random(nbj);
   Jean=5;
   bool PreviousState[nbj];
@@ -29,6 +30,7 @@ void JeanDit()
   {
     if(i!=Jean) PlayersInGame[i]=true;
   }
+  bool PlayerSafe[nbj]={false};
   int GameCounter=0;
   bool JeanPerd=false;
   bool JeanGagne=false;
@@ -43,6 +45,9 @@ void JeanDit()
 
   //Attendre le permier des 2 évènements:
   //1. Jean toggle
+  //1.2 Éliminer tous les joueurs actifs qui ne sont pas dans le bon état.
+  //1.1 Si Jean Tue tout le monde, il gagne.
+  
   //2. Tous les joueurs sauf 1 sont safe.
   //2.1 Si c'est le cas, dire à Jean qu'il peut jouer.
 
@@ -108,40 +113,120 @@ void JeanDit()
         LOG_JD("\n");
       }
     }
-
-    if(!DisableJean && PreviousState[Jean]==LOW && ReadPlayerInput(Jean)==HIGH)
-    {
-      //Reverse TargetState
-      TargetState=!TargetState;
-      DisableJean=true;
-      if(TargetState) MoveDEDUFlag(100);
-      else MoveDEDUFlag(0);
-    }
     
-    
-    for (int i=0;i<nbj;i++)
-    {
-      CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
-    }
-    
-    //Save current into previous.
-    for (int i=0;i<nbj;i++)
-    {
-      PreviousState[i]=CurrentState[i];
-    }
-    delay(GameDelay);
-
     //Check Winner or JeanPerd
     if(GameCounter>CounterJeanPerd)
     {
       JeanPerd=true;
     }
     
+    //Jean Toggle!
+    if(!DisableJean && !PreviousState[Jean] && ReadPlayerInput(Jean)==HIGH)
+    {
+      LOG_JD("Jean Toggle!\n");
+      LOG_JD("\n");
+      LOG_JD("TargetState:");
+      LOG_JD(TargetState);
+      LOG_JD("\n");
+      int TargetOutput = TargetState ? HIGH:LOW;
+      LOG_JD("TargetOutput:");
+      LOG_JD(TargetOutput);
+      LOG_JD("\n");
+      int Count=0;
+      //Tue ceux qui ne sont pas dans le bon état.  Check si Jean Gagne.
+      for (int i=0; i<nbj; i++)
+      {
+        if(PlayersInGame[i])
+        {
+          if(ReadPlayerOutput(i)!=TargetOutput)
+          {
+            LOG_JD("Disable ");
+            LOG_JD(i);
+            LOG_JD(";\n");
+            DeactivateRedLight[i];
+            PlayersInGame[i]=false;
+            Buzz();
+          }
+          else
+          {
+            Count++;
+          }
+        }
+      }
+      
+      if(Count==0)
+      {
+        LOG_JD("Jean Gagne!\n");
+        JeanGagne=true;
+      }
+      else
+      {
+        LOG_JD("New Round!\n");
+        //Reverse TargetState
+        TargetState=!TargetState;
+        DisableJean=true;
+        if(TargetState) MoveDEDUFlag(100);
+        else MoveDEDUFlag(0);
+        
+        //Reset SafeState
+        for (int i=0; i<nbj; i++)
+        {
+          PlayerSafe[i]=false;
+        }
+      }
+    }
+
     
-    GameCounter++;
+    if(!JeanPerd && !JeanGagne)
+    {
+      for (int i=0;i<nbj;i++)
+      {
+        if(i!=Jean && PlayersInGame[i])
+        {
+          CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
+          if(!PreviousState[i] && CurrentState[i])
+          {
+            if(PlayerSafe[i])
+            {
+              Buzz();
+              PlayersInGame[i]=false;
+              DeactivateRedLight(i);
+            }
+            else
+            {
+              LOG_JD("Safe:");
+              LOG_JD(i);
+              LOG_JD("\n");
+              PlayerSafe[i]=true;
+              ToggleOutput(i);
+            }
+          }
+        }
+      }
+
+      
+      int Count=0;
+      //Save current into previous.  Count players in game.
+      for (int i=0;i<nbj;i++)
+      {
+        PreviousState[i]=CurrentState[i];
+        if(PlayersInGame[i])
+        {
+          Count++;
+          Winner=i;
+        }
+      }
+      
+      if(Count>1) Winner=-1;
+      if(Count==0) JeanGagne=true;
+      
+      GameCounter++;
+      delay(GameDelay);
+    }
   }while(Winner==-1 && !JeanPerd && !JeanGagne);
 
   TurnOffAllLights();
+  MoveDEDUFlag(0);
   delay(500);
 
   if(JeanPerd)

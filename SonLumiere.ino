@@ -1,3 +1,9 @@
+//Sets or Resets the player red LED based on iState.
+void SetRedLight(int iPlayer, bool iOnState)
+{
+  if(iOnState) ActivateRedLight(iPlayer);
+  else DeactivateRedLight(iPlayer);
+}
 
 //Activates one red light.
 void ActivateRedLight(int iPlayer)
@@ -159,7 +165,7 @@ void FlashAndBuzzAllActive()
         }
       }
     }
-    tone(Tone_Pin, 2500, 200);
+    Buzz();
     delay(150);
 
 
@@ -172,6 +178,11 @@ void FlashAndBuzzAllActive()
   DeactivateGreenLED();
   DeactivateBlueLED();
   
+}
+
+void Buzz()
+{
+  tone(Tone_Pin, 2500, 200);
 }
 
 void TurnOffAllLights()

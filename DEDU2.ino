@@ -35,12 +35,13 @@ int const Game_id_FFA=19;
 
 //Opt Gen
 bool SkipSetup=true;
-bool nosound=true;
+bool nosound=false;
 bool SkipLights=true;
 
 //Opt Game
 bool ExclusiveGame=true;
 int ExclusiveGame_ID=Game_id_JD;
+int ExclusiveGameDelay=2000;
 
 //Opt Repartiteur
 bool SkipFraudeur=false;
@@ -343,6 +344,7 @@ void loop()
       ActiveGameLogging[ExclusiveGame_ID]=true;
     #endif
     PlayGame(ExclusiveGame_ID);
+    delay(ExclusiveGameDelay);
     loop();
   }
 
