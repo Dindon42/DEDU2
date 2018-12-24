@@ -31,17 +31,17 @@ int const Game_id_FFA=19;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-#define ENABLE_LOGGING
+//#define ENABLE_LOGGING
 
 //Opt Gen
-bool SkipSetup=true;
+bool SkipSetup=false;
 bool nosound=false;
-bool SkipLights=true;
+bool SkipLights=false;
 
 //Opt Game
-bool ExclusiveGame=true;
+bool ExclusiveGame=false;
 int ExclusiveGame_ID=Game_id_JD;
-int ExclusiveGameDelay=2000;
+int ExclusiveGameDelay=0;
 
 //Opt Repartiteur
 bool SkipFraudeur=false;
