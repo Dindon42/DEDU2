@@ -38,7 +38,11 @@ void JeanDit()
   int GameCounter=0;
   bool JeanPerd=false;
   bool JeanGagne=false;
-  
+  int RoundLooser=-1;
+  bool NewRound=false;
+  int NewRoundFlash=3;
+  int Flash=0;
+  const int FlashRate=100;
   //À chaque fois que Jean change le DEDU d'état, laisser un temps de réaction.
   //Éliminer le dernier à changer d'état.
   //Donner un temps minimum à Jean pour faire son action.  Graduellement réduire les lumières Vert/Bleu pendant ce temps d'attente.
@@ -100,7 +104,7 @@ void JeanDit()
       LOG_JD("\n");
     }
     
-    if(DisableJean)
+    if(DisableJean && !NewRound)
     {
       ActivateGreenLED((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2);
       CounterDisableJean++;
@@ -115,6 +119,25 @@ void JeanDit()
         LOG_JD("MaxCounterDisableJean:");
         LOG_JD(MaxCounterDisableJean)
         LOG_JD("\n");
+      }
+    }
+
+    if(NewRound)
+    {
+      if(GameCounter%100==0)
+      {
+        ToggleOutput(RoundLooser);
+        Flash++;
+      }
+
+      //Prepare for new round
+      if(Flash>NewRoundFlash)
+      {
+        Flash=0;
+        NewRound=false;
+        DisableJean=false;
+        TurnOffAllRedLights();
+        ActivateRedLight(Jean);
       }
     }
     
@@ -144,7 +167,7 @@ void JeanDit()
               LOG_JD("Disable ");
               LOG_JD(i);
               LOG_JD(";\n");
-              DeactivateRedLight[i];
+              DeactivateRedLight(i);
               PlayersInGame[i]=false;
               Buzz();
             }
@@ -223,7 +246,6 @@ void JeanDit()
       
       int NumInGame=0;
       int NumSafe=0;
-      int RoundLooser=0;
       //Save current into previous.  Count players in game.
       for (int i=0;i<nbj;i++)
       {
@@ -252,6 +274,9 @@ void JeanDit()
         Buzz();
         PlayersInGame[RoundLooser]=false;
         NumInGame--;
+        DisableJean=true;
+        NewRound=true;
+        GameCounter=0;
       }
       
       //Log at decent pace.
