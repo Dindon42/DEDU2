@@ -8,7 +8,7 @@ void JeanDit()
   WaitForAllNonActive(nbj_raw_max);
 
   //Tunables
-  int CounterJeanPerd=9000;
+  int CounterJeanPerd=6000;
   const int DisableJeanRandMin=100;
   const int DisableJeanRandMax=542;
   int MaxCounterDisableJean=300;
@@ -119,59 +119,61 @@ void JeanDit()
     {
       JeanPerd=true;
     }
-    
-    //Jean Toggle!
-    if(!DisableJean && !PreviousState[Jean] && ReadPlayerInput(Jean)==HIGH)
+    else
     {
-      LOG_JD("Jean Toggle!\n");
-      LOG_JD("\n");
-      LOG_JD("TargetState:");
-      LOG_JD(TargetState);
-      LOG_JD("\n");
-      int TargetOutput = TargetState ? HIGH:LOW;
-      LOG_JD("TargetOutput:");
-      LOG_JD(TargetOutput);
-      LOG_JD("\n");
-      int Count=0;
-      //Tue ceux qui ne sont pas dans le bon état.  Check si Jean Gagne.
-      for (int i=0; i<nbj; i++)
+      //Jean Toggle!
+      if(!DisableJean && !PreviousState[Jean] && ReadPlayerInput(Jean)==HIGH)
       {
-        if(PlayersInGame[i])
-        {
-          if(ReadPlayerOutput(i)!=TargetOutput)
-          {
-            LOG_JD("Disable ");
-            LOG_JD(i);
-            LOG_JD(";\n");
-            DeactivateRedLight[i];
-            PlayersInGame[i]=false;
-            Buzz();
-          }
-          else
-          {
-            Count++;
-          }
-        }
-      }
-      
-      if(Count==0)
-      {
-        LOG_JD("Jean Gagne!\n");
-        JeanGagne=true;
-      }
-      else
-      {
-        LOG_JD("New Round!\n");
-        //Reverse TargetState
-        TargetState=!TargetState;
-        DisableJean=true;
-        if(TargetState) MoveDEDUFlag(100);
-        else MoveDEDUFlag(0);
-        
-        //Reset SafeState
+        LOG_JD("Jean Toggle!\n");
+        LOG_JD("\n");
+        LOG_JD("TargetState:");
+        LOG_JD(TargetState);
+        LOG_JD("\n");
+        int TargetOutput = TargetState ? HIGH:LOW;
+        LOG_JD("TargetOutput:");
+        LOG_JD(TargetOutput);
+        LOG_JD("\n");
+        int Count=0;
+        //Tue ceux qui ne sont pas dans le bon état.  Check si Jean Gagne.
         for (int i=0; i<nbj; i++)
         {
-          PlayerSafe[i]=false;
+          if(PlayersInGame[i])
+          {
+            if(ReadPlayerOutput(i)!=TargetOutput)
+            {
+              LOG_JD("Disable ");
+              LOG_JD(i);
+              LOG_JD(";\n");
+              DeactivateRedLight[i];
+              PlayersInGame[i]=false;
+              Buzz();
+            }
+            else
+            {
+              Count++;
+            }
+          }
+        }
+        
+        if(Count==0)
+        {
+          LOG_JD("Jean Gagne!\n");
+          JeanGagne=true;
+        }
+        else
+        {
+          LOG_JD("New Round!\n");
+          //Reverse TargetState
+          TargetState=!TargetState;
+          DisableJean=true;
+          if(TargetState) MoveDEDUFlag(100);
+          else MoveDEDUFlag(0);
+          
+          //Reset SafeState
+          for (int i=0; i<nbj; i++)
+          {
+            PlayerSafe[i]=false;
+          }
         }
       }
     }
