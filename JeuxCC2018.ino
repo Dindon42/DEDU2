@@ -8,7 +8,7 @@ void JeanDit()
   WaitForAllNonActive(nbj_raw_max);
 
   //Tunables
-  int CounterJeanPerd=6000;
+  int CounterJeanPerd=24000;
   const int DisableJeanRandMin=100;
   const int DisableJeanRandMax=542;
   int MaxCounterDisableJean=300;
@@ -31,6 +31,10 @@ void JeanDit()
     if(i!=Jean) PlayersInGame[i]=true;
   }
   bool PlayerSafe[nbj]={false};
+  for (int i=0; i<nbj; i++)
+  {
+    if(i!=Jean) PlayerSafe[i]=true;
+  }
   int GameCounter=0;
   bool JeanPerd=false;
   bool JeanGagne=false;
@@ -129,17 +133,13 @@ void JeanDit()
         LOG_JD("TargetState:");
         LOG_JD(TargetState);
         LOG_JD("\n");
-        int TargetOutput = TargetState ? HIGH:LOW;
-        LOG_JD("TargetOutput:");
-        LOG_JD(TargetOutput);
-        LOG_JD("\n");
         int Count=0;
         //Tue ceux qui ne sont pas dans le bon état.  Check si Jean Gagne.
         for (int i=0; i<nbj; i++)
         {
           if(PlayersInGame[i])
           {
-            if(ReadPlayerOutput(i)!=TargetOutput)
+            if(ReadPlayerOutput(i)==HIGH)
             {
               LOG_JD("Disable ");
               LOG_JD(i);
@@ -169,9 +169,21 @@ void JeanDit()
           if(TargetState) MoveDEDUFlag(100);
           else MoveDEDUFlag(0);
           
-          //Reset SafeState
+          //Reset SafeState, Activate Player LED, Deactivate Jean.
           for (int i=0; i<nbj; i++)
           {
+            if(i==Jean) DeactivateRedLight(i);
+            if(PlayersInGame[i])
+            {
+              LOG_JD("Activate ");
+              LOG_JD(i);
+              LOG_JD(";\n");
+              ActivateRedLight(i);
+            }
+            else
+            {
+              DeactivateRedLight(i);
+            }
             PlayerSafe[i]=false;
           }
         }
@@ -188,11 +200,14 @@ void JeanDit()
           CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
           if(!PreviousState[i] && CurrentState[i])
           {
+            ToggleOutput(i);
             if(PlayerSafe[i])
             {
+              LOG_JD("Out:");
+              LOG_JD(i);
+              LOG_JD("\n");
               Buzz();
               PlayersInGame[i]=false;
-              DeactivateRedLight(i);
             }
             else
             {
@@ -200,27 +215,58 @@ void JeanDit()
               LOG_JD(i);
               LOG_JD("\n");
               PlayerSafe[i]=true;
-              ToggleOutput(i);
             }
           }
         }
       }
 
       
-      int Count=0;
+      int NumInGame=0;
+      int NumSafe=0;
+      int RoundLooser=0;
       //Save current into previous.  Count players in game.
       for (int i=0;i<nbj;i++)
       {
         PreviousState[i]=CurrentState[i];
         if(PlayersInGame[i])
         {
-          Count++;
-          Winner=i;
+          NumInGame++;
+          if(PlayerSafe[i])
+          {
+            Winner=i;
+            NumSafe++;
+          }
+          else
+          {
+            RoundLooser=i;
+          }
         }
       }
       
-      if(Count>1) Winner=-1;
-      if(Count==0) JeanGagne=true;
+      //Eliminate Round Looser.
+      if(NumInGame-NumSafe==1)
+      {
+        LOG_JD("Looser:");
+        LOG_JD(RoundLooser);
+        LOG_JD("\n");
+        Buzz();
+        PlayersInGame[RoundLooser]=false;
+        NumInGame--;
+      }
+      
+      //Log at decent pace.
+      if(GameCounter%500==0)
+      {
+        LOG_JD("PlayersInGame:");
+        LOG_JD(NumInGame);
+        LOG_JD("\n");
+        LOG_JD("Safe Players:");
+        LOG_JD(NumSafe);
+        LOG_JD("\n");
+      }
+
+      if(NumInGame<=0) JeanGagne=true;
+      else if(NumInGame>1) Winner=-1;
       
       GameCounter++;
       delay(GameDelay);
