@@ -268,6 +268,10 @@ void LogGameName(int game_id, bool NewLine)
   {
     LOG_GENERAL("JeanDit     ");
   }
+  else if (game_id==Game_id_ED)
+  {
+    LOG_GENERAL("EstimeDedu  ");
+  }
   if(NewLine) LOG_GENERAL("\n");
 }
 

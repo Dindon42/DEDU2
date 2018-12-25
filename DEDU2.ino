@@ -1,6 +1,6 @@
 #include <Servo.h>
 #include <avr/pgmspace.h>
-int const NbJeux = 20;
+int const NbJeux = 21;
 int const NbModes=4;
 int const NbGameTypes=5;
 //Ordre utilisé pour le mode DÉMO  doit être consécutif de 0 à NbJeux-1.
@@ -14,16 +14,17 @@ int const Game_id_PC2=6;
 int const Game_id_MIN=7;
 int const Game_id_UC=8;
 int const Game_id_JD=9;
-int const Game_id_AR=10;
-int const Game_id_MH=11;
-int const Game_id_TH=12;
-int const Game_id_TV=13;
-int const Game_id_PB=14;
-int const Game_id_Duel=15;
-int const Game_id_PPV=16;
-int const Game_id_TDD=17;
-int const Game_id_JC=18;
-int const Game_id_FFA=19;
+int const Game_id_ED=10;
+int const Game_id_AR=11;
+int const Game_id_MH=12;
+int const Game_id_TH=13;
+int const Game_id_TV=14;
+int const Game_id_PB=15;
+int const Game_id_Duel=16;
+int const Game_id_PPV=17;
+int const Game_id_TDD=18;
+int const Game_id_JC=19;
+int const Game_id_FFA=20;
 
 //=========================\\
 //==         DEDU        ==\\
@@ -40,7 +41,7 @@ bool SkipLights=false;
 
 //Opt Game
 bool ExclusiveGame=false;
-int ExclusiveGame_ID=Game_id_JD;
+int ExclusiveGame_ID=Game_id_ED;
 int ExclusiveGameDelay=0;
 
 //Opt Repartiteur

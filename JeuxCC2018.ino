@@ -1,4 +1,14 @@
 #ifdef ENABLE_LOGGING
+  #define LOG_ED(a) LOG_GAME(Game_id_ED,a)
+#else
+  #define LOG_ED(a)
+#endif
+void EstimeDedu()
+{
+  
+}
+
+#ifdef ENABLE_LOGGING
   #define LOG_JD(a) LOG_GAME(Game_id_JD,a)
 #else
   #define LOG_JD(a)
