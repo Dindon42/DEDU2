@@ -91,6 +91,7 @@ void DefineProbJeux()
   }
   //Add experimental modes here:
   GameProb[Game_id_JD][wMode]=120;
+  GameProb[Game_id_ED][wMode]=120;
   
   //===================//
   
@@ -107,6 +108,7 @@ void DefineProbJeux()
     ProbIndivJeux[Game_id_TDD]=0;
     ProbIndivJeux[Game_id_AR]=0;
     ProbIndivJeux[Game_id_JD]=0;
+    ProbIndivJeux[Game_id_ED]=0;
   }
 
   //Log Prob.
@@ -128,6 +130,7 @@ void DefineGameTypes()
   GameTypes[Game_id_PB]=0;
   GameTypes[Game_id_PPV]=0;
   GameTypes[Game_id_JD]=0;
+  GameTypes[Game_id_ED]=0;
    
   //1=Perdant individuel
   GameTypes[Game_id_DQP]=1;

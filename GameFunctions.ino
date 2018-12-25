@@ -184,6 +184,14 @@ void PlayGame(int game_id)
   {
     JeanDit();
   }
+  else if (game_id==Game_id_ED)
+  {
+    EstimeDedu();
+  }
+  else
+  {
+    PQP();
+  }
 }
 
 void LogGameName(int game_id, bool NewLine)

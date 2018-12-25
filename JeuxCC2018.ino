@@ -5,7 +5,19 @@
 #endif
 void EstimeDedu()
 {
+  //Signature: Dedu monte/descend et lumières individuelles consécutives.  Son Monte descend.
+  //Après 1 cycle, le DEDU s'arrête sur le target de victoire et toutes les lumières s'allument.
+  //Lancer le jeu avec ReadySound.  Éteindre toutes les lumières, puis commencer.
   
+  //Une fois que le jeu démarre, le DEDU va monter/descendre.
+  //À tout moment,  les joueurs peuvent cliquer (trans OFF ON) pour faire leur choix.
+  //Enregistrer la valeur du DEDU lorsque le joueur pèse, illuminer sa lumière pour indiquer que le choix est fait.
+
+  //Une fois que tout le monde a choisi sa valeur ou que le DEDU a cyclé 3 fois, arrêter le jeu.
+  //Pour le score. Rapidement éliminer tous les joueurs sauf les 3 meilleurs.
+  //Pour ce faire, montrer le score de victoire, puis celui du joueur. Faire delta-son, puis un buzz et lumière clignotante.
+  //Pour les 3 derniers: cycler entre les positions des 3 meilleurs quelques fois, puis faire le pattern précédent pour les 2 plus bas.
+  //Refaire le delta une dernière fois pour le meilleur, puis lui donner winnersoundlight();
 }
 
 #ifdef ENABLE_LOGGING
