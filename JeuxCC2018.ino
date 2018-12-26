@@ -29,8 +29,8 @@ void JeanDit()
 {
   //Tunables
   int CounterJeanPerd=6000;
-  const int DisableJeanRandMin=200;
-  const int DisableJeanRandMax=542;
+  int DisableJeanRandMin=200;
+  int DisableJeanRandMax=542;
   int DisableJeanMinDelta=(0.8*DisableJeanRandMin/nbj);
   int DisableJeanMaxDelta=(0.7*DisableJeanRandMax/nbj);
   int MaxCounterDisableJean=random((int)(DisableJeanRandMax*0.7),DisableJeanRandMax);
@@ -135,7 +135,7 @@ void JeanDit()
     {
       ActivateGreenLED((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2);
       CounterDisableJean++;
-      if(CounterDisableJean>MaxCounterDisableJean || ((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2)<1)
+      if(CounterDisableJean>MaxCounterDisableJean || ((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2)<2)
       {
         DisableJean=false;
         CounterDisableJean=0;
