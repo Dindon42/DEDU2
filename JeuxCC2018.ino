@@ -186,15 +186,17 @@ void JeanDit()
     }
     else
     {
-        LOG_JD("DisableJean:");
-        LOG_JD(DisableJean);
-        LOG_JD("\n");
-        LOG_JD("PreviousState[Jean]:");
-        LOG_JD(PreviousState[Jean]);
-        LOG_JD("\n");
-        LOG_JD("ReadPlayerInput(Jean):");
-        LOG_JD(ReadPlayerInput(Jean));
-        LOG_JD("\n");
+      /*
+      LOG_JD("DisableJean:");
+      LOG_JD(DisableJean);
+      LOG_JD("\n");
+      LOG_JD("PreviousState[Jean]:");
+      LOG_JD(PreviousState[Jean]);
+      LOG_JD("\n");
+      LOG_JD("ReadPlayerInput(Jean):");
+      LOG_JD(ReadPlayerInput(Jean));
+      LOG_JD("\n");
+      */
       
       //Jean Toggle!
       if(!DisableJean && !PreviousState[Jean] && ReadPlayerInput(Jean)==HIGH)
@@ -333,7 +335,7 @@ void JeanDit()
       }
       
       //Log at decent pace.
-      if(GameCounter%500==0)
+      if(GameCounter%1000==0)
       {
         LOG_JD("PlayersInGame:");
         LOG_JD(NumInGame);
