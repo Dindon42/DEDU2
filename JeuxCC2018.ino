@@ -5,11 +5,14 @@
 #endif
 void EstimeDedu()
 {
-  
+  //Tunables
+  const int MainGameCycles=5;
+  const float ScoreDecreaseFactorPerCycle=0.1;
   const int Full_Cycle=1000;
   const int num_start_cycle=4;
-  const int tone_min;
-  const int tone_max;
+
+  const int tone_min=600;
+  const int tone_max=1800;
   const int start_delay=1;
   bool GoingUp=true;
   int Win=random(0.2*Full_Cycle,0.8*Full_Cycle);
@@ -18,7 +21,6 @@ void EstimeDedu()
   int LightCount=0;
   bool PreviousState[nbj_max]={false};
   bool CurrentState[nbj_max];
-  const int MainGameCycles=3;
   LOG_ED("ESTIME DEDU!");
   LOG_ED("Win");
   LOG_ED(Win);
