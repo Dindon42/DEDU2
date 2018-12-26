@@ -5,14 +5,73 @@
 #endif
 void EstimeDedu()
 {
+  
+  const int Full_Cycle=1000;
+  const int num_start_cycle=4;
+  const int tone_min;
+  const int tone_max;
+  const int start_delay=1;
+  bool GoingUp=true;
+  int Win=random(0.2*Full_Cycle,0.8*Full_Cycle);
+  int ToneWin;
+  int LightUp=Full_Cycle/nbj_max;
+  int LightCount=0;
+  bool PreviousState[nbj_max]={false};
+  bool CurrentState[nbj_max];
+  const int MainGameCycles=3;
+  LOG_ED("ESTIME DEDU!");
+  LOG_ED("Win");
+  LOG_ED(Win);
+  LOG_ED("\n");
+  
   //Signature: Dedu monte/descend et lumières individuelles consécutives.  Son Monte descend.
   //Après 1 cycle, le DEDU s'arrête sur le target de victoire et toutes les lumières s'allument.
   //Lancer le jeu avec ReadySound.  Éteindre toutes les lumières, puis commencer.
+  for (int i=0; i<num_start_cycle; i++)
+  {
+    for (int j=0 ; j<Full_Cycle ; j++)
+    {
+      if(GoingUp) MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
+      else MoveDEDUFlag((((float)Full_Cycle-(float)j)/(float)Full_Cycle)*100);
+      delay(start_delay);
+      if(j%LightUp==0)
+      {
+        if(GoingUp)
+        {
+          ActivateRedLight(LightCount);
+          LightCount++;
+        }
+        else
+        {
+          DeactivateRedLight(LightCount);
+          LightCount--;
+        }
+      }
+    }
+    GoingUp=!GoingUp;
+  }
+  delay(500);
+  TurnOnAllRedLights();
+  for (int j=0 ; j<Win ; j++)
+  {
+    if(GoingUp) MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
+    else MoveDEDUFlag((((float)Full_Cycle-(float)j)/(float)Full_Cycle)*100);
+    delay(start_delay);
+  }
+  delay(500)
+  TurnOffAllRedLights();
+  MoveDEDUFlag(0);
+  ReadySound(500);
   
   //Une fois que le jeu démarre, le DEDU va monter/descendre.
   //À tout moment,  les joueurs peuvent cliquer (trans OFF ON) pour faire leur choix.
   //Enregistrer la valeur du DEDU lorsque le joueur pèse, illuminer sa lumière pour indiquer que le choix est fait.
 
+  //MAIN GAME LOOP
+  do
+  {
+    
+  }while(1);
   //Une fois que tout le monde a choisi sa valeur ou que le DEDU a cyclé 3 fois, arrêter le jeu.
   //Pour le score. Rapidement éliminer tous les joueurs sauf les 3 meilleurs.
   //Pour ce faire, montrer le score de victoire, puis celui du joueur. Faire delta-son, puis un buzz et lumière clignotante.
