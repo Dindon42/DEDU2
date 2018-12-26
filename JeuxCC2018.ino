@@ -1,31 +1,51 @@
 #ifdef ENABLE_LOGGING
+  #define LOG_ED(a) LOG_GAME(Game_id_ED,a)
+#else
+  #define LOG_ED(a)
+#endif
+void EstimeDedu()
+{
+  //Signature: Dedu monte/descend et lumières individuelles consécutives.  Son Monte descend.
+  //Après 1 cycle, le DEDU s'arrête sur le target de victoire et toutes les lumières s'allument.
+  //Lancer le jeu avec ReadySound.  Éteindre toutes les lumières, puis commencer.
+  
+  //Une fois que le jeu démarre, le DEDU va monter/descendre.
+  //À tout moment,  les joueurs peuvent cliquer (trans OFF ON) pour faire leur choix.
+  //Enregistrer la valeur du DEDU lorsque le joueur pèse, illuminer sa lumière pour indiquer que le choix est fait.
+
+  //Une fois que tout le monde a choisi sa valeur ou que le DEDU a cyclé 3 fois, arrêter le jeu.
+  //Pour le score. Rapidement éliminer tous les joueurs sauf les 3 meilleurs.
+  //Pour ce faire, montrer le score de victoire, puis celui du joueur. Faire delta-son, puis un buzz et lumière clignotante.
+  //Pour les 3 derniers: cycler entre les positions des 3 meilleurs quelques fois, puis faire le pattern précédent pour les 2 plus bas.
+  //Refaire le delta une dernière fois pour le meilleur, puis lui donner winnersoundlight();
+}
+
+#ifdef ENABLE_LOGGING
   #define LOG_JD(a) LOG_GAME(Game_id_JD,a)
 #else
   #define LOG_JD(a)
 #endif
 void JeanDit()
 {
-  WaitForAllNonActive(nbj_raw_max);
-
   //Tunables
-  int CounterJeanPerd=24000;
-  const int DisableJeanRandMin=100;
-  const int DisableJeanRandMax=542;
-  int MaxCounterDisableJean=300;
+  int CounterJeanPerd=6000;
+  int DisableJeanRandMin=200;
+  int DisableJeanRandMax=542;
+  int DisableJeanMinDelta=(0.8*DisableJeanRandMin/nbj);
+  int DisableJeanMaxDelta=(0.7*DisableJeanRandMax/nbj);
+  int MaxCounterDisableJean=random((int)(DisableJeanRandMax*0.7),DisableJeanRandMax);
   
   int Winner=-1;
-  int Players=nbj;
   int Jean=random(nbj);
-  Jean=5;
-  bool PreviousState[nbj];
-  bool CurrentState[nbj];
+  bool PreviousState[nbj_max]={false};
+  bool CurrentState[nbj_max];
   const int FlagDelay=10;
   bool DisableJean=true;
   int CounterDisableJean=0;
   float DisableJeanLightFactor=(float)100/(float)MaxCounterDisableJean;
   const int GameDelay=5;
   bool TargetState=false;
-  bool PlayersInGame[nbj]={false};
+  bool PlayersInGame[nbj_max]={false};
   for (int i=0; i<nbj; i++)
   {
     if(i!=Jean) PlayersInGame[i]=true;
@@ -68,6 +88,13 @@ void JeanDit()
   LOG_JD("MaxCounterDisableJean:");
   LOG_JD(MaxCounterDisableJean)
   LOG_JD("\n");
+  LOG_JD("DisableJeanMinDelta:");
+  LOG_JD(DisableJeanMinDelta)
+  LOG_JD("\n");
+  LOG_JD("DisableJeanMaxDelta:");
+  LOG_JD(DisableJeanMaxDelta)
+  LOG_JD("\n");
+  
   //Signature lumineuse/sonore
   ActivateRedLight(Jean);
   if(!SkipLights)
@@ -108,22 +135,33 @@ void JeanDit()
     {
       ActivateGreenLED((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2);
       CounterDisableJean++;
-      if(CounterDisableJean>MaxCounterDisableJean || ((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2)<1)
+      if(CounterDisableJean>MaxCounterDisableJean || ((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2)<2)
       {
         DisableJean=false;
         CounterDisableJean=0;
         GameCounter=0;
         ActivateGreenLED(0);
         MaxCounterDisableJean=random(DisableJeanRandMin,DisableJeanRandMax);
+        DisableJeanLightFactor=(float)100/(float)MaxCounterDisableJean;
         LOG_JD("END_DISABLEJEAN\n:");
         LOG_JD("MaxCounterDisableJean:");
         LOG_JD(MaxCounterDisableJean)
+        LOG_JD("\n");
+        LOG_JD("DisableJeanLightFactor:");
+        LOG_JD(DisableJeanLightFactor)
+        LOG_JD("\n");
+        LOG_JD("DisableJeanRandMin:");
+        LOG_JD(DisableJeanRandMin)
+        LOG_JD("\n");
+        LOG_JD("DisableJeanRandMax:");
+        LOG_JD(DisableJeanRandMax)
         LOG_JD("\n");
       }
     }
 
     if(NewRound)
     {
+      ActivateGreenLED(0);
       if(GameCounter%100==0)
       {
         ToggleOutput(RoundLooser);
@@ -148,6 +186,18 @@ void JeanDit()
     }
     else
     {
+      /*
+      LOG_JD("DisableJean:");
+      LOG_JD(DisableJean);
+      LOG_JD("\n");
+      LOG_JD("PreviousState[Jean]:");
+      LOG_JD(PreviousState[Jean]);
+      LOG_JD("\n");
+      LOG_JD("ReadPlayerInput(Jean):");
+      LOG_JD(ReadPlayerInput(Jean));
+      LOG_JD("\n");
+      */
+      
       //Jean Toggle!
       if(!DisableJean && !PreviousState[Jean] && ReadPlayerInput(Jean)==HIGH)
       {
@@ -189,6 +239,9 @@ void JeanDit()
           //Reverse TargetState
           TargetState=!TargetState;
           DisableJean=true;
+          DisableJeanRandMin=DisableJeanRandMin-DisableJeanMinDelta;
+          DisableJeanRandMax=DisableJeanRandMax-DisableJeanMaxDelta;
+          
           if(TargetState) MoveDEDUFlag(100);
           else MoveDEDUFlag(0);
           
@@ -218,9 +271,9 @@ void JeanDit()
     {
       for (int i=0;i<nbj;i++)
       {
+        CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
         if(i!=Jean && PlayersInGame[i])
         {
-          CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
           if(!PreviousState[i] && CurrentState[i])
           {
             ToggleOutput(i);
@@ -275,12 +328,14 @@ void JeanDit()
         PlayersInGame[RoundLooser]=false;
         NumInGame--;
         DisableJean=true;
+        DisableJeanRandMin=DisableJeanRandMin-DisableJeanMinDelta;
+        DisableJeanRandMax=DisableJeanRandMax-DisableJeanMaxDelta;
         NewRound=true;
         GameCounter=0;
       }
       
       //Log at decent pace.
-      if(GameCounter%500==0)
+      if(GameCounter%1000==0)
       {
         LOG_JD("PlayersInGame:");
         LOG_JD(NumInGame);

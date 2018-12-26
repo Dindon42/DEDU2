@@ -184,6 +184,14 @@ void PlayGame(int game_id)
   {
     JeanDit();
   }
+  else if (game_id==Game_id_ED)
+  {
+    EstimeDedu();
+  }
+  else
+  {
+    PQP();
+  }
 }
 
 void LogGameName(int game_id, bool NewLine)
@@ -267,6 +275,10 @@ void LogGameName(int game_id, bool NewLine)
   else if (game_id==Game_id_JD)
   {
     LOG_GENERAL("JeanDit     ");
+  }
+  else if (game_id==Game_id_ED)
+  {
+    LOG_GENERAL("EstimeDedu  ");
   }
   if(NewLine) LOG_GENERAL("\n");
 }

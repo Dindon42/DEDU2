@@ -1,3 +1,21 @@
+/*PROB DE JEUX PAR CATEGORIE*/ 
+/*
+Mode 1
+Id:0 GI: 609 ->  42.15%
+Id:1 PI: 404 ->  27.96%
+Id:2 Eq: 235 ->  16.26%
+Id:3 Au: 197 ->  13.63%
+Id:4 Ho: 194 ->  13.43%
+*/
+/*
+Mode 2
+Id:0 GI: 595 ->  43.91%
+Id:1 PI: 425 ->  31.37%
+Id:2 Eq: 257 ->  18.97%
+Id:3 Au:  78 ->  5.76%
+Id:4 Ho: 174 ->  12.84%
+*/
+
 void DefineProbJeux()
 {
   int wMode;
@@ -91,6 +109,7 @@ void DefineProbJeux()
   }
   //Add experimental modes here:
   GameProb[Game_id_JD][wMode]=120;
+  GameProb[Game_id_ED][wMode]=120;
   
   //===================//
   
@@ -107,6 +126,7 @@ void DefineProbJeux()
     ProbIndivJeux[Game_id_TDD]=0;
     ProbIndivJeux[Game_id_AR]=0;
     ProbIndivJeux[Game_id_JD]=0;
+    ProbIndivJeux[Game_id_ED]=0;
   }
 
   //Log Prob.
@@ -128,6 +148,7 @@ void DefineGameTypes()
   GameTypes[Game_id_PB]=0;
   GameTypes[Game_id_PPV]=0;
   GameTypes[Game_id_JD]=0;
+  GameTypes[Game_id_ED]=0;
    
   //1=Perdant individuel
   GameTypes[Game_id_DQP]=1;
