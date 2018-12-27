@@ -6,19 +6,22 @@
 void EstimeDedu()
 {
   //Tunables
-  const int MainGameCycles=5;
+  const int MaxMainGameCycles=10;
   const float ScoreDecreaseFactorPerCycle=0.1;
   const int Full_Cycle=1000;
   const int num_start_cycle=4;
 
-  const int tone_min=600;
-  const int tone_max=1800;
+  int GameCounter=0;
+  int GameCycles=0;
+  const int newtone=25;
+  const int tone_min=500;
   const int start_delay=1;
   bool GoingUp=true;
   int Win=random(0.2*Full_Cycle,0.8*Full_Cycle);
-  int ToneWin;
   int LightUp=Full_Cycle/nbj_max;
   int LightCount=0;
+  int PlayersInGame=nbj;
+  float PlayerScore[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
   bool PreviousState[nbj_max]={false};
   bool CurrentState[nbj_max];
   LOG_ED("ESTIME DEDU!");
@@ -33,8 +36,16 @@ void EstimeDedu()
   {
     for (int j=0 ; j<Full_Cycle ; j++)
     {
-      if(GoingUp) MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
-      else MoveDEDUFlag((((float)Full_Cycle-(float)j)/(float)Full_Cycle)*100);
+      if(GoingUp)
+      {
+        MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
+        if(j%newtone==0) tone(Tone_Pin,tone_min+j,newtone);
+      }
+      else
+      {
+        MoveDEDUFlag((((float)Full_Cycle-(float)j)/(float)Full_Cycle)*100);
+        if(j%newtone==0) tone(Tone_Pin,tone_min+Full_Cycle-j,newtone);
+      }
       delay(start_delay);
       if(j%LightUp==0)
       {
@@ -54,16 +65,28 @@ void EstimeDedu()
   }
   delay(500);
   TurnOnAllRedLights();
+  int WinTone;
   for (int j=0 ; j<Win ; j++)
   {
-    if(GoingUp) MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
-    else MoveDEDUFlag((((float)Full_Cycle-(float)j)/(float)Full_Cycle)*100);
+    if(GoingUp)
+    {
+      MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
+      if(j%newtone==0) tone(Tone_Pin,tone_min+j,newtone);
+    }
     delay(start_delay);
   }
-  delay(500)
+  delay(newtone);
+  for(int i=0; i<2; i++)
+  {
+    TurnOffAllRedLights();
+    delay(500);
+    TurnOnAllRedLights();
+    PlayNote(Tone_Pin,tone_min+Win,500,0);
+  }
   TurnOffAllRedLights();
+  delay(500);
   MoveDEDUFlag(0);
-  ReadySound(500);
+  delay(500);
   
   //Une fois que le jeu démarre, le DEDU va monter/descendre.
   //À tout moment,  les joueurs peuvent cliquer (trans OFF ON) pour faire leur choix.
@@ -72,8 +95,45 @@ void EstimeDedu()
   //MAIN GAME LOOP
   do
   {
+    //Move DEDUFLAG
+    if(GoingUp)
+    {
+      MoveDEDUFlag(((float)GameCounter/(float)Full_Cycle)*100);
+      if(j%newtone==0) tone(Tone_Pin,tone_min+GameCounter,newtone);
+    }
+    else
+    {
+      MoveDEDUFlag((((float)Full_Cycle-(float)GameCounter)/(float)Full_Cycle)*100);
+      if(j%newtone==0) tone(Tone_Pin,tone_min+Full_Cycle-GameCounter,newtone);
+    }
     
-  }while(1);
+    //Read current state
+    for (int i=0;i<nbj;i++)
+    {
+      CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
+      if(!PreviousState[i] && CurrentState[i] && PlayerScore[i]!=-1)
+      {
+        //RECORD PLAYER SCORE BASED ON GAMECOUNTER AND CYCLES.
+      }
+    }
+
+    //Save current in previous state
+    for (int i=0;i<nbj;i++)
+    {
+      PreviousState[i]=CurrentState[i];
+    }
+    
+    GameCounter++;
+    if(GameCounter%Full_Cycle==0)
+    {
+      GameCounter=0;
+      
+    }
+  }while(PlayersInGame<=0 || GameCycles>=MainGameCycles);
+
+  
+  //Deal with players who have not made their choices at game end.
+    
   //Une fois que tout le monde a choisi sa valeur ou que le DEDU a cyclé 3 fois, arrêter le jeu.
   //Pour le score. Rapidement éliminer tous les joueurs sauf les 3 meilleurs.
   //Pour ce faire, montrer le score de victoire, puis celui du joueur. Faire delta-son, puis un buzz et lumière clignotante.
