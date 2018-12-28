@@ -18,14 +18,23 @@ void EstimeDedu()
   const int tone_min=500;
   const int game_delay=1;
   bool GoingUp=true;
-  int Win=random(0.2*Full_Cycle,0.8*Full_Cycle);
+  int Win=random(0.1*Full_Cycle,0.9*Full_Cycle);
   int LightUp=Full_Cycle/nbj_max;
   int LightCount=0;
   int PlayersInGame=nbj;
-  int PlayerScore[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
-  int PlayerCycles[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
   const int num_items=4;
+  //0 Abs Score
+  //1 Cycles
+  //2 PlayerId
+  //3 GameCounter At click
   int Scores[nbj][num_items];
+  for (int i=0; i<nbj; i++)
+  {
+    for (int j=0; j<num_items; j++)
+    {
+      Scores[i][j]=-1;
+    }
+  }
   bool PreviousState[nbj_max]={false};
   bool CurrentState[nbj_max];
   LOG_ED("ESTIME DEDU!");
@@ -116,26 +125,24 @@ void EstimeDedu()
     {
       CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
       //Detect player press.
-      if(!PreviousState[i] && CurrentState[i] && PlayerScore[i]==-1)
+      if(!PreviousState[i] && CurrentState[i] && Scores[i][0]==-1)
       {
         //RECORD PLAYER SCORE BASED ON GAMECOUNTER AND CYCLES.
-        if(GoingUp) PlayerScore[i]=GameCounter;
-        else PlayerScore[i]=Full_Cycle-GameCounter;
-        PlayerCycles[i]=GameCycles;
-        PlayersInGame--;
-        Scores[i][0]=abs(Full_Cycle-PlayerScore[i]);
-        Scores[i][1]=PlayerCycles[i];
+        if(GoingUp) Scores[i][3]=GameCounter;
+        else Scores[i][3]=Full_Cycle-GameCounter;
+        Scores[i][0]=abs(Win-Scores[i][3]);
+        Scores[i][1]=GameCycles;
         Scores[i][2]=i;
-        Scores[i][3]=PlayerScore[i];
         ActivateRedLight(i);
+        PlayersInGame--;
 
         
         LOG_ED("\nPlayerPressing!\n");
         LOG_ED("AbsoluteScore:");
         LOG_ED(Scores[i][0]);
         LOG_ED("\n");
-        LOG_ED("PlayerScore[i]:");
-        LOG_ED(PlayerScore[i]);
+        LOG_ED("Scores[i][3]:");
+        LOG_ED(Scores[i][3]);
         LOG_ED("\n");
         LOG_ED("GoingUp=");
         LOG_ED(GoingUp);
@@ -209,7 +216,7 @@ void EstimeDedu()
   //Deal with players who have not made their choices at game end.
   for(int i=0; i<nbj; i++)
   {
-    if(PlayerScore[i]!=-1)
+    if(Scores[i][0]!=-1)
     {
       NumGoodScores++;
     }
