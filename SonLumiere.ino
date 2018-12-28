@@ -312,6 +312,25 @@ void LooserSoundAndLight(int iPlayer)
   }
 }
 
+void AllLoosers()
+{
+  ActivateBlueLED(20);
+    
+  //Sound for Loosers.
+  for(int i=0 ; i<4 ; i++)
+  {
+    tone(Tone_Pin,800,700);
+    DeactivateBlueLED();
+    TurnOnAllRedLights();
+    delay(800);
+    TurnOffAllRedLights();
+    ActivateBlueLED(20);
+    delay(800);
+  }
+  
+  TurnOffAllLights();
+}
+
 void WinnerSoundAndLight(int iPlayer)
 {
   ActivateGreenLED(0);
