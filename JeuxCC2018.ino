@@ -7,21 +7,22 @@ void EstimeDedu()
 {
   //Tunables
   const int MaxMainGameCycles=10;
-  const float ScoreDecreaseFactorPerCycle=0.1;
-  const int Full_Cycle=1000;
+  const int Full_Cycle=2000;
   const int num_start_cycle=4;
-
+  
   int GameCounter=0;
   int GameCycles=0;
   const int newtone=25;
+  const int newpos=25;
   const int tone_min=500;
-  const int start_delay=1;
+  const int game_delay=1;
   bool GoingUp=true;
   int Win=random(0.2*Full_Cycle,0.8*Full_Cycle);
   int LightUp=Full_Cycle/nbj_max;
   int LightCount=0;
   int PlayersInGame=nbj;
   float PlayerScore[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+  int NumCycles[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
   bool PreviousState[nbj_max]={false};
   bool CurrentState[nbj_max];
   LOG_ED("ESTIME DEDU!");
@@ -38,15 +39,15 @@ void EstimeDedu()
     {
       if(GoingUp)
       {
-        MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
+        if(j%newpos==0) MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
         if(j%newtone==0) tone(Tone_Pin,tone_min+j,newtone);
       }
       else
       {
-        MoveDEDUFlag((((float)Full_Cycle-(float)j)/(float)Full_Cycle)*100);
+        if(j%newpos==0) MoveDEDUFlag((((float)Full_Cycle-(float)j)/(float)Full_Cycle)*100);
         if(j%newtone==0) tone(Tone_Pin,tone_min+Full_Cycle-j,newtone);
       }
-      delay(start_delay);
+      delay(game_delay);
       if(j%LightUp==0)
       {
         if(GoingUp)
@@ -65,15 +66,14 @@ void EstimeDedu()
   }
   delay(500);
   TurnOnAllRedLights();
-  int WinTone;
   for (int j=0 ; j<Win ; j++)
   {
     if(GoingUp)
     {
-      MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
+      if(j%newpos==0) MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
       if(j%newtone==0) tone(Tone_Pin,tone_min+j,newtone);
     }
-    delay(start_delay);
+    delay(game_delay);
   }
   delay(newtone);
   for(int i=0; i<2; i++)
@@ -92,30 +92,22 @@ void EstimeDedu()
   //À tout moment,  les joueurs peuvent cliquer (trans OFF ON) pour faire leur choix.
   //Enregistrer la valeur du DEDU lorsque le joueur pèse, illuminer sa lumière pour indiquer que le choix est fait.
 
+  GoingUp=true;
   //MAIN GAME LOOP
   do
   {
     //Move DEDUFLAG
     if(GoingUp)
     {
-      MoveDEDUFlag(((float)GameCounter/(float)Full_Cycle)*100);
-      if(j%newtone==0) tone(Tone_Pin,tone_min+GameCounter,newtone);
+      if(GameCounter%newpos==0) MoveDEDUFlag(((float)GameCounter/(float)Full_Cycle)*100);
+      if(GameCounter%newtone==0) tone(Tone_Pin,tone_min+GameCounter,newtone);
     }
     else
     {
-      MoveDEDUFlag((((float)Full_Cycle-(float)GameCounter)/(float)Full_Cycle)*100);
-      if(j%newtone==0) tone(Tone_Pin,tone_min+Full_Cycle-GameCounter,newtone);
+      if(GameCounter%newpos==0) MoveDEDUFlag((((float)Full_Cycle-(float)GameCounter)/(float)Full_Cycle)*100);
+      if(GameCounter%newtone==0) tone(Tone_Pin,tone_min+Full_Cycle-GameCounter,newtone);
     }
-    
-    //Read current state
-    for (int i=0;i<nbj;i++)
-    {
-      CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
-      if(!PreviousState[i] && CurrentState[i] && PlayerScore[i]!=-1)
-      {
-        //RECORD PLAYER SCORE BASED ON GAMECOUNTER AND CYCLES.
-      }
-    }
+
 
     //Save current in previous state
     for (int i=0;i<nbj;i++)
@@ -123,16 +115,28 @@ void EstimeDedu()
       PreviousState[i]=CurrentState[i];
     }
     
+    //Increment Counter and Wait.
     GameCounter++;
+    delay(game_delay);
+    
+    //Reset Condition
     if(GameCounter%Full_Cycle==0)
     {
       GameCounter=0;
-      
+      GameCycles++;
+      GoingUp=!GoingUp;
+      if(PlayersInGame<=0) GameCycles=MaxMainGameCycles;
     }
-  }while(PlayersInGame<=0 || GameCycles>=MainGameCycles);
+  }while(GameCycles<MaxMainGameCycles || PlayersInGame==nbj);
 
-  
+  MoveDEDUFlag(0);
+  do
+  {
+    
+  }while(1);
+
   //Deal with players who have not made their choices at game end.
+  
     
   //Une fois que tout le monde a choisi sa valeur ou que le DEDU a cyclé 3 fois, arrêter le jeu.
   //Pour le score. Rapidement éliminer tous les joueurs sauf les 3 meilleurs.
