@@ -7,26 +7,33 @@ void EstimeDedu()
 {
   //Tunables
   const int MaxMainGameCycles=10;
-  const int AbsoluteMaxMainGameCycles=20;
-  const int Full_Cycle=2000;
+  const int AbsoluteMaxMainGameCycles=12;
+  const int Full_Cycle_Min=8;
+  const int Full_Cycle_Max=22;
   const int num_start_cycle=4;
+  bool NoTone=true;
 
+  int SavedTonePin=Tone_Pin;
+  if(NoTone)
+  {
+    Tone_Pin=9999;
+  }
+  int Full_Cycle=(random(Full_Cycle_Min,Full_Cycle_Max))*100;
   int GameCounter=0;
   int GameCycles=0;
   const int newtone=25;
   const int newpos=10;
-  const int tone_min=500;
+  const int tone_min=200;
   const int game_delay=1;
   bool GoingUp=true;
-  int Win=random(0.1*Full_Cycle,0.9*Full_Cycle);
+  int Win=random(0.2*Full_Cycle,0.8*Full_Cycle);
   int LightUp=Full_Cycle/nbj_max;
   int LightCount=0;
   int PlayersInGame=nbj;
-  const int num_items=4;
+  const int num_items=3;
   //0 Abs Score
   //1 Cycles
-  //2 PlayerId
-  //3 GameCounter At click
+  //2 GameCounter At click
   int Scores[nbj][num_items];
   for (int i=0; i<nbj; i++)
   {
@@ -40,6 +47,9 @@ void EstimeDedu()
   LOG_ED("ESTIME DEDU!");
   LOG_ED("Win");
   LOG_ED(Win);
+  LOG_ED("\n");
+  LOG_ED("Full_Cycle");
+  LOG_ED(Full_Cycle);
   LOG_ED("\n");
   
   //Signature: Dedu monte/descend et lumières individuelles consécutives.  Son Monte descend.
@@ -128,21 +138,23 @@ void EstimeDedu()
       if(!PreviousState[i] && CurrentState[i] && Scores[i][0]==-1)
       {
         //RECORD PLAYER SCORE BASED ON GAMECOUNTER AND CYCLES.
-        if(GoingUp) Scores[i][3]=GameCounter;
-        else Scores[i][3]=Full_Cycle-GameCounter;
-        Scores[i][0]=abs(Win-Scores[i][3]);
+        if(GoingUp) Scores[i][2]=GameCounter;
+        else Scores[i][2]=Full_Cycle-GameCounter;
+        Scores[i][0]=abs(Win-Scores[i][2]);
         Scores[i][1]=GameCycles;
-        Scores[i][2]=i;
         ActivateRedLight(i);
         PlayersInGame--;
 
         
         LOG_ED("\nPlayerPressing!\n");
+        LOG_ED("Player:");
+        LOG_ED(i);
+        LOG_ED("\n");
         LOG_ED("AbsoluteScore:");
         LOG_ED(Scores[i][0]);
         LOG_ED("\n");
-        LOG_ED("Scores[i][3]:");
-        LOG_ED(Scores[i][3]);
+        LOG_ED("Scores[i][2]:");
+        LOG_ED(Scores[i][2]);
         LOG_ED("\n");
         LOG_ED("GoingUp=");
         LOG_ED(GoingUp);
@@ -180,59 +192,88 @@ void EstimeDedu()
     }
   //Une fois que tout le monde a choisi sa valeur ou que le DEDU a cyclé x fois, arrêter le jeu.
   }while((GameCycles<MaxMainGameCycles || PlayersInGame==nbj) && GameCycles<AbsoluteMaxMainGameCycles);
+
+  //ResetTonePin
+  Tone_Pin=SavedTonePin;
   
   //FLAG DOWN, LIGHTS OUT
   MoveDEDUFlag(0);
   TurnOffAllRedLights();
-  int temp;
-  //SORT SCORES.
-  for(int i=0;i<nbj;i++)
-  {
-    for(int j=i+1;j<nbj;j++)
-    {
-      if(Scores[i][0] > Scores[j][0] || (Scores[i][0]==Scores[j][0] && Scores[i][1]>Scores[j][1]))
-      {
-        for(int x=0;x<num_items;x++)
-        {
-          temp=Scores[i][x];
-          Scores[i][x]=Scores[j][x];
-          Scores[j][x]=temp;
-        }
-      }
-    }
-  }
-  //Print Scores.
-  for(int i=0;i<nbj;i++)
-  {
-    for(int j=0;j<num_items;j++)
-    {
-      LOG_ED(Scores[i][j]);
-      LOG_ED(" ");
-    }
-    LOG_ED("\n");
-  }
 
-  int NumGoodScores;
+  
+  int Winner=-1;
   //Deal with players who have not made their choices at game end.
   for(int i=0; i<nbj; i++)
   {
     if(Scores[i][0]!=-1)
     {
-      NumGoodScores++;
+      if(Winner==-1)
+      {
+        Winner=i;
+      }
+      else if(Scores[i][0]<Scores[Winner][0] || (Scores[i][0]==Scores[Winner][0] && Scores[i][1]<Scores[Winner][1]))
+      {
+        Winner=i;
+      }
     }
   }
 
-  //Few GoodScores
-  if(NumGoodScores<3)
+  
+  if(Winner==-1)
   {
-    
+    AllLoosers();
   }
+  else
+  {
+    int NumScored=0;
+    bool Scored[nbj]={false};
+    
+    do
+    {
+      int Player=random(nbj);
+      LOG_ED("Player:");
+      LOG_ED(Player);
+      LOG_ED("\n");
+      if(Scored[Player]==false && Player!=Winner)
+      {
+        Scored[Player]=true;
+        NumScored++;
 
-  do
-  {
+        ActivateGreenLED(20);
+        MoveDEDUFlag(((float)Win/(float)Full_Cycle)*100);
+        delay(1000);
+        ActivateGreenLED(0);
+        
+        ActivateRedLight(Player);
+        delay(500);
+        MoveDEDUFlag(((float)Scores[Player][2]/(float)Full_Cycle)*100);
+        tone(Tone_Pin,200,200);
+        delay(500);
+        DeactivateRedLight(Player);
+        delay(500);
+        ActivateRedLight(Player);
+        tone(Tone_Pin,200,200);
+        delay(500);
+        DeactivateRedLight(Player);
+        
+        MoveDEDUFlag(((float)Win/(float)Full_Cycle)*100);
+      }
+    }while (NumScored<(nbj-1));
     
+    //WINNER
+    ActivateGreenLED(20);
+    MoveDEDUFlag(((float)Win/(float)Full_Cycle)*100);
+    delay(1000);
+    ActivateGreenLED(0);
+    ActivateRedLight(Winner);
+    delay(500);
+    MoveDEDUFlag(((float)Scores[Winner][2]/(float)Full_Cycle)*100);
+    WinnerSoundAndLight(Winner);
+
+    
+    MoveDEDUFlag(0);
+    TurnOffAllLights();
   }
-  while(1);
   
   //Pour le score. Rapidement éliminer tous les joueurs sauf les 3 meilleurs.
   //Pour ce faire, montrer le score de victoire, puis celui du joueur. Faire delta-son, puis un buzz et lumière clignotante.
