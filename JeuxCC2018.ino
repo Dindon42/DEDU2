@@ -7,13 +7,14 @@ void EstimeDedu()
 {
   //Tunables
   const int MaxMainGameCycles=10;
+  const int AbsoluteMaxMainGameCycles=20;
   const int Full_Cycle=2000;
   const int num_start_cycle=4;
-  
+
   int GameCounter=0;
   int GameCycles=0;
   const int newtone=25;
-  const int newpos=25;
+  const int newpos=10;
   const int tone_min=500;
   const int game_delay=1;
   bool GoingUp=true;
@@ -21,8 +22,10 @@ void EstimeDedu()
   int LightUp=Full_Cycle/nbj_max;
   int LightCount=0;
   int PlayersInGame=nbj;
-  float PlayerScore[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
-  int NumCycles[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+  int PlayerScore[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+  int PlayerCycles[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+  const int num_items=4;
+  int Scores[nbj][num_items];
   bool PreviousState[nbj_max]={false};
   bool CurrentState[nbj_max];
   LOG_ED("ESTIME DEDU!");
@@ -107,8 +110,49 @@ void EstimeDedu()
       if(GameCounter%newpos==0) MoveDEDUFlag((((float)Full_Cycle-(float)GameCounter)/(float)Full_Cycle)*100);
       if(GameCounter%newtone==0) tone(Tone_Pin,tone_min+Full_Cycle-GameCounter,newtone);
     }
+    
+    //Read current state
+    for (int i=0;i<nbj;i++)
+    {
+      CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
+      //Detect player press.
+      if(!PreviousState[i] && CurrentState[i] && PlayerScore[i]==-1)
+      {
+        //RECORD PLAYER SCORE BASED ON GAMECOUNTER AND CYCLES.
+        if(GoingUp) PlayerScore[i]=GameCounter;
+        else PlayerScore[i]=Full_Cycle-GameCounter;
+        PlayerCycles[i]=GameCycles;
+        PlayersInGame--;
+        Scores[i][0]=abs(Full_Cycle-PlayerScore[i]);
+        Scores[i][1]=PlayerCycles[i];
+        Scores[i][2]=i;
+        Scores[i][3]=PlayerScore[i];
+        ActivateRedLight(i);
 
-
+        
+        LOG_ED("\nPlayerPressing!\n");
+        LOG_ED("AbsoluteScore:");
+        LOG_ED(Scores[i][0]);
+        LOG_ED("\n");
+        LOG_ED("PlayerScore[i]:");
+        LOG_ED(PlayerScore[i]);
+        LOG_ED("\n");
+        LOG_ED("GoingUp=");
+        LOG_ED(GoingUp);
+        LOG_ED("\n");
+        LOG_ED("GameCounter=");
+        LOG_ED(GameCounter);
+        LOG_ED("\n");
+        LOG_ED("GameCycles=");
+        LOG_ED(GameCycles);
+        LOG_ED("\n");
+        LOG_ED("PlayersInGame=");
+        LOG_ED(PlayersInGame);
+        LOG_ED("\n");
+        LOG_ED("\n");
+      }
+    }
+    
     //Save current in previous state
     for (int i=0;i<nbj;i++)
     {
@@ -127,18 +171,62 @@ void EstimeDedu()
       GoingUp=!GoingUp;
       if(PlayersInGame<=0) GameCycles=MaxMainGameCycles;
     }
-  }while(GameCycles<MaxMainGameCycles || PlayersInGame==nbj);
-
+  //Une fois que tout le monde a choisi sa valeur ou que le DEDU a cyclé x fois, arrêter le jeu.
+  }while((GameCycles<MaxMainGameCycles || PlayersInGame==nbj) && GameCycles<AbsoluteMaxMainGameCycles);
+  
+  //FLAG DOWN, LIGHTS OUT
   MoveDEDUFlag(0);
+  TurnOffAllRedLights();
+  int temp;
+  //SORT SCORES.
+  for(int i=0;i<nbj;i++)
+  {
+    for(int j=i+1;j<nbj;j++)
+    {
+      if(Scores[i][0] > Scores[j][0] || (Scores[i][0]==Scores[j][0] && Scores[i][1]>Scores[j][1]))
+      {
+        for(int x=0;x<num_items;x++)
+        {
+          temp=Scores[i][x];
+          Scores[i][x]=Scores[j][x];
+          Scores[j][x]=temp;
+        }
+      }
+    }
+  }
+  //Print Scores.
+  for(int i=0;i<nbj;i++)
+  {
+    for(int j=0;j<num_items;j++)
+    {
+      LOG_ED(Scores[i][j]);
+      LOG_ED(" ");
+    }
+    LOG_ED("\n");
+  }
+
+  int NumGoodScores;
+  //Deal with players who have not made their choices at game end.
+  for(int i=0; i<nbj; i++)
+  {
+    if(PlayerScore[i]!=-1)
+    {
+      NumGoodScores++;
+    }
+  }
+
+  //Few GoodScores
+  if(NumGoodScores<3)
+  {
+    
+  }
+
   do
   {
     
-  }while(1);
-
-  //Deal with players who have not made their choices at game end.
+  }
+  while(1);
   
-    
-  //Une fois que tout le monde a choisi sa valeur ou que le DEDU a cyclé 3 fois, arrêter le jeu.
   //Pour le score. Rapidement éliminer tous les joueurs sauf les 3 meilleurs.
   //Pour ce faire, montrer le score de victoire, puis celui du joueur. Faire delta-son, puis un buzz et lumière clignotante.
   //Pour les 3 derniers: cycler entre les positions des 3 meilleurs quelques fois, puis faire le pattern précédent pour les 2 plus bas.
