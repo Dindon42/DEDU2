@@ -109,7 +109,7 @@ void DefineProbJeux()
   }
   //Add experimental modes here:
   GameProb[Game_id_JD][wMode]=120;
-  GameProb[Game_id_ED][wMode]=0;
+  GameProb[Game_id_ED][wMode]=120;
   
   //===================//
   
