@@ -9,7 +9,7 @@ void EstimeDedu()
   const int MaxMainGameCycles=10;
   const int AbsoluteMaxMainGameCycles=12;
   const int Full_Cycle_Min=8;
-  const int Full_Cycle_Max=22;
+  const int Full_Cycle_Max=15;
   const int num_start_cycle=4;
   bool NoTone=true;
 
