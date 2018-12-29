@@ -5,8 +5,10 @@
 #endif
 void PPV()
 {
+  //TUNABLES
+  int WinNumPress=5;
+  //END TUNABLES
   int Winner=-1;
-  int WinNumPress=6;
   unsigned long Game_Timer=0;
   unsigned long PreviousTotalPressTime[nbj_max]={0};
   unsigned long PressTime[nbj_max]={0};
