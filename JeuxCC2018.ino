@@ -5,14 +5,23 @@
 #endif
 void EstimeDedu()
 {
-  //Tunables
-  const int MaxMainGameCycles=10;
-  const int AbsoluteMaxMainGameCycles=12;
+  //Tunables//
+  //Control Game Length
+  const int MaxMainGameCycles=16;
+  const int AbsoluteMaxMainGameCycles=20;7
+  
+  //Control DEDU speed
   const int Full_Cycle_Min=8;
   const int Full_Cycle_Max=15;
+  
+  //Control Init
   const int num_start_cycle=4;
+  
+  //Control sound
   bool NoTone=true;
-
+  //END TUNABLES//
+  
+  //LOCALS
   int SavedTonePin=Tone_Pin;
   if(NoTone)
   {
@@ -218,7 +227,7 @@ void EstimeDedu()
     }
   }
 
-  
+  //No one clicked at game end.
   if(Winner==-1)
   {
     AllLoosers();
@@ -277,9 +286,10 @@ void EstimeDedu()
   
   //Pour le score. Rapidement éliminer tous les joueurs sauf les 3 meilleurs.
   //Pour ce faire, montrer le score de victoire, puis celui du joueur. Faire delta-son, puis un buzz et lumière clignotante.
-  //Pour les 3 derniers: cycler entre les positions des 3 meilleurs quelques fois, puis faire le pattern précédent pour les 2 plus bas.
+  //Pour le meilleur: cycler entre les positions des 3 meilleurs quelques fois, puis faire le pattern précédent pour les 2 plus bas.
   //Refaire le delta une dernière fois pour le meilleur, puis lui donner winnersoundlight();
 }
+
 
 #ifdef ENABLE_LOGGING
   #define LOG_JD(a) LOG_GAME(Game_id_JD,a)
