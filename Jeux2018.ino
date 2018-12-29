@@ -144,11 +144,13 @@ void PPV()
 #endif
 void PressBattle()
 {
-  int Winner=-1;
-  #define GAME_TIME_MIN 2542
-  #define GAME_TIME_MAX 5242
+  //TUNABLES
+  #define GAME_TIME_MIN 542
+  #define GAME_TIME_MAX 2242
+  //END TUNABLES
   #define SOUND_TIME 500
   #define GAME_DELAY 5
+  int Winner=-1;
   int Game_Time = (random(GAME_TIME_MIN,GAME_TIME_MAX)/GAME_DELAY);
   unsigned long Game_Timer=0;
   int ClicCount[nbj_max]={0};
