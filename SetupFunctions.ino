@@ -48,6 +48,7 @@ void DefineProbJeux()
   GameProb[Game_id_UC][wMode]=75;
   GameProb[Game_id_Duel][wMode]=80;
   GameProb[Game_id_PB][wMode]=80;
+  GameProb[Game_id_ED][wMode]=120;
   
   //Perdant Unique
   GameProb[Game_id_DQP][wMode]=40;
@@ -109,7 +110,6 @@ void DefineProbJeux()
   }
   //Add experimental modes here:
   GameProb[Game_id_JD][wMode]=120;
-  GameProb[Game_id_ED][wMode]=120;
   
   //===================//
   
