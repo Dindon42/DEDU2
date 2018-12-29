@@ -299,12 +299,20 @@ void EstimeDedu()
 void JeanDit()
 {
   //Tunables
-  int CounterJeanPerd=6000;
+  //GameCounter pour faire perdre Jean.
+  int CounterJeanPerd=8000;
+
+  //Nombre de cycles où Jean ne peut pas 
   int DisableJeanRandMin=200;
   int DisableJeanRandMax=542;
-  int DisableJeanMinDelta=(0.8*DisableJeanRandMin/nbj);
-  int DisableJeanMaxDelta=(0.7*DisableJeanRandMax/nbj);
+
+  //DELTA à chaque nouvelle ronde.
+  int DisableJeanMinDelta=(0.7*DisableJeanRandMin/nbj);
+  int DisableJeanMaxDelta=(0.6*DisableJeanRandMax/nbj);
+  
+  //Commencer avec un random élevé pour le premier round.
   int MaxCounterDisableJean=random((int)(DisableJeanRandMax*0.7),DisableJeanRandMax);
+  //TUNABLES END//
   
   int Winner=-1;
   int Jean=random(nbj);
