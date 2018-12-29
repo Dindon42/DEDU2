@@ -8,7 +8,7 @@ void EstimeDedu()
   //Tunables//
   //Control Game Length
   const int MaxMainGameCycles=16;
-  const int AbsoluteMaxMainGameCycles=20;7
+  const int AbsoluteMaxMainGameCycles=20;
   
   //Control DEDU speed
   const int Full_Cycle_Min=8;
