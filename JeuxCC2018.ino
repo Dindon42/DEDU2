@@ -302,16 +302,16 @@ void JeanDit()
   //GameCounter pour faire perdre Jean.
   int CounterJeanPerd=8000;
 
-  //Nombre de cycles où Jean ne peut pas 
-  int DisableJeanRandMin=200;
-  int DisableJeanRandMax=542;
+  //Nombre de cycles où Jean ne peut pas cliquer.
+  int DisableJeanRandMin=15200;
+  int DisableJeanRandMax=20542;
 
   //DELTA à chaque nouvelle ronde.
   int DisableJeanMinDelta=(0.7*DisableJeanRandMin/nbj);
   int DisableJeanMaxDelta=(0.6*DisableJeanRandMax/nbj);
   
-  //Commencer avec un random élevé pour le premier round.
-  int MaxCounterDisableJean=random((int)(DisableJeanRandMax*0.7),DisableJeanRandMax);
+  //Commencer avec un random pas trop élevé pour le premier round.
+  int MaxCounterDisableJean=random(300,500);
   //TUNABLES END//
   
   int Winner=-1;

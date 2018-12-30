@@ -41,7 +41,7 @@ bool SkipLights=false;
 
 //Opt Game
 bool ExclusiveGame=false;
-int ExclusiveGame_ID=Game_id_ED;
+int ExclusiveGame_ID=Game_id_JD;
 int ExclusiveGameDelay=0;
 
 //Opt Repartiteur

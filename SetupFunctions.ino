@@ -72,13 +72,14 @@ void DefineProbJeux()
   wMode=2;
   //Gagnant Unique
   GameProb[Game_id_PQP][wMode]=160;
-  GameProb[Game_id_UC][wMode]=140;
+  GameProb[Game_id_UC][wMode]=120;
   GameProb[Game_id_Duel][wMode]=100;
   GameProb[Game_id_PB][wMode]=80;
   GameProb[Game_id_PQR][wMode]=100;
   GameProb[Game_id_TV][wMode]=100;
   GameProb[Game_id_PPV][wMode]=100;
-  GameProb[Game_id_ED][wMode]=140;
+  GameProb[Game_id_ED][wMode]=120;
+  GameProb[Game_id_JD][wMode]=100;
   
   //Perdant Unique
   GameProb[Game_id_DQP][wMode]=80;
@@ -110,7 +111,7 @@ void DefineProbJeux()
     GameProb[i][wMode]=GameProb[i][wMode-1];
   }
   //Add experimental modes here:
-  GameProb[Game_id_JD][wMode]=120;
+  //GameProb[Game_id_JD][wMode]=120;
   
   //===================//
   
