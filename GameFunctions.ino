@@ -102,7 +102,7 @@ void SimulateGame(int game_id)
   }
 }
 
-void PlayGame(int game_id)
+void PlayGame(int game_id, bool DemoMode)
 {
   if(game_id==Game_id_PQP)
   {
@@ -187,6 +187,10 @@ void PlayGame(int game_id)
   else if (game_id==Game_id_ED)
   {
     EstimeDedu();
+  }
+  else if (game_id==Game_id_Seq)
+  {
+    SequenceGlobale(DemoMode);
   }
   else
   {
@@ -279,6 +283,14 @@ void LogGameName(int game_id, bool NewLine)
   else if (game_id==Game_id_ED)
   {
     LOG_GENERAL("EstimeDedu  ");
+  }
+  else if (game_id==Game_id_Seq)
+  {
+    LOG_GENERAL("Sequence G  ");
+  }
+  else
+  {
+    LOG_GENERAL("PQP         ");
   }
   if(NewLine) LOG_GENERAL("\n");
 }

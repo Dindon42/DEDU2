@@ -77,7 +77,7 @@ void DemoMode(bool AllModes)
           delay(GameDelay);
           
           //Demo the game once
-          PlayGame(i);
+          PlayGame(i,true);
 
           WaitForAllNonActive(nbj_raw);
           delay(120);

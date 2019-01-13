@@ -111,7 +111,7 @@ void DefineProbJeux()
     GameProb[i][wMode]=GameProb[i][wMode-1];
   }
   //Add experimental modes here:
-  //GameProb[Game_id_JD][wMode]=120;
+  GameProb[Game_id_Seq][wMode]=120;
   
   //===================//
   
@@ -162,6 +162,7 @@ void DefineGameTypes()
   //2=Jeu d'équipe
   GameTypes[Game_id_MIN]=2;
   GameTypes[Game_id_JC]=2;
+  GameTypes[Game_id_Seq]=2;
   
   //3=Autres
   GameTypes[Game_id_TO]=3;
