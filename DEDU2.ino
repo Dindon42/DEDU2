@@ -41,7 +41,7 @@ bool nosound=false;
 bool SkipLights=false;
 
 //Opt Game
-bool ExclusiveGame=false;
+bool ExclusiveGame=true;
 int ExclusiveGame_ID=Game_id_Seq;
 bool ExclusiveGame_DemoMode=false;
 int ExclusiveGameDelay=0;
@@ -53,7 +53,7 @@ bool DelayIfSkipGame=false;
 bool DoNotShowGameProb=false;
 
 //Opt Mus
-bool MusicMode=true;
+bool MusicMode=false;
 int SelectMusic=6;
 bool MusicRandFactVit=true;
 
