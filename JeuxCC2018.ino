@@ -303,9 +303,9 @@ void JeanDit()
   int CounterJeanPerd=8000;
 
   //Nombre de cycles où Jean ne peut pas cliquer.
-  int DisableJeanRandMin=15200;
+  int DisableJeanRandMin=15200; //Valeur plus élevée que JeanPerd pour qu'on perde un joueur par manche et Jean ne peut tuer personne.
   int DisableJeanRandMax=20542;
-
+  #define LightMax 12
   //DELTA à chaque nouvelle ronde.
   int DisableJeanMinDelta=(0.7*DisableJeanRandMin/nbj);
   int DisableJeanMaxDelta=(0.6*DisableJeanRandMax/nbj);
@@ -390,7 +390,8 @@ void JeanDit()
       delay(FlagDelay);
     }
   }
-
+  ActivateGreenLED(random(1,LightMax)); //Since Jean est toujours Disable
+  
   //Main game.
   do
   {
@@ -412,9 +413,10 @@ void JeanDit()
     
     if(DisableJean && !NewRound)
     {
-      ActivateGreenLED((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2);
+      int PercDisableRemaining=((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2);
+      //ActivateGreenLED(PercDisableRemaining);
       CounterDisableJean++;
-      if(CounterDisableJean>MaxCounterDisableJean || ((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2)<2)
+      if(CounterDisableJean>MaxCounterDisableJean || PercDisableRemaining<2)
       {
         DisableJean=false;
         CounterDisableJean=0;
@@ -520,6 +522,7 @@ void JeanDit()
           DisableJean=true;
           DisableJeanRandMin=DisableJeanRandMin-DisableJeanMinDelta;
           DisableJeanRandMax=DisableJeanRandMax-DisableJeanMaxDelta;
+          ActivateGreenLED(random(1,LightMax)); //Since Jean est toujours Disable
           
           if(TargetState) MoveDEDUFlag(100);
           else MoveDEDUFlag(0);
@@ -614,7 +617,7 @@ void JeanDit()
       }
       
       //Log at decent pace.
-      if(GameCounter%1000==0)
+      if(GameCounter%1400==0)
       {
         LOG_JD("PlayersInGame:");
         LOG_JD(NumInGame);
@@ -622,6 +625,19 @@ void JeanDit()
         LOG_JD("Safe Players:");
         LOG_JD(NumSafe);
         LOG_JD("\n");
+      }
+
+      
+      //Periodically Extinguish Loosers.
+      if(GameCounter%620==0)
+      {
+        for (int i=0;i<nbj;i++)
+        {
+          if(!PlayersInGame[i] && i!=Jean)
+          {
+            DeactivateRedLight(i);
+          }
+        }
       }
 
       if(NumInGame<=0) JeanGagne=true;
@@ -640,6 +656,8 @@ void JeanDit()
   {
     LooserSoundAndLight(Jean);
     JoueurHonte=MarqueurHonte(Jean,DelaiPetiteHonte);
+    //Reset jeux qui transfèrent la honte
+    ResetProbHonte();
   }
   else if(JeanGagne)
   {
