@@ -33,28 +33,29 @@ int const Game_id_FFA=21;
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-//#define ENABLE_LOGGING
+#define ENABLE_LOGGING
 
 //Opt Gen
-bool SkipSetup=false;
+bool SkipSetup=true;
 bool nosound=false;
 bool SkipLights=false;
 
 //Opt Game
 bool ExclusiveGame=false;
-int ExclusiveGame_ID=Game_id_JD;
+int ExclusiveGame_ID=Game_id_Seq;
+bool ExclusiveGame_DemoMode=false;
 int ExclusiveGameDelay=0;
 
 //Opt Repartiteur
-bool SkipFraudeur=false;
+bool SkipFraudeur=true;
 bool SkipGame=false;
 bool DelayIfSkipGame=false;
 bool DoNotShowGameProb=false;
 
 //Opt Mus
-bool MusicMode=false;
-int SelectMusic=-1;
-bool MusicRandFactVit=false;
+bool MusicMode=true;
+int SelectMusic=6;
+bool MusicRandFactVit=true;
 
 //SETUP IF SKIPPED:
 int nbj=10;
@@ -152,9 +153,9 @@ int RandomMax;
 
 
 ////Chansons.
-int const NombreChansons=13;
+int const NombreChansons=14;
 int ChansonPourJeu=0;
-int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
   const PROGMEM float ChansonDEDU[3][18]={
     {196,196,196,247,247,261,261,349,247,196,196,294,247,196,330,294,247,261},
     {150,150,150,300,300,300,300,600,150,150,150,150,150,150,600,150,150,600},
@@ -186,7 +187,7 @@ int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
     {155.9,35.6,45.1,45.1,53.3,78.3,191.7,231.8,96,43.9,54.5,52.2,52.2,99.6,238.9,218.4,85.8,50.7,44.2,56.9,46.2,84.2,49.8,56.9,53.3,46.2,72.4,27.4,46.2,41.5,46.2,210.7},
     };
   const PROGMEM float SWTheme[3][19]={
-    {349,349,349,466,698,622,587,523,1864,698,622,587,523,1864,698,622,587,622,523},
+    {349,349,349,466,698,622,587,523,932,698,622,587,523,932,698,622,587,622,523},
     {64.8,64.8,64.8,756.5,756.5,82.1,82.1,77.8,791.1,341.5,77.8,77.8,77.8,791.1,376.1,77.8,77.8,77.8,825.7},
     {101.8,101.8,101.8,243.5,243.5,84.5,84.5,88.9,208.9,158.5,88.9,88.9,88.9,208.9,123.9,88.9,88.9,88.9,289.9},
     };
@@ -219,6 +220,11 @@ int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
     {554,493,554,369,587,554,587,554,493,587,554,587,369,493,440,493,440,415,493,440,415,440,493,440,493,554,493,440,415,369,587,554,554,587,554,493,554},
     {76.6,76.6,494.4,621.2,76.6,76.6,76.6,76.6,748.1,76.6,76.6,498.8,498.8,76.6,76.6,76.6,76.6,76.6,76.6,625.6,76.6,76.6,748.1,76.6,76.6,207.8,192.5,203.4,183.8,492.2,444.1,1375.9,91.9,91.9,91.9,91.9,1400},
     {71.9,74.5,104.6,524.6,74.5,69.3,225.5,225.5,629.5,69.3,74.5,100.2,506.5,74.5,74.5,225.5,220.3,225.5,220.3,275.4,74.5,74.5,152.9,69.3,74.5,94.3,104.4,98.6,118.3,106.8,154.9,426.1,54,59.2,59.2,59.2,235.5},
+    };
+  const PROGMEM float Tetris[3][37] = {
+    {659,493,523,587,523,493,440,440,523,659,587,523,493,523,587,659,523,440,440,587,698,880,783,698,659,523,659,587,523,493,493,523,587,659,523,440,440},
+    {385.9,193,193,385.9,193,193,385.9,193,193,385.9,193,193,643.2,193,385.9,385.9,385.9,385.9,900.5,385.9,193,385.9,193,193,643.2,193,385.9,193,193,385.9,193,193,385.9,385.9,385.9,385.9,900.5},
+    {216.5,108.2,108.2,216.5,108.2,108.2,216.5,108.2,108.2,216.5,92.6,123.9,260.4,108.2,216.5,216.5,216.5,216.5,605.5,216.5,108.2,216.5,108.2,108.2,260.4,108.2,216.5,108.2,108.2,216.5,108.2,108.2,216.5,216.5,225.9,207.1,222.7},
     };
 
 //One-time setup:
@@ -345,7 +351,7 @@ void loop()
     #ifdef ENABLE_LOGGING
       ActiveGameLogging[ExclusiveGame_ID]=true;
     #endif
-    PlayGame(ExclusiveGame_ID,false);
+    PlayGame(ExclusiveGame_ID,ExclusiveGame_DemoMode);
     delay(ExclusiveGameDelay);
     loop();
   }

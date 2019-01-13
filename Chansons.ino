@@ -214,7 +214,7 @@ int SelectionChanson(int Numero)
           }
       }
       RandomMin = 85;
-      RandomMax = 115;
+      RandomMax = 105;
       return NombreDeNotes;
     case 9:
       pf = (float*)Scatman2;
@@ -227,7 +227,7 @@ int SelectionChanson(int Numero)
           }
       }
       RandomMin = 85;
-      RandomMax = 115;
+      RandomMax = 105;
       return NombreDeNotes;
     case 10:
       pf = (float*)Boten2;
@@ -255,7 +255,7 @@ int SelectionChanson(int Numero)
       RandomMin = 105;
       RandomMax = 155;
       return NombreDeNotes;
-    default:
+    case 12:
       pf = (float*)ctd2;
       NombreDeNotes = sizeof(ctd2[0]) / sizeof(float);
       for (int i = 0; i < ParamChansons; i++)
@@ -268,7 +268,19 @@ int SelectionChanson(int Numero)
       RandomMin = 100;
       RandomMax = 155;
       return NombreDeNotes;
-
+    default:
+      pf = (float*)Tetris;
+      NombreDeNotes = sizeof(Tetris[0]) / sizeof(float);
+      for (int i = 0; i < ParamChansons; i++)
+      {
+          for (int j = 0; j < NombreDeNotes; j++)
+          {
+              MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
+          }
+      }
+      RandomMin = 115;
+      RandomMax = 160;
+      return NombreDeNotes;
 /*
 case 3:
   pf=(float *)Darude;
