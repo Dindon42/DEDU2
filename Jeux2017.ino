@@ -1070,7 +1070,7 @@ void JeuChanson(int id_chanson)
     //Show the Player
     for(int n=0; n<NombreNotes; n++)
     {
-      PlayNoteWithLight(Tone_Pin, ChansonMod[0][n], ChansonMod[1][n], ChansonMod[2][n],OrdreJoueurs[n]);
+      PlayNoteWithLight(ChansonMod[0][n], ChansonMod[1][n], ChansonMod[2][n],OrdreJoueurs[n]);
     }
 
     

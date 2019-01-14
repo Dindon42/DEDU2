@@ -112,7 +112,7 @@ void EstimeDedu()
     TurnOffAllRedLights();
     delay(500);
     TurnOnAllRedLights();
-    PlayNote(Tone_Pin,tone_min+Win,500,0);
+    PlayNote(tone_min+Win,500,0);
   }
   TurnOffAllRedLights();
   delay(500);

@@ -81,7 +81,7 @@ void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse)
   for (int n=0 ; n<NombreNotes ; n++)
   {
     //PlayNote(int Tone_Pin, float Freq, float PlayTime, float WaitTime)
-    PlayNote(Tone_Pin, MaChanson[0][n], MaChanson[1][n]/FactVit, MaChanson[2][n]/FactVit);
+    PlayNote(MaChanson[0][n], MaChanson[1][n]/FactVit, MaChanson[2][n]/FactVit);
   }
 
   

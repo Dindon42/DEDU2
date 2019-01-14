@@ -58,7 +58,7 @@ int SelectMusic=6;
 bool MusicRandFactVit=true;
 
 //SETUP IF SKIPPED:
-int nbj=10;
+int nbj=6;
 int vitesse=10;
 int Game_Mode=3;
 //Demo Mode

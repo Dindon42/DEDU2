@@ -122,13 +122,13 @@ void ClignoteEtSon(int NbMax,int FreqStart, int FreqIncrease, int NbOffset)
   delay(500);
 }
 
-void PlayNote(int Tone_Pin, float Freq, float PlayTime, float WaitTime)
+void PlayNote(float Freq, float PlayTime, float WaitTime)
 {
   tone(Tone_Pin, Freq, PlayTime);
   delay(PlayTime+WaitTime);
 }
 
-void PlayNoteWithLight(int Tone_Pin, float Freq, float PlayTime, float WaitTime,int Player)
+void PlayNoteWithLight(float Freq, float PlayTime, float WaitTime,int Player)
 {
   ActivateRedLight(Player);
   tone(Tone_Pin, Freq, PlayTime);
@@ -349,10 +349,22 @@ void WinnerSoundAndLight(int iPlayer)
 
 void SonTestMode()
 {
-  PlayNote(Tone_Pin,2500,200,20);
-  PlayNote(Tone_Pin,1000,200,20);
-  PlayNote(Tone_Pin,2500,200,20);
-  PlayNote(Tone_Pin,1000,200,20);
+  PlayNote(2500,200,20);
+  PlayNote(1000,200,20);
+  PlayNote(2500,200,20);
+  PlayNote(1000,200,20);
+}
+
+void TicTac(int SilenceTime, int Repeats)
+{
+  if(Repeats<0) Repeats=1;
+  for(int i=0; i<Repeats; i++)
+  {
+    tone(Tone_Pin,250,10);
+    delay(SilenceTime);
+    tone(Tone_Pin,700,10);
+    delay(SilenceTime);
+  }
 }
 
 
