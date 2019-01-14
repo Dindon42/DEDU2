@@ -192,11 +192,16 @@ void SequenceGlobale(bool DemoMode)
         GameSilenceTime-=GameTimeDecrease;
         delay(500);
         DeactivateGreenLED();
-        TicTac(700,2);
+        delay(500);
       }
+      LOG_SG("==========\n");
       LOG_SG("NEW ROUND!\n");
+      LOG_SG("==========\n");
       LOG_SG("GameProgress:");
       LOG_SG(GameProgress);
+      LOG_SG("\n");
+      LOG_SG("First:");
+      LOG_SG(GameSequence[0]+1);
       LOG_SG("\n");
       //Demo the sequence
       for(int i=0; i<GameProgress; i++)
@@ -204,7 +209,8 @@ void SequenceGlobale(bool DemoMode)
         PlayNoteWithLight(Tones[GameSequence[i]],GameNoteTime,GameSilenceTime,GameSequence[i]);
       }
       TurnOffAllLights();
-      delay(500);
+      delay(700);
+      TicTac(700,2);
       NewRound=false;
       SeqProgress=0;
       GameCounter=0;
@@ -222,10 +228,20 @@ void SequenceGlobale(bool DemoMode)
 
         //Log presser
         LOG_SG("Press:");
-        LOG_SG(i);
+        LOG_SG(i+1);
         LOG_SG("\n");
-        LOG_SG("GameSequence[SeqProgress]:");
-        LOG_SG(GameSequence[SeqProgress]);
+        LOG_SG("Current:");
+        LOG_SG(GameSequence[SeqProgress]+1);
+        LOG_SG("\n");
+        LOG_SG("Next:");
+        if(SeqProgress==GameLength-1)
+        {
+          LOG_SG("N/A");
+        }
+        else
+        {
+          LOG_SG(GameSequence[SeqProgress+1]+1);
+        }
         LOG_SG("\n");
         
         //Illuminate the player's LED
@@ -261,7 +277,7 @@ void SequenceGlobale(bool DemoMode)
       else
       {
         GameProgress+=random(JumpMin,JumpMax+1);
-        if(GameProgress>GameLength) GameProgress==GameLength;
+        if(GameProgress>GameLength) GameProgress=GameLength;
         NewRound=true;
       }
     }

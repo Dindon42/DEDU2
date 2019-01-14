@@ -37,13 +37,13 @@ int const Game_id_FFA=21;
 
 //Opt Gen
 bool SkipSetup=true;
-bool nosound=false;
+bool nosound=true;
 bool SkipLights=false;
 
 //Opt Game
 bool ExclusiveGame=true;
 int ExclusiveGame_ID=Game_id_Seq;
-bool ExclusiveGame_DemoMode=false;
+bool ExclusiveGame_DemoMode=true;
 int ExclusiveGameDelay=0;
 
 //Opt Repartiteur
