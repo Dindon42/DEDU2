@@ -63,6 +63,7 @@
 int nbj=6;
 int vitesse=10;
 int Game_Mode=3;
+bool ExpertMode=true;
 //Demo Mode
 bool EnterDemo=false;
 bool AllModes=false;

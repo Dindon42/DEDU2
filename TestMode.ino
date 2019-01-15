@@ -64,9 +64,6 @@ void DemoMode(bool AllModes)
       (Game_Mode > 0 && GameProb[i][Game_Mode]!=0 && GameProb[i][Game_Mode-1]==0 && ProbIndivJeux[i]!=0) ||
        AllModes && ProbIndivJeux[i]!=0)
     {  
-      
-      
-      
       LOG_GENERAL("JEU:");
       LogGameName(i,true);
       if (!SkipGame)

@@ -295,6 +295,7 @@ void GameMode()
   {
     Game_Mode=Selection;
   }
+  ExpertMode=Game_Mode==NbModes-1;
   
   if(OriginalSel<5)
   {

@@ -300,6 +300,42 @@ void OneUp()
   noTone(Tone_Pin);
 }
 
+void MultiLooserSoundAndLight(bool Loosers[nbj_max])
+{
+  ActivateBlueLED(10);
+  
+  for (int j=0; j<nbj_max;j++)
+  {
+    if(Loosers[j]) ActivateRedLight(j);
+  }
+  
+  for (int i = 0; i < 80; i++)
+  {
+    Tone_Frequency = 2000 - 20 * i;
+    tone(Tone_Pin, Tone_Frequency);
+    delay(10);
+  }
+  noTone(Tone_Pin);
+
+  //Identify the Loosers
+  for (int e = 1; e <= 4; e++)
+  {
+    for (int j=0; j<nbj_max;j++)
+    {
+      if(Loosers[j]) ActivateRedLight(j);
+    }
+    delay(500);
+    for (int j=0; j<nbj_max;j++)
+    {
+      if(Loosers[j]) DeactivateRedLight(j);
+    }
+    delay(500);
+  }
+  
+  TurnOffAllRedLights();
+  DeactivateBlueLED();
+}
+
 void SingleLooserSoundAndLight(int iPlayer)
 {
   ActivateBlueLED(10);
