@@ -48,7 +48,7 @@ void DefinirOrdreChansons()
   LOG_GENERAL("\n");
 }
 
-void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse)
+void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse, bool Lumiere)
 {
   int NombreNotes=SelectionChanson(Chanson);
   int myRand;
@@ -80,11 +80,26 @@ void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse)
   
   for (int n=0 ; n<NombreNotes ; n++)
   {
+    if(Lumiere)
+    {
+      switch(n%3)
+      {
+        case 0:
+            TurnOnAllRedLights();
+            break;
+        case 1:
+            ActivateBlueLED(80);
+            break;
+        case 2:
+            ActivateGreenLED(80);
+            break;
+      }
+    }
     //PlayNote(int Tone_Pin, float Freq, float PlayTime, float WaitTime)
     PlayNote(MaChanson[0][n], MaChanson[1][n]/FactVit, MaChanson[2][n]/FactVit);
-  }
 
-  
+    if(Lumiere) TurnOffAllLights();
+  }
 
   LOG_GENERAL("===================\n");
   LOG_GENERAL("= JoueChanson FIN =\n");

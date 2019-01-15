@@ -300,7 +300,32 @@ void OneUp()
   noTone(Tone_Pin);
 }
 
-void LooserSoundAndLight(int iPlayer)
+void SingleLooserSoundAndLight(int iPlayer)
+{
+  ActivateBlueLED(10);
+  ActivateRedLight(iPlayer);
+  for (int i = 0; i < 80; i++)
+  {
+    Tone_Frequency = 2000 - 20 * i;
+    tone(Tone_Pin, Tone_Frequency);
+    delay(10);
+  }
+  noTone(Tone_Pin);
+
+  //Identify the Looser
+  for (int e = 1; e <= 4; e++)
+  {
+    ActivateRedLight(iPlayer);
+    delay(500);
+    DeactivateRedLight(iPlayer);
+    delay(500);
+  }
+  
+  TurnOffAllRedLights();
+  DeactivateBlueLED();
+}
+
+void LooserSoundAndLight(int iPlayer, bool extratoggles)
 {
   for(int i=0 ; i<2 ; i++)
   {
@@ -310,9 +335,20 @@ void LooserSoundAndLight(int iPlayer)
     DeactivateRedLight(iPlayer);
     delay(500);
   }
+
+  if(extratoggles)
+  {
+    for(int i=0 ; i<2 ; i++)
+    {
+      ActivateRedLight(iPlayer);
+      delay(500);
+      DeactivateRedLight(iPlayer);
+      delay(500);
+    }
+  }
 }
 
-void AllLoosers()
+void AllLoosersSoundAndLight()
 {
   ActivateBlueLED(20);
     

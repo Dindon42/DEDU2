@@ -352,6 +352,11 @@ void ResetProbHonte()
   DivideGameProb(Game_id_TDD,2);
 }
 
+void ResetProbFFA()
+{
+  ResetGameProb(Game_id_FFA);
+}
+
 void LogGameCounts()
 {
   LOG_GENERAL("TOTAL DE JEUX:");

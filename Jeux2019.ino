@@ -8,22 +8,27 @@ void SequenceGlobale(bool DemoMode)
 {
   //Tunables
   #define MaxGameCounterFailAll 1000
-  #define GameLengthPlayerFactorMin 2
-  #define GameLengthPlayerFactorMax 4
+  #define GameLengthPlayerFactorMin 1
+  #define GameLengthPlayerFactorMax 3
   #define GameLengthPlayerFactorDemo 1
+  #define MaxInvalSeqMD 100
+  #define MaxInvalSeqVT 400
   #define IntroNoteTime 150
   #define IntroSilenceTime 150
+  #define GameNoteTimeMin 150
+  #define GameSilenceTimeMin 150
+  #define GameTimeDecreaseMin 5
+  #define GameTimeDecreaseMax 25
   int GameNoteTime=300;
   int GameSilenceTime=300;
-  int GameTimeDecrease=5;
   if(DemoMode)
   {
-    #define JumpMin 1
-    #define JumpMax 1
+    #define JumpMin 2
+    #define JumpMax 2
   }
   else
   {
-    #define JumpMin 1
+    #define JumpMin 2
     #define JumpMax 4
   }
   //Tunables END.
@@ -31,10 +36,9 @@ void SequenceGlobale(bool DemoMode)
   //Game vars
   #define Gamedelay 15
   int GameCounter;
-  int GameLengthBaseNum=(int)nbj/2;
-  int GameLength=DemoMode ? GameLengthBaseNum+(nbj*GameLengthPlayerFactorDemo) : random(nbj*GameLengthPlayerFactorMin,nbj*GameLengthPlayerFactorMax);
-  if(GameLength%nbj<GameLengthBaseNum) GameLength+=GameLengthBaseNum;
-  int GameProgressInit=DemoMode ? 1 : random(JumpMin,JumpMax);
+  int GameLength=DemoMode ? (nbj*GameLengthPlayerFactorDemo)+2 : random(nbj*GameLengthPlayerFactorMin+2,nbj*GameLengthPlayerFactorMax+1);
+  if(GameLength%nbj==0) GameLength++;
+  int GameProgressInit=random(JumpMin,JumpMax+1);
   int GameProgress=GameProgressInit;
   int ValidityThreshold=max(1,(int)GameLength / nbj);
   int ValidityMaxDelta=2;
@@ -52,7 +56,6 @@ void SequenceGlobale(bool DemoMode)
   LOG_SG("SEQUENCE GLOBALE\n");
   LOG_SG("================\n");
   LOG_SG("\n");
-
   LOG_SG("GameLength:");
   LOG_SG(GameLength);
   LOG_SG("\n");
@@ -101,6 +104,35 @@ void SequenceGlobale(bool DemoMode)
       InvalidSequence=true;
       NumInvalidSeq++;
     }
+
+    bool LogMaxInval=false
+    if(NumInvalidSeq%MaxInvalSeqMD==MaxInvalSeqMD-1)
+    {
+      LogMaxInval=true;
+      ValidityMaxDelta++;
+    }
+    if(NumInvalidSeq%MaxInvalSeqVT==MaxInvalSeqVT-1)
+    {
+      LogMaxInval=true;
+      ValidityThreshold=max(1,ValidityThreshold-1);
+    }
+    if(LogMaxInval)
+    {
+      LOG_SG("TOO MANY INVALID!\n");
+      LOG_SG("-----------------\n");
+      LOG_SG("NumInvalidSeq:");
+      LOG_SG(NumInvalidSeq);
+      LOG_SG("\n");
+      LOG_SG("GameLength:");
+      LOG_SG(GameLength);
+      LOG_SG("\n");
+      LOG_SG("ValidityThreshold:");
+      LOG_SG(ValidityThreshold);
+      LOG_SG("\n");
+      LOG_SG("ValidityMaxDelta:");
+      LOG_SG(ValidityMaxDelta);
+      LOG_SG("\n");
+    }
     
     if(!InvalidSequence)
     {
@@ -116,16 +148,6 @@ void SequenceGlobale(bool DemoMode)
     }
     
   }while(InvalidSequence);
-
-  //Log Sequence
-  LOG_SG("\n");
-  LOG_SG("Game Sequence:\n");
-  for(int i=0; i<GameLength; i++)
-  {
-    LOG_SG(GameSequence[i]+1);
-    LOG_SG(", ");
-  }
-  LOG_SG("\n");
   
   //Log IndivCounts
   for(int j=0; j<nbj; j++)
@@ -142,33 +164,48 @@ void SequenceGlobale(bool DemoMode)
     LOG_SG("\n");
   }
   LOG_SG("\n");
-  
-  //Light Signature
-  //Run the sequence quickly, play notes and move DEDU accordingly.
-  int PrevG=0;
-  int PrevB=0;
-  for(int i=0; i<GameLength; i++)
-  {
-    int CurG;
-    int CurB;
-    do
+
+
+      //Log Sequence
+      LOG_SG("\n");
+      LOG_SG("Game Sequence:\n");
+      for(int i=0; i<GameLength; i++)
+      {
+        LOG_SG(GameSequence[i]+1);
+        LOG_SG(", ");
+      }
+      LOG_SG("\n");
+      SequenceGlobale(false);
+
+  if(!SkipLights)
     {
-      CurG=random(0,3);
-      CurB=random(0,3);
-    }while((CurG==PrevG && CurB==PrevB) || (CurG==0 && CurB==0));
+    //Light Signature
+    //Run the sequence quickly, play notes and move DEDU accordingly.
+    int PrevG=0;
+    int PrevB=0;
+    for(int i=0; i<GameLength; i++)
+    {
+      int CurG;
+      int CurB;
+      do
+      {
+        CurG=random(0,3);
+        CurB=random(0,3);
+      }while((CurG==PrevG && CurB==PrevB) || (CurG==0 && CurB==0));
+      
+      ActivateBlueLED(CurG*10);
+      ActivateGreenLED(CurB*10);
+      //void PlayNoteWithLight(int Tone_Pin, float Freq, float PlayTime, float WaitTime,int Player)
+      PlayNoteWithLight(Tones[GameSequence[i]],IntroNoteTime,IntroSilenceTime,GameSequence[i]);
+      PrevG=CurG;
+      PrevB=CurB;
+    }
+    TurnOffAllLights();
+    delay(700);
     
-    ActivateBlueLED(CurG*10);
-    ActivateGreenLED(CurB*10);
-    //void PlayNoteWithLight(int Tone_Pin, float Freq, float PlayTime, float WaitTime,int Player)
-    PlayNoteWithLight(Tones[GameSequence[i]],IntroNoteTime,IntroSilenceTime,GameSequence[i]);
-    PrevG=CurG;
-    PrevB=CurB;
+    TicTac(700,2);
+    delay(700);
   }
-  TurnOffAllLights();
-  delay(700);
-  
-  TicTac(700,2);
-  delay(700);
 
   //Main Game Loop
   bool NewRound=true;
@@ -181,6 +218,19 @@ void SequenceGlobale(bool DemoMode)
   {
     if(NewRound)
     {
+      LOG_SG("==========\n");
+      LOG_SG("NEW ROUND!\n");
+      LOG_SG("==========\n");
+      //Log Sequence
+      LOG_SG("\n");
+      LOG_SG("Game Sequence:\n");
+      for(int i=0; i<GameLength; i++)
+      {
+        LOG_SG(GameSequence[i]+1);
+        LOG_SG(", ");
+      }
+      LOG_SG("\n");
+      
       if(GameProgress>GameProgressInit)
       {
         delay(GameNoteTime);
@@ -188,20 +238,25 @@ void SequenceGlobale(bool DemoMode)
         delay(500);
         ActivateGreenLED(20);
         OneUp();
-        GameNoteTime-=GameTimeDecrease;
-        GameSilenceTime-=GameTimeDecrease;
+        GameNoteTime-=random(GameTimeDecreaseMin,GameTimeDecreaseMax);
+        GameSilenceTime-=random(GameTimeDecreaseMin,GameTimeDecreaseMax);
+        if(GameNoteTime<GameNoteTimeMin) GameNoteTime=GameNoteTimeMin;
+        if(GameSilenceTime<GameSilenceTimeMin) GameSilenceTime=GameSilenceTimeMin;
         delay(500);
         DeactivateGreenLED();
         delay(500);
       }
-      LOG_SG("==========\n");
-      LOG_SG("NEW ROUND!\n");
-      LOG_SG("==========\n");
       LOG_SG("GameProgress:");
       LOG_SG(GameProgress);
       LOG_SG("\n");
       LOG_SG("First:");
       LOG_SG(GameSequence[0]+1);
+      LOG_SG("\n");
+      LOG_SG("GameNoteTime:");
+      LOG_SG(GameNoteTime);
+      LOG_SG("\n");
+      LOG_SG("GameSilenceTime:");
+      LOG_SG(GameSilenceTime);
       LOG_SG("\n");
       //Demo the sequence
       for(int i=0; i<GameProgress; i++)
@@ -243,6 +298,7 @@ void SequenceGlobale(bool DemoMode)
           LOG_SG(GameSequence[SeqProgress+1]+1);
         }
         LOG_SG("\n");
+        LOG_SG("------------\n");
         
         //Illuminate the player's LED
         ActivateRedLight(i);
@@ -306,6 +362,8 @@ void SequenceGlobale(bool DemoMode)
     LOG_SG("---------------------\n");
     LOG_SG("GAME END: ALL LOOSERS\n");
     LOG_SG("---------------------\n");
+    AllLoosersSoundAndLight();
+    TurnOffAllLights();
   }
   
   if(Looser!=-1)
@@ -313,6 +371,9 @@ void SequenceGlobale(bool DemoMode)
     LOG_SG("---------------------\n");
     LOG_SG("GAME END:    1 LOOSER\n");
     LOG_SG("---------------------\n");
+    LooserSoundAndLight(Looser,false);
+    SingleLooserSoundAndLight(Looser);
+    TurnOffAllLights();
   }
   
   if(SequenceComplete)
@@ -320,6 +381,16 @@ void SequenceGlobale(bool DemoMode)
     LOG_SG("---------------------\n");
     LOG_SG("GAME END:SEQ COMPLETE\n");
     LOG_SG("---------------------\n");
+    ActivateGreenLED(20);
+    delay(500);
+    for(int i=0; i<ValidityThreshold; i++)
+    {
+      OneUp();
+      delay(500);
+    }
+    TurnOffAllLights();
+    ResetProbFFA();
+    FFA();
   }
 }
 

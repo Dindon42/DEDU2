@@ -37,13 +37,13 @@ int const Game_id_FFA=21;
 
 //Opt Gen
 bool SkipSetup=true;
-bool nosound=true;
+bool nosound=false;
 bool SkipLights=false;
 
 //Opt Game
 bool ExclusiveGame=true;
 int ExclusiveGame_ID=Game_id_Seq;
-bool ExclusiveGame_DemoMode=true;
+bool ExclusiveGame_DemoMode=false;
 int ExclusiveGameDelay=0;
 
 //Opt Repartiteur
@@ -54,11 +54,12 @@ bool DoNotShowGameProb=false;
 
 //Opt Mus
 bool MusicMode=false;
+bool MusicModeLumiere=false;
 int SelectMusic=6;
 bool MusicRandFactVit=true;
 
 //SETUP IF SKIPPED:
-int nbj=6;
+int nbj=10;
 int vitesse=10;
 int Game_Mode=3;
 //Demo Mode
@@ -328,7 +329,7 @@ void setup()
   else if(!SkipSetup)
   {
     //Toune de DEDU pour initialiser la chose.
-    JoueChanson(0,3,false);
+    JoueChanson(0,3,false, true);
   }
   
   LOG_GENERAL("==============\n");
@@ -374,7 +375,7 @@ void loop()
     }
     LOG_GENERAL(r);
     LOG_GENERAL("\n");
-    JoueChanson(r, 1, MusicRandFactVit);
+    JoueChanson(r, 1, MusicRandFactVit, MusicModeLumiere);
     delay(2500);
     loop();
   }

@@ -298,7 +298,7 @@ void DeDuel()
   if(TransfertHonte && Winner==Joueurs[1])
   {
     ///BRUIT ET TRANSFERT HONTE
-    LooserSoundAndLight(Joueurs[0]);
+    LooserSoundAndLight(Joueurs[0],false);
     JoueurHonte=MarqueurHonte(Joueurs[0],DelaiPetiteHonte);
     //Reset jeux qui transfèrent la honte
     ResetProbHonte();
@@ -913,19 +913,7 @@ void MIN()
   }
   else if(noloosers==false && allloosers==true)
   {
-    ActivateBlueLED(20);
-    
-    //Sound for Loosers.
-    for(int i=0 ; i<4 ; i++)
-    {
-      tone(Tone_Pin,800,700);
-      DeactivateBlueLED();
-      TurnOnAllRedLights();
-      delay(LightDelay);
-      TurnOffAllRedLights();
-      ActivateBlueLED(20);
-      delay(LightDelay);
-    }
+    AllLoosersSoundAndLight();
   }
   TurnOffAllLights();
 }

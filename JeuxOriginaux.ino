@@ -286,40 +286,21 @@ void DQP()
     z=z-ReadInputDeactivateOutputIfActive(nbj_raw);
   }while (z != 1);
   Perdant=FirstActiveOutput(nbj_raw);
-  
-  ActivateBlueLED(10);
+
   TurnOffNonActivePlayerRedLights();
   
-  for (int i = 1; i <= 80; i++)
-  {
-    Tone_Frequency = 2000 - 20 * i;
-    tone(Tone_Pin, Tone_Frequency);
-    delay(10);
-  }
-  noTone(Tone_Pin);
-
-  //Identify the Looser
-  for (int e = 1; e <= 4; e++) {
-    ActivateRedLight(Perdant);
-    delay(500);
-    DeactivateRedLight(Perdant);
-    delay(500);
-  }
+  SingleLooserSoundAndLight(Perdant);
   
-  TurnOffAllRedLights();
-  DeactivateBlueLED();
   delay(500);
 }
 
-  //Debut FFA
-
+//Debut FFA
 void FFA()
 {
   float myRand1 = random(280,400)/100;
   int myRand2 = random(25,32);
-  int r;
   
-  JoueChanson(0,myRand1,false);
+  JoueChanson(0,myRand1,false, true);
   
   for (int e = 1; e <= myRand2; e++) {
 
@@ -334,8 +315,7 @@ void FFA()
     DeactivateBlueLED();
 
     ActivateGreenLED(80);
-    r = 60 + random(200);
-    delay(r);
+    delay(60 + random(200));
     DeactivateGreenLED();
   }
 

@@ -230,7 +230,7 @@ void EstimeDedu()
   //No one clicked at game end.
   if(Winner==-1)
   {
-    AllLoosers();
+    AllLoosersSoundAndLight();
   }
   else
   {
@@ -654,7 +654,7 @@ void JeanDit()
 
   if(JeanPerd)
   {
-    LooserSoundAndLight(Jean);
+    LooserSoundAndLight(Jean,false);
     JoueurHonte=MarqueurHonte(Jean,DelaiPetiteHonte);
     //Reset jeux qui transfèrent la honte
     ResetProbHonte();

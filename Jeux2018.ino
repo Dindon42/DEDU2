@@ -1013,7 +1013,7 @@ void TeamDeDuel()
     }
     
     ///BRUIT ET TRANSFERT HONTE
-    LooserSoundAndLight(FailPlayer);
+    LooserSoundAndLight(FailPlayer,false);
     JoueurHonte=MarqueurHonte(FailPlayer,DelaiPetiteHonte);
     //Reset des jeux qui transferent la honte.
     ResetProbHonte();
@@ -1216,7 +1216,7 @@ void Tourniquet()
   delay(700);
   TurnOffAllLights();
 
-  LooserSoundAndLight(Looser);
+  LooserSoundAndLight(Looser,false);
   JoueurHonte=MarqueurHonte(Looser,DelaiPetiteHonte);
 }
 
