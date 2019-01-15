@@ -6,17 +6,22 @@
 void TheButton()
 {
   //Tunables
-  #define GameEndCounter 600
+  #define GameEndCounterPlayerFactor 100
   //Tunbles END
 
-  
+  //Local vars
+  int GameEndCounter=GameEndCounterPlayerFactor*nbj;
   #define Gamedelay 5
   bool SequenceComplete=false;
   int Looser=-1;
   bool TimeIsUp=false;
   int GameCounter=0;
   int GameCounterPrevAction=0;
-  int GameSequence[nbj]={-1};
+  int GameSequence[nbj];
+  for(int i=0; i<nbj; i++)
+  {
+    GameSequence[i]=-1;
+  }
   bool PreviousState[nbj]={false};
   bool CurrentState[nbj];
   int SeqProgress=0;
@@ -25,6 +30,25 @@ void TheButton()
   {
     WaitTime[j]=-1;
   }
+  //END LOCAL VARS
+
+  LOG_TB("================\n");
+  LOG_TB("   THE BUTTON\n");
+  LOG_TB("================\n");
+  LOG_TB("\n");
+  LOG_TB("GameEndCounter:");
+  LOG_TB(GameEndCounter);
+  LOG_TB("\n");
+  
+  //Log Sequence
+  LOG_TB("\n");
+  LOG_TB("Game Sequence:\n");
+  for(int i=0; i<nbj; i++)
+  {
+    LOG_TB(GameSequence[i]+1);
+    LOG_TB(", ");
+  }
+  LOG_TB("\n");
 
   MoveDEDUFlag(100);
   tone(Tone_Pin,500,1000);
@@ -33,7 +57,9 @@ void TheButton()
   do
   {
     //Move Flag To show game progress
-    MoveDEDUFlag(100-(int)100*GameCounter/GameEndCounter);
+    MoveDEDUFlag(100-(int)(100*(GameCounter/GameEndCounter)));
+    LOG_TB(100-(int)(100*(GameCounter/GameEndCounter)));
+    LOG_TB("\n");
 
     //Check player input.
     for(int i=0; i<nbj; i++)
@@ -44,6 +70,38 @@ void TheButton()
       //Check if player has started pressing
       if(!PreviousState[i] && CurrentState[i])
       {
+        
+        
+        //Log presser
+        LOG_TB("Press:");
+        LOG_TB(i+1);
+        LOG_TB("\n");
+        LOG_TB("Current:");
+        LOG_TB(GameSequence[SeqProgress]+1);
+        LOG_TB("\n");
+        LOG_TB("Next:");
+        if(SeqProgress==nbj-1)
+        {
+          LOG_TB("N/A");
+        }
+        else
+        {
+          LOG_TB(GameSequence[SeqProgress+1]+1);
+        }
+        LOG_TB("\n");
+        LOG_TB("------------\n");
+
+        
+        //Log Sequence
+        LOG_TB("\n");
+        LOG_TB("Game Sequence:\n");
+        for(int i=0; i<nbj; i++)
+        {
+          LOG_TB(GameSequence[i]+1);
+          LOG_TB(", ");
+        }
+        LOG_TB("\n");
+        
         //Player is pressing
         //If the game sequence is not defined for the current progress, define it and reset the sequence.
         if(GameSequence[SeqProgress]==-1)
@@ -94,15 +152,21 @@ void TheButton()
   if(TimeIsUp)
   {
     //Too slow, punish the slowest.
+    LOG_TB("GAME END: TOO SLOW!\n");
+    LOG_TB("GameCounter:");
+    LOG_TB(GameCounter);
+    LOG_TB("\n");
     
     //Was it someone's turn?
     if(GameSequence[SeqProgress]==-1)  //No seq assigned, all super slow.
     {
+      LOG_TB("ALL LOOSERS!\n");
       AllLoosersSoundAndLight();
       TurnOffAllLights();
     }
     else //Someone was slow
     {
+      LOG_TB("WHOS A SLOWPOKE?\n");
       //First record the last players' wait time
       WaitTime[GameSequence[SeqProgress]]=GameCounter-GameCounterPrevAction;
 
@@ -125,6 +189,7 @@ void TheButton()
   }
   else if(Looser!=-1)
   {
+    LOG_TB("WHOS BREAKS OUR BALLS?\n");
     //Single Looser, Breaker of sequence
     LooserSoundAndLight(Looser,false);
     SingleLooserSoundAndLight(Looser);
@@ -132,6 +197,7 @@ void TheButton()
   }
   else
   {
+    LOG_TB("VICTORY!\n");
     //Seq Complete
     ActivateGreenLED(20);
     delay(500);
