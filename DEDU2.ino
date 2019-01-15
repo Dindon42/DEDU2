@@ -37,12 +37,12 @@
 #define ENABLE_LOGGING
 
 //Opt Gen
-#define SkipSetup false
+#define SkipSetup true
 #define nosound false
 #define SkipLights false
 
 //Opt Game
-#define ExclusiveGame false
+#define ExclusiveGame true
 #define ExclusiveGame_ID Game_id_TB
 #define ExclusiveGame_DemoMode false
 #define ExclusiveGameDelay 0
@@ -60,7 +60,7 @@
 #define MusicRandFactVit true
 
 //SETUP IF SKIPPED:
-int nbj=10;
+int nbj=6;
 int vitesse=10;
 int Game_Mode=3;
 //Demo Mode

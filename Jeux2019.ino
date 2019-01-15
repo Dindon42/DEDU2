@@ -5,7 +5,142 @@
 #endif
 void TheButton()
 {
+  //Tunables
+  #define GameEndCounter 600
+  //Tunbles END
+
   
+  #define Gamedelay 5
+  bool SequenceComplete=false;
+  int Looser=-1;
+  bool TimeIsUp=false;
+  int GameCounter=0;
+  int GameCounterPrevAction=0;
+  int GameSequence[nbj]={-1};
+  bool PreviousState[nbj]={false};
+  bool CurrentState[nbj];
+  int SeqProgress=0;
+  int WaitTime[nbj];
+  for(int j=0; j<nbj; j++)
+  {
+    WaitTime[j]=-1;
+  }
+
+  MoveDEDUFlag(100);
+  tone(Tone_Pin,500,1000);
+  delay(1000);
+  
+  do
+  {
+    //Move Flag To show game progress
+    MoveDEDUFlag(100-(int)100*GameCounter/GameEndCounter);
+
+    //Check player input.
+    for(int i=0; i<nbj; i++)
+    {
+      //Record current state
+      CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
+
+      //Check if player has started pressing
+      if(!PreviousState[i] && CurrentState[i])
+      {
+        //Player is pressing
+        //If the game sequence is not defined for the current progress, define it and reset the sequence.
+        if(GameSequence[SeqProgress]==-1)
+        {
+          ActivateRedLight(i);
+          OneUp();
+          
+          GameSequence[SeqProgress]=i;
+
+          //Reset the sequence
+          for(int j=0; j<nbj; j++)
+          {
+            WaitTime[j]=-1;
+          }
+          SeqProgress=0;
+          GameCounter=0;
+          GameCounterPrevAction=0;
+          TurnOffAllRedLights();
+        }
+        
+        //If the game sequence is defined and the proper player presses, make the sequence progress
+        else if(GameSequence[SeqProgress]==i)
+        {
+          ActivateRedLight(i);
+          WaitTime[i]=GameCounter-GameCounterPrevAction;
+          GameCounterPrevAction=GameCounter;
+          SeqProgress++;
+        }
+        else
+        {
+          Looser=i;
+        }
+      }
+      //Record Current into Previous
+      PreviousState[i]=CurrentState[i];
+    }
+
+    
+    //Increase gametimer and delay
+    GameCounter++;
+    delay(Gamedelay);
+    
+    TimeIsUp=GameCounter>GameEndCounter;
+    SequenceComplete=SeqProgress==nbj;
+  }while(!SequenceComplete && !TimeIsUp && Looser==-1);
+
+  //Time Up: Longest wait = looser;
+  if(TimeIsUp)
+  {
+    //Too slow, punish the slowest.
+    
+    //Was it someone's turn?
+    if(GameSequence[SeqProgress]==-1)  //No seq assigned, all super slow.
+    {
+      AllLoosersSoundAndLight();
+      TurnOffAllLights();
+    }
+    else //Someone was slow
+    {
+      //First record the last players' wait time
+      WaitTime[GameSequence[SeqProgress]]=GameCounter-GameCounterPrevAction;
+
+      int MaxWait=-1;
+      for(int i=0; i<nbj; i++)
+      {
+        if(WaitTime[i]>MaxWait)
+        {
+          MaxWait=WaitTime[i];
+          Looser=i;
+        }
+      }
+      //On donne la honte à celui qui a été le plus lent.
+      LooserSoundAndLight(Looser,false);
+      JoueurHonte=MarqueurHonte(Looser,DelaiPetiteHonte);
+      //Reset des jeux qui transferent la honte.
+      ResetProbHonte();
+      TurnOffAllLights();
+    }
+  }
+  else if(Looser!=-1)
+  {
+    //Single Looser, Breaker of sequence
+    LooserSoundAndLight(Looser,false);
+    SingleLooserSoundAndLight(Looser);
+    TurnOffAllLights();
+  }
+  else
+  {
+    //Seq Complete
+    ActivateGreenLED(20);
+    delay(500);
+    OneUp();
+    delay(500);
+    TurnOffAllLights();
+    ResetProbFFA();
+    FFA();
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,13 +190,19 @@ void SequenceGlobale(bool DemoMode)
   int ValidityThreshold=max(1,(int)GameLength / nbj);
   int ValidityMaxDelta=2;
   int Looser=-1;
+  bool AllLoosers=false;
+  bool SequenceComplete=false;
   int GameSequence[GameLength];
-  int Tones[nbj];
   int BaseTones[nbj_max]={261,293,329,350,392,440,494,523,587,659};
+  int Tones[nbj];
   for(int i=0; i<nbj; i++)
   {
     Tones[i]=BaseTones[i];
   }
+  bool NewRound=true;
+  bool PreviousState[nbj]={false};
+  bool CurrentState[nbj];
+  int SeqProgress;
   //Game vars END
   
   LOG_SG("================\n");
@@ -220,12 +361,6 @@ SequenceGlobale(false);
   }
 
   //Main Game Loop
-  bool NewRound=true;
-  bool AllLoosers=false;
-  bool SequenceComplete=false;
-  bool PreviousState[nbj]={false};
-  bool CurrentState[nbj];
-  int SeqProgress;
   do
   {
     if(NewRound)
