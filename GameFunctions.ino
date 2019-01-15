@@ -192,6 +192,10 @@ void PlayGame(int game_id, bool DemoMode)
   {
     SequenceGlobale(DemoMode);
   }
+  else if (game_id==Game_id_TB)
+  {
+    TheButton();
+  }
   else
   {
     PQP();
@@ -287,6 +291,10 @@ void LogGameName(int game_id, bool NewLine)
   else if (game_id==Game_id_Seq)
   {
     LOG_GENERAL("Sequence G  ");
+  }
+  else if (game_id==Game_id_TB)
+  {
+    LOG_GENERAL("The Button  ");
   }
   else
   {
