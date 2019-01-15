@@ -105,7 +105,7 @@ void SequenceGlobale(bool DemoMode)
       NumInvalidSeq++;
     }
 
-    bool LogMaxInval=false
+    bool LogMaxInval=false;
     if(NumInvalidSeq%MaxInvalSeqMD==MaxInvalSeqMD-1)
     {
       LogMaxInval=true;
@@ -165,18 +165,18 @@ void SequenceGlobale(bool DemoMode)
   }
   LOG_SG("\n");
 
-
-      //Log Sequence
-      LOG_SG("\n");
-      LOG_SG("Game Sequence:\n");
-      for(int i=0; i<GameLength; i++)
-      {
-        LOG_SG(GameSequence[i]+1);
-        LOG_SG(", ");
-      }
-      LOG_SG("\n");
-      SequenceGlobale(false);
-
+/*LOGGAMEONLY.
+//Log Sequence
+LOG_SG("\n");
+LOG_SG("Game Sequence:\n");
+for(int i=0; i<GameLength; i++)
+{
+  LOG_SG(GameSequence[i]+1);
+  LOG_SG(", ");
+}
+LOG_SG("\n");
+SequenceGlobale(false);
+*/
   if(!SkipLights)
     {
     //Light Signature
