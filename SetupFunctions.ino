@@ -129,7 +129,7 @@ void DefineProbJeux()
     ProbIndivJeux[Game_id_TDD]=0;
     ProbIndivJeux[Game_id_AR]=0;
     ProbIndivJeux[Game_id_JD]=0;
-    ProbIndivJeux[Game_id_ED]=0;
+    ProbIndivJeux[Game_id_TB]=0;
   }
 
   //Log Prob.
@@ -295,7 +295,6 @@ void GameMode()
   {
     Game_Mode=Selection;
   }
-  ExpertMode=Game_Mode==NbModes-1;
   
   if(OriginalSel<5)
   {

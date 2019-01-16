@@ -8,13 +8,13 @@ void TheButton()
   //Tunables
   #define GameEndCounterPlayerFactorMin 50
   #define GameEndCounterPlayerFactorMax 90
-  #define ExpertModeProbNoLight 3
+  #define ProbNoLight 0
   //Tunbles END
 
   //Local vars
   int GameEndCounter=random(GameEndCounterPlayerFactorMin*nbj,GameEndCounterPlayerFactorMax*nbj);
   #define Gamedelay 5
-  #define LightDelay 200
+  #define LightDelay 150
   #define LightSignatureNum 1
   bool SequenceComplete=false;
   int Looser=-1;
@@ -35,11 +35,8 @@ void TheButton()
   {
     WaitTime[j]=-1;
   }
-  bool EnableLights=true;
-  if(ExpertMode)
-  {
-    EnableLights=random(0,ExpertModeProbNoLight)==0;
-  }
+  bool EnableLights=random(0,ProbNoLight)==0;
+  
   //END LOCAL VARS
 
   LOG_TB("================\n");

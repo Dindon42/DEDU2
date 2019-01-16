@@ -34,7 +34,7 @@
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-#define ENABLE_LOGGING
+//#define ENABLE_LOGGING
 
 //Opt Gen
 #define SkipSetup false
@@ -57,13 +57,12 @@
 #define MusicMode false
 #define MusicModeLumiere false
 #define SelectMusic 6
-#define MusicRandFactVit true
+#define MusicRandFactVit false
 
 //SETUP IF SKIPPED:
-int nbj=6;
+int nbj=10;
 int vitesse=10;
 int Game_Mode=3;
-bool ExpertMode=true;
 //Demo Mode
 bool EnterDemo=false;
 bool AllModes=false;
