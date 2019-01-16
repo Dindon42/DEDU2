@@ -267,7 +267,7 @@ void ReadySound(int SoundTime)
   delay(2*SoundTime);
   tone(Tone_Pin, 1700,SoundTime);
   delay(2*SoundTime);
-  tone(Tone_Pin, 2800,SoundTime*1.5);
+  tone(Tone_Pin, 2820,SoundTime*1.5);
   delay(SoundTime*1.5);
 }
 
