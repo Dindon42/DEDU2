@@ -6,13 +6,16 @@
 void TheButton()
 {
   //Tunables
-  #define GameEndCounterPlayerFactorMin 40
-  #define GameEndCounterPlayerFactorMax 80
+  #define GameEndCounterPlayerFactorMin 50
+  #define GameEndCounterPlayerFactorMax 90
+  #define ExpertModeProbNoLight 3
   //Tunbles END
 
   //Local vars
   int GameEndCounter=random(GameEndCounterPlayerFactorMin*nbj,GameEndCounterPlayerFactorMax*nbj);
   #define Gamedelay 5
+  #define LightDelay 200
+  #define LightSignatureNum 1
   bool SequenceComplete=false;
   int Looser=-1;
   int SuperLooser=-1;
@@ -35,7 +38,7 @@ void TheButton()
   bool EnableLights=true;
   if(ExpertMode)
   {
-    EnableLights=random(0,5)==0;
+    EnableLights=random(0,ExpertModeProbNoLight)==0;
   }
   //END LOCAL VARS
 
@@ -60,10 +63,21 @@ void TheButton()
   }
   LOG_TB("\n");
 
+  //Signature lumineuse
   MoveDEDUFlag(100);
-  tone(Tone_Pin,500,1000);
-  delay(1000);
-
+  for (int j=0; j<LightSignatureNum; j++)
+  {
+    for(int i=0; i<nbj_max; i++)
+    {
+      int lf = 100-10*i;
+      ControlAllLights(true,lf,lf);
+      delay(LightDelay);
+    }
+  }
+  ControlAllLights(true,0,0);
+  delay(25);
+  TurnOffAllLights();
+  ReadySound(550);
   
   do
   {
@@ -118,7 +132,8 @@ void TheButton()
           if(EnableLights)
           {
             ActivateRedLight(i);
-            OneUp();
+            delay(100);
+            //OneUp();
           }
           
           GameSequence[SeqProgress]=i;
