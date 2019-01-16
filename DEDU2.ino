@@ -37,12 +37,12 @@
 #define ENABLE_LOGGING
 
 //Opt Gen
-#define SkipSetup true
+#define SkipSetup false
 #define nosound false
 #define SkipLights false
 
 //Opt Game
-#define ExclusiveGame true
+#define ExclusiveGame false
 #define ExclusiveGame_ID Game_id_TB
 #define ExclusiveGame_DemoMode false
 #define ExclusiveGameDelay 0
