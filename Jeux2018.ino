@@ -48,6 +48,8 @@ void PPV()
         LOG_PPV(" PressTime[i]");
         LOG_PPV(PressTime[i]);
         LOG_PPV("\n");
+        
+        DeactivateRedLight(i);
       }
       //Record the END PRESS TIMER on trans from HIGH to LOW
       else if(PreviousState[i]==HIGH && CurrentState==LOW)
@@ -78,6 +80,7 @@ void PPV()
             
             RecordPress=false;
             NumPress[i]=0;
+            ActivateRedLight(i);
           }
         }
         
@@ -93,17 +96,6 @@ void PPV()
         }
       }
       PreviousState[i]=CurrentState;
-
-      
-      //Update Light State
-      if(NumPress[i]==0)
-      {
-        ActivateRedLight(i);
-      }
-      else
-      {
-        DeactivateRedLight(i);
-      }
       
       //Update Winner
       if(NumPress[i]>=WinNumPress)
