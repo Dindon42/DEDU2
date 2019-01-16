@@ -48,7 +48,7 @@ void DefinirOrdreChansons()
   LOG_GENERAL("\n");
 }
 
-void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse)
+void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse, bool Lumiere)
 {
   int NombreNotes=SelectionChanson(Chanson);
   int myRand;
@@ -80,11 +80,26 @@ void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse)
   
   for (int n=0 ; n<NombreNotes ; n++)
   {
+    if(Lumiere)
+    {
+      switch(n%3)
+      {
+        case 0:
+            TurnOnAllRedLights();
+            break;
+        case 1:
+            ActivateBlueLED(80);
+            break;
+        case 2:
+            ActivateGreenLED(80);
+            break;
+      }
+    }
     //PlayNote(int Tone_Pin, float Freq, float PlayTime, float WaitTime)
-    PlayNote(Tone_Pin, MaChanson[0][n], MaChanson[1][n]/FactVit, MaChanson[2][n]/FactVit);
-  }
+    PlayNote(MaChanson[0][n], MaChanson[1][n]/FactVit, MaChanson[2][n]/FactVit);
 
-  
+    if(Lumiere) TurnOffAllLights();
+  }
 
   LOG_GENERAL("===================\n");
   LOG_GENERAL("= JoueChanson FIN =\n");
@@ -214,7 +229,7 @@ int SelectionChanson(int Numero)
           }
       }
       RandomMin = 85;
-      RandomMax = 115;
+      RandomMax = 105;
       return NombreDeNotes;
     case 9:
       pf = (float*)Scatman2;
@@ -227,7 +242,7 @@ int SelectionChanson(int Numero)
           }
       }
       RandomMin = 85;
-      RandomMax = 115;
+      RandomMax = 105;
       return NombreDeNotes;
     case 10:
       pf = (float*)Boten2;
@@ -255,7 +270,7 @@ int SelectionChanson(int Numero)
       RandomMin = 105;
       RandomMax = 155;
       return NombreDeNotes;
-    default:
+    case 12:
       pf = (float*)ctd2;
       NombreDeNotes = sizeof(ctd2[0]) / sizeof(float);
       for (int i = 0; i < ParamChansons; i++)
@@ -268,7 +283,19 @@ int SelectionChanson(int Numero)
       RandomMin = 100;
       RandomMax = 155;
       return NombreDeNotes;
-
+    default:
+      pf = (float*)Tetris;
+      NombreDeNotes = sizeof(Tetris[0]) / sizeof(float);
+      for (int i = 0; i < ParamChansons; i++)
+      {
+          for (int j = 0; j < NombreDeNotes; j++)
+          {
+              MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
+          }
+      }
+      RandomMin = 115;
+      RandomMax = 160;
+      return NombreDeNotes;
 /*
 case 3:
   pf=(float *)Darude;

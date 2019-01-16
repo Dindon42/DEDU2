@@ -1,30 +1,32 @@
 #include <Servo.h>
 #include <avr/pgmspace.h>
-int const NbJeux = 21;
-int const NbModes=4;
-int const NbGameTypes=5;
+#define NbJeux 23
+#define NbModes 4
+#define NbGameTypes 5
 //Ordre utilisé pour le mode DÉMO  doit être consécutif de 0 à NbJeux-1.
-int const Game_id_PQP=0;
-int const Game_id_PQR=1;
-int const Game_id_TO=2;
-int const Game_id_DQP=3;
-int const Game_id_DQP2=4;
-int const Game_id_PC=5;
-int const Game_id_PC2=6;
-int const Game_id_MIN=7;
-int const Game_id_UC=8;
-int const Game_id_JD=9;
-int const Game_id_ED=10;
-int const Game_id_AR=11;
-int const Game_id_MH=12;
-int const Game_id_TH=13;
-int const Game_id_TV=14;
-int const Game_id_PB=15;
-int const Game_id_Duel=16;
-int const Game_id_PPV=17;
-int const Game_id_TDD=18;
-int const Game_id_JC=19;
-int const Game_id_FFA=20;
+#define Game_id_PQP 0
+#define Game_id_PQR 1
+#define Game_id_TO 2
+#define Game_id_DQP 3
+#define Game_id_DQP2 4
+#define Game_id_PC 5
+#define Game_id_PC2 6
+#define Game_id_MIN 7
+#define Game_id_UC 8
+#define Game_id_JD 9
+#define Game_id_ED 10
+#define Game_id_AR 11
+#define Game_id_MH 12
+#define Game_id_TH 13
+#define Game_id_TV 14
+#define Game_id_PB 15
+#define Game_id_Duel 16
+#define Game_id_PPV 17
+#define Game_id_TDD 18
+#define Game_id_JC 19
+#define Game_id_Seq 20
+#define Game_id_TB 21
+#define Game_id_FFA 22
 
 //=========================\\
 //==         DEDU        ==\\
@@ -35,25 +37,27 @@ int const Game_id_FFA=20;
 //#define ENABLE_LOGGING
 
 //Opt Gen
-bool SkipSetup=false;
-bool nosound=false;
-bool SkipLights=false;
+#define SkipSetup false
+#define nosound false
+#define SkipLights false
 
 //Opt Game
-bool ExclusiveGame=false;
-int ExclusiveGame_ID=Game_id_JD;
-int ExclusiveGameDelay=0;
+#define ExclusiveGame false
+#define ExclusiveGame_ID Game_id_TB
+#define ExclusiveGame_DemoMode false
+#define ExclusiveGameDelay 0
 
 //Opt Repartiteur
-bool SkipFraudeur=false;
-bool SkipGame=false;
-bool DelayIfSkipGame=false;
-bool DoNotShowGameProb=false;
+#define SkipFraudeur false
+#define SkipGame false
+#define DelayIfSkipGame false
+#define DoNotShowGameProb false
 
 //Opt Mus
-bool MusicMode=false;
-int SelectMusic=-1;
-bool MusicRandFactVit=false;
+#define MusicMode false
+#define MusicModeLumiere false
+#define SelectMusic 6
+#define MusicRandFactVit false
 
 //SETUP IF SKIPPED:
 int nbj=10;
@@ -91,21 +95,21 @@ int MaxProbAcc=0;
 
 //Definitions
 //Pins
-int const myRandPin=0; //To initialize the random function
-int const G = 3; //Green LED ALL
-int const B = 2; //Blue LED ALL
+#define myRandPin 0 //To initialize the random function
+#define G 3 //Green LED ALL
+#define B 2 //Blue LED ALL
 
 int Tone_Pin=52;
 
 Servo Servo_BrasDEDU;
 //Position à l'arrêt du Servo (bâton rentré)
-int const Servo_LowPos = 40;
-int const Servo_HighPos = 154;
-int const Servo_Pin = 53;
+#define Servo_LowPos 40
+#define Servo_HighPos 154
+#define Servo_Pin 53
 
 //Pour setup
-int const nbj_max=10;
-int const nbj_raw_max=9;
+#define nbj_max 10
+#define nbj_raw_max 9
 int nbj_raw;
 int vitesse_raw;
 
@@ -151,9 +155,9 @@ int RandomMax;
 
 
 ////Chansons.
-int const NombreChansons=13;
+int const NombreChansons=14;
 int ChansonPourJeu=0;
-int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
   const PROGMEM float ChansonDEDU[3][18]={
     {196,196,196,247,247,261,261,349,247,196,196,294,247,196,330,294,247,261},
     {150,150,150,300,300,300,300,600,150,150,150,150,150,150,600,150,150,600},
@@ -185,7 +189,7 @@ int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
     {155.9,35.6,45.1,45.1,53.3,78.3,191.7,231.8,96,43.9,54.5,52.2,52.2,99.6,238.9,218.4,85.8,50.7,44.2,56.9,46.2,84.2,49.8,56.9,53.3,46.2,72.4,27.4,46.2,41.5,46.2,210.7},
     };
   const PROGMEM float SWTheme[3][19]={
-    {349,349,349,466,698,622,587,523,1864,698,622,587,523,1864,698,622,587,622,523},
+    {349,349,349,466,698,622,587,523,932,698,622,587,523,932,698,622,587,622,523},
     {64.8,64.8,64.8,756.5,756.5,82.1,82.1,77.8,791.1,341.5,77.8,77.8,77.8,791.1,376.1,77.8,77.8,77.8,825.7},
     {101.8,101.8,101.8,243.5,243.5,84.5,84.5,88.9,208.9,158.5,88.9,88.9,88.9,208.9,123.9,88.9,88.9,88.9,289.9},
     };
@@ -218,6 +222,11 @@ int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
     {554,493,554,369,587,554,587,554,493,587,554,587,369,493,440,493,440,415,493,440,415,440,493,440,493,554,493,440,415,369,587,554,554,587,554,493,554},
     {76.6,76.6,494.4,621.2,76.6,76.6,76.6,76.6,748.1,76.6,76.6,498.8,498.8,76.6,76.6,76.6,76.6,76.6,76.6,625.6,76.6,76.6,748.1,76.6,76.6,207.8,192.5,203.4,183.8,492.2,444.1,1375.9,91.9,91.9,91.9,91.9,1400},
     {71.9,74.5,104.6,524.6,74.5,69.3,225.5,225.5,629.5,69.3,74.5,100.2,506.5,74.5,74.5,225.5,220.3,225.5,220.3,275.4,74.5,74.5,152.9,69.3,74.5,94.3,104.4,98.6,118.3,106.8,154.9,426.1,54,59.2,59.2,59.2,235.5},
+    };
+  const PROGMEM float Tetris[3][37] = {
+    {659,493,523,587,523,493,440,440,523,659,587,523,493,523,587,659,523,440,440,587,698,880,783,698,659,523,659,587,523,493,493,523,587,659,523,440,440},
+    {385.9,193,193,385.9,193,193,385.9,193,193,385.9,193,193,643.2,193,385.9,385.9,385.9,385.9,900.5,385.9,193,385.9,193,193,643.2,193,385.9,193,193,385.9,193,193,385.9,385.9,385.9,385.9,900.5},
+    {216.5,108.2,108.2,216.5,108.2,108.2,216.5,108.2,108.2,216.5,92.6,123.9,260.4,108.2,216.5,216.5,216.5,216.5,605.5,216.5,108.2,216.5,108.2,108.2,260.4,108.2,216.5,108.2,108.2,216.5,108.2,108.2,216.5,216.5,225.9,207.1,222.7},
     };
 
 //One-time setup:
@@ -321,7 +330,7 @@ void setup()
   else if(!SkipSetup)
   {
     //Toune de DEDU pour initialiser la chose.
-    JoueChanson(0,3,false);
+    JoueChanson(0,3,false, true);
   }
   
   LOG_GENERAL("==============\n");
@@ -333,8 +342,6 @@ void setup()
 //Setup complete.  MAIN loop.
 void loop() 
 {
-  int r;
-  
   //Special exclusivegamemode loop
   if(ExclusiveGame)
   {
@@ -344,49 +351,53 @@ void loop()
     #ifdef ENABLE_LOGGING
       ActiveGameLogging[ExclusiveGame_ID]=true;
     #endif
-    PlayGame(ExclusiveGame_ID);
+    PlayGame(ExclusiveGame_ID,ExclusiveGame_DemoMode);
     delay(ExclusiveGameDelay);
-    loop();
   }
-
-  //Special MusicModeLoop
-  if(MusicMode)
+  else
   {
-    LOG_GENERAL("\n");
-    LOG_GENERAL("MUSIC MODE");
-    LOG_GENERAL("\n");
-    if (SelectMusic==-1)
+    int r;
+    //Special MusicModeLoop
+    if(MusicMode)
     {
-      LOG_GENERAL("Random Song:");
-      r = random(NombreChansons);
+      LOG_GENERAL("\n");
+      LOG_GENERAL("MUSIC MODE");
+      LOG_GENERAL("\n");
+      if (SelectMusic==-1)
+      {
+        LOG_GENERAL("Random Song:");
+        r = random(NombreChansons);
+      }
+      else
+      {
+        LOG_GENERAL("Selected Song:");
+        r=SelectMusic;
+      }
+      LOG_GENERAL(r);
+      LOG_GENERAL("\n");
+      JoueChanson(r, 1, MusicRandFactVit, MusicModeLumiere);
+      delay(2500);
+      loop();
     }
     else
     {
-      LOG_GENERAL("Selected Song:");
-      r=SelectMusic;
+      //Normal loop starts here.
+      WaitForAllNonActive(nbj_raw);
+    
+      TurnOffAllLights();
+      
+      if (!SkipFraudeur)
+      {
+        //FacteurVitesse
+        r=random(25,50) + (11 - vitesse) * random(100);
+        Delay_Fraudeur(r);
+      }
+      
+      TurnOffAllLights();
+      
+      Repartiteur();
     }
-    LOG_GENERAL(r);
-    LOG_GENERAL("\n");
-    JoueChanson(r, 1, MusicRandFactVit);
-    delay(2500);
-    loop();
   }
-  
-  //Normal loop starts here.
-  WaitForAllNonActive(nbj_raw);
-
-  TurnOffAllLights();
-  
-  if (!SkipFraudeur)
-  {
-    //FacteurVitesse
-    r = random(25,50) + (11 - vitesse) * random(100);
-    Delay_Fraudeur(r);
-  }
-  
-  TurnOffAllLights();
-  
-  Repartiteur();
 }
 
 

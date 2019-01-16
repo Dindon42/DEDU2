@@ -67,7 +67,7 @@ void Repartiteur()
   PrepareGame(Jeu);
   if(!SkipGame)
   {
-    PlayGame(Jeu);
+    PlayGame(Jeu,false);
   }
   else
   {

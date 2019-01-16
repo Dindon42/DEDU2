@@ -1,8 +1,6 @@
 float RelativeError(float TestValue,float TrueValue)
 {
   float Score;
-
-
   
   if (TrueValue !=0)
   {

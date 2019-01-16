@@ -112,7 +112,7 @@ void EstimeDedu()
     TurnOffAllRedLights();
     delay(500);
     TurnOnAllRedLights();
-    PlayNote(Tone_Pin,tone_min+Win,500,0);
+    PlayNote(tone_min+Win,500,0);
   }
   TurnOffAllRedLights();
   delay(500);
@@ -230,7 +230,7 @@ void EstimeDedu()
   //No one clicked at game end.
   if(Winner==-1)
   {
-    AllLoosers();
+    AllLoosersSoundAndLight();
   }
   else
   {
@@ -289,6 +289,15 @@ void EstimeDedu()
   //Pour le meilleur: cycler entre les positions des 3 meilleurs quelques fois, puis faire le pattern précédent pour les 2 plus bas.
   //Refaire le delta une dernière fois pour le meilleur, puis lui donner winnersoundlight();
 }
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 #ifdef ENABLE_LOGGING
@@ -654,7 +663,7 @@ void JeanDit()
 
   if(JeanPerd)
   {
-    LooserSoundAndLight(Jean);
+    LooserSoundAndLight(Jean,false);
     JoueurHonte=MarqueurHonte(Jean,DelaiPetiteHonte);
     //Reset jeux qui transfèrent la honte
     ResetProbHonte();

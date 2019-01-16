@@ -122,13 +122,13 @@ void ClignoteEtSon(int NbMax,int FreqStart, int FreqIncrease, int NbOffset)
   delay(500);
 }
 
-void PlayNote(int Tone_Pin, float Freq, float PlayTime, float WaitTime)
+void PlayNote(float Freq, float PlayTime, float WaitTime)
 {
   tone(Tone_Pin, Freq, PlayTime);
   delay(PlayTime+WaitTime);
 }
 
-void PlayNoteWithLight(int Tone_Pin, float Freq, float PlayTime, float WaitTime,int Player)
+void PlayNoteWithLight(float Freq, float PlayTime, float WaitTime,int Player)
 {
   ActivateRedLight(Player);
   tone(Tone_Pin, Freq, PlayTime);
@@ -267,7 +267,7 @@ void ReadySound(int SoundTime)
   delay(2*SoundTime);
   tone(Tone_Pin, 1700,SoundTime);
   delay(2*SoundTime);
-  tone(Tone_Pin, 2800,SoundTime*1.5);
+  tone(Tone_Pin, 2820,SoundTime*1.5);
   delay(SoundTime*1.5);
 }
 
@@ -300,7 +300,68 @@ void OneUp()
   noTone(Tone_Pin);
 }
 
-void LooserSoundAndLight(int iPlayer)
+void MultiLooserSoundAndLight(bool Loosers[nbj_max])
+{
+  ActivateBlueLED(10);
+  
+  for (int j=0; j<nbj_max;j++)
+  {
+    if(Loosers[j]) ActivateRedLight(j);
+  }
+  
+  for (int i = 0; i < 80; i++)
+  {
+    Tone_Frequency = 2000 - 20 * i;
+    tone(Tone_Pin, Tone_Frequency);
+    delay(10);
+  }
+  noTone(Tone_Pin);
+
+  //Identify the Loosers
+  for (int e = 1; e <= 4; e++)
+  {
+    for (int j=0; j<nbj_max;j++)
+    {
+      if(Loosers[j]) ActivateRedLight(j);
+    }
+    delay(500);
+    for (int j=0; j<nbj_max;j++)
+    {
+      if(Loosers[j]) DeactivateRedLight(j);
+    }
+    delay(500);
+  }
+  
+  TurnOffAllRedLights();
+  DeactivateBlueLED();
+}
+
+void SingleLooserSoundAndLight(int iPlayer)
+{
+  ActivateBlueLED(10);
+  ActivateRedLight(iPlayer);
+  for (int i = 0; i < 80; i++)
+  {
+    Tone_Frequency = 2000 - 20 * i;
+    tone(Tone_Pin, Tone_Frequency);
+    delay(10);
+  }
+  noTone(Tone_Pin);
+
+  //Identify the Looser
+  for (int e = 1; e <= 4; e++)
+  {
+    ActivateRedLight(iPlayer);
+    delay(500);
+    DeactivateRedLight(iPlayer);
+    delay(500);
+  }
+  
+  TurnOffAllRedLights();
+  DeactivateBlueLED();
+}
+
+void LooserSoundAndLight(int iPlayer, bool extratoggles)
 {
   for(int i=0 ; i<2 ; i++)
   {
@@ -310,9 +371,20 @@ void LooserSoundAndLight(int iPlayer)
     DeactivateRedLight(iPlayer);
     delay(500);
   }
+
+  if(extratoggles)
+  {
+    for(int i=0 ; i<2 ; i++)
+    {
+      ActivateRedLight(iPlayer);
+      delay(500);
+      DeactivateRedLight(iPlayer);
+      delay(500);
+    }
+  }
 }
 
-void AllLoosers()
+void AllLoosersSoundAndLight()
 {
   ActivateBlueLED(20);
     
@@ -349,10 +421,22 @@ void WinnerSoundAndLight(int iPlayer)
 
 void SonTestMode()
 {
-  PlayNote(Tone_Pin,2500,200,20);
-  PlayNote(Tone_Pin,1000,200,20);
-  PlayNote(Tone_Pin,2500,200,20);
-  PlayNote(Tone_Pin,1000,200,20);
+  PlayNote(2500,200,20);
+  PlayNote(1000,200,20);
+  PlayNote(2500,200,20);
+  PlayNote(1000,200,20);
+}
+
+void TicTac(int SilenceTime, int Repeats)
+{
+  if(Repeats<0) Repeats=1;
+  for(int i=0; i<Repeats; i++)
+  {
+    tone(Tone_Pin,250,10);
+    delay(SilenceTime);
+    tone(Tone_Pin,700,10);
+    delay(SilenceTime);
+  }
 }
 
 

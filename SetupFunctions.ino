@@ -111,7 +111,8 @@ void DefineProbJeux()
     GameProb[i][wMode]=GameProb[i][wMode-1];
   }
   //Add experimental modes here:
-  //GameProb[Game_id_JD][wMode]=120;
+  GameProb[Game_id_Seq][wMode]=120;
+  GameProb[Game_id_TB][wMode]=120;
   
   //===================//
   
@@ -128,7 +129,7 @@ void DefineProbJeux()
     ProbIndivJeux[Game_id_TDD]=0;
     ProbIndivJeux[Game_id_AR]=0;
     ProbIndivJeux[Game_id_JD]=0;
-    ProbIndivJeux[Game_id_ED]=0;
+    ProbIndivJeux[Game_id_TB]=0;
   }
 
   //Log Prob.
@@ -162,6 +163,8 @@ void DefineGameTypes()
   //2=Jeu d'équipe
   GameTypes[Game_id_MIN]=2;
   GameTypes[Game_id_JC]=2;
+  GameTypes[Game_id_Seq]=2;
+  GameTypes[Game_id_TB]=2;
   
   //3=Autres
   GameTypes[Game_id_TO]=3;

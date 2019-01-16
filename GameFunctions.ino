@@ -102,7 +102,7 @@ void SimulateGame(int game_id)
   }
 }
 
-void PlayGame(int game_id)
+void PlayGame(int game_id, bool DemoMode)
 {
   if(game_id==Game_id_PQP)
   {
@@ -187,6 +187,14 @@ void PlayGame(int game_id)
   else if (game_id==Game_id_ED)
   {
     EstimeDedu();
+  }
+  else if (game_id==Game_id_Seq)
+  {
+    SequenceGlobale(DemoMode);
+  }
+  else if (game_id==Game_id_TB)
+  {
+    TheButton();
   }
   else
   {
@@ -280,6 +288,18 @@ void LogGameName(int game_id, bool NewLine)
   {
     LOG_GENERAL("EstimeDedu  ");
   }
+  else if (game_id==Game_id_Seq)
+  {
+    LOG_GENERAL("Sequence G  ");
+  }
+  else if (game_id==Game_id_TB)
+  {
+    LOG_GENERAL("The Button  ");
+  }
+  else
+  {
+    LOG_GENERAL("PQP         ");
+  }
   if(NewLine) LOG_GENERAL("\n");
 }
 
@@ -338,6 +358,11 @@ void ResetProbHonte()
   ResetGameProb(Game_id_MH);
   DivideGameProb(Game_id_Duel,2);
   DivideGameProb(Game_id_TDD,2);
+}
+
+void ResetProbFFA()
+{
+  ResetGameProb(Game_id_FFA);
 }
 
 void LogGameCounts()
