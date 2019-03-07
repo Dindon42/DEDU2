@@ -312,6 +312,11 @@ void setup()
     
     //Choix de complexité du jeu.
     GameMode();
+
+    if(nbj_raw==1)
+    {
+      RedefinePlayerPins();    
+    }
   }
   LogSetupParams();
 

@@ -343,6 +343,17 @@ void LogSetupParams()
   LOG_GENERAL("JoueurHonte:");
   LOG_GENERAL(JoueurHonte);
   LOG_GENERAL("\n");
+  LOG_GENERAL("Pins des Joueurs:\n");
+  for (int i=0; i<nbj_max ; i++)
+  {
+    LOG_GENERAL(i);
+    LOG_GENERAL(": In:");
+    LOG_GENERAL(PlayerInputPins[i]);
+    LOG_GENERAL(", Out:");
+    LOG_GENERAL(PlayerOutputPins[i]);
+    LOG_GENERAL("\n");
+  }
+  LOG_GENERAL("\n");
   LOG_GENERAL("\n");
   LOG_GENERAL("SETUP COMPLETE");
   LOG_GENERAL("\n");
