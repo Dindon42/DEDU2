@@ -7,8 +7,8 @@ void EstimeDedu()
 {
   //Tunables//
   //Control Game Length
-  const int MaxMainGameCycles=16;
-  const int AbsoluteMaxMainGameCycles=20;
+  const int MaxMainGameCycles=12;
+  const int AbsoluteMaxMainGameCycles=12;
   
   //Control DEDU speed
   const int Full_Cycle_Min=8;
@@ -236,37 +236,87 @@ void EstimeDedu()
   {
     int NumScored=0;
     bool Scored[nbj]={false};
+    #define MAXVALUE 30000
+    for(int i=0; i<nbj; i++)
+    {
+      if(Scores[i][0]==-1)
+      {
+        Scores[i][0]=MAXVALUE;
+        Scores[i][1]=MAXVALUE;
+        Scores[i][2]=0;
+      }
+    }
     
     do
     {
-      int Player=random(nbj);
+      int Player=-1;
+
+      int WORSTSCORE=0;
+      int WORSTCYCLE=0;
+      //BEST SCORE IS 0 => NO DIFFERENCE TO TARGET POS
+      //SECOND COMES GAMECYCLES IF SAME SCORE, AGAIN BEST IS LOW
+      //Scores[i][0]<Scores[Winner][0] || (Scores[i][0]==Scores[Winner][0] && Scores[i][1]<Scores[Winner][1])
+      for(int i=0; i<nbj; i++)
+      {
+        LOG_ED("Current Worst:");
+        LOG_ED(Player);
+        LOG_ED(", WORSTSCORE:");
+        LOG_ED(WORSTSCORE);
+        LOG_ED(", WORSTCYCLE:");
+        LOG_ED(WORSTCYCLE);
+        LOG_ED("\n");
+        LOG_ED("Player:");
+        LOG_ED(i);
+        LOG_ED(", Score:");
+        LOG_ED(Scores[i][0]);
+        LOG_ED(", GameCycles:");
+        LOG_ED(Scores[i][1]);
+        LOG_ED("\n");
+        if(Scored[i]==false && i!=Winner && (Scores[i][0]>WORSTSCORE || (Scores[i][0]==WORSTSCORE && Scores[i][1]>WORSTCYCLE)))
+        {
+          LOG_ED("Player is the current worst - updating values\n");
+          Player=i;
+          WORSTSCORE=Scores[i][0];
+          WORSTCYCLE=Scores[i][1];
+        }
+      }
+      
+      //Player=random(nbj);
+      LOG_ED("==============\n");
+      LOG_ED("Final decision\n");
+      LOG_ED("==============\n");
       LOG_ED("Player:");
       LOG_ED(Player);
+      LOG_ED(", Score:");
+      LOG_ED(Scores[Player][0]);
+      LOG_ED(", GameCycles:");
+      LOG_ED(Scores[Player][1]);
       LOG_ED("\n");
-      if(Scored[Player]==false && Player!=Winner)
-      {
-        Scored[Player]=true;
-        NumScored++;
+      LOG_ED("==============\n");
 
-        ActivateGreenLED(20);
-        MoveDEDUFlag(((float)Win/(float)Full_Cycle)*100);
-        delay(1000);
-        ActivateGreenLED(0);
+      Scored[Player]=true;
+      NumScored++;
+
+      //Ceremony for the player.
+      ActivateGreenLED(20);
+      MoveDEDUFlag(((float)Win/(float)Full_Cycle)*100);
+      delay(1000);
+      ActivateGreenLED(0);
+      
+      ActivateRedLight(Player);
+      delay(500);
+      MoveDEDUFlag(((float)Scores[Player][2]/(float)Full_Cycle)*100);
+      tone(Tone_Pin,200,200);
+      delay(500);
+      DeactivateRedLight(Player);
+      delay(500);
+      ActivateRedLight(Player);
+      tone(Tone_Pin,200,200);
+      delay(500);
+      DeactivateRedLight(Player);
+      
+      MoveDEDUFlag(((float)Win/(float)Full_Cycle)*100);
         
-        ActivateRedLight(Player);
-        delay(500);
-        MoveDEDUFlag(((float)Scores[Player][2]/(float)Full_Cycle)*100);
-        tone(Tone_Pin,200,200);
-        delay(500);
-        DeactivateRedLight(Player);
-        delay(500);
-        ActivateRedLight(Player);
-        tone(Tone_Pin,200,200);
-        delay(500);
-        DeactivateRedLight(Player);
-        
-        MoveDEDUFlag(((float)Win/(float)Full_Cycle)*100);
-      }
     }while (NumScored<(nbj-1));
     
     //WINNER
@@ -278,7 +328,6 @@ void EstimeDedu()
     delay(500);
     MoveDEDUFlag(((float)Scores[Winner][2]/(float)Full_Cycle)*100);
     WinnerSoundAndLight(Winner);
-
     
     MoveDEDUFlag(0);
     TurnOffAllLights();
