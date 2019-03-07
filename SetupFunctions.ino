@@ -213,12 +213,15 @@ void AdjustNumRoundsFullProb()
   else NumberOfRoundsForFullProb=4;
 }
 
-void NombreJoueurs()
+bool NombreJoueurs()
 {
   //Illumine toutes les LED bleu et envoie un son
   ActivateBlueLED(100);
   tone(Tone_Pin, 1500, 400);
   delay(500);
+  #define DELAYREDEFINE 400
+  #define NBJDELAY 5
+  bool Redefine=false;
 
   //Attend l'input des joueurs.
   do
@@ -233,8 +236,128 @@ void NombreJoueurs()
 
   //Montre aux joueurs les sélections.
   ClignoteEtSon(nbj_raw,500,200,0);
+
+  int count=0;
+  do
+  {
+    delay(NBJDELAY);
+    count+=NBJDELAY;
+    
+    if(count>DELAYREDEFINE) Redefine=true;
+    
+  }while (ReadPlayerInput(nbj_raw) && !Redefine);
+
+  if(Redefine)
+  {
+    //Montre aux joueurs les sélections.
+    ClignoteEtSon(nbj_raw,500,200,0);
+  }
+
+  return Redefine;
 }
 
+void RedefinePlayerPins(bool Auto)
+{
+  #define OutPinStart 31
+  #define OutPinInterval 2
+  #define InPinStart 24
+  #define InPinInterval 2
+  if(Auto)
+  {
+    //Pin definitions
+    for (int i=0; i<=nbj_raw_max;i++)
+    {
+      int Pin;
+      //LED ROUGE des joueurs
+      Pin=OutPinStart+OutPinInterval*i;
+      pinMode(Pin, OUTPUT);
+      PlayerOutputPins[i]=Pin;
+      
+      //Manettes.
+      Pin=InPinStart+InPinInterval*i;
+      pinMode(Pin, INPUT);
+      PlayerInputPins[i]=Pin;
+    }
+  }
+  else
+  {
+    int AssignedPins[nbj_max]={false};
+    int NewPins[nbj_max];
+    for(int i=0; i<nbj ; i++)
+    {
+      NewPins[i]=-1;
+    }
+    
+    ActivateBlueLED(100);
+    
+    for(int i=0; i<nbj; i++)
+    {
+      bool ValidAssignment=true;
+      do
+      {
+        int P=-1;
+        do
+        {
+          P=FirstActive(nbj_raw_max);
+        }while(P==-1);
+        LOG_GENERAL("PRESS:");
+        LOG_GENERAL(P);
+        LOG_GENERAL("\n");
+
+        if(i!=0)
+        {
+          for(int j=0; j<i; j++)
+          {
+            if(P==NewPins[j])
+            {
+              ValidAssignment=false;
+            }
+          }
+        }
+        
+        if(ValidAssignment)
+        {
+          NewPins[i]=P;
+          ActivateRedLight(P);
+          AssignedPins[P]=true;
+        }
+        delay(25);
+      }while (!ValidAssignment);
+    }
+    //Assign the rest automatically
+    for(int i=nbj; i<nbj_max; i++)
+    {
+      for(int j=0; j<nbj_max; j++)
+      {
+        if(AssignedPins[j]==false)
+        {
+          NewPins[i]=j;
+          AssignedPins[j]=true;
+          break; 
+        }
+      }
+    }
+
+    ActivateBlueLED(0);
+    TurnOffAllRedLights();
+    delay(500);
+    ActivateBlueLED(100);
+
+    //Reshuffle the new pins
+    for(int i=0; i<nbj_max; i++)
+    {
+      int Pin;
+      Pin=OutPinStart+OutPinInterval*NewPins[i];
+      PlayerOutputPins[i]=Pin;
+
+      Pin=InPinStart+InPinInterval*NewPins[i];
+      PlayerInputPins[i]=Pin;
+    }
+
+    //ClignoteEtSon
+    ClignoteEtSon(nbj_raw,500,200,0);
+  }
+}
 
 //Fonction de setup pour Vitesse
 void Vitesse()

@@ -34,7 +34,7 @@
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-//#define ENABLE_LOGGING
+#define ENABLE_LOGGING
 
 //Opt Gen
 #define SkipSetup false
@@ -114,10 +114,6 @@ int nbj_raw;
 int vitesse_raw;
 
 //Pins
-int const OutPinStart = 31;
-int const OutPinInterval = 2;
-int const InPinStart = 24;
-int const InPinInterval = 2;
 int PlayerInputPins[nbj_max];
 int PlayerOutputPins[nbj_max];
 
@@ -232,8 +228,7 @@ int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 //One-time setup:
 void setup()
 {
-  int Pin;
-  
+  bool ManualPinDef;
   #ifdef ENABLE_LOGGING
     Serial.begin(500000);
   #endif
@@ -262,31 +257,16 @@ void setup()
   Servo_BrasDEDU.attach(Servo_Pin);
   Servo_BrasDEDU.write(Servo_LowPos);
 
-  //Pin definitions
-  //LED ROUGE des joueurs
-  for (int i=0; i<=nbj_raw_max;i++)
-  {
-    Pin=OutPinStart+OutPinInterval*i;
-    pinMode(Pin, OUTPUT);
-    PlayerOutputPins[i]=Pin;
-  }
-
   //Toutes lumières G et B
   pinMode(G, OUTPUT);
   pinMode(B, OUTPUT);
-
-  //Manettes.
-  for (int i=0; i<=nbj_raw_max;i++)
-  {
-    Pin=InPinStart+InPinInterval*i;
-    pinMode(Pin, INPUT);
-    PlayerInputPins[i]=Pin;
-  }
 
   DefineGameTypes();
   
   //Ajustement du délai pour Honte
   AjustementDelaiHonte();
+
+  RedefinePlayerPins(true);
   
   if (!SkipSetup && !MusicMode)
   {
@@ -298,7 +278,7 @@ void setup()
     // Attend que les joueurs choisissent le nombre en cliquant sur le bouton correspondant au nombre souhaité.
     // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au mode suivant.
     // ----------------------------------------
-    NombreJoueurs();
+    ManualPinDef=NombreJoueurs();
     //TestModeEngage if player = 1
     if (nbj_raw==0)
     {
@@ -313,9 +293,9 @@ void setup()
     //Choix de complexité du jeu.
     GameMode();
 
-    if(nbj_raw==1)
+    if(ManualPinDef)
     {
-      RedefinePlayerPins();    
+      RedefinePlayerPins(false);
     }
   }
   LogSetupParams();
