@@ -371,20 +371,22 @@ void SequenceGlobale(bool DemoMode)
   #define GameTimeDecreaseMax 25
   int GameNoteTime=300;
   int GameSilenceTime=300;
+  int JumpMin;
+  int JumpMax;
   if(DemoMode)
   {
-    #define JumpMin 2
-    #define JumpMax 2
+    JumpMin=2;
+    JumpMax=2;
   }
   else
   {
-    #define JumpMin 2
-    #define JumpMax 4
+    JumpMin=2;
+    JumpMax=4;
   }
   //Tunables END.
 
   //Game vars
-  #define Gamedelay 15
+  #define GamedelaySeq 15
   int GameCounter;
   int GameLength=DemoMode ? (nbj*GameLengthPlayerFactorDemo)+2 : random(nbj*GameLengthPlayerFactorMin+2,nbj*GameLengthPlayerFactorMax+1);
   if(GameLength%nbj==0) GameLength++;
@@ -688,7 +690,7 @@ SequenceGlobale(false);
       }
     }
     
-    if(GameCounter==GameNoteTime/Gamedelay)
+    if(GameCounter==GameNoteTime/GamedelaySeq)
     {
       TurnOffAllRedLights();
     }
@@ -699,7 +701,7 @@ SequenceGlobale(false);
       Looser=-1;
       SequenceComplete=false;
     }
-    delay(Gamedelay);
+    delay(GamedelaySeq);
     GameCounter++;
   }while(!SequenceComplete && Looser==-1 && !AllLoosers);
   delay(200);
