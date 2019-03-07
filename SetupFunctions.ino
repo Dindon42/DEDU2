@@ -283,18 +283,20 @@ void RedefinePlayerPins(bool Auto)
   {
     int AssignedPins[nbj_max]={false};
     int NewPins[nbj_max];
-    for(int i=0; i<nbj ; i++)
+    for(int i=0; i<nbj_max ; i++)
     {
       NewPins[i]=-1;
     }
     
     ActivateBlueLED(100);
+    tone(Tone_Pin, 1500, 400);
     
     for(int i=0; i<nbj; i++)
     {
-      bool ValidAssignment=true;
+      bool ValidAssignment;
       do
       {
+        ValidAssignment=true;
         int P=-1;
         do
         {
@@ -324,6 +326,58 @@ void RedefinePlayerPins(bool Auto)
         delay(25);
       }while (!ValidAssignment);
     }
+
+    LOG_GENERAL("Assigned Pins:\n");
+    for(int i=0; i<nbj_max; i++)
+    {
+      LOG_GENERAL(i);
+      LOG_GENERAL(":");
+      LOG_GENERAL(AssignedPins[i]);
+      LOG_GENERAL(":");
+      LOG_GENERAL(NewPins[i]);
+      LOG_GENERAL("\n");
+    }
+
+    
+    //Reorder the pins so that the game makes sense.
+    int TempPins[nbj];
+    int TempPinAssigned[nbj_max]={false};
+    int index;
+    for(int i=0; i<nbj; i++)
+    {
+      int Min=99;
+      for(int j=0; j<nbj_max; j++)
+      {
+        if(AssignedPins[j]==true && TempPinAssigned[j]==false)
+        {
+          index=j;
+          break;
+        }
+      }
+      
+      LOG_GENERAL("Min Unassigned:");
+      LOG_GENERAL(NewPins[index]);
+      LOG_GENERAL("\n");
+      TempPins[i]=index;
+      TempPinAssigned[index]=true;
+    }
+
+    for(int i=0; i<nbj; i++)
+    {
+      NewPins[i]=TempPins[i];
+    }
+    
+    LOG_GENERAL("After Reordering Pins:\n");
+    for(int i=0; i<nbj_max; i++)
+    {
+      LOG_GENERAL(i);
+      LOG_GENERAL(":");
+      LOG_GENERAL(AssignedPins[i]);
+      LOG_GENERAL(":");
+      LOG_GENERAL(NewPins[i]);
+      LOG_GENERAL("\n");
+    }
+    
     //Assign the rest automatically
     for(int i=nbj; i<nbj_max; i++)
     {
@@ -337,13 +391,25 @@ void RedefinePlayerPins(bool Auto)
         }
       }
     }
+        
+    LOG_GENERAL("Final Reordering Pins with empty slots:\n");
+    for(int i=0; i<nbj_max; i++)
+    {
+      LOG_GENERAL(i);
+      LOG_GENERAL(":");
+      LOG_GENERAL(AssignedPins[i]);
+      LOG_GENERAL(":");
+      LOG_GENERAL(NewPins[i]);
+      LOG_GENERAL("\n");
+    }
 
+    delay(200);
     ActivateBlueLED(0);
     TurnOffAllRedLights();
     delay(500);
     ActivateBlueLED(100);
 
-    //Reshuffle the new pins
+    //Reassign the new pins
     for(int i=0; i<nbj_max; i++)
     {
       int Pin;
@@ -356,6 +422,7 @@ void RedefinePlayerPins(bool Auto)
 
     //ClignoteEtSon
     ClignoteEtSon(nbj_raw,500,200,0);
+    TurnOffAllLights();
   }
 }
 
