@@ -43,7 +43,7 @@
 
 //Opt Game
 #define ExclusiveGame false
-#define ExclusiveGame_ID Game_id_TB
+#define ExclusiveGame_ID Game_id_PB
 #define ExclusiveGame_DemoMode false
 #define ExclusiveGameDelay 0
 

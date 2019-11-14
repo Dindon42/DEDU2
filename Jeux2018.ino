@@ -5,8 +5,9 @@
 #endif
 void PPV()
 {
+  
   //TUNABLES
-  int WinNumPress=5;
+  int WinNumPress=6;
   //END TUNABLES
   int Winner=-1;
   unsigned long Game_Timer=0;
@@ -16,22 +17,47 @@ void PPV()
   int NumPress[nbj_max]={0};
   bool RecordPress;
   int MinimumDiff=25;
-  #define LIGHTDELAY 15
   int PreviousState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
   int CurrentState;
 
-  //Lights: Crossover from blue to green, then all RED.
   WaitForAllNonActive(nbj_raw_max);
 
-  for(int i=0; i<=100 ; i++)
+  //LUMIERES
+  //Paires de lumières rouges qui avance
+  ControlAllLights(false,0,0);
+  for(int i=0; i<5; i++)
   {
-    ControlAllLights(false,100-i,i);
-    delay(LIGHTDELAY);
+    for(int j=0; j<10; j++)
+    {
+      if(j%5==i)
+      {
+        ActivateRedLight(j);
+      }
+    }
+    delay(300);
+    TurnOffAllRedLights();
   }
-
+  delay(300);
+  //Lumière réplique du jeu
+  const int LightDelayDecrement = 75;
+  const int LightDelayMin=150;
+  int LightDelay = LightDelayMin+WinNumPress*LightDelayDecrement;
+  for(int i=0; i<WinNumPress; i++)
+  {
+    tone(Tone_Pin,400,20);
+    TurnOnAllRedLights();
+    delay(LightDelay);
+    LightDelay-=LightDelayDecrement;
+    tone(Tone_Pin,200,20);
+    TurnOffAllRedLights();
+    delay(150);
+  }
+  delay(500);
+  ControlAllLights(false,0,0);
   delay(1000);
   ControlAllLights(true,0,0);
   ReadySound(500);
+  //END LUMIERES
   
   //MAIN GAME
   do
@@ -135,10 +161,10 @@ void PPV()
   #define LOG_PB(a)
 #endif
 void PressBattle()
-{
+{ 
   //TUNABLES
-  #define GAME_TIME_MIN 542
-  #define GAME_TIME_MAX 2242
+  #define GAME_TIME_MIN 2542
+  #define GAME_TIME_MAX 4542
   //END TUNABLES
   #define SOUND_TIME 500
   #define GAME_DELAY 5
@@ -162,16 +188,23 @@ void PressBattle()
   WaitForAllNonActive(nbj_raw_max);
   
   //LIGHT SETUP
-  MoveDEDUFlag(FlagPerc);
-  delay(500);
-  for (int i=0; i<2 ; i++)
+  MoveDEDUFlag(0);
+  delay(200);
+  int NumLights=random(10,12);
+  int FlagIncrement=100/(float)NumLights;
+  for (int i=0; i<NumLights ; i++)
   {
+    tone(Tone_Pin,400,20);
     TurnOnAllRedLights();
-    delay(300);
+    delay(random(75,100));
+    IncrementDEDUFlag(FlagIncrement);
     TurnOffAllRedLights();
-    delay(300);
+    delay(random(50,125));
   }
+  MoveDEDUFlag(FlagPerc);
   ReadySound(SOUND_TIME);
+  //LIGHT SETUP END
+
   
   //Prepare
   for(int i=0 ; i<nbj ; i++)

@@ -225,6 +225,10 @@ void IlluminateTeamRedLights(int Team)
   }
 }
 
+void IncrementDEDUFlag(float PercTravelIncrement)
+{
+  MoveDEDUFlag(ServoAnglePercent()+PercTravelIncrement);
+}
 
 //0->100
 void MoveDEDUFlag(float PercTravel)
@@ -439,4 +443,27 @@ void TicTac(int SilenceTime, int Repeats)
   }
 }
 
+void InfiniRandom()
+{
+  MoveDEDUFlag(random(0,101));
+  do
+  {
+    for(int i=0;i<10; i++)
+    {
+      if(random(2)==0)
+      {
+        ActivateRedLight(i);
+      }
+      else
+      {
+        DeactivateRedLight(i);
+      }
+    }
+    IncrementDEDUFlag(random(21)-10);
+    tone(Tone_Pin,random(50,1800),random(20,100));
+    ActivateBlueLED(random(0,100));
+    ActivateGreenLED(random(0,100));
+    delay(200);
+  }while(1);
+}
 
