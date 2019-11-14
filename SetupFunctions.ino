@@ -221,6 +221,8 @@ bool NombreJoueurs()
   delay(500);
   #define DELAYREDEFINE 400
   #define NBJDELAY 5
+  #define NBJ_BASETONE 200
+  #define NBJ_TONEINC 100
   bool Redefine=false;
 
   //Attend l'input des joueurs.
@@ -235,7 +237,7 @@ bool NombreJoueurs()
   DeactivateBlueLED();
 
   //Montre aux joueurs les sélections.
-  ClignoteEtSon(nbj_raw,500,200,0);
+  ClignoteEtSon(nbj_raw,NBJ_BASETONE,NBJ_TONEINC,0);
 
   int count=0;
   do
@@ -250,7 +252,7 @@ bool NombreJoueurs()
   if(Redefine)
   {
     //Montre aux joueurs les sélections.
-    ClignoteEtSon(nbj_raw,500,200,0);
+    ClignoteEtSon(nbj_raw,NBJ_BASETONE,NBJ_TONEINC,0);
   }
 
   return Redefine;
@@ -429,6 +431,9 @@ void RedefinePlayerPins(bool Auto)
 //Fonction de setup pour Vitesse
 void Vitesse()
 {
+  #define V_BASETONE 300
+  #define V_TONEINC 150
+  
   //Vertes à ON
   ActivateGreenLED(100);
   tone(Tone_Pin, 1250, 400);
@@ -444,12 +449,16 @@ void Vitesse()
   DeactivateGreenLED();
 
   //Montre aux joueurs les sélections.
-  ClignoteEtSon(vitesse_raw,1000,300,0);
+  ClignoteEtSon(vitesse_raw,V_BASETONE,V_TONEINC,0);
 }
 
 //Game mode selection
 void GameMode()
 {
+  
+  #define GM_BASETONE 500
+  #define GM_TONEINC 50
+  
   int Selection;
   int OriginalSel;
   
@@ -488,11 +497,11 @@ void GameMode()
   
   if(OriginalSel<5)
   {
-    ClignoteEtSon(Game_Mode,500,200,0);
+    ClignoteEtSon(Game_Mode,GM_BASETONE,GM_TONEINC,0);
   }
   else
   {
-    ClignoteEtSon(Game_Mode,500,200,5);
+    ClignoteEtSon(Game_Mode,GM_BASETONE,GM_TONEINC,5);
   }
 
   if(EnterDemo)
@@ -501,7 +510,7 @@ void GameMode()
     if(ReadPlayerInput(OriginalSel)==HIGH)
     {
       AllModes=true;
-      ClignoteEtSon(Game_Mode,500,200,5);
+      ClignoteEtSon(Game_Mode,GM_BASETONE,GM_TONEINC,5);
     }
   }
   
