@@ -1,6 +1,6 @@
 #include <Servo.h>
 #include <avr/pgmspace.h>
-#define NbJeux 23
+#define NbJeux 24
 #define NbModes 4
 #define NbGameTypes 5
 //Ordre utilisé pour le mode DÉMO  doit être consécutif de 0 à NbJeux-1.
@@ -26,7 +26,9 @@
 #define Game_id_JC 19
 #define Game_id_Seq 20
 #define Game_id_TB 21
-#define Game_id_FFA 22
+#define Game_id_AR2 22
+//Garder FFA comme dernier jeu
+#define Game_id_FFA 23
 
 //=========================\\
 //==         DEDU        ==\\
@@ -86,7 +88,7 @@ int MaxProbAcc=0;
 
 #ifdef ENABLE_LOGGING
   bool ActiveGameLogging[NbJeux]={false};
-  #define LOG_GAME(i,a) if( ActiveGameLogging[i] ) Serial.print(a);
+  #define LOG_GAME(i,a) if(ActiveGameLogging[i]) Serial.print(a);
   #define LOG_GENERAL(a) Serial.print(a);
 #else
   #define LOG_GAME(i,a)
@@ -125,7 +127,7 @@ int Tone_Frequency;
 //Globales.
 int InputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
 int OutputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
-int Equipes[10];
+int Equipes[nbj_max];
 int NbEquipes;
 int NbJoueursEq1;
 int NbJoueursEq2;

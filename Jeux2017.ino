@@ -968,7 +968,7 @@ void JeuChanson(int id_chanson)
   float TeamSizeModifier=1.03;
   
   NombreNotes=SelectionChanson(id_chanson);
-  AllocateTwoTeams();
+  AllocateTwoTeams(nbj_max);
   
   if(NbJoueursEq1>NbJoueursEq2 && FactorTeamSize==true)
   {
@@ -1510,7 +1510,7 @@ void AllRandom()
   LOG_RANDOM("\n");
   
   //Initial Lights setup: 50/50 Lit vs Not Lit
-  AllocateTwoTeams();
+  AllocateTwoTeams(nbj_max);
 
   //Fill Random Array
   do

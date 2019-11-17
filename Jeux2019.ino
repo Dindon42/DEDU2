@@ -1,4 +1,72 @@
 #ifdef ENABLE_LOGGING
+  #define LOG_AR2(a) LOG_GAME(Game_id_AR2,a)
+#else
+  #define LOG_AR2(a)
+#endif
+void AR2()
+{
+  if(nbj<=5) return;
+  #define AR2_NumAssignments 16
+  //LUMIERES
+  if(!SkipLights)
+  {
+    MaxRandom(10,true);
+  }
+  //END LUMIERES
+
+  //Inputs possibles
+  //LED 1 à 10
+  //BUZZER 2 joueurs
+  //LED V 2 joueurs
+  //LED B 2 joueurs
+  //DEDU (maître de jeu) + DEDUMASTER
+  bool OutputArray[AR2_NumAssignments]={false};
+  bool InputArray[AR2_NumAssignments]={false};
+  bool PreviousState[nbj]={false};
+  
+  LOG_AR2("=--=--=\n");
+  LOG_AR2("=-AR2-=\n");
+  LOG_AR2("=--=--=\n");
+  
+  //Assignations des états initiaux
+  //Diviser les joueurs actifs en 2
+  //Diviser les joueurs non-actifs en 2
+  //Assigner les états initiaux
+  AllocateTwoTeams(nbj);
+  for(int i=0; i<nbj; i++)
+  {
+    OutputArray[i]=Equipes[i]==1;
+  }
+  
+  AllocateTwoTeams(AR2_NumAssignments-nbj);
+  for(int i=nbj; i<AR2_NumAssignments; i++)
+  {
+    OutputArray[i]=Equipes[i-nbj]==1;
+  }
+
+#ifdef ENABLE_LOGGING
+  LOG_AR2("Initial states\n");
+  for(int i=0; i<AR2_NumAssignments ; i++)
+  {
+    LOG_AR2("i: ");
+    LOG_AR2(i);
+    LOG_AR2("  State: ")
+    LOG_AR2(OutputArray[i]);
+    LOG_AR2("\n");
+  }
+#endif
+  
+  do
+  {
+    
+  }while(1);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef ENABLE_LOGGING
   #define LOG_TB(a) LOG_GAME(Game_id_TB,a)
 #else
   #define LOG_TB(a)

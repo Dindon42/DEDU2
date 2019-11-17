@@ -443,7 +443,7 @@ void TicTac(int SilenceTime, int Repeats)
   }
 }
 
-void InfiniRandom()
+void MaxRandom(int NumTimes, bool AllOff)
 {
   MoveDEDUFlag(random(0,101));
   do
@@ -464,6 +464,12 @@ void InfiniRandom()
     ActivateBlueLED(random(0,100));
     ActivateGreenLED(random(0,100));
     delay(200);
-  }while(1);
+  }while(NumTimes-->=0);
+
+  if(AllOff)
+  {
+    ControlAllLights(false,0,0);
+    MoveDEDUFlag(0);
+  }
 }
 

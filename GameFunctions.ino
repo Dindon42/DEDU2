@@ -196,6 +196,10 @@ void PlayGame(int game_id, bool DemoMode)
   {
     TheButton();
   }
+  else if (game_id==Game_id_AR2)
+  {
+    AR2();
+  }
   else
   {
     PQP();
@@ -295,6 +299,10 @@ void LogGameName(int game_id, bool NewLine)
   else if (game_id==Game_id_TB)
   {
     LOG_GENERAL("The Button  ");
+  }
+  else if (game_id==Game_id_AR2)
+  {
+    LOG_GENERAL("ALL RANDOM 2");
   }
   else
   {
