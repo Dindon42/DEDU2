@@ -5,9 +5,9 @@
 #endif
 void AR2()
 {
-  if(nbj<=5) return;
   //MAX NUMASSIGNMENTS NE PEUT PAS ÊTRE PLUS GRAND QUE LA GRANDEUR DE ARRAY EQUIPES-nbj.
   #define AR2_NumAssignments 18
+  #define GAMEDELAY_AR2 5
   //LUMIERES
   if(!SkipLights)
   {
@@ -22,14 +22,13 @@ void AR2()
   //16, 17 -> LED B 1, 2
   //DEDU (Condition de victoire) + DEDUMASTER
   bool OutputArray[AR2_NumAssignments]={false};
-  bool InputArray[AR2_NumAssignments]={false};
-  int InputMapping[AR2_NumAssignments];
-  bool PreviousState[nbj]={false};
+  bool PreviousState[AR2_NumAssignments]={false};
+  int OutputMapping[AR2_NumAssignments];
   int WinCondition=-1;
   //Setting all input mappings to -1
   for(int i=0; i<AR2_NumAssignments; i++)
   {
-    InputMapping[i]=-1;
+    OutputMapping[i]=-1;
   }
   LOG_AR2("=--=--=\n");
   LOG_AR2("=-AR2-=\n");
@@ -69,23 +68,23 @@ void AR2()
   LOG_AR2("Assigning Player Mappings\n")
   for(int i=0; i<AR2_NumAssignments; i++)
   {
-    LOG_AR2("Assigning Player: ")
-    LOG_AR2(i);
-    LOG_AR2("\n");
+    //LOG_AR2("Assigning Player: ")
+    //LOG_AR2(i);
+    //LOG_AR2("\n");
     do
     {
       bool NumAlreadyAllocated=false;
       int r=random(AR2_NumAssignments);
-      LOG_AR2("Wanting to assign mapping: ")
-      LOG_AR2(r);
-      LOG_AR2("\n");
+      //LOG_AR2("Wanting to assign mapping: ")
+      //LOG_AR2(r);
+      //LOG_AR2("\n");
       for(int j=0; j<i; j++)
       {
-        if(InputMapping[j]==r)
+        if(OutputMapping[j]==r)
         {
-          LOG_AR2("Mapping already assigned to player: ")
-          LOG_AR2(j);
-          LOG_AR2("\n");
+          //LOG_AR2("Mapping already assigned to player: ")
+          //LOG_AR2(j);
+          //LOG_AR2("\n");
           NumAlreadyAllocated=true;
           break;
         }
@@ -93,15 +92,14 @@ void AR2()
   
       if(NumAlreadyAllocated==false)
       {
-        LOG_AR2("Mapping not already assigned.\nAssigning it to player: ")
-        LOG_AR2(i);
-        LOG_AR2("\n");
-        InputMapping[i]=r;
+        //LOG_AR2("Mapping not already assigned.\nAssigning it to player: ")
+        //LOG_AR2(i);
+        //LOG_AR2("\n");
+        OutputMapping[i]=r;
       }
-    }while(InputMapping[i]==-1);
+    }while(OutputMapping[i]==-1);
   }
 
-  
   //Print des Mappings
   LOG_AR2("Input Mapping\n");
   for(int i=0; i<AR2_NumAssignments ; i++)
@@ -109,14 +107,24 @@ void AR2()
     LOG_AR2("i: ");
     LOG_AR2(i);
     LOG_AR2("  NewMapping: ")
-    LOG_AR2(InputMapping[i]);
+    LOG_AR2(OutputMapping[i]);
     LOG_AR2("\n");
   }
 
   
+  //Initial win condition
+  if(random(2)==0)
+  {
+    WinCondition=0;
+  }
+  else
+  {
+    WinCondition=nbj;
+  }
   
   do
   {
+    
     /*
     //Activate lights
     for(int i=0; i<4 ; i++)
@@ -152,11 +160,50 @@ void AR2()
       PlayNote(ToneMapping[i],500,0);
     }
     */
+    SetAr2Outputs(OutputArray, OutputMapping, WinCondition, GAMEDELAY_AR2, ToneMapping, LightMapping);
+    delay(GAMEDELAY_AR2);
   }while(abs(SumPlayerOutput(OutputArray, nbj)-WinCondition)!=1);
 
   //Identify the Looser based on wincondition
   //Do something to it.
   
+}
+
+void SetAr2Outputs(bool OutputArray[], int OutputMapping[], int WinCondition, int NoteTime, int ToneMapping[], int LightMapping[])
+{
+  if(WinCondition==0) MoveDEDUFlag(0);
+  else MoveDEDUFlag(100);
+
+  //Mappings.
+  //0 to 9 -> LED 1 à 10
+  //10, 11, 12, 13 -> BUZZER 1, 2, 3, 4
+  //14, 15 -> LED G 1, 2
+  //16, 17 -> LED B 1, 2
+  int SumTone=0;
+  int SumGreenLED=0;
+  int SumBlueLED=0;
+  for(int i=0; i<AR2_NumAssignments; i++)
+  {
+    if(OutputMapping[i]<10)
+    {
+      SetRedLight(OutputMapping[i],OutputArray[i]);
+    }
+    else if(OutputMapping[i]<14)
+    {
+      if(OutputArray[i]) SumTone++;
+    }
+    else if(OutputMapping[i]<16)
+    {
+      if(OutputArray[i]) SumGreenLED++;
+    }
+    else
+    {
+      if(OutputArray[i]) SumBlueLED++;
+    }
+  }
+  tone(Tone_Pin,ToneMapping[SumTone],NoteTime);
+  ActivateGreenLED(LightMapping[SumGreenLED]);
+  ActivateBlueLED(LightMapping[SumBlueLED]);
 }
 
 int SumPlayerOutput(bool OutputArray[], int ArrSize)
