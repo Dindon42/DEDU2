@@ -53,7 +53,7 @@ void AllocateTwoTeams(int NbjToAllocate)
   LOG_GENERAL("\n");
   LOG_GENERAL("Assignments");
   LOG_GENERAL("\n");
-  for(int i=0; i<nbj_max; i++)
+  for(int i=0; i<NbjToAllocate; i++)
   {
     LOG_GENERAL("ID: ");
     LOG_GENERAL(i+1);

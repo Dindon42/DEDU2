@@ -5,9 +5,18 @@
 #endif
 void AR2()
 {
+  //TUNABLES
+  int RandFactor=20;
+  int RandFactorIncrease=50;
+  #define DeduMasterClickMin 1
+  #define DeduMasterClickMax 5
+  #define AR2_WinCondToggleRand 150
+  //END TUNABLES
+
+  
   //MAX NUMASSIGNMENTS NE PEUT PAS ÊTRE PLUS GRAND QUE LA GRANDEUR DE ARRAY EQUIPES-nbj.
   #define AR2_NumAssignments 18
-  #define GAMEDELAY_AR2 5
+  #define GAMEDELAY_AR2 20
   //LUMIERES
   if(!SkipLights)
   {
@@ -24,7 +33,7 @@ void AR2()
   bool OutputArray[AR2_NumAssignments]={false};
   bool PreviousState[AR2_NumAssignments]={false};
   int OutputMapping[AR2_NumAssignments];
-  int WinCondition=-1;
+  int WinCondition=0;
   //Setting all input mappings to -1
   for(int i=0; i<AR2_NumAssignments; i++)
   {
@@ -35,6 +44,17 @@ void AR2()
   LOG_AR2("=--=--=\n");
   int LightMapping[4] = {0,6,15,24};
   int ToneMapping[8]={261,293,329,350,392,440,494,523};
+  long GameCounter=0;
+  int DeduMaster = random(nbj);
+  int DeduMasterClicks=0;
+  int DeduMasterNextAction = random(DeduMasterClickMin, DeduMasterClickMax);
+  
+  LOG_AR2("DeduMaster: ");
+  LOG_AR2(DeduMaster);
+  LOG_AR2("\n");
+  LOG_AR2("DeduMasterNextAction: ");
+  LOG_AR2(DeduMasterNextAction);
+  LOG_AR2("\n");
   
   //Assignations des états initiaux
   //Diviser les joueurs actifs en 2
@@ -58,7 +78,7 @@ void AR2()
   {
     LOG_AR2("i: ");
     LOG_AR2(i);
-    LOG_AR2("  State: ")
+    LOG_AR2("  State: ");
     LOG_AR2(OutputArray[i]);
     LOG_AR2("\n");
   }
@@ -115,16 +135,82 @@ void AR2()
   //Initial win condition
   if(random(2)==0)
   {
-    WinCondition=0;
+    WinCondition=AR2ToggleWinCondition(WinCondition);
   }
-  else
-  {
-    WinCondition=nbj;
-  }
-  
+
+  TurnOffAllLights();
+  delay(500);
+  SetAr2Outputs(OutputArray, OutputMapping, WinCondition, GAMEDELAY_AR2, ToneMapping, LightMapping);
+  delay(500);
+  ReadySound(500);
+
+  //////////////////
+  //MAIN GAME LOOP//
+  //////////////////
   do
   {
+    if(GameCounter>RandFactorIncrease)
+    {
+      LOG_AR2("New RandFactor: ");
+      LOG_AR2(RandFactor);
+      LOG_AR2("\n");
+      RandFactor++;
+      RandFactorIncrease++;
+      GameCounter=0;
+    }
     
+    //RandomFactor ToggleWinCondition
+    if(random(AR2_WinCondToggleRand)==0)
+    {
+      WinCondition=AR2ToggleWinCondition(WinCondition);
+    }
+    
+    //Read Input and Modify Assignments.
+    for(int i=0; i<AR2_NumAssignments; i++)
+    {
+      bool CurrentState;
+      if(i<nbj)
+      {
+        CurrentState=ReadPlayerInput(i)==HIGH? true:false;
+      }
+      else
+      {
+        CurrentState=random(RandFactor)==0;
+      }
+      
+      if(!PreviousState[i] && CurrentState)
+      {
+        //New click registered.
+        //Reverse output array if player clicks.
+        OutputArray[i]=!OutputArray[i];
+
+
+        //Check DEDUMASTER actions.
+        if(i==DeduMaster)
+        {
+          LOG_AR2("DeduMasterClicks++\n");
+          DeduMasterClicks++;
+          if(DeduMasterClicks==DeduMasterNextAction)
+          {
+            LOG_AR2("TOGGLING FROM DEDUMASTER!\n");
+            WinCondition=AR2ToggleWinCondition(WinCondition);
+
+            //Compute next DEDUMASTER
+            DeduMaster = random(nbj);
+            DeduMasterClicks=0;
+            DeduMasterNextAction = random(DeduMasterClickMin, DeduMasterClickMax);
+            LOG_AR2("DeduMaster: ");
+            LOG_AR2(DeduMaster);
+            LOG_AR2("\n");
+            LOG_AR2("DeduMasterNextAction: ");
+            LOG_AR2(DeduMasterNextAction);
+            LOG_AR2("\n");
+          }
+        }
+        
+      }
+      PreviousState[i]=CurrentState;
+    }
     /*
     //Activate lights
     for(int i=0; i<4 ; i++)
@@ -162,17 +248,57 @@ void AR2()
     */
     SetAr2Outputs(OutputArray, OutputMapping, WinCondition, GAMEDELAY_AR2, ToneMapping, LightMapping);
     delay(GAMEDELAY_AR2);
+    GameCounter++;
   }while(abs(SumPlayerOutput(OutputArray, nbj)-WinCondition)!=1);
+  
+  delay(500);
+  TurnOffAllLights();
+  delay(500);
+  
 
   //Identify the Looser based on wincondition
-  //Do something to it.
+  for(int i=0; i<nbj; i++)
+  {
+    if(WinCondition==0)
+    {
+      if(OutputArray[i]==true)
+      {
+        SingleLooserSoundAndLight(i);
+        break;
+      }
+    }
+    else
+    {
+      if(OutputArray[i]==false)
+      {
+        SingleLooserSoundAndLight(i);
+        break;
+      }
+    }
+  }
+
+  MoveDEDUFlag(0);
+  TurnOffAllLights();
   
+}
+
+int AR2ToggleWinCondition(int WinCondition)
+{
+  LOG_AR2("TOGGLING WINCONDITION\n");
+  if(WinCondition==0) return nbj;
+  else return 0;
 }
 
 void SetAr2Outputs(bool OutputArray[], int OutputMapping[], int WinCondition, int NoteTime, int ToneMapping[], int LightMapping[])
 {
-  if(WinCondition==0) MoveDEDUFlag(0);
-  else MoveDEDUFlag(100);
+  if(WinCondition==0)
+  {
+    MoveDEDUFlag(0);
+  }
+  else
+  {
+    MoveDEDUFlag(100);
+  }
 
   //Mappings.
   //0 to 9 -> LED 1 à 10
@@ -228,8 +354,8 @@ int SumPlayerOutput(bool OutputArray[], int ArrSize)
 void TheButton()
 {
   //Tunables
-  #define GameEndCounterPlayerFactorMin 50
-  #define GameEndCounterPlayerFactorMax 90
+  #define GameEndCounterPlayerFactorMin 70
+  #define GameEndCounterPlayerFactorMax 120
   #define ProbNoLight 0
   //Tunbles END
 
