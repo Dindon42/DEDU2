@@ -10,13 +10,18 @@ void AR2()
   int RandFactorIncrease=50;
   #define DeduMasterClickMin 1
   #define DeduMasterClickMax 5
+  #define AR2_BUZZERS_MIN 10
+  #define AR2_BUZZERS_MAX 13
+  #define AR2_G_LED_MIN 14
+  #define AR2_G_LED_MAX 15
+  #define AR2_B_LED_MIN 16
+  #define AR2_B_LED_MAX 17
   #define AR2_WinCondToggleRand 150
+  #define AR2_GAMEDELAY 20
+  #define AR2_NOTETIME 200
   //END TUNABLES
 
   
-  //MAX NUMASSIGNMENTS NE PEUT PAS ÊTRE PLUS GRAND QUE LA GRANDEUR DE ARRAY EQUIPES-nbj.
-  #define AR2_NumAssignments 18
-  #define GAMEDELAY_AR2 20
   //LUMIERES
   if(!SkipLights)
   {
@@ -24,6 +29,8 @@ void AR2()
   }
   //END LUMIERES
 
+//MAX NUMASSIGNMENTS NE PEUT PAS ÊTRE PLUS GRAND QUE LA GRANDEUR DE ARRAY EQUIPES-nbj.
+  #define AR2_NumAssignments 18
   //Inputs Mappings
   //0 to 9 -> LED 1 à 10
   //10, 11, 12, 13 -> BUZZER 1, 2, 3, 4
@@ -34,6 +41,7 @@ void AR2()
   bool PreviousState[AR2_NumAssignments]={false};
   int OutputMapping[AR2_NumAssignments];
   int WinCondition=0;
+  bool RefreshNotes=true;
   //Setting all input mappings to -1
   for(int i=0; i<AR2_NumAssignments; i++)
   {
@@ -140,7 +148,7 @@ void AR2()
 
   TurnOffAllLights();
   delay(500);
-  SetAr2Outputs(OutputArray, OutputMapping, WinCondition, GAMEDELAY_AR2, ToneMapping, LightMapping);
+  SetAr2Outputs(OutputArray, OutputMapping, WinCondition, AR2_NOTETIME, ToneMapping, LightMapping, RefreshNotes);
   delay(500);
   ReadySound(500);
 
@@ -164,6 +172,8 @@ void AR2()
     {
       WinCondition=AR2ToggleWinCondition(WinCondition);
     }
+    //RefreshNotes False by default.
+    RefreshNotes=false;
     
     //Read Input and Modify Assignments.
     for(int i=0; i<AR2_NumAssignments; i++)
@@ -206,6 +216,9 @@ void AR2()
             LOG_AR2(DeduMasterNextAction);
             LOG_AR2("\n");
           }
+          
+          //Check if the player controls buzzer. If so, refresh the note.
+          if(OutputMapping[i]>=AR2_BUZZERS_MIN && OutputMapping[i]<=AR2_BUZZERS_MAX) RefreshNotes=true;
         }
         
       }
@@ -246,8 +259,8 @@ void AR2()
       PlayNote(ToneMapping[i],500,0);
     }
     */
-    SetAr2Outputs(OutputArray, OutputMapping, WinCondition, GAMEDELAY_AR2, ToneMapping, LightMapping);
-    delay(GAMEDELAY_AR2);
+    SetAr2Outputs(OutputArray, OutputMapping, WinCondition, AR2_NOTETIME, ToneMapping, LightMapping, RefreshNotes);
+    delay(AR2_GAMEDELAY);
     GameCounter++;
   }while(abs(SumPlayerOutput(OutputArray, nbj)-WinCondition)!=1);
   
@@ -289,7 +302,7 @@ int AR2ToggleWinCondition(int WinCondition)
   else return 0;
 }
 
-void SetAr2Outputs(bool OutputArray[], int OutputMapping[], int WinCondition, int NoteTime, int ToneMapping[], int LightMapping[])
+void SetAr2Outputs(bool OutputArray[], int OutputMapping[], int WinCondition, int NoteTime, int ToneMapping[], int LightMapping[], bool RefreshNotes)
 {
   if(WinCondition==0)
   {
@@ -299,7 +312,7 @@ void SetAr2Outputs(bool OutputArray[], int OutputMapping[], int WinCondition, in
   {
     MoveDEDUFlag(100);
   }
-
+  
   //Mappings.
   //0 to 9 -> LED 1 à 10
   //10, 11, 12, 13 -> BUZZER 1, 2, 3, 4
@@ -314,11 +327,11 @@ void SetAr2Outputs(bool OutputArray[], int OutputMapping[], int WinCondition, in
     {
       SetRedLight(OutputMapping[i],OutputArray[i]);
     }
-    else if(OutputMapping[i]<14)
+    else if(OutputMapping[i]<=AR2_BUZZERS_MAX)
     {
       if(OutputArray[i]) SumTone++;
     }
-    else if(OutputMapping[i]<16)
+    else if(OutputMapping[i]<=AR2_G_LED_MAX)
     {
       if(OutputArray[i]) SumGreenLED++;
     }
@@ -327,7 +340,7 @@ void SetAr2Outputs(bool OutputArray[], int OutputMapping[], int WinCondition, in
       if(OutputArray[i]) SumBlueLED++;
     }
   }
-  tone(Tone_Pin,ToneMapping[SumTone],NoteTime);
+  if(RefreshNotes) tone(Tone_Pin,ToneMapping[SumTone],NoteTime);
   ActivateGreenLED(LightMapping[SumGreenLED]);
   ActivateBlueLED(LightMapping[SumBlueLED]);
 }
