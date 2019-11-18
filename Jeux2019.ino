@@ -6,7 +6,8 @@
 void AR2()
 {
   if(nbj<=5) return;
-  #define AR2_NumAssignments 16
+  //MAX NUMASSIGNMENTS NE PEUT PAS ÊTRE PLUS GRAND QUE LA GRANDEUR DE ARRAY EQUIPES-nbj.
+  #define AR2_NumAssignments 18
   //LUMIERES
   if(!SkipLights)
   {
@@ -14,22 +15,31 @@ void AR2()
   }
   //END LUMIERES
 
-  //Inputs possibles
-  //LED 1 à 10
-  //BUZZER 2 joueurs
-  //LED V 2 joueurs
-  //LED B 2 joueurs
-  //DEDU (maître de jeu) + DEDUMASTER
+  //Inputs Mappings
+  //0 to 9 -> LED 1 à 10
+  //10, 11, 12, 13 -> BUZZER 1, 2, 3, 4
+  //14, 15 -> LED G 1, 2
+  //16, 17 -> LED B 1, 2
+  //DEDU (Condition de victoire) + DEDUMASTER
   bool OutputArray[AR2_NumAssignments]={false};
   bool InputArray[AR2_NumAssignments]={false};
+  int InputMapping[AR2_NumAssignments];
   bool PreviousState[nbj]={false};
-  
+  int WinCondition=-1;
+  //Setting all input mappings to -1
+  for(int i=0; i<AR2_NumAssignments; i++)
+  {
+    InputMapping[i]=-1;
+  }
   LOG_AR2("=--=--=\n");
   LOG_AR2("=-AR2-=\n");
   LOG_AR2("=--=--=\n");
+  int LightMapping[4] = {0,6,15,24};
+  int ToneMapping[8]={261,293,329,350,392,440,494,523};
   
   //Assignations des états initiaux
   //Diviser les joueurs actifs en 2
+  //Assigner les états initiaux
   //Diviser les joueurs non-actifs en 2
   //Assigner les états initiaux
   AllocateTwoTeams(nbj);
@@ -37,14 +47,13 @@ void AR2()
   {
     OutputArray[i]=Equipes[i]==1;
   }
-  
+
   AllocateTwoTeams(AR2_NumAssignments-nbj);
   for(int i=nbj; i<AR2_NumAssignments; i++)
   {
     OutputArray[i]=Equipes[i-nbj]==1;
   }
-
-#ifdef ENABLE_LOGGING
+  //Print des états initiaux
   LOG_AR2("Initial states\n");
   for(int i=0; i<AR2_NumAssignments ; i++)
   {
@@ -54,12 +63,110 @@ void AR2()
     LOG_AR2(OutputArray[i]);
     LOG_AR2("\n");
   }
-#endif
+  
+  //Assign Random Mapping to each player
+  int PosAssigned=0;
+  LOG_AR2("Assigning Player Mappings\n")
+  for(int i=0; i<AR2_NumAssignments; i++)
+  {
+    LOG_AR2("Assigning Player: ")
+    LOG_AR2(i);
+    LOG_AR2("\n");
+    do
+    {
+      bool NumAlreadyAllocated=false;
+      int r=random(AR2_NumAssignments);
+      LOG_AR2("Wanting to assign mapping: ")
+      LOG_AR2(r);
+      LOG_AR2("\n");
+      for(int j=0; j<i; j++)
+      {
+        if(InputMapping[j]==r)
+        {
+          LOG_AR2("Mapping already assigned to player: ")
+          LOG_AR2(j);
+          LOG_AR2("\n");
+          NumAlreadyAllocated=true;
+          break;
+        }
+      }
+  
+      if(NumAlreadyAllocated==false)
+      {
+        LOG_AR2("Mapping not already assigned.\nAssigning it to player: ")
+        LOG_AR2(i);
+        LOG_AR2("\n");
+        InputMapping[i]=r;
+      }
+    }while(InputMapping[i]==-1);
+  }
+
+  
+  //Print des Mappings
+  LOG_AR2("Input Mapping\n");
+  for(int i=0; i<AR2_NumAssignments ; i++)
+  {
+    LOG_AR2("i: ");
+    LOG_AR2(i);
+    LOG_AR2("  NewMapping: ")
+    LOG_AR2(InputMapping[i]);
+    LOG_AR2("\n");
+  }
+
+  
   
   do
   {
-    
-  }while(1);
+    /*
+    //Activate lights
+    for(int i=0; i<4 ; i++)
+    {
+      ActivateBlueLED(LightMapping[i]);
+      delay(1000);
+    }
+    for(int i=0; i<4 ; i++)
+    {
+      ActivateGreenLED(LightMapping[i]);
+      delay(1000);
+    }
+    for(int i=3; i>=0 ; i--)
+    {
+      ActivateBlueLED(LightMapping[i]);
+      delay(1000);
+    }
+    for(int i=3; i>=0 ; i--)
+    {
+      ActivateGreenLED(LightMapping[i]);
+      delay(1000);
+    }
+    */
+
+    /*
+    //Activate tone.
+    for(int i=0; i<8; i++)
+    {
+      PlayNote(ToneMapping[i],500,0);
+    }
+    for(int i=7; i>=0; i--)
+    {
+      PlayNote(ToneMapping[i],500,0);
+    }
+    */
+  }while(abs(SumPlayerOutput(OutputArray, nbj)-WinCondition)!=1);
+
+  //Identify the Looser based on wincondition
+  //Do something to it.
+  
+}
+
+int SumPlayerOutput(bool OutputArray[], int ArrSize)
+{
+  int Sum=0;
+  for(int i=0; i<ArrSize; i++)
+  {
+    if(OutputArray[i]) Sum++;
+  }
+  return Sum;
 }
 
 

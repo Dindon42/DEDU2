@@ -47,23 +47,20 @@ void AllocateTwoTeams(int NbjToAllocate)
       NbjAlloueEq1++;
     }
   }
-
-
-  #ifdef ENABLE_LOGGING
-    LOG_GENERAL("NbjToAllocate: ");
-    LOG_GENERAL(NbjToAllocate);
+  
+  LOG_GENERAL("NbjToAllocate: ");
+  LOG_GENERAL(NbjToAllocate);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("Assignments");
+  LOG_GENERAL("\n");
+  for(int i=0; i<nbj_max; i++)
+  {
+    LOG_GENERAL("ID: ");
+    LOG_GENERAL(i+1);
+    LOG_GENERAL("  Eq: ");
+    LOG_GENERAL(Equipes[i]);
     LOG_GENERAL("\n");
-    LOG_GENERAL("Assignments");
-    LOG_GENERAL("\n");
-    for(int i=0; i<nbj_max; i++)
-    {
-      LOG_GENERAL("ID: ");
-      LOG_GENERAL(i+1);
-      LOG_GENERAL("  Eq: ");
-      LOG_GENERAL(Equipes[i]);
-      LOG_GENERAL("\n");
-    }
-  #endif
+  }
 }
 
 void AllocateTwoConsecutiveTeams()

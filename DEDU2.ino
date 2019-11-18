@@ -127,7 +127,7 @@ int Tone_Frequency;
 //Globales.
 int InputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
 int OutputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
-int Equipes[nbj_max];
+int Equipes[42];
 int NbEquipes;
 int NbJoueursEq1;
 int NbJoueursEq2;
