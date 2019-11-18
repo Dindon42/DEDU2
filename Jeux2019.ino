@@ -6,16 +6,20 @@
 void AR2()
 {
   //TUNABLES
-  int RandFactor=20;
-  int RandFactorIncrease=50;
+  int RandFactor=random(10,25);
+  int RandFactorIncrease=random(40,60);
   #define DeduMasterClickMin 1
   #define DeduMasterClickMax 5
   #define AR2_BUZZERS_MIN 10
-  #define AR2_BUZZERS_MAX 13
-  #define AR2_G_LED_MIN 14
-  #define AR2_G_LED_MAX 15
-  #define AR2_B_LED_MIN 16
-  #define AR2_B_LED_MAX 17
+  #define AR2_BUZZERS_MAX 12
+  #define AR2_G_LED_MIN 13
+  #define AR2_G_LED_MAX 13
+  #define AR2_B_LED_MIN 14
+  #define AR2_B_LED_MAX 14
+  #define AR2_GB_LED_MIN 15
+  #define AR2_GB_LED_MAX 15
+  //MAX NUMASSIGNMENTS NE PEUT PAS ÊTRE PLUS GRAND QUE LA GRANDEUR DE ARRAY EQUIPES-nbj.
+  #define AR2_NumAssignments 16
   #define AR2_WinCondToggleRand 150
   #define AR2_GAMEDELAY 20
   #define AR2_NOTETIME 200
@@ -28,14 +32,8 @@ void AR2()
     MaxRandom(10,true);
   }
   //END LUMIERES
-
-//MAX NUMASSIGNMENTS NE PEUT PAS ÊTRE PLUS GRAND QUE LA GRANDEUR DE ARRAY EQUIPES-nbj.
-  #define AR2_NumAssignments 18
+  
   //Inputs Mappings
-  //0 to 9 -> LED 1 à 10
-  //10, 11, 12, 13 -> BUZZER 1, 2, 3, 4
-  //14, 15 -> LED G 1, 2
-  //16, 17 -> LED B 1, 2
   //DEDU (Condition de victoire) + DEDUMASTER
   bool OutputArray[AR2_NumAssignments]={false};
   bool PreviousState[AR2_NumAssignments]={false};
@@ -50,20 +48,13 @@ void AR2()
   LOG_AR2("=--=--=\n");
   LOG_AR2("=-AR2-=\n");
   LOG_AR2("=--=--=\n");
-  int LightMapping[4] = {0,6,15,24};
+  //int LightMapping[4] = {0,6,15,24};
+  int LightMapping[4] = {0,8,24,42};
   int ToneMapping[8]={261,293,329,350,392,440,494,523};
   long GameCounter=0;
   int DeduMaster = random(nbj);
   int DeduMasterClicks=0;
   int DeduMasterNextAction = random(DeduMasterClickMin, DeduMasterClickMax);
-  
-  LOG_AR2("DeduMaster: ");
-  LOG_AR2(DeduMaster);
-  LOG_AR2("\n");
-  LOG_AR2("DeduMasterNextAction: ");
-  LOG_AR2(DeduMasterNextAction);
-  LOG_AR2("\n");
-  
   //Assignations des états initiaux
   //Diviser les joueurs actifs en 2
   //Assigner les états initiaux
@@ -138,7 +129,12 @@ void AR2()
     LOG_AR2(OutputMapping[i]);
     LOG_AR2("\n");
   }
-
+  LOG_AR2("DeduMaster: ");
+  LOG_AR2(DeduMaster);
+  LOG_AR2("\n");
+  LOG_AR2("DeduMasterNextAction: ");
+  LOG_AR2(DeduMasterNextAction);
+  LOG_AR2("\n");
   
   //Initial win condition
   if(random(2)==0)
@@ -148,7 +144,7 @@ void AR2()
 
   TurnOffAllLights();
   delay(500);
-  SetAr2Outputs(OutputArray, OutputMapping, WinCondition, AR2_NOTETIME, ToneMapping, LightMapping, RefreshNotes);
+  SetAr2Outputs(OutputArray, OutputMapping, WinCondition, AR2_NOTETIME, ToneMapping, LightMapping, false);
   delay(500);
   ReadySound(500);
 
@@ -159,9 +155,9 @@ void AR2()
   {
     if(GameCounter>RandFactorIncrease)
     {
-      LOG_AR2("New RandFactor: ");
-      LOG_AR2(RandFactor);
-      LOG_AR2("\n");
+      //LOG_AR2("New RandFactor: ");
+      //LOG_AR2(RandFactor);
+      //LOG_AR2("\n");
       RandFactor++;
       RandFactorIncrease++;
       GameCounter=0;
@@ -194,6 +190,12 @@ void AR2()
         //Reverse output array if player clicks.
         OutputArray[i]=!OutputArray[i];
 
+        //Check if music Buzzer Musician
+        if(OutputMapping[i]>=AR2_BUZZERS_MIN && OutputMapping[i]<=AR2_BUZZERS_MAX)
+        {
+          RefreshNotes=true;
+        }
+
 
         //Check DEDUMASTER actions.
         if(i==DeduMaster)
@@ -215,15 +217,12 @@ void AR2()
             LOG_AR2("DeduMasterNextAction: ");
             LOG_AR2(DeduMasterNextAction);
             LOG_AR2("\n");
-          }
-          
-          //Check if the player controls buzzer. If so, refresh the note.
-          if(OutputMapping[i]>=AR2_BUZZERS_MIN && OutputMapping[i]<=AR2_BUZZERS_MAX) RefreshNotes=true;
+          }          
         }
-        
       }
       PreviousState[i]=CurrentState;
     }
+    
     /*
     //Activate lights
     for(int i=0; i<4 ; i++)
@@ -263,20 +262,18 @@ void AR2()
     delay(AR2_GAMEDELAY);
     GameCounter++;
   }while(abs(SumPlayerOutput(OutputArray, nbj)-WinCondition)!=1);
-  
-  delay(500);
-  TurnOffAllLights();
-  delay(500);
-  
 
+//Faire quelque chose ici pour marquer la fin de la partie.
+  
   //Identify the Looser based on wincondition
+  int Looser=-1;
   for(int i=0; i<nbj; i++)
   {
     if(WinCondition==0)
     {
       if(OutputArray[i]==true)
       {
-        SingleLooserSoundAndLight(i);
+        Looser=i;
         break;
       }
     }
@@ -284,12 +281,50 @@ void AR2()
     {
       if(OutputArray[i]==false)
       {
-        SingleLooserSoundAndLight(i);
+        Looser=i;
         break;
       }
     }
   }
 
+  //Sync all dummy players to win condition
+  for(int i=nbj; i<AR2_NumAssignments; i++)
+  {
+    bool ExpectedOutput = WinCondition==0 ? false : true;
+    if(OutputArray[i]==ExpectedOutput)
+    {
+      continue;
+    }
+    
+    delay(800);
+    OutputArray[i]=ExpectedOutput;
+    RefreshNotes=false;
+    //Check if musician.
+    if(OutputMapping[i]>=AR2_BUZZERS_MIN && OutputMapping[i]<=AR2_BUZZERS_MAX)
+    {
+      RefreshNotes=true;
+    }
+    SetAr2Outputs(OutputArray, OutputMapping, WinCondition, AR2_NOTETIME, ToneMapping, LightMapping, RefreshNotes);
+  }
+  
+  //Flash looser with its mapping
+  for(int i=0; i<4; i++)
+  {
+    delay(800);
+    OutputArray[Looser]=!OutputArray[Looser];
+    if(OutputMapping[Looser]>=AR2_BUZZERS_MIN && OutputMapping[i]<=AR2_BUZZERS_MAX)
+    {
+      RefreshNotes=true;
+    }
+    SetAr2Outputs(OutputArray, OutputMapping, WinCondition, AR2_NOTETIME, ToneMapping, LightMapping, RefreshNotes);
+  }
+  
+  delay(500);
+  TurnOffAllLights();
+  delay(500);
+  
+  SingleLooserSoundAndLight(Looser);
+  
   MoveDEDUFlag(0);
   TurnOffAllLights();
   
@@ -297,7 +332,7 @@ void AR2()
 
 int AR2ToggleWinCondition(int WinCondition)
 {
-  LOG_AR2("TOGGLING WINCONDITION\n");
+  //LOG_AR2("TOGGLING WINCONDITION\n");
   if(WinCondition==0) return nbj;
   else return 0;
 }
@@ -335,9 +370,17 @@ void SetAr2Outputs(bool OutputArray[], int OutputMapping[], int WinCondition, in
     {
       if(OutputArray[i]) SumGreenLED++;
     }
-    else
+    else if(OutputMapping[i]<=AR2_B_LED_MAX)
     {
       if(OutputArray[i]) SumBlueLED++;
+    }
+    else
+    {
+      if(OutputArray[i])
+      {
+        SumGreenLED++;
+        SumBlueLED++;
+      }
     }
   }
   if(RefreshNotes) tone(Tone_Pin,ToneMapping[SumTone],NoteTime);
