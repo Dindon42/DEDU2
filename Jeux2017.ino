@@ -1323,7 +1323,7 @@ void JeuChanson(int id_chanson)
 #endif
 void PatateChaude()
 {
-  unsigned long basetime=4242;
+  unsigned long basetime=5242;
   unsigned long maxrandtime=12242;
   unsigned long GameTimeMillis = basetime+random(maxrandtime);
   unsigned long GameCounter=0;
@@ -1332,6 +1332,14 @@ void PatateChaude()
   bool ReadyToSwitch=false;
   int ReactTimeMin=84;
   int ReactTimeMax=2420;
+  unsigned long GameCounterPenalite[nbj];
+  bool PreviousState[nbj];
+  for(int i=0; i<nbj ; i++)
+  {
+    GameCounterPenalite[i]=0;
+    PreviousState[i]=false;
+  }
+  #define PenaliteIncr 2000;
 
   LOG_PATATE("GameTimeMillis:");
   LOG_PATATE(GameTimeMillis);
@@ -1345,6 +1353,7 @@ void PatateChaude()
   int LuckyPlayer = random(nbj);
   int NextPlayer;
 
+  
   if(random(2)==0)
   {
      NextPlayer=1;
@@ -1366,7 +1375,27 @@ void PatateChaude()
       ReadyToSwitch=true;
     }
 
-    if(ReadPlayerInput(LuckyPlayer)==HIGH && ReadyToSwitch==true)
+    for(int i=0; i<nbj ; i++)
+    {
+      if(i==LuckyPlayer)
+      {
+        continue;
+      }
+
+      if(ReadPlayerInput(i)==HIGH && !PreviousState[i])
+      {
+        GameCounterPenalite[i]=GameCounter+PenaliteIncr;
+        
+        LOG_PATATE("Penalite Joueur:");
+        LOG_PATATE(i);
+        LOG_PATATE("\n");
+        LOG_PATATE("GameCounterPenalite[i]:");
+        LOG_PATATE(GameCounterPenalite[i]);
+        LOG_PATATE("\n");
+      }
+    }
+    
+    if(ReadPlayerInput(LuckyPlayer)==HIGH && ReadyToSwitch==true && GameCounter>GameCounterPenalite[LuckyPlayer])
     {
       LOG_PATATE("SwitchingPlayer!!");
       LOG_PATATE("\n");
@@ -1427,6 +1456,11 @@ void PatateChaude()
         NextPlayer=1;
         MoveDEDUFlag(random(ServoAnglePercent(),100));
       }
+    }
+
+    for(int i=0; i<nbj; i++)
+    {
+      PreviousState[i]=ReadPlayerInput(i)==HIGH;
     }
     delay(1);
     GameCounter++;
