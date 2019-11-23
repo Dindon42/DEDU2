@@ -2,6 +2,10 @@
 #include <avr/pgmspace.h>
 #define NbJeux 24
 #define NbModes 4
+#define Game_Mode_Original 0
+#define Game_Mode_Medium 1
+#define Game_Mode_Expert 2
+#define Game_Mode_Experimental 3
 #define NbGameTypes 5
 //Ordre utilisé pour le mode DÉMO  doit être consécutif de 0 à NbJeux-1.
 #define Game_id_PQP 0

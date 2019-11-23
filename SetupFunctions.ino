@@ -189,7 +189,7 @@ void AjustementProbJeuxInit()
   }
   //MarqueurHonte initial élevé, FFA 0
   ProbIndivJeuxCurrent[Game_id_FFA]=0;
-  if(Game_Mode!=0)
+  if(Game_Mode!=Game_Mode_Original)
   {
     ProbIndivJeuxCurrent[Game_id_MH]=424;
   }
@@ -209,10 +209,10 @@ void NoHonteProbResets()
 
 void AdjustNumRoundsFullProb()
 {
-  if(Game_Mode==0)      NumberOfRoundsForFullProb=5;
-  else if(Game_Mode==1) NumberOfRoundsForFullProb=8;
-  else if(Game_Mode==2) NumberOfRoundsForFullProb=12;
-  else if(Game_Mode==3) NumberOfRoundsForFullProb=12;
+  if(Game_Mode==Game_Mode_Original)          NumberOfRoundsForFullProb=5;
+  else if(Game_Mode==Game_Mode_Medium)       NumberOfRoundsForFullProb=8;
+  else if(Game_Mode==Game_Mode_Expert)       NumberOfRoundsForFullProb=12;
+  else if(Game_Mode==Game_Mode_Experimental) NumberOfRoundsForFullProb=12;
   else NumberOfRoundsForFullProb=4;
 }
 
