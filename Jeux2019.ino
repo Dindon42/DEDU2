@@ -8,6 +8,7 @@ void AR2()
   //TUNABLES
   int RandFactor=random(10,25);
   int RandFactorIncrease=random(40,60);
+  #define AR2_ENDGAME_RANDFACTOR 102
   #define DeduMasterClickMin 1
   #define DeduMasterClickMax 5
   #define AR2_BUZZERS_MIN 10
@@ -22,6 +23,7 @@ void AR2()
   #define AR2_NumAssignments 16
   #define AR2_WinCondToggleRand 150
   #define AR2_GAMEDELAY 20
+  #define AR2_GRACETIME 7242
   #define AR2_NOTETIME 200
   //END TUNABLES
 
@@ -40,9 +42,12 @@ void AR2()
   int OutputMapping[AR2_NumAssignments];
   int WinCondition=0;
   bool RefreshNotes=true;
+  bool PlayersInGame[AR2_NumAssignments];
+  int SumActivePlayers=0;
   //Setting all input mappings to -1
   for(int i=0; i<AR2_NumAssignments; i++)
   {
+    PlayersInGame[i]=true;
     OutputMapping[i]=-1;
   }
   LOG_AR2("=--=--=\n");
@@ -51,10 +56,15 @@ void AR2()
   //int LightMapping[4] = {0,6,15,24};
   int LightMapping[4] = {0,8,24,42};
   int ToneMapping[8]={261,293,329,350,392,440,494,523};
-  long GameCounter=0;
+  unsigned long GameCounter=0;
+  unsigned long RandIncreaseCounter=0;
   int DeduMaster = random(nbj);
   int DeduMasterClicks=0;
   int DeduMasterNextAction = random(DeduMasterClickMin, DeduMasterClickMax);
+  int Looser=-1;
+  bool GraceTimeOver=false;
+  bool TriggerEndGame=false;
+  
   //Assignations des états initiaux
   //Diviser les joueurs actifs en 2
   //Assigner les états initiaux
@@ -119,6 +129,11 @@ void AR2()
     }while(OutputMapping[i]==-1);
   }
 
+  for(int i=0; i<AR2_NumAssignments; i++)
+  {
+    OutputMapping[i]=AR2_NumAssignments-i-1;
+  }
+
   //Print des Mappings
   LOG_AR2("Input Mapping\n");
   for(int i=0; i<AR2_NumAssignments ; i++)
@@ -139,7 +154,7 @@ void AR2()
   //Initial win condition
   if(random(2)==0)
   {
-    WinCondition=AR2ToggleWinCondition(WinCondition);
+    WinCondition=AR2ToggleWinCondition(WinCondition, TriggerEndGame);
   }
 
   TurnOffAllLights();
@@ -153,20 +168,20 @@ void AR2()
   //////////////////
   do
   {
-    if(GameCounter>RandFactorIncrease)
+    if(RandIncreaseCounter>RandFactorIncrease && !TriggerEndGame)
     {
       //LOG_AR2("New RandFactor: ");
       //LOG_AR2(RandFactor);
       //LOG_AR2("\n");
       RandFactor++;
       RandFactorIncrease++;
-      GameCounter=0;
+      RandIncreaseCounter=0;
     }
     
     //RandomFactor ToggleWinCondition
     if(random(AR2_WinCondToggleRand)==0)
     {
-      WinCondition=AR2ToggleWinCondition(WinCondition);
+      WinCondition=AR2ToggleWinCondition(WinCondition, TriggerEndGame);
     }
     //RefreshNotes False by default.
     RefreshNotes=false;
@@ -181,21 +196,46 @@ void AR2()
       }
       else
       {
+        //AUTOMATED PLAYERS DO RANDOM ACTION
         CurrentState=random(RandFactor)==0;
       }
       
-      if(!PreviousState[i] && CurrentState)
+      if(!PreviousState[i] && CurrentState && PlayersInGame[i])
       {
         //New click registered.
         //Reverse output array if player clicks.
         OutputArray[i]=!OutputArray[i];
+
+        //Slowly stop auto-spammers as they reach goal condition
+        if(TriggerEndGame && i!=Looser)
+        {
+          if(WinCondition==0)
+          {
+            if(OutputArray[i]==false)
+            {
+              LOG_AR2("One Less: ");
+              LOG_AR2(i);
+              LOG_AR2("\n");
+              PlayersInGame[i]=false;
+            }
+          }
+          else
+          {
+            if(OutputArray[i]==true)
+            {
+              LOG_AR2("One Less: ");
+              LOG_AR2(i);
+              LOG_AR2("\n");
+              PlayersInGame[i]=false;
+            }
+          }
+        }
 
         //Check if music Buzzer Musician
         if(OutputMapping[i]>=AR2_BUZZERS_MIN && OutputMapping[i]<=AR2_BUZZERS_MAX)
         {
           RefreshNotes=true;
         }
-
 
         //Check DEDUMASTER actions.
         if(i==DeduMaster)
@@ -205,7 +245,7 @@ void AR2()
           if(DeduMasterClicks==DeduMasterNextAction)
           {
             LOG_AR2("TOGGLING FROM DEDUMASTER!\n");
-            WinCondition=AR2ToggleWinCondition(WinCondition);
+            WinCondition=AR2ToggleWinCondition(WinCondition, TriggerEndGame);
 
             //Compute next DEDUMASTER
             DeduMaster = random(nbj);
@@ -222,90 +262,65 @@ void AR2()
       }
       PreviousState[i]=CurrentState;
     }
-    
-    /*
-    //Activate lights
-    for(int i=0; i<4 ; i++)
-    {
-      ActivateBlueLED(LightMapping[i]);
-      delay(1000);
-    }
-    for(int i=0; i<4 ; i++)
-    {
-      ActivateGreenLED(LightMapping[i]);
-      delay(1000);
-    }
-    for(int i=3; i>=0 ; i--)
-    {
-      ActivateBlueLED(LightMapping[i]);
-      delay(1000);
-    }
-    for(int i=3; i>=0 ; i--)
-    {
-      ActivateGreenLED(LightMapping[i]);
-      delay(1000);
-    }
-    */
-
-    /*
-    //Activate tone.
-    for(int i=0; i<8; i++)
-    {
-      PlayNote(ToneMapping[i],500,0);
-    }
-    for(int i=7; i>=0; i--)
-    {
-      PlayNote(ToneMapping[i],500,0);
-    }
-    */
     SetAr2Outputs(OutputArray, OutputMapping, WinCondition, AR2_NOTETIME, ToneMapping, LightMapping, RefreshNotes);
     delay(AR2_GAMEDELAY);
-    GameCounter++;
-  }while(abs(SumPlayerOutput(OutputArray, nbj)-WinCondition)!=1);
-
-//Faire quelque chose ici pour marquer la fin de la partie.
-  
-  //Identify the Looser based on wincondition
-  int Looser=-1;
-  for(int i=0; i<nbj; i++)
-  {
-    if(WinCondition==0)
-    {
-      if(OutputArray[i]==true)
-      {
-        Looser=i;
-        break;
-      }
-    }
-    else
-    {
-      if(OutputArray[i]==false)
-      {
-        Looser=i;
-        break;
-      }
-    }
-  }
-
-  //Sync all dummy players to win condition
-  for(int i=nbj; i<AR2_NumAssignments; i++)
-  {
-    bool ExpectedOutput = WinCondition==0 ? false : true;
-    if(OutputArray[i]==ExpectedOutput)
-    {
-      continue;
-    }
+    RandIncreaseCounter++;
     
-    delay(800);
-    OutputArray[i]=ExpectedOutput;
-    RefreshNotes=false;
-    //Check if musician.
-    if(OutputMapping[i]>=AR2_BUZZERS_MIN && OutputMapping[i]<=AR2_BUZZERS_MAX)
+    if(!GraceTimeOver)
     {
-      RefreshNotes=true;
+      GameCounter+=AR2_GAMEDELAY;
+      if(GameCounter > AR2_GRACETIME)
+      {
+        LOG_AR2("GRACETIME over\n");
+        GraceTimeOver=true;
+      }
     }
-    SetAr2Outputs(OutputArray, OutputMapping, WinCondition, AR2_NOTETIME, ToneMapping, LightMapping, RefreshNotes);
-  }
+
+    if(abs(SumPlayerOutput(OutputArray, nbj)-WinCondition)==1 && !TriggerEndGame  && GraceTimeOver)
+    {
+      LOG_AR2("Trigger End Game\n");
+      RandFactor=AR2_ENDGAME_RANDFACTOR;
+      TriggerEndGame=true;
+      //Identify the Looser based on wincondition
+      for(int i=0; i<nbj; i++)
+      {
+        if(WinCondition==0)
+        {
+          if(OutputArray[i]==true)
+          {
+            Looser=i;
+          }
+          else
+          {
+            PlayersInGame[i]=false;
+          }
+        }
+        else
+        {
+          if(OutputArray[i]==false)
+          {
+            Looser=i;
+          }
+          else
+          {
+            PlayersInGame[i]=false;
+          }
+        }
+      }
+    }
+
+    SumActivePlayers=0;
+    for(int i=0; i<AR2_NumAssignments; i++)
+    {
+      if(PlayersInGame[i])
+      {
+        SumActivePlayers++;
+      }
+    }
+  }while(SumActivePlayers!=1);
+
+
+  LOG_AR2("OUT OF MAIN LOOP");
   
   //Flash looser with its mapping
   for(int i=0; i<4; i++)
@@ -330,8 +345,9 @@ void AR2()
   
 }
 
-int AR2ToggleWinCondition(int WinCondition)
+int AR2ToggleWinCondition(int WinCondition,bool EndGame)
 {
+  if (EndGame) return WinCondition;
   //LOG_AR2("TOGGLING WINCONDITION\n");
   if(WinCondition==0) return nbj;
   else return 0;
