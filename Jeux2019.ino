@@ -129,11 +129,6 @@ void AR2()
     }while(OutputMapping[i]==-1);
   }
 
-  for(int i=0; i<AR2_NumAssignments; i++)
-  {
-    OutputMapping[i]=AR2_NumAssignments-i-1;
-  }
-
   //Print des Mappings
   LOG_AR2("Input Mapping\n");
   for(int i=0; i<AR2_NumAssignments ; i++)
@@ -357,7 +352,7 @@ void SetAr2Outputs(bool OutputArray[], int OutputMapping[], int WinCondition, in
 {
   if(WinCondition==0)
   {
-    MoveDEDUFlag(0);
+    MoveDEDUFlag(1);
   }
   else
   {
