@@ -24,11 +24,11 @@
 #define Game_id_TH 13
 #define Game_id_TV 14
 #define Game_id_PB 15
-#define Game_id_Duel 16
+#define Game_id_DUEL 16
 #define Game_id_PPV 17
 #define Game_id_TDD 18
 #define Game_id_JC 19
-#define Game_id_Seq 20
+#define Game_id_SEQ 20
 #define Game_id_TB 21
 #define Game_id_AR2 22
 //Garder FFA comme dernier jeu
@@ -62,7 +62,7 @@
 //Opt Mus
 #define MusicMode false
 #define MusicModeLumiere false
-#define SelectMusic 6
+#define SelectedSong 6
 #define MusicRandFactVit false
 
 //SETUP IF SKIPPED:
@@ -303,7 +303,8 @@ void setup()
     //Reset joueurhonte après la démo.
     JoueurHonte=-1;
   }
-  else if(!SkipSetup)
+  
+  if(!SkipSetup)
   {
     //Toune de DEDU pour initialiser la chose.
     JoueChanson(0,3,false, true);
@@ -318,62 +319,33 @@ void setup()
 //Setup complete.  MAIN loop.
 void loop() 
 {
+  //Special Music Mode
+  if(MusicMode)
+  {
+    EndlessMusicMode();
+  }
+  
   //Special exclusivegamemode loop
   if(ExclusiveGame)
   {
-    LOG_GENERAL("\n");
-    LOG_GENERAL("EXCLUSIVE MODE");
-    LOG_GENERAL("\n");
-    #ifdef ENABLE_LOGGING
-      ActiveGameLogging[ExclusiveGame_ID]=true;
-    #endif
-    PlayGame(ExclusiveGame_ID,ExclusiveGame_DemoMode);
-    delay(ExclusiveGameDelay);
+    PlayExclusiveGame();
   }
-  else
+  
+  //Normal loop starts here.
+  WaitForAllNonActive(nbj_raw);
+
+  TurnOffAllLights();
+  
+  if (!SkipFraudeur)
   {
-    int r;
-    //Special MusicModeLoop
-    if(MusicMode)
-    {
-      LOG_GENERAL("\n");
-      LOG_GENERAL("MUSIC MODE");
-      LOG_GENERAL("\n");
-      if (SelectMusic==-1)
-      {
-        LOG_GENERAL("Random Song:");
-        r = random(NombreChansons);
-      }
-      else
-      {
-        LOG_GENERAL("Selected Song:");
-        r=SelectMusic;
-      }
-      LOG_GENERAL(r);
-      LOG_GENERAL("\n");
-      JoueChanson(r, 1, MusicRandFactVit, MusicModeLumiere);
-      delay(2500);
-      loop();
-    }
-    else
-    {
-      //Normal loop starts here.
-      WaitForAllNonActive(nbj_raw);
-    
-      TurnOffAllLights();
-      
-      if (!SkipFraudeur)
-      {
-        //FacteurVitesse
-        r=random(25,50) + (11 - vitesse) * random(100);
-        Delay_Fraudeur(r);
-      }
-      
-      TurnOffAllLights();
-      
-      Repartiteur();
-    }
+    //FacteurVitesse
+    int r=random(25,50) + (11 - vitesse) * random(100);
+    Delay_Fraudeur(r);
   }
+  
+  TurnOffAllLights();
+  
+  Repartiteur();
 }
 
 

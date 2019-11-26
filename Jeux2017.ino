@@ -1,5 +1,5 @@
 #ifdef ENABLE_LOGGING
-  #define LOG_DEDUEL(a) LOG_GAME(Game_id_Duel,a)
+  #define LOG_DEDUEL(a) LOG_GAME(Game_id_DUEL,a)
 #else
   #define LOG_DEDUEL(a)
 #endif

@@ -257,63 +257,6 @@ int SelectionChanson(int Numero)
       RandomMin = 115;
       RandomMax = 160;
       return NombreDeNotes;
-/*
-case 3:
-  pf=(float *)Darude;
-  NombreDeNotes = sizeof(Darude[0]) / sizeof(float);
-  for (int i = 0; i < ParamChansons; i++)
-  {
-      for (int j = 0; j < NombreDeNotes; j++)
-      {
-          MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
-      }
-  }
-  RandomMin = 90;
-  RandomMax = 130;
-  return NombreDeNotes;
-case 5:
-  pf=(float *)FF6BT;
-  NombreDeNotes = sizeof(FF6BT[0]) / sizeof(float);
-  for (int i = 0; i < ParamChansons; i++)
-  {
-      for (int j = 0; j < NombreDeNotes; j++)
-      {
-          MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
-      }
-  }
-  RandomMin = 100;
-  RandomMax = 150;
-  return NombreDeNotes;
-case 6:
-  pf=(float *)Dammit;
-  NombreDeNotes = sizeof(Dammit[0]) / sizeof(float);
-  for (int i = 0; i < ParamChansons; i++)
-  {
-      for (int j = 0; j < NombreDeNotes; j++)
-      {
-          MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
-      }
-  }
-  RandomMin = 95;
-  RandomMax = 125;
-  return NombreDeNotes;
-  
-case 8:
-  pf = (float*)WhatIsLove;
-  NombreDeNotes = sizeof(WhatIsLove[0]) / sizeof(float);
-  for (int i = 0; i < ParamChansons; i++)
-  {
-      for (int j = 0; j < NombreDeNotes; j++)
-      {
-          MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
-      }
-  }
-  RandomMin = 100;
-  RandomMax = 185;
-  return NombreDeNotes;
-
-*/
-
   }
 }
 

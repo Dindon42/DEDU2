@@ -148,7 +148,7 @@ void PlayGame(int game_id, bool DemoMode)
   {
     UltimateChallenge();
   }
-  else if (game_id==Game_id_Duel)
+  else if (game_id==Game_id_DUEL)
   {
     DeDuel();
   }
@@ -188,7 +188,7 @@ void PlayGame(int game_id, bool DemoMode)
   {
     EstimeDedu();
   }
-  else if (game_id==Game_id_Seq)
+  else if (game_id==Game_id_SEQ)
   {
     SequenceGlobale(DemoMode);
   }
@@ -252,7 +252,7 @@ void LogGameName(int game_id, bool NewLine)
   {
     LOG_GENERAL("Ulti        ");
   }
-  else if (game_id==Game_id_Duel)
+  else if (game_id==Game_id_DUEL)
   {
     LOG_GENERAL("DeDuel      ");
   }
@@ -292,7 +292,7 @@ void LogGameName(int game_id, bool NewLine)
   {
     LOG_GENERAL("EstimeDedu  ");
   }
-  else if (game_id==Game_id_Seq)
+  else if (game_id==Game_id_SEQ)
   {
     LOG_GENERAL("Sequence G  ");
   }
@@ -364,7 +364,7 @@ void ResetProbHonte()
 {
   ResetGameProb(Game_id_TH);
   ResetGameProb(Game_id_MH);
-  DivideGameProb(Game_id_Duel,2);
+  DivideGameProb(Game_id_DUEL,2);
   DivideGameProb(Game_id_TDD,2);
 }
 

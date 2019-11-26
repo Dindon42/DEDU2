@@ -54,7 +54,7 @@ void DemoMode(bool AllModes)
   SonTestMode();
 
   delay(GameDelay);
-  for(int i=0 ; i<NbJeux;i++)
+  for(int i=0 ; i<NbJeux-1;i++)
   {
     //If the game mode is 0, play games that have non-0 Prob
     //If the game mode is non-0, play games that did not exist in previous mode.
@@ -137,5 +137,45 @@ void DemoMode(bool AllModes)
   LOG_GENERAL("==============\n");
   LOG_GENERAL("=  DEMO FIN  =\n");
   LOG_GENERAL("==============\n");
+}
+
+void EndlessMusicMode()
+{
+  do
+  {
+    int r;
+    LOG_GENERAL("\n");
+    LOG_GENERAL("MUSIC MODE");
+    LOG_GENERAL("\n");
+    if (SelectedSong==-1)
+    {
+      LOG_GENERAL("Random Song:");
+      r = random(NombreChansons);
+    }
+    else
+    {
+      LOG_GENERAL("Selected Song:");
+      r=SelectedSong;
+    }
+    LOG_GENERAL(r);
+    LOG_GENERAL("\n");
+    JoueChanson(r, 1, MusicRandFactVit, MusicModeLumiere);
+    delay(2500);
+  }while(1);
+}
+
+void PlayExclusiveGame()
+{
+  do
+  {
+    LOG_GENERAL("\n");
+    LOG_GENERAL("EXCLUSIVE MODE");
+    LOG_GENERAL("\n");
+    #ifdef ENABLE_LOGGING
+      ActiveGameLogging[ExclusiveGame_ID]=true;
+    #endif
+    PlayGame(ExclusiveGame_ID,ExclusiveGame_DemoMode);
+    delay(ExclusiveGameDelay);
+  }while(1);
 }
 

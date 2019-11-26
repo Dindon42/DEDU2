@@ -46,7 +46,7 @@ void DefineProbJeux()
   //Gagnant Unique
   GameProb[Game_id_PQP][wMode]=120;
   GameProb[Game_id_UC][wMode]=75;
-  GameProb[Game_id_Duel][wMode]=80;
+  GameProb[Game_id_DUEL][wMode]=80;
   GameProb[Game_id_PB][wMode]=80;
   GameProb[Game_id_ED][wMode]=100;
   
@@ -73,7 +73,7 @@ void DefineProbJeux()
   //Gagnant Unique
   GameProb[Game_id_PQP][wMode]=160;
   GameProb[Game_id_UC][wMode]=120;
-  GameProb[Game_id_Duel][wMode]=100;
+  GameProb[Game_id_DUEL][wMode]=100;
   GameProb[Game_id_PB][wMode]=80;
   GameProb[Game_id_PQR][wMode]=100;
   GameProb[Game_id_TV][wMode]=100;
@@ -111,7 +111,7 @@ void DefineProbJeux()
     GameProb[i][wMode]=GameProb[i][wMode-1];
   }
   //Add experimental modes here:
-  GameProb[Game_id_Seq][wMode]=120;
+  GameProb[Game_id_SEQ][wMode]=120;
   GameProb[Game_id_TB][wMode]=120;
   GameProb[Game_id_AR2][wMode]=120;
   
@@ -147,7 +147,7 @@ void DefineGameTypes()
   //0=Gagnant Individuel
   GameTypes[Game_id_PQP]=0;
   GameTypes[Game_id_UC]=0;
-  GameTypes[Game_id_Duel]=0;
+  GameTypes[Game_id_DUEL]=0;
   GameTypes[Game_id_PQR]=0;
   GameTypes[Game_id_TV]=0;
   GameTypes[Game_id_PB]=0;
@@ -166,7 +166,7 @@ void DefineGameTypes()
   //2=Jeu d'équipe
   GameTypes[Game_id_MIN]=2;
   GameTypes[Game_id_JC]=2;
-  GameTypes[Game_id_Seq]=2;
+  GameTypes[Game_id_SEQ]=2;
   GameTypes[Game_id_TB]=2;
   
   //3=Autres
@@ -201,7 +201,7 @@ void NoHonteProbResets()
 {
   if(JoueurHonte==-1)
   {
-    ProbIndivJeuxCurrent[Game_id_Duel]=0;
+    ProbIndivJeuxCurrent[Game_id_DUEL]=0;
     ProbIndivJeuxCurrent[Game_id_TH]=0;
     ProbIndivJeuxCurrent[Game_id_TDD]=0;
   }
