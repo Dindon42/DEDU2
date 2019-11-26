@@ -138,7 +138,7 @@ void PlayGame(int game_id, bool DemoMode)
   }
   else if (game_id==Game_id_PC)
   {
-    PatateChaude();
+    PatateChaude(Game_Mode<=Game_Mode_Medium);
   }
   else if (game_id==Game_id_AR)
   {
@@ -195,6 +195,10 @@ void PlayGame(int game_id, bool DemoMode)
   else if (game_id==Game_id_TB)
   {
     TheButton();
+  }
+  else if (game_id==Game_id_AR2)
+  {
+    AR2();
   }
   else
   {
@@ -296,6 +300,10 @@ void LogGameName(int game_id, bool NewLine)
   {
     LOG_GENERAL("The Button  ");
   }
+  else if (game_id==Game_id_AR2)
+  {
+    LOG_GENERAL("ALL RANDOM 2");
+  }
   else
   {
     LOG_GENERAL("PQP         ");
@@ -337,7 +345,7 @@ void ResetProbAfterGame(int game_id)
 
 void ResetGameProb(int game_id)
 {
-  if(Game_Mode==0)
+  if(Game_Mode==Game_Mode_Original)
   {
     DivideGameProb(game_id,2);
   }

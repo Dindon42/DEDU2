@@ -1,34 +1,35 @@
-void AllocateTwoTeams()
+void AllocateTwoTeams(int NbjToAllocate)
 {
   int NbjAlloueEq1=0;
   int NbjAlloueEq2=0;
-  
-  for (int i=0; i<=nbj_raw_max ; i++)
+
+  //Reset Array
+  for (int i=0; i<nbj_max ; i++)
   {
     Equipes[i]=-1;
   }
   
   NbEquipes=2;
-  if(nbj%2==0)
+  if(NbjToAllocate%2==0)
   {
-    NbJoueursEq1=nbj/2;
+    NbJoueursEq1=NbjToAllocate/2;
     NbJoueursEq2=NbJoueursEq1;
   }
   else
   {
     if(random(2)==0)
     {
-      NbJoueursEq1=(nbj+1)/2;
-      NbJoueursEq2=nbj-NbJoueursEq1;
+      NbJoueursEq1=(NbjToAllocate+1)/2;
+      NbJoueursEq2=NbjToAllocate-NbJoueursEq1;
     }
     else
     {
-      NbJoueursEq1=(nbj-1)/2;
-      NbJoueursEq2=nbj-NbJoueursEq1;
+      NbJoueursEq1=(NbjToAllocate-1)/2;
+      NbJoueursEq2=NbjToAllocate-NbJoueursEq1;
     }
   }
 
-  for (int i=0; i<=nbj_raw ; i++)
+  for (int i=0; i<NbjToAllocate ; i++)
   {
     if(random(2)==0 && NbjAlloueEq1<NbJoueursEq1)
     {
@@ -45,6 +46,20 @@ void AllocateTwoTeams()
       Equipes[i]=0;
       NbjAlloueEq1++;
     }
+  }
+  
+  LOG_GENERAL("NbjToAllocate: ");
+  LOG_GENERAL(NbjToAllocate);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("Assignments");
+  LOG_GENERAL("\n");
+  for(int i=0; i<NbjToAllocate; i++)
+  {
+    LOG_GENERAL("ID: ");
+    LOG_GENERAL(i+1);
+    LOG_GENERAL("  Eq: ");
+    LOG_GENERAL(Equipes[i]);
+    LOG_GENERAL("\n");
   }
 }
 

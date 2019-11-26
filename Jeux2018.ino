@@ -1262,13 +1262,20 @@ void Patate2()
   bool ReadyToSwitch[2]={false,false};
   bool PlayerIsPressing[2]={false,false};
   unsigned long PressCounter[2]={0,0};
-  const int PressRev=150;
-  const int PressStall=300;
   int LuckyPlayer[2];
   int DirectionNextPlayer[2]={0,0};
   int ProbOppDir=3;
   unsigned long MinChangeCounter=3500;
   unsigned long ChangeCounter=0;
+
+  #define PenaliteIncrPatate2 2000;
+  unsigned long GameCounterPenalite[nbj];
+  bool PreviousState[nbj];
+  for(int i=0; i<nbj ; i++)
+  {
+    GameCounterPenalite[i]=0;
+    PreviousState[i]=false;
+  }
 
   //Positions of DEDU for different configs.
   int BothPlus = 80;
@@ -1342,6 +1349,24 @@ void Patate2()
 
   do
   {
+    //Monitor spammers
+    for(int i=0; i<nbj; i++)
+    {
+      bool PP = ReadPlayerInput(i)==HIGH;
+      if(PP && !PreviousState[i] && i!=LuckyPlayer[0] && i!=LuckyPlayer[1])
+      {
+        GameCounterPenalite[i]=GameCounter+PenaliteIncrPatate2;
+        
+        LOG_PATATE2("Penalite Joueur:");
+        LOG_PATATE2(i);
+        LOG_PATATE2("\n");
+        LOG_PATATE2("GameCounterPenalite[i]:");
+        LOG_PATATE2(GameCounterPenalite[i]);
+        LOG_PATATE2("\n");
+      }
+      PreviousState[i]=PP;
+    }
+    
     ChangeCounter++;
     GameCounter++;
     for (int i=0 ; i<=1 ; i++)
@@ -1362,7 +1387,7 @@ void Patate2()
       */
       
       //Monitor initial transition to LOW
-      if(ReadPlayerInput(LuckyPlayer[i])==LOW && ReadyToSwitch[i]==false)
+      if(ReadPlayerInput(LuckyPlayer[i])==LOW && ReadyToSwitch[i]==false && GameCounter>GameCounterPenalite[LuckyPlayer[i]])
       {
         LOG_PATATE2("Change ReadyToSwitch");
         LOG_PATATE2("\n");
@@ -1376,8 +1401,6 @@ void Patate2()
         LOG_PATATE2("\n");
         PlayerIsPressing[i]=true;
       }
-
-      
       
       //Player releases.  Check counter to know in which direction to go.
       if (PlayerIsPressing[i]==true)
@@ -1408,7 +1431,7 @@ void Patate2()
           LOG_PATATE2(PressCounter[i]);
           LOG_PATATE2("\n");
           //NORMAL DIRECTION
-          if (PressCounter[i]<PressRev)
+          if (PressCounter[i]<Patate_PressRev)
           {
             LOG_PATATE2("NORMAL DIR!");
             LOG_PATATE2("\n");
@@ -1417,7 +1440,7 @@ void Patate2()
             tone(Tone_Pin, 800, 15);
           }
           //REV DIR
-          else if (PressCounter[i]>=PressRev && PressCounter[i] < PressStall)
+          else if (PressCounter[i]>=Patate_PressRev && PressCounter[i] < Patate_PressStall)
           {
             LOG_PATATE2("REV DIR!");
             LOG_PATATE2("\n");

@@ -968,7 +968,7 @@ void JeuChanson(int id_chanson)
   float TeamSizeModifier=1.03;
   
   NombreNotes=SelectionChanson(id_chanson);
-  AllocateTwoTeams();
+  AllocateTwoTeams(nbj_max);
   
   if(NbJoueursEq1>NbJoueursEq2 && FactorTeamSize==true)
   {
@@ -1321,17 +1321,29 @@ void JeuChanson(int id_chanson)
 #else
   #define LOG_PATATE(a)
 #endif
-void PatateChaude()
+void PatateChaude(bool SimpleControls)
 {
-  unsigned long basetime=4242;
+  unsigned long basetime=5242;
   unsigned long maxrandtime=12242;
   unsigned long GameTimeMillis = basetime+random(maxrandtime);
   unsigned long GameCounter=0;
+  unsigned long PressCounter=0;
   int TimeDecMin=42;
   int TimeDecMax=242;
   bool ReadyToSwitch=false;
   int ReactTimeMin=84;
   int ReactTimeMax=2420;
+  unsigned long GameCounterPenalite[nbj];
+  bool PlayerIsPressing=false;
+  bool PreviousState[nbj];
+  for(int i=0; i<nbj ; i++)
+  {
+    GameCounterPenalite[i]=0;
+    PreviousState[i]=false;
+  }
+  #define PenaliteIncrPatate 2000;
+  #define Patate_PressRev 150
+  #define Patate_PressStall 300
 
   LOG_PATATE("GameTimeMillis:");
   LOG_PATATE(GameTimeMillis);
@@ -1345,6 +1357,7 @@ void PatateChaude()
   int LuckyPlayer = random(nbj);
   int NextPlayer;
 
+  
   if(random(2)==0)
   {
      NextPlayer=1;
@@ -1361,51 +1374,111 @@ void PatateChaude()
   
   do
   {
-    if(ReadPlayerInput(LuckyPlayer)==LOW)
+    //Monitor spammers
+    for(int i=0; i<nbj ; i++)
+    {
+      if(ReadPlayerInput(i)==HIGH && !PreviousState[i] && i!=LuckyPlayer)
+      {
+        GameCounterPenalite[i]=GameCounter+PenaliteIncrPatate;
+        
+        LOG_PATATE("Penalite Joueur:");
+        LOG_PATATE(i);
+        LOG_PATATE("\n");
+        LOG_PATATE("GameCounterPenalite[i]:");
+        LOG_PATATE(GameCounterPenalite[i]);
+        LOG_PATATE("\n");
+      }
+    }
+    
+    if(ReadPlayerInput(LuckyPlayer)==LOW && GameCounter>GameCounterPenalite[LuckyPlayer])
     {
       ReadyToSwitch=true;
     }
-
-    if(ReadPlayerInput(LuckyPlayer)==HIGH && ReadyToSwitch==true)
+    
+    if(ReadPlayerInput(LuckyPlayer)==HIGH && ReadyToSwitch==true && PlayerIsPressing==false)
     {
-      LOG_PATATE("SwitchingPlayer!!");
+      LOG_PATATE("Change PlayerIsPressing");
       LOG_PATATE("\n");
-      LOG_PATATE("GameTimeMillisIN:");
-      LOG_PATATE(GameTimeMillis);
-      LOG_PATATE("\n");
-      LOG_PATATE("GameCounter:");
-      LOG_PATATE(GameCounter);
-      LOG_PATATE("\n");
-      
-      //Deactivate my Light;
-      DeactivateRedLight(LuckyPlayer);
+      PlayerIsPressing=true;
+    }
 
-      LOG_PATATE("REDUCING TIME!!");
-      LOG_PATATE("\n");
-      GameTimeMillis-=(random(TimeDecMin,TimeDecMax));
 
-      //AddTimeToAllowReaction
-      if (GameTimeMillis-GameCounter<ReactTimeMin)
+      //CHECK RELEASE
+    if (PlayerIsPressing==true)
+    {
+      LOG_PATATE("I have started Pressing");
+      LOG_PATATE("\n");
+      //HIGH, Keep counting
+      if(ReadPlayerInput(LuckyPlayer)==HIGH)
       {
+        LOG_PATATE("I keep Pressing");
         LOG_PATATE("\n");
-        LOG_PATATE("GIVING MORE TIME!!");
-        LOG_PATATE("\n");
-        GameTimeMillis+=(random(ReactTimeMin,ReactTimeMax));
+        PressCounter++;
       }
-      
-      LOG_PATATE("GameTimeMillisAFTER:");
-      LOG_PATATE(GameTimeMillis);
-      LOG_PATATE("\n");
-      
-      //GoToNextPlayer
-      LuckyPlayer+=NextPlayer;
+      else
+      {
+        LOG_PATATE("SwitchingPlayer!!");
+        LOG_PATATE("\n");
+        LOG_PATATE("GameTimeMillisIN:");
+        LOG_PATATE(GameTimeMillis);
+        LOG_PATATE("\n");
+        LOG_PATATE("GameCounter:");
+        LOG_PATATE(GameCounter);
+        LOG_PATATE("\n");
+        LOG_PATATE("PressCounter:");
+        LOG_PATATE(PressCounter);
+        LOG_PATATE("\n");
+        //NORMAL DIRECTION
+        if (PressCounter < Patate_PressRev || SimpleControls)
+        {
+          LOG_PATATE("NORMAL DIR!");
+          LOG_PATATE("\n");
+          DeactivateRedLight(LuckyPlayer);
+          LuckyPlayer+=NextPlayer;
+          tone(Tone_Pin, 800, 15);
+        }
+        //REV DIR
+        else if (PressCounter >= Patate_PressRev && PressCounter < Patate_PressStall)
+        {
+          LOG_PATATE("REV DIR!");
+          LOG_PATATE("\n");
+          DeactivateRedLight(LuckyPlayer);
+          LuckyPlayer-=NextPlayer;
+          tone(Tone_Pin, 1200, 15);
+        }
+        else
+        {
+          //STALL ON PLAYER, TOO LONG PRESS
+          LOG_PATATE("STALL");
+          LOG_PATATE("\n");
+          tone(Tone_Pin, 300, 150);
+        }
+        
+        LOG_PATATE("REDUCING TIME!!");
+        LOG_PATATE("\n");
+        GameTimeMillis-=(random(TimeDecMin,TimeDecMax));
+  
+        //AddTimeToAllowReaction
+        if (GameTimeMillis-GameCounter<ReactTimeMin)
+        {
+          LOG_PATATE("\n");
+          LOG_PATATE("GIVING MORE TIME!!");
+          LOG_PATATE("\n");
+          GameTimeMillis+=(random(ReactTimeMin,ReactTimeMax));
+        }
+        
+        LOG_PATATE("GameTimeMillisAFTER:");
+        LOG_PATATE(GameTimeMillis);
+        LOG_PATATE("\n");
 
-      LuckyPlayer=WrapAround(LuckyPlayer);
-      
-      //Activate new lucky Player
-      ActivateRedLight(LuckyPlayer);
-      tone(Tone_Pin, 800+LuckyPlayer*50, 2);
-      ReadyToSwitch=false;
+        //Correct New LuckyPlayer
+        LuckyPlayer=WrapAround(LuckyPlayer);
+        //Activate new lucky Player
+        ActivateRedLight(LuckyPlayer);
+        ReadyToSwitch=false;
+        PlayerIsPressing=false;
+        PressCounter=0;
+      }
     }
     
     if (random(10000)>9996)
@@ -1427,6 +1500,11 @@ void PatateChaude()
         NextPlayer=1;
         MoveDEDUFlag(random(ServoAnglePercent(),100));
       }
+    }
+
+    for(int i=0; i<nbj; i++)
+    {
+      PreviousState[i]=ReadPlayerInput(i)==HIGH;
     }
     delay(1);
     GameCounter++;
@@ -1484,7 +1562,10 @@ void AllRandom()
   bool Toggle;
   long RandomProb=30000;
   long RandomProbThr=29900;
-  
+  #define AR_GraceTime 4242
+  #define AR_GAMEDELAY 5
+  int GameTimer=0;
+  bool GraceTimeOver=false;
 
   LOG_RANDOM("ALLRANDOM\n");
   
@@ -1510,7 +1591,7 @@ void AllRandom()
   LOG_RANDOM("\n");
   
   //Initial Lights setup: 50/50 Lit vs Not Lit
-  AllocateTwoTeams();
+  AllocateTwoTeams(nbj_max);
 
   //Fill Random Array
   do
@@ -1649,7 +1730,7 @@ void AllRandom()
     }
 
     //Win Condition
-    if (OutputSum == Wincondition)
+    if (OutputSum == Wincondition && GraceTimeOver)
     { 
       if (Wincondition==1)
       {
@@ -1674,7 +1755,17 @@ void AllRandom()
         }
       }
     }
-    delay(5);
+    
+    delay(AR_GAMEDELAY);
+    if(!GraceTimeOver)
+    {
+      GameTimer+=AR_GAMEDELAY;
+      if(GameTimer>AR_GraceTime)
+      {
+        GraceTimeOver=true;
+        LOG_RANDOM("GraceTimeOver\n");
+      }
+    }
   }while(Looser==-1);
 
 

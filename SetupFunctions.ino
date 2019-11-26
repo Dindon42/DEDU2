@@ -113,6 +113,7 @@ void DefineProbJeux()
   //Add experimental modes here:
   GameProb[Game_id_Seq][wMode]=120;
   GameProb[Game_id_TB][wMode]=120;
+  GameProb[Game_id_AR2][wMode]=120;
   
   //===================//
   
@@ -130,6 +131,7 @@ void DefineProbJeux()
     ProbIndivJeux[Game_id_AR]=0;
     ProbIndivJeux[Game_id_JD]=0;
     ProbIndivJeux[Game_id_TB]=0;
+    ProbIndivJeux[Game_id_AR2]=0;
   }
 
   //Log Prob.
@@ -159,6 +161,7 @@ void DefineGameTypes()
   GameTypes[Game_id_DQP2]=1;
   GameTypes[Game_id_PC2]=1;
   GameTypes[Game_id_AR]=1;
+  GameTypes[Game_id_AR2]=1;
   
   //2=Jeu d'équipe
   GameTypes[Game_id_MIN]=2;
@@ -186,7 +189,7 @@ void AjustementProbJeuxInit()
   }
   //MarqueurHonte initial élevé, FFA 0
   ProbIndivJeuxCurrent[Game_id_FFA]=0;
-  if(Game_Mode!=0)
+  if(Game_Mode!=Game_Mode_Original)
   {
     ProbIndivJeuxCurrent[Game_id_MH]=424;
   }
@@ -206,10 +209,10 @@ void NoHonteProbResets()
 
 void AdjustNumRoundsFullProb()
 {
-  if(Game_Mode==0)      NumberOfRoundsForFullProb=5;
-  else if(Game_Mode==1) NumberOfRoundsForFullProb=8;
-  else if(Game_Mode==2) NumberOfRoundsForFullProb=12;
-  else if(Game_Mode==3) NumberOfRoundsForFullProb=12;
+  if(Game_Mode==Game_Mode_Original)          NumberOfRoundsForFullProb=5;
+  else if(Game_Mode==Game_Mode_Medium)       NumberOfRoundsForFullProb=8;
+  else if(Game_Mode==Game_Mode_Expert)       NumberOfRoundsForFullProb=12;
+  else if(Game_Mode==Game_Mode_Experimental) NumberOfRoundsForFullProb=12;
   else NumberOfRoundsForFullProb=4;
 }
 
