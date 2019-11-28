@@ -23,7 +23,7 @@ void EstimeDedu()
   
   //LOCALS
   int SavedTonePin=Tone_Pin;
-  if(NoTone)
+  if (NoTone)
   {
     Tone_Pin=9999;
   }
@@ -66,22 +66,22 @@ void EstimeDedu()
   //Lancer le jeu avec ReadySound.  Éteindre toutes les lumières, puis commencer.
   for (int i=0; i<num_start_cycle; i++)
   {
-    for (int j=0 ; j<Full_Cycle ; j++)
+    for (int j=0; j<Full_Cycle; j++)
     {
-      if(GoingUp)
+      if (GoingUp)
       {
-        if(j%newpos==0) MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
-        if(j%newtone==0) tone(Tone_Pin,tone_min+j,newtone);
+        if (j%newpos==0) MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
+        if (j%newtone==0) tone(Tone_Pin,tone_min+j,newtone);
       }
       else
       {
-        if(j%newpos==0) MoveDEDUFlag((((float)Full_Cycle-(float)j)/(float)Full_Cycle)*100);
-        if(j%newtone==0) tone(Tone_Pin,tone_min+Full_Cycle-j,newtone);
+        if (j%newpos==0) MoveDEDUFlag((((float)Full_Cycle-(float)j)/(float)Full_Cycle)*100);
+        if (j%newtone==0) tone(Tone_Pin,tone_min+Full_Cycle-j,newtone);
       }
       delay(game_delay);
-      if(j%LightUp==0)
+      if (j%LightUp==0)
       {
-        if(GoingUp)
+        if (GoingUp)
         {
           ActivateRedLight(LightCount);
           LightCount++;
@@ -97,17 +97,17 @@ void EstimeDedu()
   }
   delay(500);
   TurnOnAllRedLights();
-  for (int j=0 ; j<Win ; j++)
+  for (int j=0; j<Win; j++)
   {
-    if(GoingUp)
+    if (GoingUp)
     {
-      if(j%newpos==0) MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
-      if(j%newtone==0) tone(Tone_Pin,tone_min+j,newtone);
+      if (j%newpos==0) MoveDEDUFlag(((float)j/(float)Full_Cycle)*100);
+      if (j%newtone==0) tone(Tone_Pin,tone_min+j,newtone);
     }
     delay(game_delay);
   }
   delay(newtone);
-  for(int i=0; i<2; i++)
+  for (int i=0; i<2; i++)
   {
     TurnOffAllRedLights();
     delay(500);
@@ -128,15 +128,15 @@ void EstimeDedu()
   do
   {
     //Move DEDUFLAG
-    if(GoingUp)
+    if (GoingUp)
     {
-      if(GameCounter%newpos==0) MoveDEDUFlag(((float)GameCounter/(float)Full_Cycle)*100);
-      if(GameCounter%newtone==0) tone(Tone_Pin,tone_min+GameCounter,newtone);
+      if (GameCounter%newpos==0) MoveDEDUFlag(((float)GameCounter/(float)Full_Cycle)*100);
+      if (GameCounter%newtone==0) tone(Tone_Pin,tone_min+GameCounter,newtone);
     }
     else
     {
-      if(GameCounter%newpos==0) MoveDEDUFlag((((float)Full_Cycle-(float)GameCounter)/(float)Full_Cycle)*100);
-      if(GameCounter%newtone==0) tone(Tone_Pin,tone_min+Full_Cycle-GameCounter,newtone);
+      if (GameCounter%newpos==0) MoveDEDUFlag((((float)Full_Cycle-(float)GameCounter)/(float)Full_Cycle)*100);
+      if (GameCounter%newtone==0) tone(Tone_Pin,tone_min+Full_Cycle-GameCounter,newtone);
     }
     
     //Read current state
@@ -144,10 +144,10 @@ void EstimeDedu()
     {
       CurrentState[i]=ReadPlayerInput(i);
       //Detect player press.
-      if(!PreviousState[i] && CurrentState[i] && Scores[i][0]==-1)
+      if (!PreviousState[i] && CurrentState[i] && Scores[i][0]==-1)
       {
         //RECORD PLAYER SCORE BASED ON GAMECOUNTER AND CYCLES.
-        if(GoingUp) Scores[i][2]=GameCounter;
+        if (GoingUp) Scores[i][2]=GameCounter;
         else Scores[i][2]=Full_Cycle-GameCounter;
         Scores[i][0]=abs(Win-Scores[i][2]);
         Scores[i][1]=GameCycles;
@@ -192,12 +192,12 @@ void EstimeDedu()
     delay(game_delay);
     
     //Reset Condition
-    if(GameCounter%Full_Cycle==0)
+    if (GameCounter%Full_Cycle==0)
     {
       GameCounter=0;
       GameCycles++;
       GoingUp=!GoingUp;
-      if(PlayersInGame<=0) GameCycles=MaxMainGameCycles;
+      if (PlayersInGame<=0) GameCycles=MaxMainGameCycles;
     }
   //Une fois que tout le monde a choisi sa valeur ou que le DEDU a cyclé x fois, arrêter le jeu.
   }while((GameCycles<MaxMainGameCycles || PlayersInGame==nbj) && GameCycles<AbsoluteMaxMainGameCycles);
@@ -212,15 +212,15 @@ void EstimeDedu()
   
   int Winner=-1;
   //Deal with players who have not made their choices at game end.
-  for(int i=0; i<nbj; i++)
+  for (int i=0; i<nbj; i++)
   {
-    if(Scores[i][0]!=-1)
+    if (Scores[i][0]!=-1)
     {
-      if(Winner==-1)
+      if (Winner==-1)
       {
         Winner=i;
       }
-      else if(Scores[i][0]<Scores[Winner][0] || (Scores[i][0]==Scores[Winner][0] && Scores[i][1]<Scores[Winner][1]))
+      else if (Scores[i][0]<Scores[Winner][0] || (Scores[i][0]==Scores[Winner][0] && Scores[i][1]<Scores[Winner][1]))
       {
         Winner=i;
       }
@@ -228,7 +228,7 @@ void EstimeDedu()
   }
 
   //No one clicked at game end.
-  if(Winner==-1)
+  if (Winner==-1)
   {
     AllLoosersSoundAndLight();
   }
@@ -237,9 +237,9 @@ void EstimeDedu()
     int NumScored=0;
     bool Scored[nbj]={false};
     #define MAXVALUE 30000
-    for(int i=0; i<nbj; i++)
+    for (int i=0; i<nbj; i++)
     {
-      if(Scores[i][0]==-1)
+      if (Scores[i][0]==-1)
       {
         Scores[i][0]=MAXVALUE;
         Scores[i][1]=MAXVALUE;
@@ -253,10 +253,10 @@ void EstimeDedu()
 
       int WORSTSCORE=0;
       int WORSTCYCLE=0;
-      //BEST SCORE IS 0 => NO DIFFERENCE TO TARGET POS
+      //BEST SCORE IS 0 =>NO DIFFERENCE TO TARGET POS
       //SECOND COMES GAMECYCLES IF SAME SCORE, AGAIN BEST IS LOW
       //Scores[i][0]<Scores[Winner][0] || (Scores[i][0]==Scores[Winner][0] && Scores[i][1]<Scores[Winner][1])
-      for(int i=0; i<nbj; i++)
+      for (int i=0; i<nbj; i++)
       {
         LOG_ED("Current Worst:");
         LOG_ED(Player);
@@ -272,7 +272,7 @@ void EstimeDedu()
         LOG_ED(", GameCycles:");
         LOG_ED(Scores[i][1]);
         LOG_ED("\n");
-        if(!Scored[i] && i!=Winner && (Scores[i][0]>WORSTSCORE || (Scores[i][0]==WORSTSCORE && Scores[i][1]>WORSTCYCLE)))
+        if (!Scored[i] && i!=Winner && (Scores[i][0]>WORSTSCORE || (Scores[i][0]==WORSTSCORE && Scores[i][1]>WORSTCYCLE)))
         {
           LOG_ED("Player is the current worst - updating values\n");
           Player=i;
@@ -385,12 +385,12 @@ void JeanDit()
   bool PlayersInGame[nbj_max]={false};
   for (int i=0; i<nbj; i++)
   {
-    if(i!=Jean) PlayersInGame[i]=true;
+    if (i!=Jean) PlayersInGame[i]=true;
   }
   bool PlayerSafe[nbj]={false};
   for (int i=0; i<nbj; i++)
   {
-    if(i!=Jean) PlayerSafe[i]=true;
+    if (i!=Jean) PlayerSafe[i]=true;
   }
   int GameCounter=0;
   bool JeanPerd=false;
@@ -434,7 +434,7 @@ void JeanDit()
   
   //Signature lumineuse/sonore
   ActivateRedLight(Jean);
-  if(!SkipLights)
+  if (!SkipLights)
   {
     delay(500);
     for (int i=0; i<100; i++)
@@ -453,7 +453,7 @@ void JeanDit()
   //Main game.
   do
   {
-    if(ReadPlayerInput(Jean))
+    if (ReadPlayerInput(Jean))
     {
       LOG_JD("PrevState:");
       LOG_JD(PreviousState[Jean]);
@@ -469,12 +469,12 @@ void JeanDit()
       LOG_JD("\n");
     }
     
-    if(DisableJean && !NewRound)
+    if (DisableJean && !NewRound)
     {
       int PercDisableRemaining=((100 - (int)(CounterDisableJean*DisableJeanLightFactor))/2);
       //ActivateGreenLED(PercDisableRemaining);
       CounterDisableJean++;
-      if(CounterDisableJean>MaxCounterDisableJean || PercDisableRemaining<2)
+      if (CounterDisableJean>MaxCounterDisableJean || PercDisableRemaining<2)
       {
         DisableJean=false;
         CounterDisableJean=0;
@@ -498,17 +498,17 @@ void JeanDit()
       }
     }
 
-    if(NewRound)
+    if (NewRound)
     {
       ActivateGreenLED(0);
-      if(GameCounter%100==0)
+      if (GameCounter%100==0)
       {
         ToggleOutput(RoundLooser);
         Flash++;
       }
 
       //Prepare for new round
-      if(Flash>NewRoundFlash)
+      if (Flash>NewRoundFlash)
       {
         Flash=0;
         NewRound=false;
@@ -519,7 +519,7 @@ void JeanDit()
     }
     
     //Check Winner or JeanPerd
-    if(GameCounter>CounterJeanPerd)
+    if (GameCounter>CounterJeanPerd)
     {
       JeanPerd=true;
     }
@@ -538,7 +538,7 @@ void JeanDit()
       */
       
       //Jean Toggle!
-      if(!DisableJean && !PreviousState[Jean] && ReadPlayerInput(Jean))
+      if (!DisableJean && !PreviousState[Jean] && ReadPlayerInput(Jean))
       {
         LOG_JD("Jean Toggle!\n");
         LOG_JD("\n");
@@ -549,9 +549,9 @@ void JeanDit()
         //Tue ceux qui ne sont pas dans le bon état.  Check si Jean Gagne.
         for (int i=0; i<nbj; i++)
         {
-          if(PlayersInGame[i])
+          if (PlayersInGame[i])
           {
-            if(ReadPlayerOutput(i))
+            if (ReadPlayerOutput(i))
             {
               LOG_JD("Disable ");
               LOG_JD(i);
@@ -567,7 +567,7 @@ void JeanDit()
           }
         }
         
-        if(Count==0)
+        if (Count==0)
         {
           LOG_JD("Jean Gagne!\n");
           JeanGagne=true;
@@ -582,14 +582,14 @@ void JeanDit()
           DisableJeanRandMax=DisableJeanRandMax-DisableJeanMaxDelta;
           ActivateGreenLED(random(1,LightMax)); //Since Jean est toujours Disable
           
-          if(TargetState) MoveDEDUFlag(100);
+          if (TargetState) MoveDEDUFlag(100);
           else MoveDEDUFlag(0);
           
           //Reset SafeState, Activate Player LED, Deactivate Jean.
           for (int i=0; i<nbj; i++)
           {
-            if(i==Jean) DeactivateRedLight(i);
-            if(PlayersInGame[i])
+            if (i==Jean) DeactivateRedLight(i);
+            if (PlayersInGame[i])
             {
               LOG_JD("Activate ");
               LOG_JD(i);
@@ -607,17 +607,17 @@ void JeanDit()
     }
 
     
-    if(!JeanPerd && !JeanGagne)
+    if (!JeanPerd && !JeanGagne)
     {
       for (int i=0;i<nbj;i++)
       {
         CurrentState[i]=ReadPlayerInput(i);
-        if(i!=Jean && PlayersInGame[i])
+        if (i!=Jean && PlayersInGame[i])
         {
-          if(!PreviousState[i] && CurrentState[i])
+          if (!PreviousState[i] && CurrentState[i])
           {
             ToggleOutput(i);
-            if(PlayerSafe[i])
+            if (PlayerSafe[i])
             {
               LOG_JD("Out:");
               LOG_JD(i);
@@ -643,10 +643,10 @@ void JeanDit()
       for (int i=0;i<nbj;i++)
       {
         PreviousState[i]=CurrentState[i];
-        if(PlayersInGame[i])
+        if (PlayersInGame[i])
         {
           NumInGame++;
-          if(PlayerSafe[i])
+          if (PlayerSafe[i])
           {
             Winner=i;
             NumSafe++;
@@ -659,7 +659,7 @@ void JeanDit()
       }
       
       //Eliminate Round Looser.
-      if(NumInGame-NumSafe==1)
+      if (NumInGame-NumSafe==1)
       {
         LOG_JD("Looser:");
         LOG_JD(RoundLooser);
@@ -675,7 +675,7 @@ void JeanDit()
       }
       
       //Log at decent pace.
-      if(GameCounter%1400==0)
+      if (GameCounter%1400==0)
       {
         LOG_JD("PlayersInGame:");
         LOG_JD(NumInGame);
@@ -687,19 +687,19 @@ void JeanDit()
 
       
       //Periodically Extinguish Loosers.
-      if(GameCounter%620==0)
+      if (GameCounter%620==0)
       {
         for (int i=0;i<nbj;i++)
         {
-          if(!PlayersInGame[i] && i!=Jean)
+          if (!PlayersInGame[i] && i!=Jean)
           {
             DeactivateRedLight(i);
           }
         }
       }
 
-      if(NumInGame<=0) JeanGagne=true;
-      else if(NumInGame>1) Winner=-1;
+      if (NumInGame<=0) JeanGagne=true;
+      else if (NumInGame>1) Winner=-1;
       
       GameCounter++;
       delay(GameDelay);
@@ -710,14 +710,14 @@ void JeanDit()
   MoveDEDUFlag(0);
   delay(500);
 
-  if(JeanPerd)
+  if (JeanPerd)
   {
     LooserSoundAndLight(Jean,false);
     JoueurHonte=MarqueurHonte(Jean,DelaiPetiteHonte);
     //Reset jeux qui transfèrent la honte
     ResetProbHonte();
   }
-  else if(JeanGagne)
+  else if (JeanGagne)
   {
     WinnerSoundAndLight(Jean);
   }

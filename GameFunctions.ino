@@ -2,7 +2,7 @@ void UpdateCountByType(int jeu)
 {
   int TempType=GameTypes[jeu];
 
-  if(TempType>=50)
+  if (TempType>=50)
   {
     CountType[4]++;
     TempType-=50;
@@ -17,23 +17,23 @@ void LogTypeName(int type_id)
   //2 Eq
   //3 Au
   //4 Ho
-  if(type_id==0)
+  if (type_id==0)
   {
     LOG_GENERAL("GI:");
   }
-  else if(type_id==1)
+  else if (type_id==1)
   {
     LOG_GENERAL("PI:");
   }
-  else if(type_id==2)
+  else if (type_id==2)
   {
     LOG_GENERAL("Eq:");
   }
-  else if(type_id==3)
+  else if (type_id==3)
   {
     LOG_GENERAL("Au:");
   }
-  else if(type_id==4)
+  else if (type_id==4)
   {
     LOG_GENERAL("Ho:");
   }
@@ -42,17 +42,17 @@ void LogGameCountsByType()
 {
   
   LOG_GENERAL("COUNTS BY TYPE\n");
-  for(int i=0 ; i<NbGameTypes ; i++)
+  for (int i=0; i<NbGameTypes; i++)
   {
     LOG_GENERAL("Id:");
     LOG_GENERAL(i);
     LOG_GENERAL(" ");
     LogTypeName(i);
-    if(CountType[i]<10)
+    if (CountType[i]<10)
     {
       LOG_GENERAL("   ");
     }
-    else if(CountType[i]<100)
+    else if (CountType[i]<100)
     {
       LOG_GENERAL("  ");
     }
@@ -61,8 +61,8 @@ void LogGameCountsByType()
       LOG_GENERAL(" ");
     }
     LOG_GENERAL(CountType[i]);
-    LOG_GENERAL(" -> ");
-    if((float)CountType[i]/(float)TotalNbJeux<10)
+    LOG_GENERAL(" ->");
+    if ((float)CountType[i]/(float)TotalNbJeux<10)
     {
       LOG_GENERAL(" ");
     }
@@ -73,20 +73,20 @@ void LogGameCountsByType()
 
 int SelectGame(int r)
 {
-  for(int i=0 ; i<NbJeux ; i++)
+  for (int i=0; i<NbJeux; i++)
   {
-    if (r <= ProbAccumuleeJeux[i])
+    if (r<=ProbAccumuleeJeux[i])
     {
       return i;
     }
   }
-  //Default => Should not happen.
+  //Default =>Should not happen.
   return Game_id_PQP;
 }
 
 void PrepareGame(int game_id)
 {
-  if(game_id==Game_id_JC)
+  if (game_id==Game_id_JC)
   {
     int c=CountJeux[Game_id_JC]%NombreChansons;
     BesoinOrdreChansons(c);
@@ -96,7 +96,7 @@ void PrepareGame(int game_id)
 
 void SimulateGame(int game_id)
 {
-  if(game_id==Game_id_MH || game_id==Game_id_TDD || game_id==Game_id_TH)
+  if (game_id==Game_id_MH || game_id==Game_id_TDD || game_id==Game_id_TH)
   {
     JoueurHonte=random(nbj);
   }
@@ -104,7 +104,7 @@ void SimulateGame(int game_id)
 
 void PlayGame(int game_id, bool DemoMode)
 {
-  if(game_id==Game_id_PQP)
+  if (game_id==Game_id_PQP)
   {
     PQP();
   }
@@ -212,7 +212,7 @@ void PlayGame(int game_id, bool DemoMode)
 
 void LogGameName(int game_id, bool NewLine)
 {
-  if(game_id==Game_id_PQP)
+  if (game_id==Game_id_PQP)
   {
     LOG_GENERAL("PQP         ");
   }
@@ -316,7 +316,7 @@ void LogGameName(int game_id, bool NewLine)
   {
     LOG_GENERAL("PQP         ");
   }
-  if(NewLine) LOG_GENERAL("\n");
+  if (NewLine) LOG_GENERAL("\n");
 }
 
 void ResetProbAfterGame(int game_id)
@@ -354,7 +354,7 @@ void ResetProbAfterGame(int game_id)
 
 void ResetGameProb(int game_id)
 {
-  if(Game_Mode==Game_Mode_Original)
+  if (Game_Mode==Game_Mode_Original)
   {
     DivideGameProb(game_id,2);
   }
@@ -388,7 +388,7 @@ void LogGameCounts()
   LOG_GENERAL(TotalNbJeux);
   LOG_GENERAL("\n");
 
-  for(int i=0 ; i<NbJeux ; i++)
+  for (int i=0; i<NbJeux; i++)
   {
     LOG_GENERAL("Id: ");
     LOG_GENERAL(i);

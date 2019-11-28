@@ -5,8 +5,8 @@
 #endif
 void DeDuel()
 {
-  //Joueur 0 = VERT
-  //Joueur 1 = BLEU
+  //Joueur 0=VERT
+  //Joueur 1=BLEU
   int Joueurs[2]={-1,-1};
   unsigned long ClicCount[2]={0,0};
   int Winner=-1;
@@ -15,8 +15,6 @@ void DeDuel()
   float Score=50;
   float ScoreFactor=1;
   float ScoreIncrease=0.27;
-  int FinalCtd1ID=11;
-  int FinalCtd2ID=12;
   int Chanson=FinalCtd1ID;
   long MusicCounter=0;
   long NextMusicEventCtr=-1;
@@ -38,7 +36,7 @@ void DeDuel()
   int TransfertHonteProb=3;
 
 
-  if(JoueurHonte!=-1)
+  if (JoueurHonte!=-1)
   {
     LOG_DEDUEL("HONTE EXISTANTE");
     LOG_DEDUEL("\n");
@@ -87,13 +85,13 @@ void DeDuel()
     MoveDEDUFlag(50);
     delay(500);
     
-    for (int i=1; i<50 ; i++)
+    for (int i=1; i<50; i++)
     {
       ActivateGreenLED(i);
       delay(ForLightDelay);
     }
     delay(LightDelay);
-    for(int i=0 ; i<2 ; i++)
+    for (int i=0; i<2; i++)
     {
       ActivateRedLight(Joueurs[0]);
       ActivateGreenLED(0);
@@ -104,13 +102,13 @@ void DeDuel()
     }
     ControlAllLights(false,0,0);
     delay(2*LightDelay);
-    for (int i=1; i<50 ; i++)
+    for (int i=1; i<50; i++)
     {
       ActivateBlueLED(i);
       delay(ForLightDelay);
     }
     delay(LightDelay);
-    for(int i=0 ; i<2 ; i++)
+    for (int i=0; i<2; i++)
     {
       ActivateRedLight(Joueurs[1]);
       ActivateBlueLED(0);
@@ -164,7 +162,7 @@ void DeDuel()
         NextMusicEventCtr+=DelayBetweenSongs/FactVit;
         MusicEventId=0;
         
-        if(Chanson==FinalCtd1ID)
+        if (Chanson==FinalCtd1ID)
         {
           Chanson=FinalCtd2ID;
         }
@@ -180,12 +178,12 @@ void DeDuel()
     //UpdateHasReleased
     for (int i=0; i<=1 ;i++)
     {
-      if(!ReadPlayerInput(Joueurs[i]) && !HasReleased[i])
+      if (!ReadPlayerInput(Joueurs[i]) && !HasReleased[i])
       {
         HasReleased[i]=true;
       }
       delay(ReactionDelay);
-      if(HasReleased[i] && ReadPlayerInput(Joueurs[i]))
+      if (HasReleased[i] && ReadPlayerInput(Joueurs[i]))
       {
         HasReleased[i]=false;
         ClicCount[i]++;
@@ -196,7 +194,7 @@ void DeDuel()
       }
     }
 
-    if(ScoreIncCounter>ScoreIncreaseIter && ScoreFactor<50)
+    if (ScoreIncCounter>ScoreIncreaseIter && ScoreFactor<50)
     {
       ScoreIncCounter=0;
       ScoreFactor=ScoreFactor*(ScoreIncrease+1);
@@ -257,7 +255,7 @@ void DeDuel()
 
   if (Winner==Joueurs[0])
   {
-    for (int i=1; i<50 ; i++)
+    for (int i=1; i<50; i++)
     {
       ActivateGreenLED(i);
       delay(20);
@@ -267,7 +265,7 @@ void DeDuel()
   }
   else
   {
-    for (int i=1; i<50 ; i++)
+    for (int i=1; i<50; i++)
     {
       ActivateBlueLED(i);
       delay(20);
@@ -275,7 +273,7 @@ void DeDuel()
     delay(LightDelay);
     ActivateBlueLED(0);
     ActivateRedLight(Joueurs[1]);
-    for(int i=0 ; i<2 ; i++)
+    for (int i=0; i<2; i++)
     {
       WinnerSound();
       delay(LightDelay);
@@ -295,7 +293,7 @@ void DeDuel()
   ControlAllLights(false,0,0);
   delay(500);
   
-  if(TransfertHonte && Winner==Joueurs[1])
+  if (TransfertHonte && Winner==Joueurs[1])
   {
     ///BRUIT ET TRANSFERT HONTE
     LooserSoundAndLight(Joueurs[0],false);
@@ -372,7 +370,7 @@ void UltimateChallenge()
   //Identification Lumineuse du jeu: sinwave
   for (int j=0;j<4;j++)
   {
-    for (int i=0 ; i<NumSteps ; i++)
+    for (int i=0; i<NumSteps; i++)
     {
       ControlAllLights(false,CurrentIntensity,CurrentIntensity);
       CurrentIntensity+=MaxIntensity/NumSteps;
@@ -380,7 +378,7 @@ void UltimateChallenge()
     }
   
     
-    for (int i=0 ; i<NumSteps-1 ; i++)
+    for (int i=0; i<NumSteps-1; i++)
     {
       CurrentIntensity-=MaxIntensity/NumSteps;
       ControlAllLights(false,CurrentIntensity,CurrentIntensity);
@@ -413,7 +411,7 @@ void UltimateChallenge()
 
     
     DelayCounter=0;
-    for(int i=0;i<=nbj_raw;i++)
+    for (int i=0;i<=nbj_raw;i++)
     {
       LightCounterPlayer[i]=0;
     }
@@ -421,15 +419,15 @@ void UltimateChallenge()
     //Check if people press
     do
     {
-      for(int i=0;i<=nbj_raw;i++)
+      for (int i=0;i<=nbj_raw;i++)
       {
-        if(ReadPlayerInput(i) && PlayerState[i]!=Looser)
+        if (ReadPlayerInput(i) && PlayerState[i]!=Looser)
         {
           LOG_ULTI("PressLooser: ");
           LOG_ULTI(i);
           LOG_ULTI("\n");
           
-          if(PlayerState[i]!=Looser)
+          if (PlayerState[i]!=Looser)
           {
             NbPlayersStillInGame--;
             LightCounterPlayer[i]=LightTime;
@@ -437,7 +435,7 @@ void UltimateChallenge()
           PlayerState[i]=Looser;
           ActivateRedLight(i);
           tone(Tone_Pin,800,ToneTime);
-          if(DelayCounter<2*LightTime)
+          if (DelayCounter<2*LightTime)
           {
             DelayCounter=0;
           }
@@ -446,7 +444,7 @@ void UltimateChallenge()
             DelayCounter-=2*LightTime;
           }
         }
-        if(LightCounterPlayer[i]>0)
+        if (LightCounterPlayer[i]>0)
         {
           LightCounterPlayer[i]--;
         }
@@ -465,7 +463,7 @@ void UltimateChallenge()
     LOG_ULTI("PlayerStates");
     
     LOG_ULTI("\n");
-    for(int i=0 ; i<nbj; i++)
+    for (int i=0; i<nbj; i++)
     {
       LOG_ULTI("  ");
       LOG_ULTI(PlayerState[i]);
@@ -473,7 +471,7 @@ void UltimateChallenge()
     LOG_ULTI("\n");
       
     //Check if only one person left.
-    if(NbPlayersStillInGame==1)
+    if (NbPlayersStillInGame==1)
     {
       delay(500);
       noTone(Tone_Pin);
@@ -489,7 +487,7 @@ void UltimateChallenge()
       }
       LOG_ULTI("PlayerStates");
       LOG_ULTI("\n");
-      for(int i=0 ; i<nbj; i++)
+      for (int i=0; i<nbj; i++)
       {
         LOG_ULTI("  ");
         LOG_ULTI(PlayerState[i]);
@@ -510,7 +508,7 @@ void UltimateChallenge()
         }
       }
       //If not enough potential players, check some conditions
-      if(nPotPlayers<2)
+      if (nPotPlayers<2)
       {
         for (int i=0;i<nbj;i++)
         {
@@ -562,7 +560,7 @@ void UltimateChallenge()
       nPlayersSelected=0;
       for (int i=0; i<nbj;i++)
       {
-        if(PlayerState[i]==GuaranteedPlay)
+        if (PlayerState[i]==GuaranteedPlay)
         {
           nPlayersSelected++;
           PlayerState[i]=InGame;
@@ -574,15 +572,15 @@ void UltimateChallenge()
       {
         for (int i=0; i<nbj;i++)
         {
-          if(PlayerState[i]==ReadyToPlay)
+          if (PlayerState[i]==ReadyToPlay)
           {
-            if(random(20,30)>28)
+            if (random(20,30)>28)
             {
               nPlayersSelected++;
               PlayerState[i]=InGame;
             }
           }
-          if(nPlayersSelected==nPlayersForRound)
+          if (nPlayersSelected==nPlayersForRound)
           {
             break;
           }
@@ -596,7 +594,7 @@ void UltimateChallenge()
       
       LOG_ULTI("PlayerStates");
       LOG_ULTI("\n");
-      for(int i=0 ; i<nbj; i++)
+      for (int i=0; i<nbj; i++)
       {
         LOG_ULTI("  ");
         LOG_ULTI(PlayerState[i]);
@@ -606,7 +604,7 @@ void UltimateChallenge()
       //Reset HasReleased for in-game players and set light
       for (int i=0; i<nbj;i++)
       {
-        if(PlayerState[i]==InGame)
+        if (PlayerState[i]==InGame)
         {
           HasReleased[i]=false;
           ActivateRedLight(i);
@@ -626,12 +624,12 @@ void UltimateChallenge()
             PlayerState[i]=Looser;
             ActivateRedLight(i);
           }
-          if(PlayerState[i]==InGame && !ReadPlayerInput(i) && !HasReleased[i])
+          if (PlayerState[i]==InGame && !ReadPlayerInput(i) && !HasReleased[i])
           {
             HasReleased[i]=true;
           }
           delay(15);
-          if(PlayerState[i]==InGame && HasReleased[i] && ReadPlayerInput(i))
+          if (PlayerState[i]==InGame && HasReleased[i] && ReadPlayerInput(i))
           {
             //WINNER
             RoundWinner=i;
@@ -642,15 +640,15 @@ void UltimateChallenge()
       }while(RoundWinner==-1);
       
       //WinSound
-      for (int i = 1; i<= 120; i++)
+      for (int i=1; i<=120; i++)
       {
-        Tone_Frequency = 500 + 30 * i;
+        Tone_Frequency=500 + 30 * i;
         tone(Tone_Pin, Tone_Frequency, 3);
         delay(3);
       }
       noTone(Tone_Pin);
       //Flash winner light
-      for (int i=0 ; i<2 ; i++)
+      for (int i=0; i<2; i++)
       {
         DeactivateRedLight(RoundWinner);
         delay(500);
@@ -663,9 +661,9 @@ void UltimateChallenge()
       //Update playerstates
       for (int i=0; i<nbj;i++)
       {
-        if(PlayerState[i]==InGame)
+        if (PlayerState[i]==InGame)
         {
-          if(i==RoundWinner)
+          if (i==RoundWinner)
           {
             PlayerState[i]=Winner;
           }
@@ -681,15 +679,15 @@ void UltimateChallenge()
     nLoosers=0;
     for (int i=0;i<nbj_max;i++)
     {
-      if(PlayerState[i]==Winner)
+      if (PlayerState[i]==Winner)
       {
         Ultimatewinner=i;
         nWinners++;
       }
-      if(PlayerState[i]==Looser) nLoosers++;
+      if (PlayerState[i]==Looser) nLoosers++;
     }
     
-    if(nWinners==1 && nLoosers==(nbj-1))
+    if (nWinners==1 && nLoosers==(nbj-1))
     {
       Ultimatewinner=Ultimatewinner;
     }
@@ -704,7 +702,7 @@ void UltimateChallenge()
   ControlAllLights(false,0,0);
   delay(500);
   CurrentIntensity=0;
-  for (int i=0 ; i<NumSteps ; i++)
+  for (int i=0; i<NumSteps; i++)
   {
     ActivateGreenLED(CurrentIntensity);
     CurrentIntensity+=MaxIntensity/NumSteps;
@@ -712,7 +710,7 @@ void UltimateChallenge()
     
   }
   OneUp();
-  for (int i=0 ; i<2 ; i++)
+  for (int i=0; i<2; i++)
   {
     ActivateGreenLED(0);
     ActivateRedLight(Ultimatewinner);
@@ -754,18 +752,18 @@ void DQP2()
     looserfound=false;
     for (int i=0;i<=nbj_raw;i++)
     {
-      if(ReadPlayerInput(i) || ReadPlayerOutput(i))
+      if (ReadPlayerInput(i) || ReadPlayerOutput(i))
       {
         LooserCount++;
         Looser=i;
       }
     }
     
-    if(LooserCount==1)
+    if (LooserCount==1)
     {
       looserfound=true;
     }
-    else if(LooserCount==0)
+    else if (LooserCount==0)
     {
       TurnOnAllRedLights();
       delay(20);
@@ -780,16 +778,16 @@ void DQP2()
 
   
 
-  for (int i = 1; i<= 80; i++)
+  for (int i=1; i<=80; i++)
   {
-    Tone_Frequency = 2000 - 20 * i;
+    Tone_Frequency=2000 - 20 * i;
     tone(Tone_Pin, Tone_Frequency);
     delay(10);
   }
   noTone(Tone_Pin);
 
   //Identify the Loosers
-  for (int e = 1; e<= 4; e++) {
+  for (int e=1; e<=4; e++) {
     
     ActivateRedLight(Looser);
     
@@ -809,8 +807,8 @@ void DQP2()
 
 void MIN()
 {
-  int Sum0 = 0;
-  int Sum1 = 0;
+  int Sum0=0;
+  int Sum1=0;
   bool allloosers;
   bool noloosers=false;
   int DeclaredLoosers[nbj_max];
@@ -826,10 +824,10 @@ void MIN()
   
   int RandTimer=5+random(9);
 
-  float TimeInterval = 900;
+  float TimeInterval=900;
   float TimeDelta;
   
-  for(int i = 0;i<RandTimer;i++)
+  for (int i=0;i<RandTimer;i++)
   {
     tone(Tone_Pin,250,10);
     delay(400);
@@ -846,7 +844,7 @@ void MIN()
   CheckAllActive(nbj_raw);
   delay(500);
 
-  for (int i=0; i<=nbj_raw ; i++)
+  for (int i=0; i<=nbj_raw; i++)
   {
     if (InputState[i])
       Sum1++;
@@ -855,7 +853,7 @@ void MIN()
   }
 
   //ALL LOSERS
-  if(Sum0==0||Sum1==0)
+  if (Sum0==0||Sum1==0)
   {
     for (int i=0; i<=nbj_raw;i++)
     {
@@ -863,7 +861,7 @@ void MIN()
     }
     allloosers=true;
   }
-  else if(Sum0>Sum1) // Low Looses
+  else if (Sum0>Sum1) // Low Looses
   {
     for (int i=0; i<=nbj_raw;i++)
     {
@@ -874,7 +872,7 @@ void MIN()
     }
     allloosers=false;
   }
-  else if(Sum1>Sum0)//HIGH Looses
+  else if (Sum1>Sum0)//HIGH Looses
   {
     for (int i=0; i<=nbj_raw;i++)
     {
@@ -887,7 +885,7 @@ void MIN()
   {
     ActivateGreenLED(100);
     OneUp();
-    for(int i=0 ; i<4 ; i++)
+    for (int i=0; i<4; i++)
     {
       DeactivateGreenLED();
       delay(LightDelay);
@@ -905,7 +903,7 @@ void MIN()
     
     OneUp();
     //Sound for winners.
-    for(int i=0 ; i<4 ; i++)
+    for (int i=0; i<4; i++)
     {
       for (int i=0; i<=nbj_raw;i++)
       {
@@ -923,7 +921,7 @@ void MIN()
       delay(LightDelay);
     }
   }
-  else if(!noloosers && allloosers)
+  else if (!noloosers && allloosers)
   {
     AllLoosersSoundAndLight();
   }
@@ -965,7 +963,7 @@ void JeuChanson(int id_chanson)
   float ScoreWeight;
   float CumulativeWait;
   float CumulativePlay;
-  bool FactorTeamSize = true;
+  bool FactorTeamSize=true;
   float TeamSizeScoreRatio[2]={1,1};
   float TeamSizeModifier=1.03;
   float ChansonMod[ParamChansons][NbNoteMax];
@@ -976,11 +974,11 @@ void JeuChanson(int id_chanson)
   NombreNotes=SelectionChanson(id_chanson);
   AllocateTwoTeams(nbj_max);
   
-  if(NbJoueursEq1>NbJoueursEq2 && FactorTeamSize==true)
+  if (NbJoueursEq1>NbJoueursEq2 && FactorTeamSize==true)
   {
     TeamSizeScoreRatio[0]=TeamSizeModifier;
   }
-  else if(NbJoueursEq2>NbJoueursEq1 && FactorTeamSize==true)
+  else if (NbJoueursEq2>NbJoueursEq1 && FactorTeamSize==true)
   {
     TeamSizeScoreRatio[1]=TeamSizeModifier;
   }
@@ -999,9 +997,9 @@ void JeuChanson(int id_chanson)
   delay(2000);
 
   //Répéter pour chaque équipe
-  for (int e = 0; e<NbEquipes ; e++)
+  for (int e=0; e<NbEquipes; e++)
   {
-    if(LengthScoreFactor)
+    if (LengthScoreFactor)
     {
       PlayTotal=0;
       WaitTotal=0;
@@ -1019,13 +1017,13 @@ void JeuChanson(int id_chanson)
     LOG_CHANSON("Chanson Mod:");
     LOG_CHANSON("\n");
     //Transform MaChanson
-    for(int n=0; n<NombreNotes; n++)
+    for (int n=0; n<NombreNotes; n++)
     {
       ChansonMod[0][n]=MaChanson[0][n];
       ChansonMod[1][n]=MaChanson[1][n]/FacteurVitesse;
       ChansonMod[2][n]=MaChanson[2][n]/FacteurVitesse;
 
-      if(LengthScoreFactor)
+      if (LengthScoreFactor)
       {
         PlayTotal+=ChansonMod[1][n];
         if (n<NombreNotes-1)
@@ -1061,9 +1059,9 @@ void JeuChanson(int id_chanson)
     DeactivateGreenLED();
     delay(1000);
     
-    for(int i=0 ; i<=nbj_raw ; i++)
+    for (int i=0; i<=nbj_raw; i++)
     {
-      if(Equipes[i]==e)
+      if (Equipes[i]==e)
       {
         ActivateRedLight(i);
         delay(400);
@@ -1075,7 +1073,7 @@ void JeuChanson(int id_chanson)
     delay(1200);
 
     //Show the Player
-    for(int n=0; n<NombreNotes; n++)
+    for (int n=0; n<NombreNotes; n++)
     {
       PlayNoteWithLight(ChansonMod[0][n], ChansonMod[1][n], ChansonMod[2][n],OrdreJoueurs[n]);
     }
@@ -1083,12 +1081,12 @@ void JeuChanson(int id_chanson)
     
     TurnOffAllRedLights();
     delay(1500);
-    for(int t=0; t<4 ; t++){
+    for (int t=0; t<4; t++){
       tone(Tone_Pin,800,10);
       delay(700);
     }
     
-    for(int n=0; n<NombreNotes; n++)
+    for (int n=0; n<NombreNotes; n++)
     {
       ActivateRedLight(OrdreJoueurs[n]);
       TakeTime();
@@ -1130,7 +1128,7 @@ void JeuChanson(int id_chanson)
         
         CumulativeWait+=ChansonMod[2][n-1];
         
-        if(LengthScoreFactor)
+        if (LengthScoreFactor)
         {
           ScoreWeight=ChansonMod[2][n-1]/WaitTotal;
         }
@@ -1162,7 +1160,7 @@ void JeuChanson(int id_chanson)
 
       CumulativePlay+=ChansonMod[1][n];
       
-      if(LengthScoreFactor)
+      if (LengthScoreFactor)
       {
         ScoreWeight=ChansonMod[1][n]/PlayTotal;
       }
@@ -1243,9 +1241,9 @@ void JeuChanson(int id_chanson)
     Scores[1]=Scores[1]*1.15;
   }
 
-  for (int i=0 ; i<2;i++)
+  for (int i=0; i<2;i++)
   {
-    if(Scores[i]>1)
+    if (Scores[i]>1)
     {
       Scores[i]=1;
     }
@@ -1259,15 +1257,15 @@ void JeuChanson(int id_chanson)
 
   
   //Game complete.  Scoring!
-  for (int e = 0; e<NbEquipes ; e++)
+  for (int e=0; e<NbEquipes; e++)
   {
     TurnOffAllLights();
     MoveDEDUFlag(0);
     delay(1500);
     CurTone=BaseTone;
-    for(int i=0 ; i<=nbj_raw ; i++)
+    for (int i=0; i<=nbj_raw; i++)
     {
-      if(Equipes[i]==e)
+      if (Equipes[i]==e)
       {
         ActivateRedLight(i);
         tone(Tone_Pin,CurTone,100);
@@ -1280,7 +1278,7 @@ void JeuChanson(int id_chanson)
     TurnOnAllRedLights();
     delay(250);
     
-    for(int j=0 ; j<=Scores[e]*100 ; j++)
+    for (int j=0; j<=Scores[e]*100; j++)
     {
       ActivateGreenLED(j);
       ActivateBlueLED(j);
@@ -1298,13 +1296,13 @@ void JeuChanson(int id_chanson)
   delay(500);
 
   //Winner found, lights on/off!
-  for (int a = 1 ; a<= 3 ; a++)  
+  for (int a=1; a<=3; a++)  
   {
     IlluminateTeamRedLights(WinTeam);
     
-    for (int i = 1; i<= 120; i++)
+    for (int i=1; i<=120; i++)
     {
-      Tone_Frequency = 500 + 30 * i;
+      Tone_Frequency=500 + 30 * i;
       tone(Tone_Pin, Tone_Frequency, 3);
       delay(3);
     }
@@ -1332,7 +1330,7 @@ void PatateChaude(bool SimpleControls)
 {
   unsigned long basetime=5242;
   unsigned long maxrandtime=12242;
-  unsigned long GameTimeMillis = basetime+random(maxrandtime);
+  unsigned long GameTimeMillis=basetime+random(maxrandtime);
   unsigned long GameCounter=0;
   unsigned long PressCounter=0;
   int TimeDecMin=42;
@@ -1343,7 +1341,7 @@ void PatateChaude(bool SimpleControls)
   unsigned long GameCounterPenalite[nbj];
   bool PlayerIsPressing=false;
   bool PreviousState[nbj];
-  for(int i=0; i<nbj ; i++)
+  for (int i=0; i<nbj; i++)
   {
     GameCounterPenalite[i]=0;
     PreviousState[i]=false;
@@ -1361,11 +1359,11 @@ void PatateChaude(bool SimpleControls)
   ActivateBlueLED(21);
   delay(1200);
 
-  int LuckyPlayer = random(nbj);
+  int LuckyPlayer=random(nbj);
   int NextPlayer;
 
   
-  if(random(2)==0)
+  if (random(2)==0)
   {
      NextPlayer=1;
   }
@@ -1382,9 +1380,9 @@ void PatateChaude(bool SimpleControls)
   do
   {
     //Monitor spammers
-    for(int i=0; i<nbj ; i++)
+    for (int i=0; i<nbj; i++)
     {
-      if(ReadPlayerInput(i) && !PreviousState[i] && i!=LuckyPlayer)
+      if (ReadPlayerInput(i) && !PreviousState[i] && i!=LuckyPlayer)
       {
         GameCounterPenalite[i]=GameCounter+PenaliteIncrPatate;
         
@@ -1397,12 +1395,12 @@ void PatateChaude(bool SimpleControls)
       }
     }
     
-    if(!ReadPlayerInput(LuckyPlayer) && GameCounter>GameCounterPenalite[LuckyPlayer])
+    if (!ReadPlayerInput(LuckyPlayer) && GameCounter>GameCounterPenalite[LuckyPlayer])
     {
       ReadyToSwitch=true;
     }
     
-    if(ReadPlayerInput(LuckyPlayer) && ReadyToSwitch && !PlayerIsPressing)
+    if (ReadPlayerInput(LuckyPlayer) && ReadyToSwitch && !PlayerIsPressing)
     {
       LOG_PATATE("Change PlayerIsPressing");
       LOG_PATATE("\n");
@@ -1416,7 +1414,7 @@ void PatateChaude(bool SimpleControls)
       LOG_PATATE("I have started Pressing");
       LOG_PATATE("\n");
       //HIGH, Keep counting
-      if(ReadPlayerInput(LuckyPlayer))
+      if (ReadPlayerInput(LuckyPlayer))
       {
         LOG_PATATE("I keep Pressing");
         LOG_PATATE("\n");
@@ -1509,7 +1507,7 @@ void PatateChaude(bool SimpleControls)
       }
     }
 
-    for(int i=0; i<nbj; i++)
+    for (int i=0; i<nbj; i++)
     {
       PreviousState[i]=ReadPlayerInput(i);
     }
@@ -1519,16 +1517,16 @@ void PatateChaude(bool SimpleControls)
 
   ActivateBlueLED(5);
   
-  for (int i = 1; i<= 80; i++)
+  for (int i=1; i<=80; i++)
   {
-    Tone_Frequency = 2000 - 20 * i;
+    Tone_Frequency=2000 - 20 * i;
     tone(Tone_Pin, Tone_Frequency);
     delay(10);
   }
   noTone(Tone_Pin);
   
   //Identify the Looser
-  for (int e = 1; e<= 4; e++) {
+  for (int e=1; e<=4; e++) {
     ActivateRedLight(LuckyPlayer);
     delay(500);
     DeactivateRedLight(LuckyPlayer);
@@ -1582,7 +1580,7 @@ void AllRandom()
   ActivateBlueLED(10);
   ActivateGreenLED(22);
 
-  if(random(DEDUmasterProb)==0)
+  if (random(DEDUmasterProb)==0)
   {
     DEDUmaster=random(nbj);
     LOG_RANDOM("DEDUmasterNextChange:");
@@ -1603,9 +1601,9 @@ void AllRandom()
   //Fill Random Array
   do
   {
-    r = random(nbj);
+    r=random(nbj);
     
-    if(NewAssignment[r]==-1)
+    if (NewAssignment[r]==-1)
     {
       do
       {
@@ -1613,7 +1611,7 @@ void AllRandom()
        
        r2=random(nbj);
        
-       for(int j=0;j<=nbj_raw;j++)
+       for (int j=0;j<=nbj_raw;j++)
        {
         
         if (NewAssignment[j]==r2)
@@ -1624,7 +1622,7 @@ void AllRandom()
         }
        }
 
-       if(!NumAlreadyAllocated)
+       if (!NumAlreadyAllocated)
        {
         NewAssignment[r]=r2;
         PosAssigned++;
@@ -1637,9 +1635,9 @@ void AllRandom()
 
 
   //Activate Based on  assignment from previous call
-  for(int i=0 ; i<=nbj_raw ; i++)
+  for (int i=0; i<=nbj_raw; i++)
   {
-    if(Equipes[i]==0)
+    if (Equipes[i]==0)
     {
       ActivateRedLight(NewAssignment[i]);
       LightState[i]=true;
@@ -1652,7 +1650,7 @@ void AllRandom()
   }
   
   delay(800);
-  if(random(2)==0)
+  if (random(2)==0)
   {
     Wincondition=1;
     MoveDEDUFlag(0);
@@ -1670,10 +1668,10 @@ void AllRandom()
   do
   {
     //Change win condition randomly regardless of DEDUMASTER
-    if(random(RandomProb)>RandomProbThr)
+    if (random(RandomProb)>RandomProbThr)
     {
       LOG_RANDOM("Changing WinCond:");
-      if(random(2)==0)
+      if (random(2)==0)
       {
         LOG_RANDOM("LOW");
         Wincondition=1;
@@ -1689,7 +1687,7 @@ void AllRandom()
     }
     
     OutputSum=0;
-    for (int i=0 ; i<=nbj_raw ; i++)
+    for (int i=0; i<=nbj_raw; i++)
     {
       Toggle=false;
       //IF PLAYER IS HIGH AND PREV IS LOW, Toggle his light
@@ -1701,16 +1699,16 @@ void AllRandom()
       PreviousState[i]=ReadPlayerInput(i);
       OutputSum+=LightState[i];
 
-      if(i==DEDUmaster && Toggle)
+      if (i==DEDUmaster && Toggle)
       {
         LOG_RANDOM("DEDUmasterPressCounter:");
         LOG_RANDOM(DEDUmasterPressCounter);
         LOG_RANDOM("\n");
-        if(DEDUmasterPressCounter==DEDUmasterNextChange)
+        if (DEDUmasterPressCounter==DEDUmasterNextChange)
         {
           LOG_RANDOM("Change FLAG:");
           LOG_RANDOM("\n");
-          if(Wincondition==1)
+          if (Wincondition==1)
           {
             Wincondition=nbj-1;
             MoveDEDUFlag(100);
@@ -1741,9 +1739,9 @@ void AllRandom()
     {
       if (Wincondition==1)
       {
-        for (int i=0 ; i<=nbj_raw ; i++)
+        for (int i=0; i<=nbj_raw; i++)
         {
-          if(LightState[i])
+          if (LightState[i])
           {
             Looser=i;
             break;
@@ -1752,9 +1750,9 @@ void AllRandom()
       }
       else
       {
-        for (int i=0 ; i<=nbj_raw ; i++)
+        for (int i=0; i<=nbj_raw; i++)
         {
-          if(!LightState[i])
+          if (!LightState[i])
           {
             Looser=i;
             break;
@@ -1764,10 +1762,10 @@ void AllRandom()
     }
     
     delay(AR_GAMEDELAY);
-    if(!GraceTimeOver)
+    if (!GraceTimeOver)
     {
       GameTimer+=AR_GAMEDELAY;
-      if(GameTimer>AR_GraceTime)
+      if (GameTimer>AR_GraceTime)
       {
         GraceTimeOver=true;
         LOG_RANDOM("GraceTimeOver\n");
@@ -1777,9 +1775,9 @@ void AllRandom()
 
 
   
-  for (int i = 1; i<= 80; i++)
+  for (int i=1; i<=80; i++)
   {
-    Tone_Frequency = 2000 - 20 * i;
+    Tone_Frequency=2000 - 20 * i;
     tone(Tone_Pin, Tone_Frequency);
     delay(10);
   }
@@ -1793,7 +1791,7 @@ void AllRandom()
   delay(700);
   
   //Identify the Looser
-  for (int e = 1; e<= 4; e++) {
+  for (int e=1; e<=4; e++) {
     ActivateRedLight(Looser);
     delay(500);
     DeactivateRedLight(Looser);

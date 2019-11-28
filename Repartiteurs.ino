@@ -6,12 +6,12 @@ void Repartiteur()
   bool ShowGameProb=!DoNotShowGameProb;
   LOG_GENERAL("DEBUT REPARTITEUR\n");
   
-  for (int i=0 ; i<NbJeux ; i++)
+  for (int i=0; i<NbJeux; i++)
   {
     if (i==0)ProbAccumuleeJeux[i]=ProbIndivJeuxCurrent[i];
     else ProbAccumuleeJeux[i]=ProbAccumuleeJeux[i-1]+ProbIndivJeuxCurrent[i];
 
-    if(ShowGameProb)
+    if (ShowGameProb)
     {
       LogGameProb(i);
     }
@@ -19,7 +19,7 @@ void Repartiteur()
     //Update for next round
     ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
     
-    if(NotMoreThanMaxProb)
+    if (NotMoreThanMaxProb)
     {
       //Logique si le flag NotMoreThanMaxProb est ON.  Exclusion pour Honte et DEDU
       if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=Game_id_FFA && i!=Game_id_MH)
@@ -37,17 +37,17 @@ void Repartiteur()
   max_prob=ProbAccumuleeJeux[NbJeux-1];
 
   //Check for Min/Max of ProbAcc
-  if(max_prob<MinProbAcc)
+  if (max_prob<MinProbAcc)
   {
     MinProbAcc=max_prob;
   }
-  if(max_prob>MaxProbAcc)
+  if (max_prob>MaxProbAcc)
   {
     MaxProbAcc=max_prob;
   }
   
   // Debut REPARTITEUR
-  r = random(1,max_prob+1);
+  r=random(1,max_prob+1);
 
   LOG_GENERAL("R:");
   LOG_GENERAL(r);
@@ -57,7 +57,7 @@ void Repartiteur()
   LOG_GENERAL(max_prob);
   LOG_GENERAL("\n");
 
-  Jeu = SelectGame(r);
+  Jeu=SelectGame(r);
   
   LOG_GENERAL("================\n");
   LOG_GENERAL("JEU:");
@@ -65,7 +65,7 @@ void Repartiteur()
   LOG_GENERAL("================\n");
   
   PrepareGame(Jeu);
-  if(!SkipGame)
+  if (!SkipGame)
   {
     PlayGame(Jeu,false);
   }
@@ -79,7 +79,7 @@ void Repartiteur()
   
   if (SkipGame)
   {
-    if(DelayIfSkipGame)
+    if (DelayIfSkipGame)
     {
       delay(2500);
     }

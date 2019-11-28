@@ -1,19 +1,19 @@
 /*PROB DE JEUX PAR CATEGORIE*/ 
 /*
 Mode 1
-Id:0 GI: 609 ->  42.15%
-Id:1 PI: 404 ->  27.96%
-Id:2 Eq: 235 ->  16.26%
-Id:3 Au: 197 ->  13.63%
-Id:4 Ho: 194 ->  13.43%
+Id:0 GI: 609 ->42.15%
+Id:1 PI: 404 ->27.96%
+Id:2 Eq: 235 ->16.26%
+Id:3 Au: 197 ->13.63%
+Id:4 Ho: 194 ->13.43%
 */
 /*
 Mode 2
-Id:0 GI: 595 ->  43.91%
-Id:1 PI: 425 ->  31.37%
-Id:2 Eq: 257 ->  18.97%
-Id:3 Au:  78 ->  5.76%
-Id:4 Ho: 174 ->  12.84%
+Id:0 GI: 595 ->43.91%
+Id:1 PI: 425 ->31.37%
+Id:2 Eq: 257 ->18.97%
+Id:3 Au:  78 ->5.76%
+Id:4 Ho: 174 ->12.84%
 */
 
 void DefineProbJeux()
@@ -132,7 +132,7 @@ void DefineProbJeux()
   wMode=4;
 
   //Set Game Probs to previous mode.
-  for (int i=0 ; i<NbJeux ; i++)
+  for (int i=0; i<NbJeux; i++)
   {
     GameProb[i][wMode]=GameProb[i][wMode-1];
   }
@@ -145,7 +145,7 @@ void DefineProbJeux()
   //===================//
   
   //Initialization des Prob de base des jeux en fn du mode sélectionné.
-  for (int i =0 ; i<NbJeux ; i++)
+  for (int i =0; i<NbJeux; i++)
   {
     ProbIndivJeux[i]=GameProb[i][Game_Mode];
   }
@@ -162,7 +162,7 @@ void DefineProbJeux()
   }
 
   //Log Prob.
-  for (int i =0 ; i<NbJeux ; i++)
+  for (int i =0; i<NbJeux; i++)
   {
     LogBaseProb(i);
   }
@@ -172,7 +172,7 @@ void DefineGameTypes()
 {
   //DEFINE GAME TYPES.
   //SET DEFAULT TO -1;
-  for(int i=0; i<NbJeux; i++)
+  for (int i=0; i<NbJeux; i++)
   {
     GameTypes[i]=-1;
   }
@@ -215,9 +215,9 @@ void DefineGameTypes()
   //52=Équipe et honte
   GameTypes[Game_id_TDD]=52;
 
-  for(int i=0; i<NbJeux; i++)
+  for (int i=0; i<NbJeux; i++)
   {
-    if(GameTypes[i]==-1)
+    if (GameTypes[i]==-1)
     {
       LOG_GENERAL("GAME_TYPE NON DEFINI POUR JEU: ");
       LOG_GENERAL(i);
@@ -228,13 +228,13 @@ void DefineGameTypes()
 
 void AjustementProbJeuxInit()
 {
-  for (int i ; i<NbJeux; i++)
+  for (int i; i<NbJeux; i++)
   {
     ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
   }
   //MarqueurHonte initial élevé, FFA 0
   ProbIndivJeuxCurrent[Game_id_FFA]=0;
-  if(Game_Mode!=Game_Mode_Original)
+  if (Game_Mode!=Game_Mode_Original)
   {
     ProbIndivJeuxCurrent[Game_id_MH]=424;
   }
@@ -244,7 +244,7 @@ void AjustementProbJeuxInit()
 
 void NoHonteProbResets()
 {
-  if(JoueurHonte==-1)
+  if (JoueurHonte==-1)
   {
     ProbIndivJeuxCurrent[Game_id_DUEL]=0;
     ProbIndivJeuxCurrent[Game_id_TH]=0;
@@ -254,10 +254,10 @@ void NoHonteProbResets()
 
 void AdjustNumRoundsFullProb()
 {
-  if(Game_Mode==Game_Mode_Original)          NumberOfRoundsForFullProb=5;
-  else if(Game_Mode==Game_Mode_Medium)       NumberOfRoundsForFullProb=8;
-  else if(Game_Mode==Game_Mode_Expert)       NumberOfRoundsForFullProb=12;
-  else if(Game_Mode==Game_Mode_Experimental) NumberOfRoundsForFullProb=12;
+  if (Game_Mode==Game_Mode_Original)          NumberOfRoundsForFullProb=5;
+  else if (Game_Mode==Game_Mode_Medium)       NumberOfRoundsForFullProb=8;
+  else if (Game_Mode==Game_Mode_Expert)       NumberOfRoundsForFullProb=12;
+  else if (Game_Mode==Game_Mode_Experimental) NumberOfRoundsForFullProb=12;
   else NumberOfRoundsForFullProb=4;
 }
 
@@ -293,11 +293,11 @@ bool NombreJoueurs()
     delay(NBJDELAY);
     count+=NBJDELAY;
     
-    if(count>DELAYREDEFINE) Redefine=true;
+    if (count>DELAYREDEFINE) Redefine=true;
     
   }while (ReadPlayerInput(nbj_raw) && !Redefine);
 
-  if(Redefine)
+  if (Redefine)
   {
     //Montre aux joueurs les sélections.
     ClignoteEtSon(nbj_raw,NBJ_BASETONE,NBJ_TONEINC,0);
@@ -312,7 +312,7 @@ void RedefinePlayerPins(bool Auto)
   #define OutPinInterval 2
   #define InPinStart 24
   #define InPinInterval 2
-  if(Auto)
+  if (Auto)
   {
     //Pin definitions
     for (int i=0; i<=nbj_raw_max;i++)
@@ -333,7 +333,7 @@ void RedefinePlayerPins(bool Auto)
   {
     int AssignedPins[nbj_max]={false};
     int NewPins[nbj_max];
-    for(int i=0; i<nbj_max ; i++)
+    for (int i=0; i<nbj_max; i++)
     {
       NewPins[i]=-1;
     }
@@ -341,7 +341,7 @@ void RedefinePlayerPins(bool Auto)
     ActivateBlueLED(100);
     tone(Tone_Pin, 1500, 400);
     
-    for(int i=0; i<nbj; i++)
+    for (int i=0; i<nbj; i++)
     {
       bool ValidAssignment;
       do
@@ -356,18 +356,18 @@ void RedefinePlayerPins(bool Auto)
         LOG_GENERAL(P);
         LOG_GENERAL("\n");
 
-        if(i!=0)
+        if (i!=0)
         {
-          for(int j=0; j<i; j++)
+          for (int j=0; j<i; j++)
           {
-            if(P==NewPins[j])
+            if (P==NewPins[j])
             {
               ValidAssignment=false;
             }
           }
         }
         
-        if(ValidAssignment)
+        if (ValidAssignment)
         {
           NewPins[i]=P;
           ActivateRedLight(P);
@@ -378,7 +378,7 @@ void RedefinePlayerPins(bool Auto)
     }
 
     LOG_GENERAL("Assigned Pins:\n");
-    for(int i=0; i<nbj_max; i++)
+    for (int i=0; i<nbj_max; i++)
     {
       LOG_GENERAL(i);
       LOG_GENERAL(":");
@@ -393,12 +393,12 @@ void RedefinePlayerPins(bool Auto)
     int TempPins[nbj];
     int TempPinAssigned[nbj_max]={false};
     int index;
-    for(int i=0; i<nbj; i++)
+    for (int i=0; i<nbj; i++)
     {
       int Min=99;
-      for(int j=0; j<nbj_max; j++)
+      for (int j=0; j<nbj_max; j++)
       {
-        if(AssignedPins[j] && !TempPinAssigned[j])
+        if (AssignedPins[j] && !TempPinAssigned[j])
         {
           index=j;
           break;
@@ -412,13 +412,13 @@ void RedefinePlayerPins(bool Auto)
       TempPinAssigned[index]=true;
     }
 
-    for(int i=0; i<nbj; i++)
+    for (int i=0; i<nbj; i++)
     {
       NewPins[i]=TempPins[i];
     }
     
     LOG_GENERAL("After Reordering Pins:\n");
-    for(int i=0; i<nbj_max; i++)
+    for (int i=0; i<nbj_max; i++)
     {
       LOG_GENERAL(i);
       LOG_GENERAL(":");
@@ -429,11 +429,11 @@ void RedefinePlayerPins(bool Auto)
     }
     
     //Assign the rest automatically
-    for(int i=nbj; i<nbj_max; i++)
+    for (int i=nbj; i<nbj_max; i++)
     {
-      for(int j=0; j<nbj_max; j++)
+      for (int j=0; j<nbj_max; j++)
       {
-        if(!AssignedPins[j])
+        if (!AssignedPins[j])
         {
           NewPins[i]=j;
           AssignedPins[j]=true;
@@ -443,7 +443,7 @@ void RedefinePlayerPins(bool Auto)
     }
         
     LOG_GENERAL("Final Reordering Pins with empty slots:\n");
-    for(int i=0; i<nbj_max; i++)
+    for (int i=0; i<nbj_max; i++)
     {
       LOG_GENERAL(i);
       LOG_GENERAL(":");
@@ -460,7 +460,7 @@ void RedefinePlayerPins(bool Auto)
     ActivateBlueLED(100);
 
     //Reassign the new pins
-    for(int i=0; i<nbj_max; i++)
+    for (int i=0; i<nbj_max; i++)
     {
       int Pin;
       Pin=OutPinStart+OutPinInterval*NewPins[i];
@@ -543,7 +543,7 @@ void GameMode()
     Game_Mode=Selection;
   }
   
-  if(OriginalSel<5)
+  if (OriginalSel<5)
   {
     ClignoteEtSon(Game_Mode,GM_BASETONE,GM_TONEINC,0);
   }
@@ -552,10 +552,10 @@ void GameMode()
     ClignoteEtSon(Game_Mode,GM_BASETONE,GM_TONEINC,5);
   }
 
-  if(EnterDemo)
+  if (EnterDemo)
   {
     delay(750);
-    if(ReadPlayerInput(OriginalSel))
+    if (ReadPlayerInput(OriginalSel))
     {
       AllModes=true;
       ClignoteEtSon(Game_Mode,GM_BASETONE,GM_TONEINC,5);
@@ -585,7 +585,7 @@ void LogSetupParams()
   LOG_GENERAL(JoueurHonte);
   LOG_GENERAL("\n");
   LOG_GENERAL("Pins des Joueurs:\n");
-  for (int i=0; i<nbj_max ; i++)
+  for (int i=0; i<nbj_max; i++)
   {
     LOG_GENERAL(i);
     LOG_GENERAL(": In:");

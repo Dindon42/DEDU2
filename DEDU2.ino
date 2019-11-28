@@ -94,7 +94,7 @@ int MaxProbAcc=0;
 
 #ifdef ENABLE_LOGGING
   bool ActiveGameLogging[NbJeux]={false};
-  #define LOG_GAME(i,a) if(ActiveGameLogging[i]) Serial.print(a);
+  #define LOG_GAME(i,a) if (ActiveGameLogging[i]) Serial.print(a);
   #define LOG_GENERAL(a) Serial.print(a);
 #else
   #define LOG_GAME(i,a)
@@ -150,10 +150,12 @@ int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 int ChansonFacteurRandomMin;
 int ChansonFacteurRandomMax;
 int ChansonPourJeu=0;
+int FinalCtd1ID;
+int FinalCtd2ID;
 //Pour Chaque chanson:
-//0 => Freq
-//1 => Temps Actif
-//2 => Temps Silence Après
+//0 =>Freq
+//1 =>Temps Actif
+//2 =>Temps Silence Après
 float MaChanson[ParamChansons][NbNoteMax];
 //Definition des arrays de chansons.
 const PROGMEM float ChansonDEDU[3][18]={
@@ -206,7 +208,7 @@ const PROGMEM float ctd2[3][37]={
   {76.6,76.6,494.4,621.2,76.6,76.6,76.6,76.6,748.1,76.6,76.6,498.8,498.8,76.6,76.6,76.6,76.6,76.6,76.6,625.6,76.6,76.6,748.1,76.6,76.6,207.8,192.5,203.4,183.8,492.2,444.1,1375.9,91.9,91.9,91.9,91.9,1400},
   {71.9,74.5,104.6,524.6,74.5,69.3,225.5,225.5,629.5,69.3,74.5,100.2,506.5,74.5,74.5,225.5,220.3,225.5,220.3,275.4,74.5,74.5,152.9,69.3,74.5,94.3,104.4,98.6,118.3,106.8,154.9,426.1,54,59.2,59.2,59.2,235.5},
   };
-const PROGMEM float Tetris[3][37] = {
+const PROGMEM float Tetris[3][37]={
   {659,493,523,587,523,493,440,440,523,659,587,523,493,523,587,659,523,440,440,587,698,880,783,698,659,523,659,587,523,493,493,523,587,659,523,440,440},
   {385.9,193,193,385.9,193,193,385.9,193,193,385.9,193,193,643.2,193,385.9,385.9,385.9,385.9,900.5,385.9,193,385.9,193,193,643.2,193,385.9,193,193,385.9,193,193,385.9,385.9,385.9,385.9,900.5},
   {216.5,108.2,108.2,216.5,108.2,108.2,216.5,108.2,108.2,216.5,92.6,123.9,260.4,108.2,216.5,216.5,216.5,216.5,605.5,216.5,108.2,216.5,108.2,108.2,260.4,108.2,216.5,108.2,108.2,216.5,108.2,108.2,216.5,216.5,225.9,207.1,222.7},
@@ -226,11 +228,11 @@ void setup()
   //TONE
   if (nosound)
   {
-    Tone_Pin = 9999;
+    Tone_Pin=9999;
   }
   else
   {
-    Tone_Pin = 52; //Tone
+    Tone_Pin=52; //Tone
   }
   
   //In case setup was skipped.
@@ -263,7 +265,7 @@ void setup()
     // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au mode suivant.
     // ----------------------------------------
     ManualPinDef=NombreJoueurs();
-    //TestModeEngage if player = 1
+    //TestModeEngage if player=1
     if (nbj_raw==0)
     {
       TestMode();
@@ -271,13 +273,13 @@ void setup()
     
     //Debut VITESSE
     // Attend que les joueurs choisissent la vitesse du jeu.
-    // 1 = lent, 10 = vite
+    // 1=lent, 10=vite
     Vitesse();
     
     //Choix de complexité du jeu.
     GameMode();
 
-    if(ManualPinDef)
+    if (ManualPinDef)
     {
       RedefinePlayerPins(false);
     }
@@ -290,14 +292,14 @@ void setup()
   //Ajustement initial des prob pour les jeux.  Quelques cas spéciaux.
   AjustementProbJeuxInit();
 
-  if(EnterDemo)
+  if (EnterDemo)
   {
     DemoMode(AllModes);
     //Reset joueurhonte après la démo.
     JoueurHonte=-1;
   }
   
-  if(!SkipSetup)
+  if (!SkipSetup)
   {
     //Toune de DEDU pour initialiser la chose.
     JoueChanson(0,3,false, true);
@@ -313,13 +315,13 @@ void setup()
 void loop() 
 {
   //Special Music Mode
-  if(MusicMode)
+  if (MusicMode)
   {
     EndlessMusicMode();
   }
   
   //Special exclusivegamemode loop
-  if(ExclusiveGame)
+  if (ExclusiveGame)
   {
     PlayExclusiveGame();
   }

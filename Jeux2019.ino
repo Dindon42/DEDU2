@@ -44,7 +44,7 @@ void AR2()
 
   
   //LUMIERES
-  if(!SkipLights)
+  if (!SkipLights)
   {
     MaxRandom(10,true);
   }
@@ -60,7 +60,7 @@ void AR2()
   bool PlayersInGame[AR2_NumAssignments];
   int SumActivePlayers=0;
   //Setting all input mappings to -1
-  for(int i=0; i<AR2_NumAssignments; i++)
+  for (int i=0; i<AR2_NumAssignments; i++)
   {
     PlayersInGame[i]=true;
     OutputMapping[i]=-1;
@@ -68,14 +68,14 @@ void AR2()
   LOG_AR2("=--=--=\n");
   LOG_AR2("=-AR2-=\n");
   LOG_AR2("=--=--=\n");
-  //int LightMapping[4] = {0,6,15,24};
-  int LightMapping[4] = {0,8,24,42};
+  //int LightMapping[4]={0,6,15,24};
+  int LightMapping[4]={0,8,24,42};
   int ToneMapping[8]={261,293,329,350,392,440,494,523};
   unsigned long GameCounter=0;
   unsigned long RandIncreaseCounter=0;
-  int DeduMaster = random(nbj);
+  int DeduMaster=random(nbj);
   int DeduMasterClicks=0;
-  int DeduMasterNextAction = random(DeduMasterClickMin, DeduMasterClickMax);
+  int DeduMasterNextAction=random(DeduMasterClickMin, DeduMasterClickMax);
   int Looser=-1;
   bool GraceTimeOver=false;
   bool TriggerEndGame=false;
@@ -86,19 +86,19 @@ void AR2()
   //Diviser les joueurs non-actifs en 2
   //Assigner les états initiaux
   AllocateTwoTeams(nbj);
-  for(int i=0; i<nbj; i++)
+  for (int i=0; i<nbj; i++)
   {
     OutputArray[i]=Equipes[i]==1;
   }
 
   AllocateTwoTeams(AR2_NumAssignments-nbj);
-  for(int i=nbj; i<AR2_NumAssignments; i++)
+  for (int i=nbj; i<AR2_NumAssignments; i++)
   {
     OutputArray[i]=Equipes[i-nbj]==1;
   }
   //Print des états initiaux
   LOG_AR2("Initial states\n");
-  for(int i=0; i<AR2_NumAssignments ; i++)
+  for (int i=0; i<AR2_NumAssignments; i++)
   {
     LOG_AR2("i: ");
     LOG_AR2(i);
@@ -110,7 +110,7 @@ void AR2()
   //Assign Random Mapping to each player
   int PosAssigned=0;
   LOG_AR2("Assigning Player Mappings\n")
-  for(int i=0; i<AR2_NumAssignments; i++)
+  for (int i=0; i<AR2_NumAssignments; i++)
   {
     //LOG_AR2("Assigning Player: ")
     //LOG_AR2(i);
@@ -122,9 +122,9 @@ void AR2()
       //LOG_AR2("Wanting to assign mapping: ")
       //LOG_AR2(r);
       //LOG_AR2("\n");
-      for(int j=0; j<i; j++)
+      for (int j=0; j<i; j++)
       {
-        if(OutputMapping[j]==r)
+        if (OutputMapping[j]==r)
         {
           //LOG_AR2("Mapping already assigned to player: ")
           //LOG_AR2(j);
@@ -134,7 +134,7 @@ void AR2()
         }
       }
   
-      if(!NumAlreadyAllocated)
+      if (!NumAlreadyAllocated)
       {
         //LOG_AR2("Mapping not already assigned.\nAssigning it to player: ")
         //LOG_AR2(i);
@@ -146,7 +146,7 @@ void AR2()
 
   //Print des Mappings
   LOG_AR2("Input Mapping\n");
-  for(int i=0; i<AR2_NumAssignments ; i++)
+  for (int i=0; i<AR2_NumAssignments; i++)
   {
     LOG_AR2("i: ");
     LOG_AR2(i);
@@ -162,7 +162,7 @@ void AR2()
   LOG_AR2("\n");
   
   //Initial win condition
-  if(random(2)==0)
+  if (random(2)==0)
   {
     WinCondition=AR2ToggleWinCondition(WinCondition, TriggerEndGame);
   }
@@ -178,14 +178,14 @@ void AR2()
   //////////////////
   do
   {
-    if(RandIncreaseCounter>RandFactorModifThreshold)
+    if (RandIncreaseCounter>RandFactorModifThreshold)
     {
       LOG_AR2("New RandFactor: ");
       LOG_AR2(RandFactor);
       LOG_AR2("\n");
       
       //Speed up The AutoBots at end of game
-      if(TriggerEndGame)
+      if (TriggerEndGame)
       {
         RandFactor--;
         RandFactorModifThreshold--;
@@ -199,7 +199,7 @@ void AR2()
     }
     
     //RandomFactor ToggleWinCondition
-    if(random(AR2_WinCondToggleRand)==0)
+    if (random(AR2_WinCondToggleRand)==0)
     {
       WinCondition=AR2ToggleWinCondition(WinCondition, TriggerEndGame);
     }
@@ -207,10 +207,10 @@ void AR2()
     RefreshNotes=false;
     
     //Read Input and Modify Assignments.
-    for(int i=0; i<AR2_NumAssignments; i++)
+    for (int i=0; i<AR2_NumAssignments; i++)
     {
       bool CurrentState;
-      if(i<nbj)
+      if (i<nbj)
       {
         CurrentState=ReadPlayerInput(i);
       }
@@ -220,18 +220,18 @@ void AR2()
         CurrentState=random(RandFactor)==0;
       }
       
-      if(!PreviousState[i] && CurrentState && PlayersInGame[i])
+      if (!PreviousState[i] && CurrentState && PlayersInGame[i])
       {
         //New click registered.
         //Reverse output array if player clicks.
         OutputArray[i]=!OutputArray[i];
 
         //Slowly stop auto-spammers as they reach goal condition
-        if(TriggerEndGame && i!=Looser)
+        if (TriggerEndGame && i!=Looser)
         {
-          if(WinCondition==0)
+          if (WinCondition==0)
           {
-            if(!OutputArray[i])
+            if (!OutputArray[i])
             {
               LOG_AR2("One Less: ");
               LOG_AR2(i);
@@ -241,7 +241,7 @@ void AR2()
           }
           else
           {
-            if(OutputArray[i])
+            if (OutputArray[i])
             {
               LOG_AR2("One Less: ");
               LOG_AR2(i);
@@ -252,25 +252,25 @@ void AR2()
         }
 
         //Check if music Buzzer Musician
-        if(OutputMapping[i]>=AR2_BUZZERS_MIN && OutputMapping[i]<=AR2_BUZZERS_MAX)
+        if (OutputMapping[i]>=AR2_BUZZERS_MIN && OutputMapping[i]<=AR2_BUZZERS_MAX)
         {
           RefreshNotes=true;
         }
 
         //Check DEDUMASTER actions.
-        if(i==DeduMaster)
+        if (i==DeduMaster)
         {
           LOG_AR2("DeduMasterClicks++\n");
           DeduMasterClicks++;
-          if(DeduMasterClicks==DeduMasterNextAction)
+          if (DeduMasterClicks==DeduMasterNextAction)
           {
             LOG_AR2("TOGGLING FROM DEDUMASTER!\n");
             WinCondition=AR2ToggleWinCondition(WinCondition, TriggerEndGame);
 
             //Compute next DEDUMASTER
-            DeduMaster = random(nbj);
+            DeduMaster=random(nbj);
             DeduMasterClicks=0;
-            DeduMasterNextAction = random(DeduMasterClickMin, DeduMasterClickMax);
+            DeduMasterNextAction=random(DeduMasterClickMin, DeduMasterClickMax);
             LOG_AR2("DeduMaster: ");
             LOG_AR2(DeduMaster);
             LOG_AR2("\n");
@@ -286,27 +286,27 @@ void AR2()
     delay(AR2_GAMEDELAY);
     RandIncreaseCounter++;
     
-    if(!GraceTimeOver)
+    if (!GraceTimeOver)
     {
       GameCounter+=AR2_GAMEDELAY;
-      if(GameCounter>AR2_GRACETIME)
+      if (GameCounter>AR2_GRACETIME)
       {
         LOG_AR2("GRACETIME over\n");
         GraceTimeOver=true;
       }
     }
 
-    if(abs(SumPlayerOutput(OutputArray, nbj)-WinCondition)==1 && !TriggerEndGame  && GraceTimeOver)
+    if (abs(SumPlayerOutput(OutputArray, nbj)-WinCondition)==1 && !TriggerEndGame  && GraceTimeOver)
     {
       LOG_AR2("Trigger End Game\n");
       RandFactor=AR2_ENDGAME_RANDFACTOR;
       TriggerEndGame=true;
       //Identify the Looser based on wincondition
-      for(int i=0; i<nbj; i++)
+      for (int i=0; i<nbj; i++)
       {
-        if(WinCondition==0)
+        if (WinCondition==0)
         {
-          if(OutputArray[i])
+          if (OutputArray[i])
           {
             Looser=i;
           }
@@ -317,7 +317,7 @@ void AR2()
         }
         else
         {
-          if(!OutputArray[i])
+          if (!OutputArray[i])
           {
             Looser=i;
           }
@@ -330,9 +330,9 @@ void AR2()
     }
 
     SumActivePlayers=0;
-    for(int i=0; i<AR2_NumAssignments; i++)
+    for (int i=0; i<AR2_NumAssignments; i++)
     {
-      if(PlayersInGame[i])
+      if (PlayersInGame[i])
       {
         SumActivePlayers++;
       }
@@ -343,11 +343,11 @@ void AR2()
   LOG_AR2("OUT OF MAIN LOOP");
   
   //Flash looser with its mapping
-  for(int i=0; i<4; i++)
+  for (int i=0; i<4; i++)
   {
     delay(800);
     OutputArray[Looser]=!OutputArray[Looser];
-    if(OutputMapping[Looser]>=AR2_BUZZERS_MIN && OutputMapping[i]<=AR2_BUZZERS_MAX)
+    if (OutputMapping[Looser]>=AR2_BUZZERS_MIN && OutputMapping[i]<=AR2_BUZZERS_MAX)
     {
       RefreshNotes=true;
     }
@@ -369,13 +369,13 @@ int AR2ToggleWinCondition(int WinCondition,bool EndGame)
 {
   if (EndGame) return WinCondition;
   //LOG_AR2("TOGGLING WINCONDITION\n");
-  if(WinCondition==0) return nbj;
+  if (WinCondition==0) return nbj;
   else return 0;
 }
 
 void SetAr2Outputs(bool OutputArray[], int OutputMapping[], int WinCondition, int NoteTime, int ToneMapping[], int LightMapping[], bool RefreshNotes)
 {
-  if(WinCondition==0)
+  if (WinCondition==0)
   {
     MoveDEDUFlag(1);
   }
@@ -385,41 +385,41 @@ void SetAr2Outputs(bool OutputArray[], int OutputMapping[], int WinCondition, in
   }
   
   //Mappings.
-  //0 to 9 -> LED 1 à 10
-  //10, 11, 12, 13 -> BUZZER 1, 2, 3, 4
-  //14, 15 -> LED G 1, 2
-  //16, 17 -> LED B 1, 2
+  //0 to 9 ->LED 1 à 10
+  //10, 11, 12, 13 ->BUZZER 1, 2, 3, 4
+  //14, 15 ->LED G 1, 2
+  //16, 17 ->LED B 1, 2
   int SumTone=0;
   int SumGreenLED=0;
   int SumBlueLED=0;
-  for(int i=0; i<AR2_NumAssignments; i++)
+  for (int i=0; i<AR2_NumAssignments; i++)
   {
-    if(OutputMapping[i]<10)
+    if (OutputMapping[i]<10)
     {
       SetRedLight(OutputMapping[i],OutputArray[i]);
     }
-    else if(OutputMapping[i]<=AR2_BUZZERS_MAX)
+    else if (OutputMapping[i]<=AR2_BUZZERS_MAX)
     {
-      if(OutputArray[i]) SumTone++;
+      if (OutputArray[i]) SumTone++;
     }
-    else if(OutputMapping[i]<=AR2_G_LED_MAX)
+    else if (OutputMapping[i]<=AR2_G_LED_MAX)
     {
-      if(OutputArray[i]) SumGreenLED++;
+      if (OutputArray[i]) SumGreenLED++;
     }
-    else if(OutputMapping[i]<=AR2_B_LED_MAX)
+    else if (OutputMapping[i]<=AR2_B_LED_MAX)
     {
-      if(OutputArray[i]) SumBlueLED++;
+      if (OutputArray[i]) SumBlueLED++;
     }
     else
     {
-      if(OutputArray[i])
+      if (OutputArray[i])
       {
         SumGreenLED++;
         SumBlueLED++;
       }
     }
   }
-  if(RefreshNotes) tone(Tone_Pin,ToneMapping[SumTone],NoteTime);
+  if (RefreshNotes) tone(Tone_Pin,ToneMapping[SumTone],NoteTime);
   ActivateGreenLED(LightMapping[SumGreenLED]);
   ActivateBlueLED(LightMapping[SumBlueLED]);
 }
@@ -427,9 +427,9 @@ void SetAr2Outputs(bool OutputArray[], int OutputMapping[], int WinCondition, in
 int SumPlayerOutput(bool OutputArray[], int ArrSize)
 {
   int Sum=0;
-  for(int i=0; i<ArrSize; i++)
+  for (int i=0; i<ArrSize; i++)
   {
-    if(OutputArray[i]) Sum++;
+    if (OutputArray[i]) Sum++;
   }
   return Sum;
 }
@@ -463,7 +463,7 @@ void TheButton()
   int GameCounter=0;
   int GameCounterPrevAction=0;
   int GameSequence[nbj];
-  for(int i=0; i<nbj; i++)
+  for (int i=0; i<nbj; i++)
   {
     GameSequence[i]=-1;
   }
@@ -471,7 +471,7 @@ void TheButton()
   bool CurrentState[nbj];
   int SeqProgress=0;
   int WaitTime[nbj];
-  for(int j=0; j<nbj; j++)
+  for (int j=0; j<nbj; j++)
   {
     WaitTime[j]=-1;
   }
@@ -493,7 +493,7 @@ void TheButton()
   //Log Sequence
   LOG_TB("\n");
   LOG_TB("Game Sequence:\n");
-  for(int i=0; i<nbj; i++)
+  for (int i=0; i<nbj; i++)
   {
     LOG_TB(GameSequence[i]+1);
     LOG_TB(", ");
@@ -504,9 +504,9 @@ void TheButton()
   MoveDEDUFlag(100);
   for (int j=0; j<LightSignatureNum; j++)
   {
-    for(int i=0; i<nbj_max; i++)
+    for (int i=0; i<nbj_max; i++)
     {
-      int lf = 100-10*i;
+      int lf=100-10*i;
       ControlAllLights(true,lf,lf);
       delay(LightDelay);
     }
@@ -522,13 +522,13 @@ void TheButton()
     MoveDEDUFlag(100-100*((float)GameCounter/(float)GameEndCounter));
 
     //Check player input.
-    for(int i=0; i<nbj; i++)
+    for (int i=0; i<nbj; i++)
     {
       //Record current state
       CurrentState[i]=ReadPlayerInput(i);
 
       //Check if player has started pressing
-      if(!PreviousState[i] && CurrentState[i])
+      if (!PreviousState[i] && CurrentState[i])
       {
         //Log presser
         LOG_TB("Press:");
@@ -538,7 +538,7 @@ void TheButton()
         LOG_TB(GameSequence[SeqProgress]+1);
         LOG_TB("\n");
         LOG_TB("Next:");
-        if(SeqProgress==nbj-1)
+        if (SeqProgress==nbj-1)
         {
           LOG_TB("N/A");
         }
@@ -553,20 +553,20 @@ void TheButton()
 
         //Check if player is part of the sequence first.
         bool NotInSequence=true;
-        for(int j=0; j<nbj; j++)
+        for (int j=0; j<nbj; j++)
         {
           NotInSequence=GameSequence[j]!=i;
-          if(!NotInSequence) break;
+          if (!NotInSequence) break;
         }
         
         //If the game sequence is not defined for the current progress, define it and reset the sequence.
-        if(GameSequence[SeqProgress]==-1 && NotInSequence)
+        if (GameSequence[SeqProgress]==-1 && NotInSequence)
         {
           LOG_TB("NEW Player in seq:");
           LOG_TB(i+1);
           LOG_TB("\n");
 
-          if(EnableLights)
+          if (EnableLights)
           {
             ActivateRedLight(i);
             delay(100);
@@ -576,7 +576,7 @@ void TheButton()
           GameSequence[SeqProgress]=i;
 
           //Reset the sequence
-          for(int j=0; j<nbj; j++)
+          for (int j=0; j<nbj; j++)
           {
             WaitTime[j]=-1;
           }
@@ -589,7 +589,7 @@ void TheButton()
           //Log Sequence
           LOG_TB("\n");
           LOG_TB("NEW Game Sequence:\n");
-          for(int j=0; j<nbj; j++)
+          for (int j=0; j<nbj; j++)
           {
             LOG_TB(GameSequence[j]+1);
             LOG_TB(", ");
@@ -598,7 +598,7 @@ void TheButton()
 
           
           LOG_TB("Next:");
-          if(SeqProgress==nbj-1)
+          if (SeqProgress==nbj-1)
           {
             LOG_TB("N/A");
           }
@@ -610,9 +610,9 @@ void TheButton()
           LOG_TB("------------\n");
         }
         //If the game sequence is defined and the proper player presses, make the sequence progress
-        else if(GameSequence[SeqProgress]==i)
+        else if (GameSequence[SeqProgress]==i)
         {
-          if(EnableLights)
+          if (EnableLights)
           {
             ActivateRedLight(i);
           }
@@ -620,7 +620,7 @@ void TheButton()
           GameCounterPrevAction=GameCounter;
           SeqProgress++;
         }
-        else if(!NotInSequence)
+        else if (!NotInSequence)
         {
           LOG_TB("SUPER LOOSER:");
           LOG_TB(i+1);
@@ -631,7 +631,7 @@ void TheButton()
           //Log Sequence
           LOG_TB("\n");
           LOG_TB("Game Sequence:\n");
-          for(int j=0; j<nbj; j++)
+          for (int j=0; j<nbj; j++)
           {
             LOG_TB(GameSequence[j]+1);
             LOG_TB(", ");
@@ -668,8 +668,8 @@ void TheButton()
   MoveDEDUFlag(0);
   delay(500);
 
-  //Time Up: Longest wait = looser;
-  if(TimeIsUp)
+  //Time Up: Longest wait=looser;
+  if (TimeIsUp)
   {
     //Too slow, punish the slowest.
     LOG_TB("GAME END: TOO SLOW!\n");
@@ -678,14 +678,14 @@ void TheButton()
     LOG_TB("\n");
     
     //Was it someone's turn?
-    if(GameSequence[SeqProgress]==-1)  //No one's turn
+    if (GameSequence[SeqProgress]==-1)  //No one's turn
     {
       bool TheyAllLoose=SeqProgress==0;
       
       //Check if the sequence players left enough time
       int TimeRemainingAtGameEnd=GameCounter-GameCounterPrevAction;
 
-      if(TheyAllLoose)
+      if (TheyAllLoose)
       {
         LOG_TB("ALL LOOSERS!\n");
         AllLoosersSoundAndLight();
@@ -694,16 +694,16 @@ void TheButton()
       else
       {
         int MaxWait=-1;
-        for(int i=0; i<nbj; i++)
+        for (int i=0; i<nbj; i++)
         {
-          if(WaitTime[i]>MaxWait)
+          if (WaitTime[i]>MaxWait)
           {
             MaxWait=WaitTime[i];
             Looser=i;
           }
         }
         
-        if(MaxWait>TimeRemainingAtGameEnd)
+        if (MaxWait>TimeRemainingAtGameEnd)
         {
           //They did not have enough time, you bastard.
           LOG_TB("This Fella did not leave enough time for the rest!\n");
@@ -715,13 +715,13 @@ void TheButton()
         {
           bool Loosers[nbj_max]={false};
 
-          for(int i=0; i<nbj; i++)
+          for (int i=0; i<nbj; i++)
           {
             bool NotInSequence;
-            for(int j=0; j<nbj; j++)
+            for (int j=0; j<nbj; j++)
             {
               NotInSequence=GameSequence[j]!=i;
-              if(!NotInSequence) break;
+              if (!NotInSequence) break;
             }
             Loosers[i]=NotInSequence;
           }
@@ -738,9 +738,9 @@ void TheButton()
       WaitTime[GameSequence[SeqProgress]]=GameCounter-GameCounterPrevAction;
 
       int MaxWait=-1;
-      for(int i=0; i<nbj; i++)
+      for (int i=0; i<nbj; i++)
       {
-        if(WaitTime[i]>MaxWait)
+        if (WaitTime[i]>MaxWait)
         {
           MaxWait=WaitTime[i];
           Looser=i;
@@ -754,7 +754,7 @@ void TheButton()
       TurnOffAllLights();
     }
   }
-  else if(Looser!=-1)
+  else if (Looser!=-1)
   {
     LOG_TB("WHO BREAKS OUR BALLS?\n");
     //Single Looser, Breaker of sequence
@@ -762,7 +762,7 @@ void TheButton()
     SingleLooserSoundAndLight(Looser);
     TurnOffAllLights();
   }
-  else if(SuperLooser!=-1)
+  else if (SuperLooser!=-1)
   {
     LOG_TB("WTF REALLY?\n");
     //Single Looser, Breaker of sequence, already in the seq
@@ -813,7 +813,7 @@ void SequenceGlobale(bool DemoMode)
   int GameSilenceTime=300;
   int JumpMin;
   int JumpMax;
-  if(DemoMode)
+  if (DemoMode)
   {
     JumpMin=2;
     JumpMax=2;
@@ -829,10 +829,10 @@ void SequenceGlobale(bool DemoMode)
   #define GamedelaySeq 15
   int GameCounter;
   int GameLength=DemoMode ? (nbj*GameLengthPlayerFactorDemo)+2 : random(nbj*GameLengthPlayerFactorMin+2,nbj*GameLengthPlayerFactorMax+1);
-  if(GameLength%nbj==0) GameLength++;
+  if (GameLength%nbj==0) GameLength++;
   int GameProgressInit=random(JumpMin,JumpMax+1);
   int GameProgress=GameProgressInit;
-  int ValidityThreshold=max(1,(int)GameLength / nbj);
+  int ValidityThreshold=max(1,(int)GameLength/nbj);
   int ValidityMaxDelta=2;
   int Looser=-1;
   bool AllLoosers=false;
@@ -840,7 +840,7 @@ void SequenceGlobale(bool DemoMode)
   int GameSequence[GameLength];
   int BaseTones[nbj_max]={261,293,329,350,392,440,494,523,587,659};
   int Tones[nbj];
-  for(int i=0; i<nbj; i++)
+  for (int i=0; i<nbj; i++)
   {
     Tones[i]=BaseTones[i];
   }
@@ -872,24 +872,24 @@ void SequenceGlobale(bool DemoMode)
     int Min=1000;
     int Max=-1000;
     //Randomize sequence
-    for(int i=0; i<GameLength; i++)
+    for (int i=0; i<GameLength; i++)
     {
       GameSequence[i]=random(nbj);
     }
     InvalidSequence=false;
     //Check Sequence
-    for(int j=0; j<nbj; j++)
+    for (int j=0; j<nbj; j++)
     {
       int Count=0;
-      for(int i=0; i<GameLength; i++)
+      for (int i=0; i<GameLength; i++)
       {
-        if(GameSequence[i]==j) Count++;
+        if (GameSequence[i]==j) Count++;
       }
 
-      if(Count<Min) Min=Count;
-      if(Count>Max) Max=Count;
+      if (Count<Min) Min=Count;
+      if (Count>Max) Max=Count;
       
-      if(Count<ValidityThreshold)
+      if (Count<ValidityThreshold)
       {
         InvalidSequence=true;
         NumInvalidSeq++;
@@ -897,24 +897,24 @@ void SequenceGlobale(bool DemoMode)
       }
     }
 
-    if(Max-Min>ValidityMaxDelta && !InvalidSequence)
+    if (Max-Min>ValidityMaxDelta && !InvalidSequence)
     {
       InvalidSequence=true;
       NumInvalidSeq++;
     }
 
     bool LogMaxInval=false;
-    if(NumInvalidSeq%MaxInvalSeqMD==MaxInvalSeqMD-1)
+    if (NumInvalidSeq%MaxInvalSeqMD==MaxInvalSeqMD-1)
     {
       LogMaxInval=true;
       ValidityMaxDelta++;
     }
-    if(NumInvalidSeq%MaxInvalSeqVT==MaxInvalSeqVT-1)
+    if (NumInvalidSeq%MaxInvalSeqVT==MaxInvalSeqVT-1)
     {
       LogMaxInval=true;
       ValidityThreshold=max(1,ValidityThreshold-1);
     }
-    if(LogMaxInval)
+    if (LogMaxInval)
     {
       LOG_SG("TOO MANY INVALID!\n");
       LOG_SG("-----------------\n");
@@ -932,7 +932,7 @@ void SequenceGlobale(bool DemoMode)
       LOG_SG("\n");
     }
     
-    if(!InvalidSequence)
+    if (!InvalidSequence)
     {
       LOG_SG("Max:");
       LOG_SG(Max);
@@ -948,12 +948,12 @@ void SequenceGlobale(bool DemoMode)
   }while(InvalidSequence);
   
   //Log IndivCounts
-  for(int j=0; j<nbj; j++)
+  for (int j=0; j<nbj; j++)
   {
     int Count=0;
-    for(int i=0; i<GameLength; i++)
+    for (int i=0; i<GameLength; i++)
     {
-      if(GameSequence[i]==j) Count++;
+      if (GameSequence[i]==j) Count++;
     }
     LOG_SG("ID:");
     LOG_SG(j+1);
@@ -967,7 +967,7 @@ void SequenceGlobale(bool DemoMode)
 //Log Sequence
 LOG_SG("\n");
 LOG_SG("Game Sequence:\n");
-for(int i=0; i<GameLength; i++)
+for (int i=0; i<GameLength; i++)
 {
   LOG_SG(GameSequence[i]+1);
   LOG_SG(", ");
@@ -975,13 +975,13 @@ for(int i=0; i<GameLength; i++)
 LOG_SG("\n");
 SequenceGlobale(false);
 */
-  if(!SkipLights)
+  if (!SkipLights)
     {
     //Light Signature
     //Run the sequence quickly, play notes and move DEDU accordingly.
     int PrevG=0;
     int PrevB=0;
-    for(int i=0; i<GameLength; i++)
+    for (int i=0; i<GameLength; i++)
     {
       int CurG;
       int CurB;
@@ -1008,7 +1008,7 @@ SequenceGlobale(false);
   //Main Game Loop
   do
   {
-    if(NewRound)
+    if (NewRound)
     {
       LOG_SG("==========\n");
       LOG_SG("NEW ROUND!\n");
@@ -1016,14 +1016,14 @@ SequenceGlobale(false);
       //Log Sequence
       LOG_SG("\n");
       LOG_SG("Game Sequence:\n");
-      for(int i=0; i<GameLength; i++)
+      for (int i=0; i<GameLength; i++)
       {
         LOG_SG(GameSequence[i]+1);
         LOG_SG(", ");
       }
       LOG_SG("\n");
       
-      if(GameProgress>GameProgressInit)
+      if (GameProgress>GameProgressInit)
       {
         delay(GameNoteTime);
         TurnOffAllRedLights();
@@ -1032,8 +1032,8 @@ SequenceGlobale(false);
         OneUp();
         GameNoteTime-=random(GameTimeDecreaseMin,GameTimeDecreaseMax);
         GameSilenceTime-=random(GameTimeDecreaseMin,GameTimeDecreaseMax);
-        if(GameNoteTime<GameNoteTimeMin) GameNoteTime=GameNoteTimeMin;
-        if(GameSilenceTime<GameSilenceTimeMin) GameSilenceTime=GameSilenceTimeMin;
+        if (GameNoteTime<GameNoteTimeMin) GameNoteTime=GameNoteTimeMin;
+        if (GameSilenceTime<GameSilenceTimeMin) GameSilenceTime=GameSilenceTimeMin;
         delay(500);
         DeactivateGreenLED();
         delay(500);
@@ -1051,7 +1051,7 @@ SequenceGlobale(false);
       LOG_SG(GameSilenceTime);
       LOG_SG("\n");
       //Demo the sequence
-      for(int i=0; i<GameProgress; i++)
+      for (int i=0; i<GameProgress; i++)
       {
         PlayNoteWithLight(Tones[GameSequence[i]],GameNoteTime,GameSilenceTime,GameSequence[i]);
       }
@@ -1064,13 +1064,13 @@ SequenceGlobale(false);
     }
 
     //Check Inputs
-    for(int i=0; i<nbj; i++)
+    for (int i=0; i<nbj; i++)
     {
       //Record current state
       CurrentState[i]=ReadPlayerInput(i);
 
       //Check if player has started pressing
-      if(!PreviousState[i] && CurrentState[i])
+      if (!PreviousState[i] && CurrentState[i])
       {
 
         //Log presser
@@ -1081,7 +1081,7 @@ SequenceGlobale(false);
         LOG_SG(GameSequence[SeqProgress]+1);
         LOG_SG("\n");
         LOG_SG("Next:");
-        if(SeqProgress==GameLength-1)
+        if (SeqProgress==GameLength-1)
         {
           LOG_SG("N/A");
         }
@@ -1096,7 +1096,7 @@ SequenceGlobale(false);
         ActivateRedLight(i);
         
         //Check if it is the proper player
-        if(i==GameSequence[SeqProgress])
+        if (i==GameSequence[SeqProgress])
         {
           //Good! Make the sequence progress.
           tone(Tone_Pin, Tones[i], GameNoteTime);
@@ -1115,27 +1115,27 @@ SequenceGlobale(false);
     }
 
     //Check for new round
-    if(SeqProgress==GameProgress)
+    if (SeqProgress==GameProgress)
     {
       //Check for Seq complete
-      if(GameProgress==GameLength)
+      if (GameProgress==GameLength)
       {
         SequenceComplete=true;
       }
       else
       {
         GameProgress+=random(JumpMin,JumpMax+1);
-        if(GameProgress>GameLength) GameProgress=GameLength;
+        if (GameProgress>GameLength) GameProgress=GameLength;
         NewRound=true;
       }
     }
     
-    if(GameCounter==GameNoteTime/GamedelaySeq)
+    if (GameCounter==GameNoteTime/GamedelaySeq)
     {
       TurnOffAllRedLights();
     }
     
-    if(GameCounter>MaxGameCounterFailAll)
+    if (GameCounter>MaxGameCounterFailAll)
     {
       AllLoosers=true;
       Looser=-1;
@@ -1149,7 +1149,7 @@ SequenceGlobale(false);
   
   delay(500);
   
-  if(AllLoosers)
+  if (AllLoosers)
   {
     LOG_SG("---------------------\n");
     LOG_SG("GAME END: ALL LOOSERS\n");
@@ -1158,7 +1158,7 @@ SequenceGlobale(false);
     TurnOffAllLights();
   }
   
-  if(Looser!=-1)
+  if (Looser!=-1)
   {
     LOG_SG("---------------------\n");
     LOG_SG("GAME END:    1 LOOSER\n");
@@ -1168,14 +1168,14 @@ SequenceGlobale(false);
     TurnOffAllLights();
   }
   
-  if(SequenceComplete)
+  if (SequenceComplete)
   {
     LOG_SG("---------------------\n");
     LOG_SG("GAME END:SEQ COMPLETE\n");
     LOG_SG("---------------------\n");
     ActivateGreenLED(20);
     delay(500);
-    for(int i=0; i<ValidityThreshold; i++)
+    for (int i=0; i<ValidityThreshold; i++)
     {
       OneUp();
       delay(500);

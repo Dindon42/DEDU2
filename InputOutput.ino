@@ -3,13 +3,13 @@ bool ReadInputActivateOutput(int NbInputs)
 {
   bool AtLeastOneHIGH=false;
   
-  for (int i=0; i<=NbInputs ; i++)
+  for (int i=0; i<=NbInputs; i++)
   {
     if (ReadPlayerInput(i))
     {
       //Activate the output
       ActivateRedLight(i);
-      AtLeastOneHIGH = true;
+      AtLeastOneHIGH=true;
     }
   }
   return AtLeastOneHIGH;
@@ -41,11 +41,11 @@ int IlluminateActiveExtinguishNonActive(int NbInputs)
 int ReadInputDeactivateOutputIfActive(int NbInputs)
 {
   int count=0;
-  for (int i=0; i<=NbInputs ; i++)
+  for (int i=0; i<=NbInputs; i++)
   {
     if (ReadPlayerInput(i))
     {
-      if(ReadPlayerOutput(i))
+      if (ReadPlayerOutput(i))
       {
         //Deactivate the output
         DeactivateRedLight(i);
@@ -60,11 +60,11 @@ int ReadInputDeactivateOutputIfActive(int NbInputs)
 //Reads each user input.  If the input is Active, toggle the light.
 void ReadInputToggleOutput(int NbInputs)
 {
-  for (int i=0; i<=NbInputs ; i++)
+  for (int i=0; i<=NbInputs; i++)
   {
     if (ReadPlayerInput(i))
     {
-      if(ReadPlayerOutput(i))
+      if (ReadPlayerOutput(i))
       {
         DeactivateRedLight(i);
       }
@@ -90,7 +90,7 @@ bool ReadPlayerOutput(int iPlayer)
 
 bool ToggleOutput(int iPlayer)
 {
-  if(ReadPlayerOutput(iPlayer))
+  if (ReadPlayerOutput(iPlayer))
   {
     DeactivateRedLight(iPlayer);
     return false;
@@ -105,7 +105,7 @@ bool ToggleOutput(int iPlayer)
 //Return first active player.  -1 is default if none active.  Player 1 is 0.
 int FirstActive(int NbInputs)
 {
-  for (int i=0; i<=NbInputs ; i++)
+  for (int i=0; i<=NbInputs; i++)
   {
     if (ReadPlayerInput(i))
     {
@@ -119,7 +119,7 @@ int FirstActive(int NbInputs)
 int CheckAllActive(int NbInputs)
 {
   int NumActive=0;
-  for (int i=0; i<=NbInputs ; i++)
+  for (int i=0; i<=NbInputs; i++)
   {
     //Store in global input array
     InputState[i]=ReadPlayerInput(i);
@@ -135,7 +135,7 @@ int CheckAllActive(int NbInputs)
 int CheckAllActiveOutputs(int NbOutputs)
 {
   int NumActive=0;
-  for (int i=0; i<=NbOutputs ; i++)
+  for (int i=0; i<=NbOutputs; i++)
   {
     //Store in global output array
     OutputState[i]=ReadPlayerOutput(i);
@@ -150,7 +150,7 @@ int CheckAllActiveOutputs(int NbOutputs)
 //Return first active player output.  -1 is default if none active.  Player 1 is 0.
 int FirstActiveOutput(int NbOutputs)
 {
-  for (int i=0; i<=NbOutputs ; i++)
+  for (int i=0; i<=NbOutputs; i++)
   {
     if (ReadPlayerOutput(i))
     {
@@ -163,8 +163,8 @@ int FirstActiveOutput(int NbOutputs)
 //Waits for all inputs to be non-active or MAX ITER, in which case, error mode.
 void WaitForAllNonActive(int NbInputs)
 {
-  int max_iter = 60;
-  int count = 0;
+  int max_iter=60;
+  int count=0;
   
   do
   {
@@ -172,7 +172,7 @@ void WaitForAllNonActive(int NbInputs)
     delay(15);
   }while(CheckAllActive(nbj_raw)!=0 && count<=max_iter);
   
-  if(count>=max_iter)
+  if (count>=max_iter)
   {
     FlashAndBuzzAllActive();
     WaitForAllNonActive(NbInputs);

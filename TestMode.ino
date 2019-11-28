@@ -14,7 +14,7 @@ void TestMode()
   {
     NumAct=IlluminateActiveExtinguishNonActive(nbj_raw_max);
     delay(1);
-    if(NumAct<5)
+    if (NumAct<5)
     {
       ActivateGreenLED(20);
       ActivateBlueLED(0);
@@ -42,7 +42,7 @@ void DemoMode(bool AllModes)
   int MaxP=nbj;
   int GameDelay=1000;
 
-  if(Player1Controls)
+  if (Player1Controls)
   {
     MaxP=1;
   }
@@ -54,12 +54,12 @@ void DemoMode(bool AllModes)
   SonTestMode();
 
   delay(GameDelay);
-  for(int i=0 ; i<NbJeux-1;i++)
+  for (int i=0; i<NbJeux-1;i++)
   {
     //If the game mode is 0, play games that have non-0 Prob
     //If the game mode is non-0, play games that did not exist in previous mode.
     //If AllModes, Demo all modes.
-    if(
+    if (
       (Game_Mode==Game_Mode_Original && ProbIndivJeux[i]!=0) ||
       (Game_Mode>Game_Mode_Original && GameProb[i][Game_Mode]!=0 && GameProb[i][Game_Mode-1]==0 && ProbIndivJeux[i]!=0) ||
        AllModes && ProbIndivJeux[i]!=0)
@@ -84,11 +84,11 @@ void DemoMode(bool AllModes)
           {
             Counter++;
             GoToNext=false;
-            for(int j=0 ; j<MaxP ;j++)
+            for (int j=0; j<MaxP ;j++)
             {
-              if(ReadPlayerInput(j))
+              if (ReadPlayerInput(j))
               {
-                if(!PrevInputState[j])
+                if (!PrevInputState[j])
                 {
                   Counter=0;
                   LOG_GENERAL("TOGGLE:");
@@ -115,7 +115,7 @@ void DemoMode(bool AllModes)
             
             NumActOut=CheckAllActiveOutputs(nbj_raw);
             
-            if(NumActOut==MaxP)
+            if (NumActOut==MaxP)
             {
               GoToNext=true;
             }
@@ -150,7 +150,7 @@ void EndlessMusicMode()
     if (SelectedSong==-1)
     {
       LOG_GENERAL("Random Song:");
-      r = random(NombreChansons);
+      r=random(NombreChansons);
     }
     else
     {

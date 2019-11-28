@@ -25,11 +25,11 @@ void PPV()
   //LUMIERES
   //Paires de lumières rouges qui avance
   ControlAllLights(false,0,0);
-  for(int i=0; i<5; i++)
+  for (int i=0; i<5; i++)
   {
-    for(int j=0; j<10; j++)
+    for (int j=0; j<10; j++)
     {
-      if(j%5==i)
+      if (j%5==i)
       {
         ActivateRedLight(j);
       }
@@ -39,10 +39,10 @@ void PPV()
   }
   delay(300);
   //Lumière réplique du jeu
-  const int LightDelayDecrement = 75;
+  const int LightDelayDecrement=75;
   const int LightDelayMin=150;
-  int LightDelay = LightDelayMin+WinNumPress*LightDelayDecrement;
-  for(int i=0; i<WinNumPress; i++)
+  int LightDelay=LightDelayMin+WinNumPress*LightDelayDecrement;
+  for (int i=0; i<WinNumPress; i++)
   {
     tone(Tone_Pin,400,20);
     TurnOnAllRedLights();
@@ -62,11 +62,11 @@ void PPV()
   //MAIN GAME
   do
   {
-    for (int i=0 ; i<nbj ; i++)
+    for (int i=0; i<nbj; i++)
     {
       CurrentState=ReadPlayerInput(i);
       //Record the START PRESS TIMER on trans from LOW to HIGH
-      if(!PreviousState[i] && CurrentState)
+      if (!PreviousState[i] && CurrentState)
       {
         PressTime[i]=Game_Timer;
         LOG_PPV("i:");
@@ -78,7 +78,7 @@ void PPV()
         DeactivateRedLight(i);
       }
       //Record the END PRESS TIMER on trans from HIGH to LOW
-      else if(PreviousState[i] && !CurrentState)
+      else if (PreviousState[i] && !CurrentState)
       {
         RecordPress=true;
         TotalPressTime=Game_Timer-PressTime[i];
@@ -90,10 +90,10 @@ void PPV()
         LOG_PPV(TotalPressTime);
         LOG_PPV("\n");
         
-        if(NumPress[i]!=0)
+        if (NumPress[i]!=0)
         {
           //Reset Sequence if this press time is greater than the previous
-          if(TotalPressTime+MinimumDiff>=PreviousTotalPressTime[i])
+          if (TotalPressTime+MinimumDiff>=PreviousTotalPressTime[i])
           {
             
             LOG_PPV("i:");
@@ -110,7 +110,7 @@ void PPV()
           }
         }
         
-        if(RecordPress)
+        if (RecordPress)
         {
           LOG_PPV("i:");
           LOG_PPV(i);
@@ -124,7 +124,7 @@ void PPV()
       PreviousState[i]=CurrentState;
       
       //Update Winner
-      if(NumPress[i]>=WinNumPress)
+      if (NumPress[i]>=WinNumPress)
       {
         Winner=i;
         LOG_PPV("i:");
@@ -169,7 +169,7 @@ void PressBattle()
   #define SOUND_TIME 500
   #define GAME_DELAY 5
   int Winner=-1;
-  int Game_Time = (random(GAME_TIME_MIN,GAME_TIME_MAX)/GAME_DELAY);
+  int Game_Time=(random(GAME_TIME_MIN,GAME_TIME_MAX)/GAME_DELAY);
   unsigned long Game_Timer=0;
   int ClicCount[nbj_max]={0};
   bool PreviousState[nbj_max]={false};
@@ -192,7 +192,7 @@ void PressBattle()
   delay(200);
   int NumLights=random(10,12);
   int FlagIncrement=100/(float)NumLights;
-  for (int i=0; i<NumLights ; i++)
+  for (int i=0; i<NumLights; i++)
   {
     tone(Tone_Pin,400,20);
     TurnOnAllRedLights();
@@ -207,7 +207,7 @@ void PressBattle()
 
   
   //Prepare
-  for(int i=0 ; i<nbj ; i++)
+  for (int i=0; i<nbj; i++)
   {
     PlayerState[i]=0;
   }
@@ -215,7 +215,7 @@ void PressBattle()
   //MAIN GAME
   do
   {
-    if(Game_Timer<Game_Time)
+    if (Game_Timer<Game_Time)
     {
       Game_Timer++;
       FlagPerc=(float)(Game_Time-Game_Timer)/(float)Game_Time*100; 
@@ -226,9 +226,9 @@ void PressBattle()
     }
     MoveDEDUFlag(FlagPerc);
 
-    for (int i=0 ; i<nbj ; i++)
+    for (int i=0; i<nbj; i++)
     {
-      if(!PreviousState[i] && ReadPlayerInput(i))
+      if (!PreviousState[i] && ReadPlayerInput(i))
       {
         ClicCount[i]++;
         LOG_PB("i:");
@@ -246,19 +246,19 @@ void PressBattle()
     NumPlayersMaxClic=0;
     PotentialWinner=-1;
     //First Check What's the max number of clics.
-    for (int i=0 ; i<nbj ; i++)
+    for (int i=0; i<nbj; i++)
     {
-      if(ClicCount[i]>MaxClic)
+      if (ClicCount[i]>MaxClic)
       {
         MaxClic=ClicCount[i];
       }
     }
     //Then identify players that have the max cliccount.
-    for (int i=0 ; i<nbj ; i++)
+    for (int i=0; i<nbj; i++)
     {
-      if(ClicCount[i]==MaxClic)
+      if (ClicCount[i]==MaxClic)
       {
-        if(PotentialWinner!=-1)
+        if (PotentialWinner!=-1)
         {
           PlayersTied=true;
         }
@@ -272,7 +272,7 @@ void PressBattle()
     }
     
     //Check Win Condition if Game Timer is greater than Game_Time and no ties and a potential winner;
-    if(Game_Timer>=Game_Time && !PlayersTied && PotentialWinner!=-1)
+    if (Game_Timer>=Game_Time && !PlayersTied && PotentialWinner!=-1)
     {
       Winner=PotentialWinner;
     }
@@ -349,16 +349,16 @@ void PQR()
   
   do
   {
-    if(!InitialGreenComplete)
+    if (!InitialGreenComplete)
     {
-      PercG = ((float)GreenCounter/(float)GreenTransMax)*LightIntG;
-      PercB = ((float)GreenCounter/(float)GreenTransMax)*LightIntB;
-      if(PercG<MinG) PercG=MinG;
-      if(PercB<MinB) PercB=MinB;
+      PercG=((float)GreenCounter/(float)GreenTransMax)*LightIntG;
+      PercB=((float)GreenCounter/(float)GreenTransMax)*LightIntB;
+      if (PercG<MinG) PercG=MinG;
+      if (PercB<MinB) PercB=MinB;
       ActivateGreenLED(PercG);
       ActivateBlueLED(PercB);
     }
-    if(GreenCounter>GreenTransMax && !InitialGreenComplete)
+    if (GreenCounter>GreenTransMax && !InitialGreenComplete)
     {
       LOG_PQR("GreenTransComplete\n");
       LOG_PQR("GameCounter:");
@@ -372,7 +372,7 @@ void PQR()
     }
 
     //Record States to compare win condition.
-    for(int i=0;i<nbj;i++)
+    for (int i=0;i<nbj;i++)
     {
       PreviousState[i]=InputState[i];
     }
@@ -384,7 +384,7 @@ void PQR()
     NumActive=0;
     for (int i=0; i<=nbj_raw ;i++)
     {
-      if(PlayersInGame[i]==1)
+      if (PlayersInGame[i]==1)
       {
         if (ReadPlayerInput(i))
         {
@@ -401,12 +401,12 @@ void PQR()
         }
       }
       
-      if(PreviousState[i]!=InputState[i])
+      if (PreviousState[i]!=InputState[i])
       {
         StateChanges[i]++;
       }
       
-      if(StateChanges[i]>ChangeThr && !TriggerEndGame)
+      if (StateChanges[i]>ChangeThr && !TriggerEndGame)
       {
         LOG_PQR("You're OUT\n");
         PlayersInGame[i]=0;
@@ -416,19 +416,19 @@ void PQR()
     }
 
     //Check if everyone is a spammer.
-    if(!TriggerEndGame)
+    if (!TriggerEndGame)
     {
       PlayersActive=0;
       for (int i=0; i<=nbj_raw ;i++)
       {
-        if(PlayersInGame[i]==1)
+        if (PlayersInGame[i]==1)
         {
           PlayersActive++;
         }
       }
       
       //Reset Counts if everyone is a dumbass.
-      if(PlayersActive==0)
+      if (PlayersActive==0)
       {
         LOG_PQR("RESET EVERYONE\n");
         for (int i=0; i<=nbj_raw ;i++)
@@ -439,25 +439,25 @@ void PQR()
       }
     }
     
-    if(NumActive==WinCondition && TriggerEndGame)
+    if (NumActive==WinCondition && TriggerEndGame)
     {
-      for(int i=0;i<nbj;i++)
+      for (int i=0;i<nbj;i++)
       {
-        if(PreviousState[i] && !InputState[i] && PlayersInGame[i]==1)
+        if (PreviousState[i] && !InputState[i] && PlayersInGame[i]==1)
         {
           Winner=i;
           break;
         }
       }
     }
-    else if(!TriggerEndGame)
+    else if (!TriggerEndGame)
     {
-      if(NumActive==0)
+      if (NumActive==0)
       {
         //LOG_PQR("ResetGameCounter\n");
         GameCounter=0;
       }
-      if(NumActive>=1 && NumActive!=PrevNumActive)
+      if (NumActive>=1 && NumActive!=PrevNumActive)
       {
         LOG_PQR("WinCondition Change\n");
         WinCondition=NumActive-1;
@@ -473,12 +473,12 @@ void PQR()
         LOG_PQR("\n");
       }
       
-      if(GameCounter>ReacTime && NumActive>=1)
+      if (GameCounter>ReacTime && NumActive>=1)
       {
         //Cancel Non-Pressing players
         for (int i=0; i<=nbj_raw ;i++)
         {
-          if(!InputState[i])
+          if (!InputState[i])
           {
             PlayersInGame[i]=0;
           }
@@ -505,7 +505,7 @@ void PQR()
     {
       GreenCounter++;
     }
-    if(GameCounter>90000)
+    if (GameCounter>90000)
     {
       LOG_PQR("ResetGameCounter\n");
       GameCounter=0;
@@ -546,7 +546,7 @@ void TourVic()
   bool PlayerHasWon=false;
   int SpamCheckDelay=55;
 
-  if(random(2)==0)
+  if (random(2)==0)
   {
     DirectionNextPlayer=1;
   }
@@ -591,7 +591,7 @@ void TourVic()
     LOG_TOURVIC("\n");
     */
     //Monitor initial transition to LOW
-    if(!ReadPlayerInput(CurrentPlayer) && !ReadyToPress && !IgnorePresses)
+    if (!ReadPlayerInput(CurrentPlayer) && !ReadyToPress && !IgnorePresses)
     {
       LOG_TOURVIC("Changing RTP!");
       LOG_TOURVIC("\n");
@@ -599,7 +599,7 @@ void TourVic()
     }
     
     //Monitor subsequent transition to HIGH
-    if(ReadPlayerInput(CurrentPlayer) && ReadyToPress && !PlayerIsPressing && !IgnorePresses)
+    if (ReadPlayerInput(CurrentPlayer) && ReadyToPress && !PlayerIsPressing && !IgnorePresses)
     {
       LOG_TOURVIC("Changing PIP!")
       LOG_TOURVIC("\n");
@@ -607,7 +607,7 @@ void TourVic()
     }
     
     //Monitor subsequent transition to LOW
-    if(!ReadPlayerInput(CurrentPlayer) && PlayerIsPressing && !IgnorePresses)
+    if (!ReadPlayerInput(CurrentPlayer) && PlayerIsPressing && !IgnorePresses)
     {
       LOG_TOURVIC("Player SAFE!")
       LOG_TOURVIC("\n");
@@ -620,7 +620,7 @@ void TourVic()
     delay(1);
 
     //Check if current player has won and is pressing again.  If so, make him loose.
-    if(PlayerHasWon && ReadPlayerInput(CurrentPlayer))
+    if (PlayerHasWon && ReadPlayerInput(CurrentPlayer))
     {
       LOG_TOURVIC("Player LOOSES!")
       LOG_TOURVIC("\n");
@@ -628,9 +628,9 @@ void TourVic()
     }
     
     //Enougn time on this guy...  Switch
-    if(CurrentCounter>LightDelay)
+    if (CurrentCounter>LightDelay)
     {
-      if(PlayerHasWon)
+      if (PlayerHasWon)
       {
         Winner=CurrentPlayer;
       }
@@ -651,7 +651,7 @@ void TourVic()
           LOG_TOURVIC(LightDelay);
           LOG_TOURVIC("\n");
           
-          if(ReadytoIncreaseIncrement==true)
+          if (ReadytoIncreaseIncrement==true)
           {
             if (random(IncrementProb)==0)
             {
@@ -715,7 +715,7 @@ void TeamDeDuel()
   bool HasReleased[2]={false};
   bool IsPressing[2]={false};
   int SoundTime=500;
-  int Direction = 1;
+  int Direction=1;
   int FraudulentTeam;
   int GameDelay=2;
   int Fails[nbj_max]={0};
@@ -725,7 +725,7 @@ void TeamDeDuel()
   int PlayerFound=-1;
   int FailPlayer=-1;
 
-  if(random(2)==0)
+  if (random(2)==0)
   {
     Direction=1;
   }
@@ -737,11 +737,11 @@ void TeamDeDuel()
   
   AllocateTwoConsecutiveTeams();
 
-  if(NbJoueursEq1>NbJoueursEq2)
+  if (NbJoueursEq1>NbJoueursEq2)
   {
     FactorTeamSize[0]=((float)NbJoueursEq1/(float)NbJoueursEq2)*BigTeamFactor;
   }
-  else if(NbJoueursEq2>NbJoueursEq1)
+  else if (NbJoueursEq2>NbJoueursEq1)
   {
     FactorTeamSize[1]=((float)NbJoueursEq2/(float)NbJoueursEq1)*BigTeamFactor;
   }
@@ -759,13 +759,13 @@ void TeamDeDuel()
     MoveDEDUFlag(50);
     delay(500);
     
-    for (int i=1; i<50 ; i++)
+    for (int i=1; i<50; i++)
     {
       ActivateGreenLED(i);
       delay(ForLightDelay);
     }
     delay(LightDelay);
-    for(int i=0 ; i<2 ; i++)
+    for (int i=0; i<2; i++)
     {
       IlluminateTeamRedLights(0);
       ActivateGreenLED(0);
@@ -776,13 +776,13 @@ void TeamDeDuel()
     }
     ControlAllLights(false,0,0);
     delay(2*LightDelay);
-    for (int i=1; i<50 ; i++)
+    for (int i=1; i<50; i++)
     {
       ActivateBlueLED(i);
       delay(ForLightDelay);
     }
     delay(LightDelay);
-    for(int i=0 ; i<2 ; i++)
+    for (int i=0; i<2; i++)
     {
       IlluminateTeamRedLights(1);
       ActivateBlueLED(0);
@@ -795,7 +795,7 @@ void TeamDeDuel()
   }
 
   //Remember first player from each team
-  if(Direction==1)
+  if (Direction==1)
   {
     InitPlayer[0]=0;
     InitPlayer[1]=NbJoueursEq1;
@@ -818,9 +818,9 @@ void TeamDeDuel()
   {
     ScoreIncCounter++;
     //Check for Fraudulent pressers
-    for(int i=0 ; i<nbj ; i++)
+    for (int i=0; i<nbj; i++)
     {
-      if(ReadPlayerInput(i) && (i!=Player[0] && i!=Player[1]))
+      if (ReadPlayerInput(i) && (i!=Player[0] && i!=Player[1]))
       {
         FraudulentTeam=Equipes[i];
         LOG_TEAMDEDUEL("FraudulentTeam:");
@@ -828,7 +828,7 @@ void TeamDeDuel()
         LOG_TEAMDEDUEL("\n");
 
         //Log fail if player not first.
-        if(Player[FraudulentTeam]!=InitPlayer[FraudulentTeam])
+        if (Player[FraudulentTeam]!=InitPlayer[FraudulentTeam])
         {
           Fails[i]++;
           LOG_TEAMDEDUEL("FailPlayer:");
@@ -853,22 +853,22 @@ void TeamDeDuel()
 
     delay(GameDelay);
     
-    for(int i=0 ; i<=1 ; i++)
+    for (int i=0; i<=1; i++)
     {
       //Check for Release
-      if(!ReadPlayerInput(Player[i]) && !HasReleased[i])
+      if (!ReadPlayerInput(Player[i]) && !HasReleased[i])
       {
         HasReleased[i]=true;
       }
 
       //Check for Press after release
-      if(ReadPlayerInput(Player[i]) && HasReleased[i])
+      if (ReadPlayerInput(Player[i]) && HasReleased[i])
       {
         IsPressing[i]=true;
       }
 
       //Check for release to switch to nextplayer
-      if(!ReadPlayerInput(Player[i]) && IsPressing[i])
+      if (!ReadPlayerInput(Player[i]) && IsPressing[i])
       {
         //Turn off light
         DeactivateRedLight(Player[i]);
@@ -881,7 +881,7 @@ void TeamDeDuel()
         ActivateRedLight(Player[i]);
 
         //Increase score if back to first player for team.
-        if(Player[i]==InitPlayer[i])
+        if (Player[i]==InitPlayer[i])
         {
           Count[i]++;
           LOG_TEAMDEDUEL("Score:");
@@ -893,7 +893,7 @@ void TeamDeDuel()
 
     delay(GameDelay);
     
-    if(ScoreIncCounter>ScoreIncreaseIter && ScoreFactor<50)
+    if (ScoreIncCounter>ScoreIncreaseIter && ScoreFactor<50)
     {
       ScoreIncCounter=0;
       ScoreFactor=ScoreFactor*(ScoreIncrease+1);
@@ -944,7 +944,7 @@ void TeamDeDuel()
   
   if (Winner==0)
   {
-    for (int i=1; i<50 ; i++)
+    for (int i=1; i<50; i++)
     {
       ActivateGreenLED(i);
       delay(20);
@@ -952,7 +952,7 @@ void TeamDeDuel()
     delay(LightDelay);
     ActivateGreenLED(0);
     IlluminateTeamRedLights(Winner);
-    for(int i=0 ; i<2 ; i++)
+    for (int i=0; i<2; i++)
     {
       WinnerSound();
       delay(LightDelay);
@@ -965,7 +965,7 @@ void TeamDeDuel()
   }
   else
   {
-    for (int i=1; i<50 ; i++)
+    for (int i=1; i<50; i++)
     {
       ActivateBlueLED(i);
       delay(20);
@@ -973,7 +973,7 @@ void TeamDeDuel()
     delay(LightDelay);
     ActivateBlueLED(0);
     IlluminateTeamRedLights(Winner);
-    for(int i=0 ; i<2 ; i++)
+    for (int i=0; i<2; i++)
     {
       WinnerSound();
       delay(LightDelay);
@@ -993,9 +993,9 @@ void TeamDeDuel()
 
   //Logic for HonteTransfer
   //Trouver le joueur avec le plus grand nombre de fail dans l'équipe perdante.
-  for (int i=0 ; i<nbj ; i++)
+  for (int i=0; i<nbj; i++)
   {
-    if(Fails[i]>FailsMax && Equipes[i]!=Winner)
+    if (Fails[i]>FailsMax && Equipes[i]!=Winner)
     {
       FailsMax=Fails[i];
       NumPlayersMaxFail=1;
@@ -1018,19 +1018,19 @@ void TeamDeDuel()
   LOG_TEAMDEDUEL("\n");
 
   
-  if(FailsMax!=0)
+  if (FailsMax!=0)
   {
     FailPlayerSequenceId=random(NumPlayersMaxFail);
     LOG_TEAMDEDUEL("FailPlayerSequenceId:");
     LOG_TEAMDEDUEL(FailPlayerSequenceId);
     LOG_TEAMDEDUEL("\n");
-    for (int i=0 ; i<nbj ; i++)
+    for (int i=0; i<nbj; i++)
     {
-      if(Fails[i]==FailsMax && Equipes[i]!=Winner)
+      if (Fails[i]==FailsMax && Equipes[i]!=Winner)
       {
         PlayerFound++;
       }
-      if(PlayerFound==FailPlayerSequenceId)
+      if (PlayerFound==FailPlayerSequenceId)
       {
         FailPlayer=i;
         break;
@@ -1073,7 +1073,7 @@ void Tourniquet()
   bool IgnorePresses=false;
   int IncrementProb=3;
 
-  if(random(2)==0)
+  if (random(2)==0)
   {
     DirectionNextPlayer=1;
   }
@@ -1106,7 +1106,7 @@ void Tourniquet()
     LOG_TOURNIQUET("\n");
     //Monitor initial transition to LOW
     
-    if(!ReadPlayerInput(CurrentPlayer) && !ReadyToPress && !IgnorePresses)
+    if (!ReadPlayerInput(CurrentPlayer) && !ReadyToPress && !IgnorePresses)
     {
       LOG_TOURNIQUET("Changing RTP!");
       LOG_TOURNIQUET("\n");
@@ -1114,7 +1114,7 @@ void Tourniquet()
     }
     
     //Monitor subsequent transition to HIGH
-    if(ReadPlayerInput(CurrentPlayer) && ReadyToPress && !PlayerIsPressing && !IgnorePresses)
+    if (ReadPlayerInput(CurrentPlayer) && ReadyToPress && !PlayerIsPressing && !IgnorePresses)
     {
       LOG_TOURNIQUET("Changing PIP!")
       LOG_TOURNIQUET("\n");
@@ -1122,19 +1122,19 @@ void Tourniquet()
     }
     
     //Monitor subsequent transition to LOW
-    if(!ReadPlayerInput(CurrentPlayer) && PlayerIsPressing && !IgnorePresses)
+    if (!ReadPlayerInput(CurrentPlayer) && PlayerIsPressing && !IgnorePresses)
     {
       LOG_TOURNIQUET("Player SAFE!")
       LOG_TOURNIQUET("\n");
       //YOU ARE SAFE.
-      if(PlayersState[CurrentPlayer])
+      if (PlayersState[CurrentPlayer])
       {
         NumActivePlayers--;
         PlayersState[CurrentPlayer]=false;
         IgnorePresses=true;
 
         //Change Last Player if Current Player
-        if(CurrentPlayer==LastPlayer)
+        if (CurrentPlayer==LastPlayer)
         {
           LOG_TOURNIQUET("Player was last and is now safe!")
           LOG_TOURNIQUET("\n");
@@ -1152,9 +1152,9 @@ void Tourniquet()
     delay(1);
     
     //Find spammers and bring them back in the game.
-    for(int i=0; i<=nbj_raw ; i++)
+    for (int i=0; i<=nbj_raw; i++)
     {
-      if(!PlayersState[i] && ReadPlayerInput(i))
+      if (!PlayersState[i] && ReadPlayerInput(i))
       {
         LOG_TOURNIQUET("SPAM PLAYER:");
         LOG_TOURNIQUET(i);
@@ -1168,13 +1168,13 @@ void Tourniquet()
     
     delay(1);
 
-    if(NumActivePlayers<=1) 
+    if (NumActivePlayers<=1) 
     {
       break;
     }
     
     //Enougn time on this guy...  Switch
-    if(CurrentCounter>LightDelay)
+    if (CurrentCounter>LightDelay)
     {
       
       CurrentCounter=0;
@@ -1190,7 +1190,7 @@ void Tourniquet()
         LOG_TOURNIQUET(LightDelay);
         LOG_TOURNIQUET("\n");
         
-        if(ReadytoIncreaseIncrement==true)
+        if (ReadytoIncreaseIncrement==true)
         {
           if (random(IncrementProb)==0)
           {
@@ -1209,7 +1209,7 @@ void Tourniquet()
       
       delay(1);
       //Keep winners lights active, Deactivate my light if im still in this game.
-      if(PlayersState[CurrentPlayer]==true)
+      if (PlayersState[CurrentPlayer]==true)
       {
         DeactivateRedLight(CurrentPlayer);
       }
@@ -1229,9 +1229,9 @@ void Tourniquet()
     delay(1);
   }while(NumActivePlayers>1);
 
-  for(int i=0; i<=nbj_raw ; i++)
+  for (int i=0; i<=nbj_raw; i++)
   {
-    if(PlayersState[i])
+    if (PlayersState[i])
     {
       Looser=i;
     }
@@ -1256,7 +1256,7 @@ void Patate2()
   
   unsigned long basetime=12242;
   unsigned long maxrandtime=4242;
-  unsigned long GameTimeMillis = basetime+random(maxrandtime);
+  unsigned long GameTimeMillis=basetime+random(maxrandtime);
   unsigned long GameCounter=0;
   int InitSpread=nbj/2;
   bool ReadyToSwitch[2]={false,false};
@@ -1271,24 +1271,24 @@ void Patate2()
   #define PenaliteIncrPatate2 2000;
   unsigned long GameCounterPenalite[nbj];
   bool PreviousState[nbj];
-  for(int i=0; i<nbj ; i++)
+  for (int i=0; i<nbj; i++)
   {
     GameCounterPenalite[i]=0;
     PreviousState[i]=false;
   }
 
   //Positions of DEDU for different configs.
-  int BothPlus = 80;
-  int OppDir1 = 60;
-  int OppDir2 = 40;
-  int BothMinus = 20;
+  int BothPlus=80;
+  int OppDir1=60;
+  int OppDir2=40;
+  int BothMinus=20;
   int DEDUPosition=0;
   
   
   TurnOffAllLights();
   
   //Initialize direction of turn
-  if(random(2)==0)
+  if (random(2)==0)
   {
      DirectionNextPlayer[0]=1;
      DirectionNextPlayer[1]=1;
@@ -1301,7 +1301,7 @@ void Patate2()
     DEDUPosition=BothMinus;
   }
 
-  if(nbj%2!=0)
+  if (nbj%2!=0)
   {
     if (random(2)==0)
     {
@@ -1342,7 +1342,7 @@ void Patate2()
   delay(1200);
   MoveDEDUFlag(DEDUPosition);
   delay(500);
-  for(int i=0; i<=1 ; i++)
+  for (int i=0; i<=1; i++)
   {
     ActivateRedLight(LuckyPlayer[i]);
   }
@@ -1350,10 +1350,10 @@ void Patate2()
   do
   {
     //Monitor spammers
-    for(int i=0; i<nbj; i++)
+    for (int i=0; i<nbj; i++)
     {
-      bool PP = ReadPlayerInput(i);
-      if(PP && !PreviousState[i] && i!=LuckyPlayer[0] && i!=LuckyPlayer[1])
+      bool PP=ReadPlayerInput(i);
+      if (PP && !PreviousState[i] && i!=LuckyPlayer[0] && i!=LuckyPlayer[1])
       {
         GameCounterPenalite[i]=GameCounter+PenaliteIncrPatate2;
         
@@ -1369,7 +1369,7 @@ void Patate2()
     
     ChangeCounter++;
     GameCounter++;
-    for (int i=0 ; i<=1 ; i++)
+    for (int i=0; i<=1; i++)
     {
       /*
       LOG_PATATE2("Current Player:");
@@ -1387,7 +1387,7 @@ void Patate2()
       */
       
       //Monitor initial transition to LOW
-      if(!ReadPlayerInput(LuckyPlayer[i]) && !ReadyToSwitch[i] && GameCounter>GameCounterPenalite[LuckyPlayer[i]])
+      if (!ReadPlayerInput(LuckyPlayer[i]) && !ReadyToSwitch[i] && GameCounter>GameCounterPenalite[LuckyPlayer[i]])
       {
         LOG_PATATE2("Change ReadyToSwitch");
         LOG_PATATE2("\n");
@@ -1395,7 +1395,7 @@ void Patate2()
       }
       
       //Monitor subsequent transition to HIGH
-      if(ReadPlayerInput(LuckyPlayer[i]) && ReadyToSwitch[i] && !PlayerIsPressing[i])
+      if (ReadPlayerInput(LuckyPlayer[i]) && ReadyToSwitch[i] && !PlayerIsPressing[i])
       {
         LOG_PATATE2("Change PlayerIsPressing");
         LOG_PATATE2("\n");
@@ -1408,7 +1408,7 @@ void Patate2()
         LOG_PATATE2("I have started Pressing");
         LOG_PATATE2("\n");
         //HIGH, Keep counting
-        if(ReadPlayerInput(LuckyPlayer[i]))
+        if (ReadPlayerInput(LuckyPlayer[i]))
         {
           LOG_PATATE2("I keep Pressing");
           LOG_PATATE2("\n");
@@ -1474,7 +1474,7 @@ void Patate2()
       delay(1);
       
       //Check Win condition between players.
-      if(LuckyPlayer[0] == LuckyPlayer[1])
+      if (LuckyPlayer[0] == LuckyPlayer[1])
       {
         break;
       }
@@ -1503,7 +1503,7 @@ void Patate2()
       }
 
       //Second Direction
-      if(random(ProbOppDir)==0)
+      if (random(ProbOppDir)==0)
       {
         LOG_PATATE2("Opp Directions!!");
         LOG_PATATE2("\n");
@@ -1517,22 +1517,22 @@ void Patate2()
       }
 
       //Directions
-      if(DirectionNextPlayer[0] == 1 && DirectionNextPlayer[1]==1)
+      if (DirectionNextPlayer[0] == 1 && DirectionNextPlayer[1]==1)
       {
         DEDUPosition=BothPlus;
       }
-      else if(DirectionNextPlayer[0] == 1 && DirectionNextPlayer[1]==-1)
+      else if (DirectionNextPlayer[0] == 1 && DirectionNextPlayer[1]==-1)
       {
         DEDUPosition=OppDir1;
       }
-      else if(DirectionNextPlayer[0] == -1 && DirectionNextPlayer[1]==1)
+      else if (DirectionNextPlayer[0] == -1 && DirectionNextPlayer[1]==1)
       {
         DEDUPosition=OppDir2;
       }
       else
       {
-        DirectionNextPlayer[0] = -1;
-        DirectionNextPlayer[1] = -1;
+        DirectionNextPlayer[0]=-1;
+        DirectionNextPlayer[1]=-1;
         DEDUPosition=BothMinus;
       }
       MoveDEDUFlag(DEDUPosition);
@@ -1546,16 +1546,16 @@ void Patate2()
   //Loose Stage
   ActivateBlueLED(5);
 
-  for (int i = 1; i<= 80; i++)
+  for (int i=1; i<=80; i++)
   {
-    Tone_Frequency = 2000 - 20 * i;
+    Tone_Frequency=2000 - 20 * i;
     tone(Tone_Pin, Tone_Frequency);
     delay(10);
   }
   noTone(Tone_Pin);
   
   //Identify the Looser
-  for (int e = 1; e<= 4; e++) {
+  for (int e=1; e<=4; e++) {
     ActivateRedLight(LuckyPlayer[0]);
     ActivateRedLight(LuckyPlayer[1]);
     delay(500);
