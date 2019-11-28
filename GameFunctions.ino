@@ -200,6 +200,10 @@ void PlayGame(int game_id, bool DemoMode)
   {
     AR2();
   }
+  else if (game_id==Game_id_MIN2)
+  {
+    MIN2();
+  }
   else
   {
     PQP();
@@ -304,6 +308,10 @@ void LogGameName(int game_id, bool NewLine)
   {
     LOG_GENERAL("ALL RANDOM 2");
   }
+  else if (game_id==Game_id_MIN2)
+  {
+    LOG_GENERAL("MINORITE2");
+  }
   else
   {
     LOG_GENERAL("PQP         ");
@@ -317,29 +325,30 @@ void ResetProbAfterGame(int game_id)
   ResetGameProb(game_id);
 
   //Check specific games and reset links.
-  if (game_id==Game_id_DQP)
-  {
-    ResetGameProb(Game_id_DQP2);
-  }
-  else if (game_id==Game_id_DQP2)
+  if (game_id==Game_id_DQP || game_id==Game_id_DQP2)
   {
     ResetGameProb(Game_id_DQP);
+    ResetGameProb(Game_id_DQP2);
   }
-  else if (game_id==Game_id_PC)
-  {
-    DivideGameProb(Game_id_PC2,2);
-  }
-  else if (game_id==Game_id_PC2)
+  else if (game_id==Game_id_PC || game_id==Game_id_PC2)
   {
     DivideGameProb(Game_id_PC,2);
+    DivideGameProb(Game_id_PC2,2);
   }
-  else if (game_id==Game_id_MH)
+  else if (game_id==Game_id_MH || game_id==Game_id_TH)
   {
     ResetProbHonte();
-  }
-  else if (game_id==Game_id_TH)
-  {
     ResetProbHonte();
+  }
+  else if (game_id==Game_id_AR || game_id==Game_id_AR2)
+  {
+    DivideGameProb(Game_id_AR,2);
+    DivideGameProb(Game_id_AR2,2);
+  }
+  else if (game_id==Game_id_MIN || game_id==Game_id_MIN2)
+  {
+    DivideGameProb(Game_id_MIN,2);
+    DivideGameProb(Game_id_MIN2,2);
   }
 }
 

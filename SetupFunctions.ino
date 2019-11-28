@@ -41,35 +41,61 @@ void DefineProbJeux()
   
   //===================//
   
-  //Mode plus avancé, mais pas trop complexe.
+  //Mode plus avancé, mais pas trop complexe - 10 jeux.
   wMode=1;
   //Gagnant Unique
   GameProb[Game_id_PQP][wMode]=120;
   GameProb[Game_id_UC][wMode]=75;
-  GameProb[Game_id_DUEL][wMode]=80;
   GameProb[Game_id_PB][wMode]=80;
   GameProb[Game_id_ED][wMode]=100;
   
   //Perdant Unique
   GameProb[Game_id_DQP][wMode]=40;
   GameProb[Game_id_PC][wMode]=90;
-  GameProb[Game_id_DQP2][wMode]=50;
   
   //Honte
   GameProb[Game_id_MH][wMode]=30;
 
   //Équipe
   GameProb[Game_id_MIN][wMode]=60;
-  GameProb[Game_id_TDD][wMode]=55;
   
   //Autres
   GameProb[Game_id_TO][wMode]=30;
   GameProb[Game_id_FFA][wMode]=45;
-    
+    //===================//
+  
+  //Mode AVANCE - 15 jeux
+  wMode=2;
+  //Gagnant Unique
+  GameProb[Game_id_PQP][wMode]=160;
+  GameProb[Game_id_UC][wMode]=120;
+  GameProb[Game_id_DUEL][wMode]=100;
+  GameProb[Game_id_PB][wMode]=80;
+  GameProb[Game_id_PQR][wMode]=100;
+  GameProb[Game_id_ED][wMode]=120;
+  GameProb[Game_id_JD][wMode]=100;
+  
+  //Perdant Unique
+  GameProb[Game_id_DQP][wMode]=80;
+  GameProb[Game_id_DQP2][wMode]=80;
+  GameProb[Game_id_PC][wMode]=120;
+  GameProb[Game_id_PC2][wMode]=120;
+  
+  //Honte
+  GameProb[Game_id_MH][wMode]=70;
+
+  //Équipe
+  GameProb[Game_id_MIN][wMode]=120;
+  GameProb[Game_id_TDD][wMode]=110;
+  
+  //Autres
+  GameProb[Game_id_TO][wMode]=0;
+  GameProb[Game_id_FFA][wMode]=84;
+  
   //===================//
   
-  //Mode le plus avancé. Avec qualité démontrée.
-  wMode=2;
+  //Mode Expert - 20 jeux
+  wMode=3;
   //Gagnant Unique
   GameProb[Game_id_PQP][wMode]=160;
   GameProb[Game_id_UC][wMode]=120;
@@ -103,7 +129,7 @@ void DefineProbJeux()
   //===================//
   
   //Mode EXPÉRIMENTAL.  Les nouveaux jeux passent par ici.
-  wMode=3;
+  wMode=4;
 
   //Set Game Probs to previous mode.
   for (int i=0 ; i<NbJeux ; i++)
@@ -114,6 +140,7 @@ void DefineProbJeux()
   GameProb[Game_id_SEQ][wMode]=120;
   GameProb[Game_id_TB][wMode]=120;
   GameProb[Game_id_AR2][wMode]=120;
+  GameProb[Game_id_MIN2][wMode]=120;
   
   //===================//
   
@@ -143,6 +170,13 @@ void DefineProbJeux()
 
 void DefineGameTypes()
 {
+  //DEFINE GAME TYPES.
+  //SET DEFAULT TO -1;
+  for(int i=0; i<NbJeux; i++)
+  {
+    GameTypes[i]=-1;
+  }
+  
   //Types
   //0=Gagnant Individuel
   GameTypes[Game_id_PQP]=0;
@@ -154,6 +188,7 @@ void DefineGameTypes()
   GameTypes[Game_id_PPV]=0;
   GameTypes[Game_id_JD]=0;
   GameTypes[Game_id_ED]=0;
+  GameTypes[Game_id_MIN2]=0;
    
   //1=Perdant individuel
   GameTypes[Game_id_DQP]=1;
@@ -179,6 +214,16 @@ void DefineGameTypes()
   
   //52=Équipe et honte
   GameTypes[Game_id_TDD]=52;
+
+  for(int i=0; i<NbJeux; i++)
+  {
+    if(GameTypes[i]==-1)
+    {
+      LOG_GENERAL("GAME_TYPE NON DEFINI POUR JEU: ");
+      LOG_GENERAL(i);
+      LOG_GENERAL("\n");
+    }
+  }
 }
 
 void AjustementProbJeuxInit()
