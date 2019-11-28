@@ -822,7 +822,7 @@ void MIN()
   ActivateGreenLED(100);
   TurnOnAllRedLights();
   
-  int RandTimer=5+random(9);
+  int RandTimer=8+random(7);
 
   float TimeInterval=900;
   float TimeDelta;
