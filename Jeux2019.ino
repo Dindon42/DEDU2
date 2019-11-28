@@ -134,7 +134,7 @@ void AR2()
         }
       }
   
-      if(NumAlreadyAllocated==false)
+      if(!NumAlreadyAllocated)
       {
         //LOG_AR2("Mapping not already assigned.\nAssigning it to player: ")
         //LOG_AR2(i);
@@ -231,7 +231,7 @@ void AR2()
         {
           if(WinCondition==0)
           {
-            if(OutputArray[i]==false)
+            if(!OutputArray[i])
             {
               LOG_AR2("One Less: ");
               LOG_AR2(i);
@@ -241,7 +241,7 @@ void AR2()
           }
           else
           {
-            if(OutputArray[i]==true)
+            if(OutputArray[i])
             {
               LOG_AR2("One Less: ");
               LOG_AR2(i);
@@ -306,7 +306,7 @@ void AR2()
       {
         if(WinCondition==0)
         {
-          if(OutputArray[i]==true)
+          if(OutputArray[i])
           {
             Looser=i;
           }
@@ -317,7 +317,7 @@ void AR2()
         }
         else
         {
-          if(OutputArray[i]==false)
+          if(!OutputArray[i])
           {
             Looser=i;
           }

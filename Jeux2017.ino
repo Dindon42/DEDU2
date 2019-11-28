@@ -180,12 +180,12 @@ void DeDuel()
     //UpdateHasReleased
     for (int i=0; i<=1 ;i++)
     { 
-      if(!ReadPlayerInput(Joueurs[i]) && HasReleased[i]==false)
+      if(!ReadPlayerInput(Joueurs[i]) && !HasReleased[i])
       {
         HasReleased[i]=true;
       }
       delay(ReactionDelay);
-      if(HasReleased[i]==true && ReadPlayerInput(Joueurs[i]))
+      if(HasReleased[i] && ReadPlayerInput(Joueurs[i]))
       {
         HasReleased[i]=false;
         ClicCount[i]++;
@@ -626,12 +626,12 @@ void UltimateChallenge()
             PlayerState[i]=Looser;
             ActivateRedLight(i);
           }
-          if(PlayerState[i]==InGame && !ReadPlayerInput(i) && HasReleased[i]==false)
+          if(PlayerState[i]==InGame && !ReadPlayerInput(i) && !HasReleased[i])
           {
             HasReleased[i]=true;
           }
           delay(15);
-          if(PlayerState[i]==InGame && HasReleased[i]==true && ReadPlayerInput(i))
+          if(PlayerState[i]==InGame && HasReleased[i] && ReadPlayerInput(i))
           {
             //WINNER
             RoundWinner=i;
@@ -770,7 +770,7 @@ void DQP2()
       TurnOnAllRedLights();
       delay(20);
     }
-  }while(looserfound==false);
+  }while(!looserfound);
 
 
 
@@ -899,7 +899,7 @@ void MIN()
     noloosers=true;
   }
 
-  if (noloosers==false && allloosers==false )
+  if (!noloosers && !allloosers)
   {
     ActivateGreenLED(20);
     
@@ -923,7 +923,7 @@ void MIN()
       delay(LightDelay);
     }
   }
-  else if(noloosers==false && allloosers==true)
+  else if(!noloosers && allloosers)
   {
     AllLoosersSoundAndLight();
   }
@@ -1402,7 +1402,7 @@ void PatateChaude(bool SimpleControls)
       ReadyToSwitch=true;
     }
     
-    if(ReadPlayerInput(LuckyPlayer) && ReadyToSwitch==true && PlayerIsPressing==false)
+    if(ReadPlayerInput(LuckyPlayer) && ReadyToSwitch && !PlayerIsPressing)
     {
       LOG_PATATE("Change PlayerIsPressing");
       LOG_PATATE("\n");
@@ -1624,7 +1624,7 @@ void AllRandom()
         }
        }
 
-       if(NumAlreadyAllocated==false)
+       if(!NumAlreadyAllocated)
        {
         NewAssignment[r]=r2;
         PosAssigned++;

@@ -591,7 +591,7 @@ void TourVic()
     LOG_TOURVIC("\n");
     */
     //Monitor initial transition to LOW
-    if(!ReadPlayerInput(CurrentPlayer) && ReadyToPress==false && IgnorePresses==false)
+    if(!ReadPlayerInput(CurrentPlayer) && !ReadyToPress && !IgnorePresses)
     {
       LOG_TOURVIC("Changing RTP!");
       LOG_TOURVIC("\n");
@@ -599,7 +599,7 @@ void TourVic()
     }
     
     //Monitor subsequent transition to HIGH
-    if(ReadPlayerInput(CurrentPlayer) && ReadyToPress==true && PlayerIsPressing==false && IgnorePresses==false)
+    if(ReadPlayerInput(CurrentPlayer) && ReadyToPress && !PlayerIsPressing && !IgnorePresses)
     {
       LOG_TOURVIC("Changing PIP!")
       LOG_TOURVIC("\n");
@@ -607,7 +607,7 @@ void TourVic()
     }
     
     //Monitor subsequent transition to LOW
-    if(!ReadPlayerInput(CurrentPlayer) && PlayerIsPressing==true && IgnorePresses==false)
+    if(!ReadPlayerInput(CurrentPlayer) && PlayerIsPressing && !IgnorePresses)
     {
       LOG_TOURVIC("Player SAFE!")
       LOG_TOURVIC("\n");
@@ -620,7 +620,7 @@ void TourVic()
     delay(1);
 
     //Check if current player has won and is pressing again.  If so, make him loose.
-    if(PlayerHasWon==true && ReadPlayerInput(CurrentPlayer))
+    if(PlayerHasWon && ReadPlayerInput(CurrentPlayer))
     {
       LOG_TOURVIC("Player LOOSES!")
       LOG_TOURVIC("\n");
@@ -856,19 +856,19 @@ void TeamDeDuel()
     for(int i=0 ; i<=1 ; i++)
     {
       //Check for Release
-      if(!ReadPlayerInput(Player[i]) && HasReleased[i]==false)
+      if(!ReadPlayerInput(Player[i]) && !HasReleased[i])
       {
         HasReleased[i]=true;
       }
 
       //Check for Press after release
-      if(ReadPlayerInput(Player[i]) && HasReleased[i]==true)
+      if(ReadPlayerInput(Player[i]) && HasReleased[i])
       {
         IsPressing[i]=true;
       }
 
       //Check for release to switch to nextplayer
-      if(!ReadPlayerInput(Player[i]) && IsPressing[i]==true)
+      if(!ReadPlayerInput(Player[i]) && IsPressing[i])
       {
         //Turn off light
         DeactivateRedLight(Player[i]);
@@ -1106,7 +1106,7 @@ void Tourniquet()
     LOG_TOURNIQUET("\n");
     //Monitor initial transition to LOW
     
-    if(!ReadPlayerInput(CurrentPlayer) && ReadyToPress==false && IgnorePresses==false)
+    if(!ReadPlayerInput(CurrentPlayer) && !ReadyToPress && !IgnorePresses)
     {
       LOG_TOURNIQUET("Changing RTP!");
       LOG_TOURNIQUET("\n");
@@ -1114,7 +1114,7 @@ void Tourniquet()
     }
     
     //Monitor subsequent transition to HIGH
-    if(ReadPlayerInput(CurrentPlayer) && ReadyToPress==true && PlayerIsPressing==false && IgnorePresses==false)
+    if(ReadPlayerInput(CurrentPlayer) && ReadyToPress && !PlayerIsPressing && !IgnorePresses)
     {
       LOG_TOURNIQUET("Changing PIP!")
       LOG_TOURNIQUET("\n");
@@ -1122,12 +1122,12 @@ void Tourniquet()
     }
     
     //Monitor subsequent transition to LOW
-    if(!ReadPlayerInput(CurrentPlayer) && PlayerIsPressing==true && IgnorePresses==false)
+    if(!ReadPlayerInput(CurrentPlayer) && PlayerIsPressing && !IgnorePresses)
     {
       LOG_TOURNIQUET("Player SAFE!")
       LOG_TOURNIQUET("\n");
       //YOU ARE SAFE.
-      if(PlayersState[CurrentPlayer]==true)
+      if(PlayersState[CurrentPlayer])
       {
         NumActivePlayers--;
         PlayersState[CurrentPlayer]=false;
@@ -1154,7 +1154,7 @@ void Tourniquet()
     //Find spammers and bring them back in the game.
     for(int i=0; i<=nbj_raw ; i++)
     {
-      if(PlayersState[i]==false && ReadPlayerInput(i))
+      if(!PlayersState[i] && ReadPlayerInput(i))
       {
         LOG_TOURNIQUET("SPAM PLAYER:");
         LOG_TOURNIQUET(i);
@@ -1219,7 +1219,7 @@ void Tourniquet()
       do
       {
         CurrentPlayer=WrapAround(CurrentPlayer+DirectionNextPlayer);
-      }while(PlayersState[CurrentPlayer]==false);
+      }while(!PlayersState[CurrentPlayer]);
       
       ActivateRedLight(CurrentPlayer);
       
@@ -1231,7 +1231,7 @@ void Tourniquet()
 
   for(int i=0; i<=nbj_raw ; i++)
   {
-    if(PlayersState[i]==true)
+    if(PlayersState[i])
     {
       Looser=i;
     }
@@ -1387,7 +1387,7 @@ void Patate2()
       */
       
       //Monitor initial transition to LOW
-      if(!ReadPlayerInput(LuckyPlayer[i]) && ReadyToSwitch[i]==false && GameCounter>GameCounterPenalite[LuckyPlayer[i]])
+      if(!ReadPlayerInput(LuckyPlayer[i]) && !ReadyToSwitch[i] && GameCounter>GameCounterPenalite[LuckyPlayer[i]])
       {
         LOG_PATATE2("Change ReadyToSwitch");
         LOG_PATATE2("\n");
@@ -1395,7 +1395,7 @@ void Patate2()
       }
       
       //Monitor subsequent transition to HIGH
-      if(ReadPlayerInput(LuckyPlayer[i]) && ReadyToSwitch[i]==true && PlayerIsPressing[i]==false)
+      if(ReadPlayerInput(LuckyPlayer[i]) && ReadyToSwitch[i] && !PlayerIsPressing[i])
       {
         LOG_PATATE2("Change PlayerIsPressing");
         LOG_PATATE2("\n");
@@ -1403,7 +1403,7 @@ void Patate2()
       }
       
       //Player releases.  Check counter to know in which direction to go.
-      if (PlayerIsPressing[i]==true)
+      if (PlayerIsPressing[i])
       {
         LOG_PATATE2("I have started Pressing");
         LOG_PATATE2("\n");

@@ -217,7 +217,7 @@ void TrompeOeil()
   for (int i = 0; i <= maxIter; i++)
   {
 
-    if(SwitchColor==false && i>IterVert && GreenFirst)
+    if(!SwitchColor && i>IterVert && GreenFirst)
     {
       SwitchColor=true;
       ActivateGreenLED(0);
@@ -225,7 +225,7 @@ void TrompeOeil()
       LOG_TROMPE("\n");  
     }
 
-    if(SwitchToRed==false && i>ToRED && GreenFirst)
+    if(!SwitchToRed && i>ToRED && GreenFirst)
     {
       SwitchToRed=true;
       TurnOnAllRedLights();

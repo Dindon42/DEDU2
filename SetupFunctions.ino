@@ -398,7 +398,7 @@ void RedefinePlayerPins(bool Auto)
       int Min=99;
       for(int j=0; j<nbj_max; j++)
       {
-        if(AssignedPins[j]==true && TempPinAssigned[j]==false)
+        if(AssignedPins[j] && !TempPinAssigned[j])
         {
           index=j;
           break;
@@ -433,7 +433,7 @@ void RedefinePlayerPins(bool Auto)
     {
       for(int j=0; j<nbj_max; j++)
       {
-        if(AssignedPins[j]==false)
+        if(!AssignedPins[j])
         {
           NewPins[i]=j;
           AssignedPins[j]=true;

@@ -272,7 +272,7 @@ void EstimeDedu()
         LOG_ED(", GameCycles:");
         LOG_ED(Scores[i][1]);
         LOG_ED("\n");
-        if(Scored[i]==false && i!=Winner && (Scores[i][0]>WORSTSCORE || (Scores[i][0]==WORSTSCORE && Scores[i][1]>WORSTCYCLE)))
+        if(!Scored[i] && i!=Winner && (Scores[i][0]>WORSTSCORE || (Scores[i][0]==WORSTSCORE && Scores[i][1]>WORSTCYCLE)))
         {
           LOG_ED("Player is the current worst - updating values\n");
           Player=i;
