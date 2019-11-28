@@ -820,7 +820,7 @@ void TeamDeDuel()
     //Check for Fraudulent pressers
     for(int i=0 ; i<nbj ; i++)
     {
-      if(ReadPlayerInput(i) && (i != Player[0] && i != Player[1]))
+      if(ReadPlayerInput(i) && (i!=Player[0] && i!=Player[1]))
       {
         FraudulentTeam=Equipes[i];
         LOG_TEAMDEDUEL("FraudulentTeam:");
@@ -1537,7 +1537,7 @@ void Patate2()
       }
       MoveDEDUFlag(DEDUPosition);
     }
-  }while((LuckyPlayer[0] != LuckyPlayer[1]) && (GameCounter<GameTimeMillis));
+  }while((LuckyPlayer[0]!=LuckyPlayer[1]) && (GameCounter<GameTimeMillis));
 
   //Both LED on same player OR Game Timeout.
   LOG_PATATE2("GAME OVER");

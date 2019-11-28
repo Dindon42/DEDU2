@@ -284,7 +284,7 @@ void DQP()
   do
   {
     z=z-ReadInputDeactivateOutputIfActive(nbj_raw);
-  }while (z != 1);
+  }while (z!=1);
   Perdant=FirstActiveOutput(nbj_raw);
 
   TurnOffNonActivePlayerRedLights();

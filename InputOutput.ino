@@ -170,7 +170,7 @@ void WaitForAllNonActive(int NbInputs)
   {
     count++;
     delay(15);
-  }while(CheckAllActive(nbj_raw) !=0 && count<=max_iter);
+  }while(CheckAllActive(nbj_raw)!=0 && count<=max_iter);
   
   if(count >=max_iter)
   {

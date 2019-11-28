@@ -2,7 +2,7 @@ float RelativeError(float TestValue,float TrueValue)
 {
   float Score;
   
-  if (TrueValue !=0)
+  if (TrueValue!=0)
   {
     Score = 1 - (  abs( TrueValue-TestValue )  /  ( TrueValue) );
   }
