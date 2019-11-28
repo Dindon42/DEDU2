@@ -87,7 +87,7 @@ void DeDuel()
     MoveDEDUFlag(50);
     delay(500);
     
-    for (int i=1; i <50 ; i++)
+    for (int i=1; i<50 ; i++)
     {
       ActivateGreenLED(i);
       delay(ForLightDelay);
@@ -104,7 +104,7 @@ void DeDuel()
     }
     ControlAllLights(false,0,0);
     delay(2*LightDelay);
-    for (int i=1; i <50 ; i++)
+    for (int i=1; i<50 ; i++)
     {
       ActivateBlueLED(i);
       delay(ForLightDelay);
@@ -179,7 +179,7 @@ void DeDuel()
     
     //UpdateHasReleased
     for (int i=0; i<=1 ;i++)
-    { 
+    {
       if(!ReadPlayerInput(Joueurs[i]) && !HasReleased[i])
       {
         HasReleased[i]=true;
@@ -236,7 +236,7 @@ void DeDuel()
     {
       Winner=Joueurs[0];
     }
-    else if (Score <1)
+    else if (Score<1)
     {
       Winner=Joueurs[1];
     }
@@ -257,7 +257,7 @@ void DeDuel()
 
   if (Winner==Joueurs[0])
   {
-    for (int i=1; i <50 ; i++)
+    for (int i=1; i<50 ; i++)
     {
       ActivateGreenLED(i);
       delay(20);
@@ -267,7 +267,7 @@ void DeDuel()
   }
   else
   {
-    for (int i=1; i <50 ; i++)
+    for (int i=1; i<50 ; i++)
     {
       ActivateBlueLED(i);
       delay(20);
@@ -642,7 +642,7 @@ void UltimateChallenge()
       }while(RoundWinner==-1);
       
       //WinSound
-      for (int i = 1; i <= 120; i++)
+      for (int i = 1; i<= 120; i++)
       {
         Tone_Frequency = 500 + 30 * i;
         tone(Tone_Pin, Tone_Frequency, 3);
@@ -674,7 +674,7 @@ void UltimateChallenge()
             PlayerState[i]=Looser;
           }
         }
-      } 
+      }
     }
       
     nWinners=0;
@@ -780,7 +780,7 @@ void DQP2()
 
   
 
-  for (int i = 1; i <= 80; i++)
+  for (int i = 1; i<= 80; i++)
   {
     Tone_Frequency = 2000 - 20 * i;
     tone(Tone_Pin, Tone_Frequency);
@@ -789,7 +789,7 @@ void DQP2()
   noTone(Tone_Pin);
 
   //Identify the Loosers
-  for (int e = 1; e <= 4; e++) {
+  for (int e = 1; e<= 4; e++) {
     
     ActivateRedLight(Looser);
     
@@ -829,7 +829,7 @@ void MIN()
   float TimeInterval = 900;
   float TimeDelta;
   
-  for(int i = 0;i < RandTimer;i++)
+  for(int i = 0;i<RandTimer;i++)
   {
     tone(Tone_Pin,250,10);
     delay(400);
@@ -1298,11 +1298,11 @@ void JeuChanson(int id_chanson)
   delay(500);
 
   //Winner found, lights on/off!
-  for (int a = 1 ; a <= 3 ; a++)  
+  for (int a = 1 ; a<= 3 ; a++)  
   {
     IlluminateTeamRedLights(WinTeam);
     
-    for (int i = 1; i <= 120; i++)
+    for (int i = 1; i<= 120; i++)
     {
       Tone_Frequency = 500 + 30 * i;
       tone(Tone_Pin, Tone_Frequency, 3);
@@ -1436,7 +1436,7 @@ void PatateChaude(bool SimpleControls)
         LOG_PATATE(PressCounter);
         LOG_PATATE("\n");
         //NORMAL DIRECTION
-        if (PressCounter < Patate_PressRev || SimpleControls)
+        if (PressCounter<Patate_PressRev || SimpleControls)
         {
           LOG_PATATE("NORMAL DIR!");
           LOG_PATATE("\n");
@@ -1445,7 +1445,7 @@ void PatateChaude(bool SimpleControls)
           tone(Tone_Pin, 800, 15);
         }
         //REV DIR
-        else if (PressCounter >= Patate_PressRev && PressCounter < Patate_PressStall)
+        else if (PressCounter>= Patate_PressRev && PressCounter<Patate_PressStall)
         {
           LOG_PATATE("REV DIR!");
           LOG_PATATE("\n");
@@ -1519,7 +1519,7 @@ void PatateChaude(bool SimpleControls)
 
   ActivateBlueLED(5);
   
-  for (int i = 1; i <= 80; i++)
+  for (int i = 1; i<= 80; i++)
   {
     Tone_Frequency = 2000 - 20 * i;
     tone(Tone_Pin, Tone_Frequency);
@@ -1528,7 +1528,7 @@ void PatateChaude(bool SimpleControls)
   noTone(Tone_Pin);
   
   //Identify the Looser
-  for (int e = 1; e <= 4; e++) {
+  for (int e = 1; e<= 4; e++) {
     ActivateRedLight(LuckyPlayer);
     delay(500);
     DeactivateRedLight(LuckyPlayer);
@@ -1671,7 +1671,7 @@ void AllRandom()
   {
     //Change win condition randomly regardless of DEDUMASTER
     if(random(RandomProb)>RandomProbThr)
-    { 
+    {
       LOG_RANDOM("Changing WinCond:");
       if(random(2)==0)
       {
@@ -1738,7 +1738,7 @@ void AllRandom()
 
     //Win Condition
     if (OutputSum == Wincondition && GraceTimeOver)
-    { 
+    {
       if (Wincondition==1)
       {
         for (int i=0 ; i<=nbj_raw ; i++)
@@ -1777,7 +1777,7 @@ void AllRandom()
 
 
   
-  for (int i = 1; i <= 80; i++)
+  for (int i = 1; i<= 80; i++)
   {
     Tone_Frequency = 2000 - 20 * i;
     tone(Tone_Pin, Tone_Frequency);
@@ -1793,7 +1793,7 @@ void AllRandom()
   delay(700);
   
   //Identify the Looser
-  for (int e = 1; e <= 4; e++) {
+  for (int e = 1; e<= 4; e++) {
     ActivateRedLight(Looser);
     delay(500);
     DeactivateRedLight(Looser);

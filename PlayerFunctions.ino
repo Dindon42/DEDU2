@@ -157,16 +157,16 @@ int ProchainJoueur(int iJoueurActuel,int iNombrePlaces,int iDirection)
   int wNombrePlaces=iNombrePlaces%nbj_raw;
   
   //Protection
-  if((iDirection == 1 || iDirection == -1) && (iJoueurActuel>=0 && iJoueurActuel <= nbj_raw))
+  if((iDirection == 1 || iDirection == -1) && (iJoueurActuel>=0 && iJoueurActuel<= nbj_raw))
   {
     wProchain=iJoueurActuel + wNombrePlaces * iDirection;
     
     //Wrap-Around?
-    if (wProchain < 0)
+    if (wProchain<0)
     {
       wProchain = nbj_raw + wProchain+1;
     }
-    else if(wProchain > nbj_raw)
+    else if(wProchain>nbj_raw)
     {
       wProchain = wProchain - nbj_raw-1;
     }
@@ -186,7 +186,7 @@ int WrapAround(int iPlayer)
   {
     wPlayer=0;
   }
-  else if (wPlayer < 0)
+  else if (wPlayer<0)
   {
     wPlayer=nbj_raw;
   }

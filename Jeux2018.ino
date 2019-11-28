@@ -161,7 +161,7 @@ void PPV()
   #define LOG_PB(a)
 #endif
 void PressBattle()
-{ 
+{
   //TUNABLES
   #define GAME_TIME_MIN 2542
   #define GAME_TIME_MAX 4542
@@ -223,7 +223,7 @@ void PressBattle()
     else
     {
       FlagPerc=0;
-    }   
+    }
     MoveDEDUFlag(FlagPerc);
 
     for (int i=0 ; i<nbj ; i++)
@@ -759,7 +759,7 @@ void TeamDeDuel()
     MoveDEDUFlag(50);
     delay(500);
     
-    for (int i=1; i <50 ; i++)
+    for (int i=1; i<50 ; i++)
     {
       ActivateGreenLED(i);
       delay(ForLightDelay);
@@ -776,7 +776,7 @@ void TeamDeDuel()
     }
     ControlAllLights(false,0,0);
     delay(2*LightDelay);
-    for (int i=1; i <50 ; i++)
+    for (int i=1; i<50 ; i++)
     {
       ActivateBlueLED(i);
       delay(ForLightDelay);
@@ -928,7 +928,7 @@ void TeamDeDuel()
     {
       Winner=0;
     }
-    else if (Score <1)
+    else if (Score<1)
     {
       Winner=1;
     }
@@ -944,7 +944,7 @@ void TeamDeDuel()
   
   if (Winner==0)
   {
-    for (int i=1; i <50 ; i++)
+    for (int i=1; i<50 ; i++)
     {
       ActivateGreenLED(i);
       delay(20);
@@ -965,7 +965,7 @@ void TeamDeDuel()
   }
   else
   {
-    for (int i=1; i <50 ; i++)
+    for (int i=1; i<50 ; i++)
     {
       ActivateBlueLED(i);
       delay(20);
@@ -1440,7 +1440,7 @@ void Patate2()
             tone(Tone_Pin, 800, 15);
           }
           //REV DIR
-          else if (PressCounter[i]>=Patate_PressRev && PressCounter[i] < Patate_PressStall)
+          else if (PressCounter[i]>=Patate_PressRev && PressCounter[i]<Patate_PressStall)
           {
             LOG_PATATE2("REV DIR!");
             LOG_PATATE2("\n");
@@ -1546,7 +1546,7 @@ void Patate2()
   //Loose Stage
   ActivateBlueLED(5);
 
-  for (int i = 1; i <= 80; i++)
+  for (int i = 1; i<= 80; i++)
   {
     Tone_Frequency = 2000 - 20 * i;
     tone(Tone_Pin, Tone_Frequency);
@@ -1555,7 +1555,7 @@ void Patate2()
   noTone(Tone_Pin);
   
   //Identify the Looser
-  for (int e = 1; e <= 4; e++) {
+  for (int e = 1; e<= 4; e++) {
     ActivateRedLight(LuckyPlayer[0]);
     ActivateRedLight(LuckyPlayer[1]);
     delay(500);

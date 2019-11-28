@@ -61,9 +61,9 @@ void DemoMode(bool AllModes)
     //If AllModes, Demo all modes.
     if(
       (Game_Mode==Game_Mode_Original && ProbIndivJeux[i]!=0) ||
-      (Game_Mode >Game_Mode_Original && GameProb[i][Game_Mode]!=0 && GameProb[i][Game_Mode-1]==0 && ProbIndivJeux[i]!=0) ||
+      (Game_Mode>Game_Mode_Original && GameProb[i][Game_Mode]!=0 && GameProb[i][Game_Mode-1]==0 && ProbIndivJeux[i]!=0) ||
        AllModes && ProbIndivJeux[i]!=0)
-    {  
+    {
       LOG_GENERAL("JEU:");
       LogGameName(i,true);
       if (!SkipGame)

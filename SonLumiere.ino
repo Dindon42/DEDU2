@@ -107,7 +107,7 @@ void ClignoteEtSon(int NbMax,int FreqStart, int FreqIncrease, int NbOffset)
     NbOffset=0;
   }
   //Clignote + Son
-  for (int i = 0; i <= NbMax; i++)
+  for (int i = 0; i<= NbMax; i++)
   {
     //Light and sound for valid players.
     ActivateRedLight(i);
@@ -233,11 +233,11 @@ void IncrementDEDUFlag(float PercTravelIncrement)
 //0->100
 void MoveDEDUFlag(float PercTravel)
 {
-  if (PercTravel < 0)
+  if (PercTravel<0)
   {
     PercTravel=0;
   }
-  else if (PercTravel > 100)
+  else if (PercTravel>100)
   {
     PercTravel=100;
   }
@@ -277,7 +277,7 @@ void ReadySound(int SoundTime)
 
 void WinnerSound()
 {
-  for (int i = 1; i <= 120; i++)
+  for (int i = 1; i<= 120; i++)
   {
     Tone_Frequency = 500 + 30 * i;
     tone(Tone_Pin, Tone_Frequency, 3);
@@ -313,7 +313,7 @@ void MultiLooserSoundAndLight(bool Loosers[nbj_max])
     if(Loosers[j]) ActivateRedLight(j);
   }
   
-  for (int i = 0; i < 80; i++)
+  for (int i = 0; i<80; i++)
   {
     Tone_Frequency = 2000 - 20 * i;
     tone(Tone_Pin, Tone_Frequency);
@@ -322,7 +322,7 @@ void MultiLooserSoundAndLight(bool Loosers[nbj_max])
   noTone(Tone_Pin);
 
   //Identify the Loosers
-  for (int e = 1; e <= 4; e++)
+  for (int e = 1; e<= 4; e++)
   {
     for (int j=0; j<nbj_max;j++)
     {
@@ -344,7 +344,7 @@ void SingleLooserSoundAndLight(int iPlayer)
 {
   ActivateBlueLED(10);
   ActivateRedLight(iPlayer);
-  for (int i = 0; i < 80; i++)
+  for (int i = 0; i<80; i++)
   {
     Tone_Frequency = 2000 - 20 * i;
     tone(Tone_Pin, Tone_Frequency);
@@ -353,7 +353,7 @@ void SingleLooserSoundAndLight(int iPlayer)
   noTone(Tone_Pin);
 
   //Identify the Looser
-  for (int e = 1; e <= 4; e++)
+  for (int e = 1; e<= 4; e++)
   {
     ActivateRedLight(iPlayer);
     delay(500);

@@ -130,9 +130,9 @@ int SelectionChanson(int Numero)
     case 1:
       pf=(float *)FurElise;
       NombreDeNotes = sizeof(FurElise[0]) / sizeof(float);
-      for (int i = 0; i < ParamChansons; i++)
+      for (int i = 0; i<ParamChansons; i++)
       {
-          for (int j = 0; j < NombreDeNotes; j++)
+          for (int j = 0; j<NombreDeNotes; j++)
           {
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
@@ -143,9 +143,9 @@ int SelectionChanson(int Numero)
     case 2:
       pf=(float *)FF6Over;
       NombreDeNotes = sizeof(FF6Over[0]) / sizeof(float);
-      for (int i = 0; i < ParamChansons; i++)
+      for (int i = 0; i<ParamChansons; i++)
       {
-          for (int j = 0; j < NombreDeNotes; j++)
+          for (int j = 0; j<NombreDeNotes; j++)
           {
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
@@ -156,9 +156,9 @@ int SelectionChanson(int Numero)
     case 3:
       pf=(float *)Menuet;
       NombreDeNotes = sizeof(Menuet[0]) / sizeof(float);
-      for (int i = 0; i < ParamChansons; i++)
+      for (int i = 0; i<ParamChansons; i++)
       {
-          for (int j = 0; j < NombreDeNotes; j++)
+          for (int j = 0; j<NombreDeNotes; j++)
           {
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
@@ -169,9 +169,9 @@ int SelectionChanson(int Numero)
     case 4:
       pf = (float*)SWTheme;
       NombreDeNotes = sizeof(SWTheme[0]) / sizeof(float);
-      for (int i = 0; i < ParamChansons; i++)
+      for (int i = 0; i<ParamChansons; i++)
       {
-          for (int j = 0; j < NombreDeNotes; j++)
+          for (int j = 0; j<NombreDeNotes; j++)
           {
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
@@ -182,9 +182,9 @@ int SelectionChanson(int Numero)
     case 5:
       pf = (float*)Cantina;
       NombreDeNotes = sizeof(Cantina[0]) / sizeof(float);
-      for (int i = 0; i < ParamChansons; i++)
+      for (int i = 0; i<ParamChansons; i++)
       {
-          for (int j = 0; j < NombreDeNotes; j++)
+          for (int j = 0; j<NombreDeNotes; j++)
           {
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
@@ -195,9 +195,9 @@ int SelectionChanson(int Numero)
     case 6:
       pf = (float*)Scatman2;
       NombreDeNotes = sizeof(Scatman2[0]) / sizeof(float);
-      for (int i = 0; i < ParamChansons; i++)
+      for (int i = 0; i<ParamChansons; i++)
       {
-          for (int j = 0; j < NombreDeNotes; j++)
+          for (int j = 0; j<NombreDeNotes; j++)
           {
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
@@ -208,9 +208,9 @@ int SelectionChanson(int Numero)
     case 7:
       pf = (float*)Boten2;
       NombreDeNotes = sizeof(Boten2[0]) / sizeof(float);
-      for (int i = 0; i < ParamChansons; i++)
+      for (int i = 0; i<ParamChansons; i++)
       {
-          for (int j = 0; j < NombreDeNotes; j++)
+          for (int j = 0; j<NombreDeNotes; j++)
           {
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
@@ -221,9 +221,9 @@ int SelectionChanson(int Numero)
     case 8:
       pf = (float*)ctd1;
       NombreDeNotes = sizeof(ctd1[0]) / sizeof(float);
-      for (int i = 0; i < ParamChansons; i++)
+      for (int i = 0; i<ParamChansons; i++)
       {
-          for (int j = 0; j < NombreDeNotes; j++)
+          for (int j = 0; j<NombreDeNotes; j++)
           {
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
@@ -234,9 +234,9 @@ int SelectionChanson(int Numero)
     case 9:
       pf = (float*)ctd2;
       NombreDeNotes = sizeof(ctd2[0]) / sizeof(float);
-      for (int i = 0; i < ParamChansons; i++)
+      for (int i = 0; i<ParamChansons; i++)
       {
-          for (int j = 0; j < NombreDeNotes; j++)
+          for (int j = 0; j<NombreDeNotes; j++)
           {
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
@@ -247,9 +247,9 @@ int SelectionChanson(int Numero)
     default:
       pf = (float*)Tetris;
       NombreDeNotes = sizeof(Tetris[0]) / sizeof(float);
-      for (int i = 0; i < ParamChansons; i++)
+      for (int i = 0; i<ParamChansons; i++)
       {
-          for (int j = 0; j < NombreDeNotes; j++)
+          for (int j = 0; j<NombreDeNotes; j++)
           {
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }

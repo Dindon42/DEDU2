@@ -277,7 +277,7 @@ void AR2()
             LOG_AR2("DeduMasterNextAction: ");
             LOG_AR2(DeduMasterNextAction);
             LOG_AR2("\n");
-          }          
+          }    
         }
       }
       PreviousState[i]=CurrentState;
@@ -289,7 +289,7 @@ void AR2()
     if(!GraceTimeOver)
     {
       GameCounter+=AR2_GAMEDELAY;
-      if(GameCounter > AR2_GRACETIME)
+      if(GameCounter>AR2_GRACETIME)
       {
         LOG_AR2("GRACETIME over\n");
         GraceTimeOver=true;

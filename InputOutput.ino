@@ -172,7 +172,7 @@ void WaitForAllNonActive(int NbInputs)
     delay(15);
   }while(CheckAllActive(nbj_raw)!=0 && count<=max_iter);
   
-  if(count >=max_iter)
+  if(count>=max_iter)
   {
     FlashAndBuzzAllActive();
     WaitForAllNonActive(NbInputs);

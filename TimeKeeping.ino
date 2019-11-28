@@ -7,9 +7,9 @@ unsigned long TakeTime()
 unsigned long TimeDiffSeconds()
 {
   return (millis()-TimeStart)/1000;
-} 
+}
 
 unsigned long TimeDiff()
 {
   return (millis()-TimeStart);
-} 
+}

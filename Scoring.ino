@@ -12,7 +12,7 @@ float RelativeError(float TestValue,float TrueValue)
   }
 
   
-  if (Score < 0) Score = 0;
+  if (Score<0) Score = 0;
 
 /*
   LOG_GENERAL("\n");

@@ -9,7 +9,7 @@ void Delay_Fraudeur(int r)
   int x=0;
   
   //r = Nombre de fois où la boucle fraudeur va s'exécuter avant de passer au répartiteur.
-  for (int a = 1; a <= r; a++)
+  for (int a = 1; a<= r; a++)
   {
     AtLeastOneActive=ReadInputActivateOutput(nbj_raw);
     if (AtLeastOneActive)
@@ -30,7 +30,7 @@ void Delay_Fraudeur(int r)
   }
 
   //Fraudeurs identifiés
-  if (x > 0)
+  if (x>0)
   {
     delay(500);
     MoveDEDUFlag(0);
@@ -77,11 +77,11 @@ void PQP()
   ActivateGreenLED(0);
 
   //Winner found, lights on/off!
-  for (int a = 1 ; a <= 3 ; a++)  
+  for (int a = 1 ; a<= 3 ; a++)  
   {
     ActivateRedLight(Winner);
     
-    for (int i = 1; i <= 120; i++)
+    for (int i = 1; i<= 120; i++)
     {
       Tone_Frequency = 500 + 30 * i;
       tone(Tone_Pin, Tone_Frequency, 3);
@@ -130,9 +130,9 @@ int MarqueurHonte(int iJoueurChanceux, int iSpinDelay)
   ActivateBlueLED(20);
 
   //Spin the wheel!
-  for (SpinDelay ; SpinDelay >= 1; SpinDelay -= 5)
+  for (SpinDelay ; SpinDelay>= 1; SpinDelay -= 5)
   {
-    for (int i = 0; i <= nbj_raw; i++)
+    for (int i = 0; i<= nbj_raw; i++)
     {
       tone(Tone_Pin, 3500, 10);
       ActivateRedLight(i);
@@ -147,7 +147,7 @@ int MarqueurHonte(int iJoueurChanceux, int iSpinDelay)
   ActivateBlueLED(6);
 
   //Identify the Winner
-  for (int e = 1; e <= 4; e++) {
+  for (int e = 1; e<= 4; e++) {
     tone(Tone_Pin, 3500, 10);
     ActivateRedLight(Winner);
     delay(500);
@@ -214,7 +214,7 @@ void TrompeOeil()
     TurnOnAllRedLights();
   }
 
-  for (int i = 0; i <= maxIter; i++)
+  for (int i = 0; i<= maxIter; i++)
   {
 
     if(!SwitchColor && i>IterVert && GreenFirst)
@@ -234,7 +234,7 @@ void TrompeOeil()
     }
     
     Looser=FirstActive(nbj_raw);
-    if (Looser >= 0) 
+    if (Looser>= 0) 
     {
       TurnOffAllRedLights();
       ActivateGreenLED(0);
@@ -246,9 +246,9 @@ void TrompeOeil()
     delay(1);
   }
 
-  if (Looser >= 0)
-  { 
-    for (int j = 0; j <= maxIter_Sheep; j++)
+  if (Looser>= 0)
+  {
+    for (int j = 0; j<= maxIter_Sheep; j++)
     {
       for (int i=0 ; i<=nbj_raw;i++)
       {
@@ -302,7 +302,7 @@ void FFA()
   
   JoueChanson(0,myRand1,false, true);
   
-  for (int e = 1; e <= myRand2; e++) {
+  for (int e = 1; e<= myRand2; e++) {
 
     MoveDEDUFlag(100-random(20));
 
