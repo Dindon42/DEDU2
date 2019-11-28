@@ -37,7 +37,7 @@ void DemoMode(bool AllModes)
   int IndivDelay=2;
   int DelayGame=25;
   unsigned const long CounterPlaySame=2500/DelayGame;
-  int PrevInputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
+  bool PrevInputState[nbj_max]={false};
   bool Player1Controls=true;
   int MaxP=nbj;
   int GameDelay=1000;
@@ -86,9 +86,9 @@ void DemoMode(bool AllModes)
             GoToNext=false;
             for(int j=0 ; j<MaxP ;j++)
             {
-              if(ReadPlayerInput(j)==HIGH)
+              if(ReadPlayerInput(j))
               {
-                if(PrevInputState[j]==LOW)
+                if(!PrevInputState[j])
                 {
                   Counter=0;
                   LOG_GENERAL("TOGGLE:");
@@ -101,13 +101,13 @@ void DemoMode(bool AllModes)
                   LOG_GENERAL(PrevInputState[j]);
                   LOG_GENERAL("\n");
                   
-                  PrevInputState[j]=HIGH;
+                  PrevInputState[j]=true;
                   ToggleOutput(j);
                 }
               }
               else
               {
-                PrevInputState[j]=LOW;
+                PrevInputState[j]=false;
               }
               delay(IndivDelay);
             }

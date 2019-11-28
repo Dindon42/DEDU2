@@ -252,7 +252,7 @@ void TrompeOeil()
     {
       for (int i=0 ; i<=nbj_raw;i++)
       {
-        if(ReadPlayerInput(i)==HIGH && Loosers[i]==0)
+        if(ReadPlayerInput(i) && Loosers[i]==0)
         {
           Loosers[i]=1;
           ActivateRedLight(i);

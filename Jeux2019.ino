@@ -212,7 +212,7 @@ void AR2()
       bool CurrentState;
       if(i<nbj)
       {
-        CurrentState=ReadPlayerInput(i)==HIGH? true:false;
+        CurrentState=ReadPlayerInput(i);
       }
       else
       {
@@ -525,7 +525,7 @@ void TheButton()
     for(int i=0; i<nbj; i++)
     {
       //Record current state
-      CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
+      CurrentState[i]=ReadPlayerInput(i);
 
       //Check if player has started pressing
       if(!PreviousState[i] && CurrentState[i])
@@ -1067,7 +1067,7 @@ SequenceGlobale(false);
     for(int i=0; i<nbj; i++)
     {
       //Record current state
-      CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
+      CurrentState[i]=ReadPlayerInput(i);
 
       //Check if player has started pressing
       if(!PreviousState[i] && CurrentState[i])

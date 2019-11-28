@@ -142,7 +142,7 @@ void EstimeDedu()
     //Read current state
     for (int i=0;i<nbj;i++)
     {
-      CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
+      CurrentState[i]=ReadPlayerInput(i);
       //Detect player press.
       if(!PreviousState[i] && CurrentState[i] && Scores[i][0]==-1)
       {
@@ -453,7 +453,7 @@ void JeanDit()
   //Main game.
   do
   {
-    if(ReadPlayerInput(Jean)==HIGH)
+    if(ReadPlayerInput(Jean))
     {
       LOG_JD("PrevState:");
       LOG_JD(PreviousState[Jean]);
@@ -538,7 +538,7 @@ void JeanDit()
       */
       
       //Jean Toggle!
-      if(!DisableJean && !PreviousState[Jean] && ReadPlayerInput(Jean)==HIGH)
+      if(!DisableJean && !PreviousState[Jean] && ReadPlayerInput(Jean))
       {
         LOG_JD("Jean Toggle!\n");
         LOG_JD("\n");
@@ -551,7 +551,7 @@ void JeanDit()
         {
           if(PlayersInGame[i])
           {
-            if(ReadPlayerOutput(i)==HIGH)
+            if(ReadPlayerOutput(i))
             {
               LOG_JD("Disable ");
               LOG_JD(i);
@@ -611,7 +611,7 @@ void JeanDit()
     {
       for (int i=0;i<nbj;i++)
       {
-        CurrentState[i]=ReadPlayerInput(i)==HIGH? true:false;
+        CurrentState[i]=ReadPlayerInput(i);
         if(i!=Jean && PlayersInGame[i])
         {
           if(!PreviousState[i] && CurrentState[i])

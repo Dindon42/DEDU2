@@ -5,7 +5,7 @@ bool ReadInputActivateOutput(int NbInputs)
   
   for (int i=0; i<=NbInputs ; i++)
   {
-    if (ReadPlayerInput(i)==HIGH)
+    if (ReadPlayerInput(i))
     {
       //Activate the output
       ActivateRedLight(i);
@@ -20,18 +20,18 @@ int IlluminateActiveExtinguishNonActive(int NbInputs)
   int NumActive=0;
   for (int i=0; i<=NbInputs ;i++)
   {
-    if (ReadPlayerInput(i) == HIGH)
+    if (ReadPlayerInput(i))
     {
       NumActive++;
       ActivateRedLight(i);
-      InputState[i]=HIGH;
-      OutputState[i]=HIGH;
+      InputState[i]=true;
+      OutputState[i]=true;
     }
     else
     {
       DeactivateRedLight(i);
-      InputState[i]=LOW;
-      OutputState[i]=LOW;
+      InputState[i]=false;
+      OutputState[i]=false;
     }
   }
   return NumActive;
@@ -43,9 +43,9 @@ int ReadInputDeactivateOutputIfActive(int NbInputs)
   int count=0;
   for (int i=0; i<=NbInputs ; i++)
   {
-    if (ReadPlayerInput(i)==HIGH)
+    if (ReadPlayerInput(i))
     {
-      if(ReadPlayerOutput(i)==HIGH)
+      if(ReadPlayerOutput(i))
       {
         //Deactivate the output
         DeactivateRedLight(i);
@@ -62,9 +62,9 @@ void ReadInputToggleOutput(int NbInputs)
 {
   for (int i=0; i<=NbInputs ; i++)
   {
-    if (ReadPlayerInput(i)==HIGH)
+    if (ReadPlayerInput(i))
     {
-      if(ReadPlayerOutput(i)==HIGH)
+      if(ReadPlayerOutput(i))
       {
         DeactivateRedLight(i);
       }
@@ -77,31 +77,29 @@ void ReadInputToggleOutput(int NbInputs)
 }
 
 //Returns HIGH or LOW
-int ReadPlayerInput(int iPlayer)
+bool ReadPlayerInput(int iPlayer)
 {
-  return digitalRead(PlayerInputPins[iPlayer]);
+  return digitalRead(PlayerInputPins[iPlayer])==HIGH;
 }
 
 //Returns HIGH or LOW
-int ReadPlayerOutput(int iPlayer)
+bool ReadPlayerOutput(int iPlayer)
 {
-  return digitalRead(PlayerOutputPins[iPlayer]);
+  return digitalRead(PlayerOutputPins[iPlayer])==HIGH;
 }
 
-int ToggleOutput(int iPlayer)
+bool ToggleOutput(int iPlayer)
 {
-  int Outputstate=ReadPlayerOutput(iPlayer);
-  if(Outputstate==HIGH)
+  if(ReadPlayerOutput(iPlayer))
   {
     DeactivateRedLight(iPlayer);
-    Outputstate=LOW;
+    return false;
   }
   else
   {
     ActivateRedLight(iPlayer);
-    Outputstate=HIGH;
+    return true;
   }
-  return Outputstate;
 }
 
 //Return first active player.  -1 is default if none active.  Player 1 is 0.
@@ -109,7 +107,7 @@ int FirstActive(int NbInputs)
 {
   for (int i=0; i<=NbInputs ; i++)
   {
-    if (ReadPlayerInput(i)==HIGH)
+    if (ReadPlayerInput(i))
     {
       return i;
     }
@@ -125,7 +123,7 @@ int CheckAllActive(int NbInputs)
   {
     //Store in global input array
     InputState[i]=ReadPlayerInput(i);
-    if (InputState[i]==HIGH)
+    if (InputState[i])
     {
       NumActive++;
     }
@@ -141,7 +139,7 @@ int CheckAllActiveOutputs(int NbOutputs)
   {
     //Store in global output array
     OutputState[i]=ReadPlayerOutput(i);
-    if (OutputState[i]==HIGH)
+    if (OutputState[i])
     {
       NumActive++;
     }
@@ -154,7 +152,7 @@ int FirstActiveOutput(int NbOutputs)
 {
   for (int i=0; i<=NbOutputs ; i++)
   {
-    if (ReadPlayerOutput(i)==HIGH)
+    if (ReadPlayerOutput(i))
     {
       return i;
     }

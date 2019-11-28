@@ -131,8 +131,8 @@ unsigned long TimeStart;
 int Tone_Frequency;
 
 //Globales.
-int InputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
-int OutputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
+bool InputState[nbj_max]={false};
+bool OutputState[nbj_max]={false};
 int Equipes[16];
 int NbEquipes;
 int NbJoueursEq1;

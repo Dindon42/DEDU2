@@ -17,8 +17,8 @@ void PPV()
   int NumPress[nbj_max]={0};
   bool RecordPress;
   int MinimumDiff=25;
-  int PreviousState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
-  int CurrentState;
+  bool PreviousState[nbj_max]={false};
+  bool CurrentState;
 
   WaitForAllNonActive(nbj_raw_max);
 
@@ -66,7 +66,7 @@ void PPV()
     {
       CurrentState=ReadPlayerInput(i);
       //Record the START PRESS TIMER on trans from LOW to HIGH
-      if(PreviousState[i]==LOW && CurrentState==HIGH)
+      if(!PreviousState[i] && CurrentState)
       {
         PressTime[i]=Game_Timer;
         LOG_PPV("i:");
@@ -78,7 +78,7 @@ void PPV()
         DeactivateRedLight(i);
       }
       //Record the END PRESS TIMER on trans from HIGH to LOW
-      else if(PreviousState[i]==HIGH && CurrentState==LOW)
+      else if(PreviousState[i] && !CurrentState)
       {
         RecordPress=true;
         TotalPressTime=Game_Timer-PressTime[i];
@@ -172,7 +172,7 @@ void PressBattle()
   int Game_Time = (random(GAME_TIME_MIN,GAME_TIME_MAX)/GAME_DELAY);
   unsigned long Game_Timer=0;
   int ClicCount[nbj_max]={0};
-  int PreviousState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
+  bool PreviousState[nbj_max]={false};
   int FlagPerc=100;
   bool PlayersTied;
   int PlayerState[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
@@ -228,7 +228,7 @@ void PressBattle()
 
     for (int i=0 ; i<nbj ; i++)
     {
-      if(PreviousState[i]==LOW && ReadPlayerInput(i)==HIGH)
+      if(!PreviousState[i] && ReadPlayerInput(i))
       {
         ClicCount[i]++;
         LOG_PB("i:");
@@ -319,7 +319,7 @@ void PQR()
   int NumActive;
   int PrevNumActive=-1;
   int WinCondition=-1;
-  int PreviousState[nbj_max];
+  bool PreviousState[nbj_max];
   int PlayersInGame[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
   int StateChanges[nbj_max]={0};
   int ChangeThr=3;
@@ -386,18 +386,18 @@ void PQR()
     {
       if(PlayersInGame[i]==1)
       {
-        if (ReadPlayerInput(i) == HIGH)
+        if (ReadPlayerInput(i))
         {
           NumActive++;
           ActivateRedLight(i);
-          InputState[i]=HIGH;
-          OutputState[i]=HIGH;
+          InputState[i]=true;
+          OutputState[i]=true;
         }
         else
         {
           DeactivateRedLight(i);
-          InputState[i]=LOW;
-          OutputState[i]=LOW;
+          InputState[i]=false;
+          OutputState[i]=false;
         }
       }
       
@@ -443,7 +443,7 @@ void PQR()
     {
       for(int i=0;i<nbj;i++)
       {
-        if(PreviousState[i]==HIGH && InputState[i]==LOW && PlayersInGame[i]==1)
+        if(PreviousState[i] && !InputState[i] && PlayersInGame[i]==1)
         {
           Winner=i;
           break;
@@ -478,7 +478,7 @@ void PQR()
         //Cancel Non-Pressing players
         for (int i=0; i<=nbj_raw ;i++)
         {
-          if(InputState[i]==LOW)
+          if(!InputState[i])
           {
             PlayersInGame[i]=0;
           }
@@ -591,7 +591,7 @@ void TourVic()
     LOG_TOURVIC("\n");
     */
     //Monitor initial transition to LOW
-    if(ReadPlayerInput(CurrentPlayer)==LOW && ReadyToPress==false && IgnorePresses==false)
+    if(!ReadPlayerInput(CurrentPlayer) && ReadyToPress==false && IgnorePresses==false)
     {
       LOG_TOURVIC("Changing RTP!");
       LOG_TOURVIC("\n");
@@ -599,7 +599,7 @@ void TourVic()
     }
     
     //Monitor subsequent transition to HIGH
-    if(ReadPlayerInput(CurrentPlayer)==HIGH && ReadyToPress==true && PlayerIsPressing==false && IgnorePresses==false)
+    if(ReadPlayerInput(CurrentPlayer) && ReadyToPress==true && PlayerIsPressing==false && IgnorePresses==false)
     {
       LOG_TOURVIC("Changing PIP!")
       LOG_TOURVIC("\n");
@@ -607,7 +607,7 @@ void TourVic()
     }
     
     //Monitor subsequent transition to LOW
-    if(ReadPlayerInput(CurrentPlayer)==LOW && PlayerIsPressing==true && IgnorePresses==false)
+    if(!ReadPlayerInput(CurrentPlayer) && PlayerIsPressing==true && IgnorePresses==false)
     {
       LOG_TOURVIC("Player SAFE!")
       LOG_TOURVIC("\n");
@@ -620,7 +620,7 @@ void TourVic()
     delay(1);
 
     //Check if current player has won and is pressing again.  If so, make him loose.
-    if(PlayerHasWon==true && ReadPlayerInput(CurrentPlayer)==HIGH)
+    if(PlayerHasWon==true && ReadPlayerInput(CurrentPlayer))
     {
       LOG_TOURVIC("Player LOOSES!")
       LOG_TOURVIC("\n");
@@ -820,7 +820,7 @@ void TeamDeDuel()
     //Check for Fraudulent pressers
     for(int i=0 ; i<nbj ; i++)
     {
-      if(ReadPlayerInput(i)==HIGH && (i != Player[0] && i != Player[1]))
+      if(ReadPlayerInput(i) && (i != Player[0] && i != Player[1]))
       {
         FraudulentTeam=Equipes[i];
         LOG_TEAMDEDUEL("FraudulentTeam:");
@@ -856,19 +856,19 @@ void TeamDeDuel()
     for(int i=0 ; i<=1 ; i++)
     {
       //Check for Release
-      if(ReadPlayerInput(Player[i])==LOW && HasReleased[i]==false)
+      if(!ReadPlayerInput(Player[i]) && HasReleased[i]==false)
       {
         HasReleased[i]=true;
       }
 
       //Check for Press after release
-      if(ReadPlayerInput(Player[i])==HIGH && HasReleased[i]==true)
+      if(ReadPlayerInput(Player[i]) && HasReleased[i]==true)
       {
         IsPressing[i]=true;
       }
 
       //Check for release to switch to nextplayer
-      if(ReadPlayerInput(Player[i])==LOW && IsPressing[i]==true)
+      if(!ReadPlayerInput(Player[i]) && IsPressing[i]==true)
       {
         //Turn off light
         DeactivateRedLight(Player[i]);
@@ -1106,7 +1106,7 @@ void Tourniquet()
     LOG_TOURNIQUET("\n");
     //Monitor initial transition to LOW
     
-    if(ReadPlayerInput(CurrentPlayer)==LOW && ReadyToPress==false && IgnorePresses==false)
+    if(!ReadPlayerInput(CurrentPlayer) && ReadyToPress==false && IgnorePresses==false)
     {
       LOG_TOURNIQUET("Changing RTP!");
       LOG_TOURNIQUET("\n");
@@ -1114,7 +1114,7 @@ void Tourniquet()
     }
     
     //Monitor subsequent transition to HIGH
-    if(ReadPlayerInput(CurrentPlayer)==HIGH && ReadyToPress==true && PlayerIsPressing==false && IgnorePresses==false)
+    if(ReadPlayerInput(CurrentPlayer) && ReadyToPress==true && PlayerIsPressing==false && IgnorePresses==false)
     {
       LOG_TOURNIQUET("Changing PIP!")
       LOG_TOURNIQUET("\n");
@@ -1122,7 +1122,7 @@ void Tourniquet()
     }
     
     //Monitor subsequent transition to LOW
-    if(ReadPlayerInput(CurrentPlayer)==LOW && PlayerIsPressing==true && IgnorePresses==false)
+    if(!ReadPlayerInput(CurrentPlayer) && PlayerIsPressing==true && IgnorePresses==false)
     {
       LOG_TOURNIQUET("Player SAFE!")
       LOG_TOURNIQUET("\n");
@@ -1154,7 +1154,7 @@ void Tourniquet()
     //Find spammers and bring them back in the game.
     for(int i=0; i<=nbj_raw ; i++)
     {
-      if(PlayersState[i]==false && ReadPlayerInput(i)==HIGH)
+      if(PlayersState[i]==false && ReadPlayerInput(i))
       {
         LOG_TOURNIQUET("SPAM PLAYER:");
         LOG_TOURNIQUET(i);
@@ -1352,7 +1352,7 @@ void Patate2()
     //Monitor spammers
     for(int i=0; i<nbj; i++)
     {
-      bool PP = ReadPlayerInput(i)==HIGH;
+      bool PP = ReadPlayerInput(i);
       if(PP && !PreviousState[i] && i!=LuckyPlayer[0] && i!=LuckyPlayer[1])
       {
         GameCounterPenalite[i]=GameCounter+PenaliteIncrPatate2;
@@ -1387,7 +1387,7 @@ void Patate2()
       */
       
       //Monitor initial transition to LOW
-      if(ReadPlayerInput(LuckyPlayer[i])==LOW && ReadyToSwitch[i]==false && GameCounter>GameCounterPenalite[LuckyPlayer[i]])
+      if(!ReadPlayerInput(LuckyPlayer[i]) && ReadyToSwitch[i]==false && GameCounter>GameCounterPenalite[LuckyPlayer[i]])
       {
         LOG_PATATE2("Change ReadyToSwitch");
         LOG_PATATE2("\n");
@@ -1395,7 +1395,7 @@ void Patate2()
       }
       
       //Monitor subsequent transition to HIGH
-      if(ReadPlayerInput(LuckyPlayer[i])==HIGH && ReadyToSwitch[i]==true && PlayerIsPressing[i]==false)
+      if(ReadPlayerInput(LuckyPlayer[i]) && ReadyToSwitch[i]==true && PlayerIsPressing[i]==false)
       {
         LOG_PATATE2("Change PlayerIsPressing");
         LOG_PATATE2("\n");
@@ -1408,7 +1408,7 @@ void Patate2()
         LOG_PATATE2("I have started Pressing");
         LOG_PATATE2("\n");
         //HIGH, Keep counting
-        if(ReadPlayerInput(LuckyPlayer[i])==HIGH)
+        if(ReadPlayerInput(LuckyPlayer[i]))
         {
           LOG_PATATE2("I keep Pressing");
           LOG_PATATE2("\n");

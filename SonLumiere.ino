@@ -81,7 +81,7 @@ void TurnOffNonActiveRedLights()
   //Deactivate Non-Active inputs
   for (int i=0; i<=nbj_raw;i++)
   {
-    if (ReadPlayerInput(i)==LOW)
+    if (!ReadPlayerInput(i))
     {
       DeactivateRedLight(i);
     }
@@ -153,7 +153,7 @@ void FlashAndBuzzAllActive()
   {
     for (int i=0; i<=nbj_raw_max ; i++)
     {
-      if(InputState[i]==HIGH)
+      if(InputState[i])
       {
         if (Activate == true)
         {

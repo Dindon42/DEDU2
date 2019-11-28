@@ -180,12 +180,12 @@ void DeDuel()
     //UpdateHasReleased
     for (int i=0; i<=1 ;i++)
     { 
-      if(ReadPlayerInput(Joueurs[i])==LOW && HasReleased[i]==false)
+      if(!ReadPlayerInput(Joueurs[i]) && HasReleased[i]==false)
       {
         HasReleased[i]=true;
       }
       delay(ReactionDelay);
-      if(HasReleased[i]==true && ReadPlayerInput(Joueurs[i])==HIGH)
+      if(HasReleased[i]==true && ReadPlayerInput(Joueurs[i]))
       {
         HasReleased[i]=false;
         ClicCount[i]++;
@@ -423,7 +423,7 @@ void UltimateChallenge()
     {
       for(int i=0;i<=nbj_raw;i++)
       {
-        if(ReadPlayerInput(i)==HIGH && PlayerState[i]!=Looser)
+        if(ReadPlayerInput(i) && PlayerState[i]!=Looser)
         {
           LOG_ULTI("PressLooser: ");
           LOG_ULTI(i);
@@ -621,17 +621,17 @@ void UltimateChallenge()
         for (int i=0; i<nbj;i++)
         {
           //Check if players not in game press...
-          if (PlayerState[i]!=Looser && PlayerState[i]!=InGame && ReadPlayerInput(i)==HIGH)
+          if (PlayerState[i]!=Looser && PlayerState[i]!=InGame && ReadPlayerInput(i))
           {
             PlayerState[i]=Looser;
             ActivateRedLight(i);
           }
-          if(PlayerState[i]==InGame && ReadPlayerInput(i)==LOW && HasReleased[i]==false)
+          if(PlayerState[i]==InGame && !ReadPlayerInput(i) && HasReleased[i]==false)
           {
             HasReleased[i]=true;
           }
           delay(15);
-          if(PlayerState[i]==InGame && HasReleased[i]==true && ReadPlayerInput(i)==HIGH)
+          if(PlayerState[i]==InGame && HasReleased[i]==true && ReadPlayerInput(i))
           {
             //WINNER
             RoundWinner=i;
@@ -754,7 +754,7 @@ void DQP2()
     looserfound=false;
     for (int i=0;i<=nbj_raw;i++)
     {
-      if(ReadPlayerInput(i)==HIGH || ReadPlayerOutput(i)==HIGH)
+      if(ReadPlayerInput(i) || ReadPlayerOutput(i))
       {
         LooserCount++;
         Looser=i;
@@ -848,7 +848,7 @@ void MIN()
 
   for (int i=0; i<=nbj_raw ; i++)
   {
-    if (InputState[i]==HIGH)
+    if (InputState[i])
       Sum1++;
     else
       Sum0++;
@@ -867,8 +867,10 @@ void MIN()
   {
     for (int i=0; i<=nbj_raw;i++)
     {
-      if (InputState[i]==LOW)
+      if (!InputState[i])
+      {
         DeclaredLoosers[i]=1;
+      }
     }
     allloosers=false;
   }
@@ -876,7 +878,7 @@ void MIN()
   {
     for (int i=0; i<=nbj_raw;i++)
     {
-      if (InputState[i]==HIGH)
+      if (InputState[i])
         DeclaredLoosers[i]=1;
     }
     allloosers=false;
@@ -1090,16 +1092,17 @@ void JeuChanson(int id_chanson)
     {
       ActivateRedLight(OrdreJoueurs[n]);
       TakeTime();
-      do{
+      do
+      {
         noTone(Tone_Pin);
         delay(5);
-      }while(ReadPlayerInput(OrdreJoueurs[n])==LOW);
+      }while(!ReadPlayerInput(OrdreJoueurs[n]));
       LeurTemps[0][n]=TimeDiff();
       TakeTime();
       do{
         tone(Tone_Pin,ChansonMod[0][n], 20);
         delay(5);
-      }while(ReadPlayerInput(OrdreJoueurs[n])==HIGH);
+      }while(ReadPlayerInput(OrdreJoueurs[n]));
       LeurTemps[1][n]=TimeDiff();
       noTone(Tone_Pin);
       DeactivateRedLight(OrdreJoueurs[n]);
@@ -1381,7 +1384,7 @@ void PatateChaude(bool SimpleControls)
     //Monitor spammers
     for(int i=0; i<nbj ; i++)
     {
-      if(ReadPlayerInput(i)==HIGH && !PreviousState[i] && i!=LuckyPlayer)
+      if(ReadPlayerInput(i) && !PreviousState[i] && i!=LuckyPlayer)
       {
         GameCounterPenalite[i]=GameCounter+PenaliteIncrPatate;
         
@@ -1394,12 +1397,12 @@ void PatateChaude(bool SimpleControls)
       }
     }
     
-    if(ReadPlayerInput(LuckyPlayer)==LOW && GameCounter>GameCounterPenalite[LuckyPlayer])
+    if(!ReadPlayerInput(LuckyPlayer) && GameCounter>GameCounterPenalite[LuckyPlayer])
     {
       ReadyToSwitch=true;
     }
     
-    if(ReadPlayerInput(LuckyPlayer)==HIGH && ReadyToSwitch==true && PlayerIsPressing==false)
+    if(ReadPlayerInput(LuckyPlayer) && ReadyToSwitch==true && PlayerIsPressing==false)
     {
       LOG_PATATE("Change PlayerIsPressing");
       LOG_PATATE("\n");
@@ -1413,7 +1416,7 @@ void PatateChaude(bool SimpleControls)
       LOG_PATATE("I have started Pressing");
       LOG_PATATE("\n");
       //HIGH, Keep counting
-      if(ReadPlayerInput(LuckyPlayer)==HIGH)
+      if(ReadPlayerInput(LuckyPlayer))
       {
         LOG_PATATE("I keep Pressing");
         LOG_PATATE("\n");
@@ -1508,7 +1511,7 @@ void PatateChaude(bool SimpleControls)
 
     for(int i=0; i<nbj; i++)
     {
-      PreviousState[i]=ReadPlayerInput(i)==HIGH;
+      PreviousState[i]=ReadPlayerInput(i);
     }
     delay(1);
     GameCounter++;
@@ -1554,8 +1557,8 @@ void AllRandom()
   int PosAssigned=0;
   int r;
   int r2;
-  int PreviousState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
-  int LightState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
+  bool PreviousState[nbj_max]={false};
+  bool LightState[nbj_max]={false};
   int OutputSum;
   int Looser=-1;
   int DEDUmaster=-1;
@@ -1639,7 +1642,7 @@ void AllRandom()
     if(Equipes[i]==0)
     {
       ActivateRedLight(NewAssignment[i]);
-      LightState[i]=HIGH;
+      LightState[i]=true;
     }
     LOG_RANDOM("Player:");
     LOG_RANDOM(i);
@@ -1690,7 +1693,7 @@ void AllRandom()
     {
       Toggle=false;
       //IF PLAYER IS HIGH AND PREV IS LOW, Toggle his light
-      if (ReadPlayerInput(i)==HIGH && PreviousState[i]==LOW)
+      if (ReadPlayerInput(i) && !PreviousState[i])
       {
         Toggle=true;
         LightState[i]=ToggleOutput(NewAssignment[i]);
@@ -1740,7 +1743,7 @@ void AllRandom()
       {
         for (int i=0 ; i<=nbj_raw ; i++)
         {
-          if(LightState[i]==HIGH)
+          if(LightState[i])
           {
             Looser=i;
             break;
@@ -1751,7 +1754,7 @@ void AllRandom()
       {
         for (int i=0 ; i<=nbj_raw ; i++)
         {
-          if(LightState[i]==LOW)
+          if(!LightState[i])
           {
             Looser=i;
             break;

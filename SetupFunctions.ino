@@ -555,7 +555,7 @@ void GameMode()
   if(EnterDemo)
   {
     delay(750);
-    if(ReadPlayerInput(OriginalSel)==HIGH)
+    if(ReadPlayerInput(OriginalSel))
     {
       AllModes=true;
       ClignoteEtSon(Game_Mode,GM_BASETONE,GM_TONEINC,5);
