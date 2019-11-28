@@ -478,7 +478,7 @@ void PQR()
         //Cancel Non-Pressing players
         for (int i=0; i<=nbj_raw ;i++)
         {
-          if(InputState[i]==LOW)
+          if(!ReadPlayerInput(i))
           {
             PlayersInGame[i]=0;
           }

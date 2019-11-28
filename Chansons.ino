@@ -69,7 +69,7 @@ void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse, bool Lumier
 
   if(RandVitesse)
   {
-    myRand= random(RandomMin,RandomMax);
+    myRand= random(ChansonFacteurRandomMin,ChansonFacteurRandomMax);
     FactVit=(float) myRand/100;
   }
   
@@ -124,8 +124,8 @@ int SelectionChanson(int Numero)
           MaChanson[i][j]=pgm_read_float(pf+i*NombreDeNotes+j);
         }
       }
-      RandomMin=130;
-      RandomMax=250;
+      ChansonFacteurRandomMin=130;
+      ChansonFacteurRandomMax=250;
       return NombreDeNotes;
     case 1:
       pf=(float *)FurElise;
@@ -137,8 +137,8 @@ int SelectionChanson(int Numero)
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      RandomMin = 80;
-      RandomMax = 130;
+      ChansonFacteurRandomMin = 80;
+      ChansonFacteurRandomMax = 130;
       return NombreDeNotes;
     case 2:
       pf=(float *)FF6Over;
@@ -150,8 +150,8 @@ int SelectionChanson(int Numero)
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      RandomMin = 130;
-      RandomMax = 180;
+      ChansonFacteurRandomMin = 130;
+      ChansonFacteurRandomMax = 180;
       return NombreDeNotes;
     case 3:
       pf=(float *)Menuet;
@@ -163,8 +163,8 @@ int SelectionChanson(int Numero)
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      RandomMin = 80;
-      RandomMax = 135;
+      ChansonFacteurRandomMin = 80;
+      ChansonFacteurRandomMax = 135;
       return NombreDeNotes;
     case 4:
       pf = (float*)SWTheme;
@@ -176,8 +176,8 @@ int SelectionChanson(int Numero)
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      RandomMin = 90;
-      RandomMax = 140;
+      ChansonFacteurRandomMin = 90;
+      ChansonFacteurRandomMax = 140;
       return NombreDeNotes;
     case 5:
       pf = (float*)Cantina;
@@ -189,8 +189,8 @@ int SelectionChanson(int Numero)
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      RandomMin = 85;
-      RandomMax = 115;
+      ChansonFacteurRandomMin = 85;
+      ChansonFacteurRandomMax = 115;
       return NombreDeNotes;
     case 6:
       pf = (float*)Scatman2;
@@ -202,8 +202,8 @@ int SelectionChanson(int Numero)
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      RandomMin = 85;
-      RandomMax = 105;
+      ChansonFacteurRandomMin = 85;
+      ChansonFacteurRandomMax = 105;
       return NombreDeNotes;
     case 7:
       pf = (float*)Boten2;
@@ -215,8 +215,8 @@ int SelectionChanson(int Numero)
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      RandomMin = 100;
-      RandomMax = 150;
+      ChansonFacteurRandomMin = 100;
+      ChansonFacteurRandomMax = 150;
       return NombreDeNotes;
     case 8:
       pf = (float*)ctd1;
@@ -228,8 +228,8 @@ int SelectionChanson(int Numero)
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      RandomMin = 105;
-      RandomMax = 155;
+      ChansonFacteurRandomMin = 105;
+      ChansonFacteurRandomMax = 155;
       return NombreDeNotes;
     case 9:
       pf = (float*)ctd2;
@@ -241,8 +241,8 @@ int SelectionChanson(int Numero)
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      RandomMin = 100;
-      RandomMax = 155;
+      ChansonFacteurRandomMin = 100;
+      ChansonFacteurRandomMax = 155;
       return NombreDeNotes;
     default:
       pf = (float*)Tetris;
@@ -254,8 +254,8 @@ int SelectionChanson(int Numero)
               MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      RandomMin = 115;
-      RandomMax = 160;
+      ChansonFacteurRandomMin = 115;
+      ChansonFacteurRandomMax = 160;
       return NombreDeNotes;
   }
 }

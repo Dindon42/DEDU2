@@ -966,6 +966,10 @@ void JeuChanson(int id_chanson)
   bool FactorTeamSize = true;
   float TeamSizeScoreRatio[2]={1,1};
   float TeamSizeModifier=1.03;
+  float ChansonMod[ParamChansons][NbNoteMax];
+  //Pour Chaque joueur: Silence,puis Musique.
+  float LeurTemps[ParamChansons-1][NbNoteMax];
+  float Scores[2];
   
   NombreNotes=SelectionChanson(id_chanson);
   AllocateTwoTeams(nbj_max);
@@ -1007,7 +1011,7 @@ void JeuChanson(int id_chanson)
     DefinirOrdreJoueurs(e,NombreNotes);
 
     //Definir Facteur Vitesse
-    myRand= random(RandomMin,RandomMax);
+    myRand= random(ChansonFacteurRandomMin,ChansonFacteurRandomMax);
     FacteurVitesse=(float) myRand/100;
 
     LOG_CHANSON("Chanson Mod:");

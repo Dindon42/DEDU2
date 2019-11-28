@@ -22,8 +22,9 @@ void AR2()
 {
   //TUNABLES
   int RandFactor=random(10,25);
-  int RandFactorIncrease=random(40,60);
-  #define AR2_ENDGAME_RANDFACTOR 102
+  int RandFactorModifThreshold=random(40,60);
+  #define AR2_WinCondToggleRand 125
+  #define AR2_ENDGAME_RANDFACTOR 75
   #define DeduMasterClickMin 1
   #define DeduMasterClickMax 5
   #define AR2_BUZZERS_MIN 10
@@ -36,7 +37,6 @@ void AR2()
   #define AR2_GB_LED_MAX 15
   //MAX NUMASSIGNMENTS NE PEUT PAS ÊTRE PLUS GRAND QUE LA GRANDEUR DE ARRAY EQUIPES-nbj.
   #define AR2_NumAssignments 16
-  #define AR2_WinCondToggleRand 150
   #define AR2_GAMEDELAY 20
   #define AR2_GRACETIME 7242
   #define AR2_NOTETIME 200
@@ -178,13 +178,23 @@ void AR2()
   //////////////////
   do
   {
-    if(RandIncreaseCounter>RandFactorIncrease && !TriggerEndGame)
+    if(RandIncreaseCounter>RandFactorModifThreshold)
     {
-      //LOG_AR2("New RandFactor: ");
-      //LOG_AR2(RandFactor);
-      //LOG_AR2("\n");
-      RandFactor++;
-      RandFactorIncrease++;
+      LOG_AR2("New RandFactor: ");
+      LOG_AR2(RandFactor);
+      LOG_AR2("\n");
+      
+      //Speed up The AutoBots at end of game
+      if(TriggerEndGame)
+      {
+        RandFactor--;
+        RandFactorModifThreshold--;
+      }
+      else
+      {
+        RandFactor++;
+        RandFactorModifThreshold++;
+      }
       RandIncreaseCounter=0;
     }
     

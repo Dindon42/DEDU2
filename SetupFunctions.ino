@@ -564,12 +564,6 @@ void GameMode()
   
 }
 
-void AjustementDelaiHonte()
-{
-  DelaiPetiteHonte=90 - nbj * 5;
-  DelaiHonte=160 - nbj * 7;
-}
-
 void LogSetupParams()
 {
   LOG_GENERAL("GameMode:");
