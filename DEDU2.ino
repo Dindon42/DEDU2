@@ -133,14 +133,14 @@ int Tone_Frequency;
 //Globales.
 int InputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
 int OutputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
-int Equipes[42];
+int Equipes[16];
 int NbEquipes;
 int NbJoueursEq1;
 int NbJoueursEq2;
 
 int const ParamChansons=3;
 int const NbNoteMax=42;
-
+int OrdreJoueurs[NbNoteMax];
 #define DelaiPetiteHonte 90 - nbj * 5
 #define DelaiHonte 160 - nbj * 7
 
@@ -250,9 +250,6 @@ void setup()
 
   DefineGameTypes();
   
-  //Ajustement du délai pour Honte
-  AjustementDelaiHonte();
-
   RedefinePlayerPins(true);
   
   if (!SkipSetup && !MusicMode)
