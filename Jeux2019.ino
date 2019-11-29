@@ -8,7 +8,6 @@
 #endif
 void MIN2()
 {
-  #define MIN2_MaxClicks 10
   #define MIN2_StartTicTimerThreshold  825
   #define MIN2_EndTicTimerThresholdMin 350
   #define MIN2_EndTicTimerThresholdMax 425
@@ -21,8 +20,7 @@ void MIN2()
   bool PreviousState[nbj]={false};
   bool PlayersInGame[nbj];
   bool CurrentState;
-  int Winner=-1;
-  int ClickGroups[MIN2_MaxClicks];
+  int ActivePlayers=0;
 
   //Init
   for(int i=0; i<nbj; i++)
@@ -41,6 +39,8 @@ void MIN2()
     int RoundTicTimerThreshold=random(MIN2_EndTicTimerThresholdMin, MIN2_EndTicTimerThresholdMax);
     bool Tic=true;
     int RoundNumTic=0;
+    bool RoundLoosers[nbj];
+    int MIN2_MaxClicks;
     
     LOG_MIN2("RoundTicTimerThreshold:");
     LOG_MIN2(RoundTicTimerThreshold);
@@ -50,8 +50,10 @@ void MIN2()
     ActivateGreenLED(24);
     for (int i=0; i<nbj; i++)
     {
+      RoundLoosers[i]=false;
       if (PlayersInGame[i])
       {
+        ActivePlayers++;
         DeactivateRedLight(i);
         PlayerPressCounter[i]=0;
       }
@@ -61,6 +63,7 @@ void MIN2()
         PlayerPressCounter[i]=-1;
       }
     }
+    MIN2_MaxClicks=ActivePlayers;
     
     //OneRound
     do
@@ -119,6 +122,7 @@ void MIN2()
     LOG_MIN2("\n");
 
     //Reset ClickGroups
+    int ClickGroups[MIN2_MaxClicks];
     for (int i=0; i<MIN2_MaxClicks; i++)
     {
       ClickGroups[i]=0;
@@ -132,19 +136,99 @@ void MIN2()
       LOG_MIN2(" Clicks: ");
       LOG_MIN2(PlayerPressCounter[i]);
       LOG_MIN2("\n");
-      ClickGroups[PlayerPressCounter[i]]++;
+      if(PlayersInGame[i])
+      {
+        ClickGroups[PlayerPressCounter[i]]++;
+      }
     }
-    
-    //Step 1: Remove Largest group.
-    //Step 2: Remove Lowest clicker
-    //Step 3: Remove Highest clicker
-    
-    
-    delay(2500);
-  }while(Winner==-1);
 
+    //Step 1: Remove Largest group.
+    int LargestGroup_NumPlayers=-1;
+    int NumActiveGroups=0;
+    bool GroupsToEliminate[MIN2_MaxClicks]={false};
+    for (int i=0; i<MIN2_MaxClicks; i++)
+    {
+      if(ClickGroups[i]!=0)
+      {
+        NumActiveGroups++;
+      }
+      if(ClickGroups[i]>LargestGroup_NumPlayers)
+      {
+        LargestGroup_NumPlayers=ClickGroups[i];
+      }
+    }
+
+    bool AllGroupsTied=true;
+    LOG_MIN2("GroupsToEliminate\n");
+    for (int i=0; i<MIN2_MaxClicks; i++)
+    {
+      if(ClickGroups[i]!=LargestGroup_NumPlayers)
+      {
+        AllGroupsTied=false;
+      }
+      if(ClickGroups[i]==LargestGroup_NumPlayers)
+      {
+        GroupsToEliminate[i]=true;
+      }
+      LOG_MIN2("ID: ");
+      LOG_MIN2(i);
+      LOG_MIN2(" Eliminate?: ");
+      LOG_MIN2(GroupsToEliminate[i]);
+      LOG_MIN2("\n");
+    }
+    LOG_MIN2("LargestGroup_NumPlayers: ");
+    LOG_MIN2(LargestGroup_NumPlayers);
+    LOG_MIN2("\n");
+    LOG_MIN2("AllGroupsTied: ");
+    LOG_MIN2(AllGroupsTied);
+    LOG_MIN2("\n");
+    
+    if(!AllGroupsTied)
+    {
+      for (int i=0; i<nbj; i++)
+      {
+        if(GroupsToEliminate[PlayerPressCounter[i]])
+        {
+          RoundLoosers[i]=true;
+          PlayersInGame[i]=false;
+          ActivePlayers--;
+        }
+      }
+      MultiLooserSoundAndLight(RoundLoosers);
+    }
+    else
+    {
+      //All groups tied.
+      
+      //Step 2: Remove All Players In Lowest Clicker Group
+      //If Group Size of least clicks is 1, skip
+      
+      
+      //Step 3: Remove All Players In Highest Clicker Group
+    }
+
+      ActivePlayers=0;
+      for (int i=0; i<nbj; i++)
+      {
+        if(PlayersInGame[i]) ActivePlayers++;
+      }
+    
+    //Next Round.
+    delay(500);
+
+
+  }while(ActivePlayers>2);
+
+  TurnOffAllLights();
+  delay(500);
   //winning ceremony
+  for (int i=0; i<nbj; i++)
+      {
+  if(PlayersInGame[i]) ActivateRedLight(i);
+      }
   
+  delay(2500);
+    LOG_MIN2("END GAME\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
