@@ -818,7 +818,6 @@ void MIN()
     DeclaredLoosers[i]=0;
   }
   
-  //Init Setup: Mauve comme DQP1
   ActivateGreenLED(100);
   TurnOnAllRedLights();
   

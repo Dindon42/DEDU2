@@ -70,7 +70,7 @@
 //SETUP IF SKIPPED:
 int nbj=10;
 int vitesse=10;
-int Game_Mode=3;
+int Game_Mode=4;
 //Demo Mode
 bool EnterDemo=false;
 bool AllModes=false;

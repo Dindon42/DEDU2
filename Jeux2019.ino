@@ -2,12 +2,148 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef ENABLE_LOGGING
-  #define LOG_AR2(a) LOG_GAME(Game_id_AR2,a)
+  #define LOG_MIN2(a) LOG_GAME(Game_id_MIN2,a)
 #else
-  #define LOG_AR2(a)
+  #define LOG_MIN2(a)
 #endif
 void MIN2()
 {
+  #define MIN2_MaxClicks 10
+  #define MIN2_StartTicTimerThreshold  825
+  #define MIN2_EndTicTimerThresholdMin 350
+  #define MIN2_EndTicTimerThresholdMax 425
+  #define MIN2_TicTimerDecrementFactorMin  92 //0 to 100
+  #define MIN2_TicTimerDecrementFactorMax 102 //0 to 100
+  int TicTimer=0;
+  int RoundTicCounter;
+  unsigned long GameTimer=0;
+  int PlayerPressCounter[nbj];
+  bool PreviousState[nbj]={false};
+  bool PlayersInGame[nbj];
+  bool CurrentState;
+  int Winner=-1;
+  int ClickGroups[MIN2_MaxClicks];
+
+  //Init
+  for(int i=0; i<nbj; i++)
+  {
+    PlayerPressCounter[i]=0;
+    PlayersInGame[i]=true;
+  }
+  LOG_MIN2("========\n");
+  LOG_MIN2("==MIN2==\n");
+  LOG_MIN2("========\n");
+  //MAIN GAME
+  do
+  {
+    //Prep Round
+    int TicTimerThreshold=MIN2_StartTicTimerThreshold;
+    int RoundTicTimerThreshold=random(MIN2_EndTicTimerThresholdMin, MIN2_EndTicTimerThresholdMax);
+    bool Tic=true;
+    int RoundNumTic=0;
+    
+    LOG_MIN2("RoundTicTimerThreshold:");
+    LOG_MIN2(RoundTicTimerThreshold);
+    LOG_MIN2("\n");
+    
+    ActivateGreenLED(100);
+    ActivateGreenLED(24);
+    for (int i=0; i<nbj; i++)
+    {
+      if (PlayersInGame[i])
+      {
+        DeactivateRedLight(i);
+        PlayerPressCounter[i]=0;
+      }
+      else
+      {
+        ActivateRedLight(i);
+        PlayerPressCounter[i]=-1;
+      }
+    }
+    
+    //OneRound
+    do
+    {
+      if (TicTimer>=TicTimerThreshold)
+      {
+        if(Tic)
+        {
+          tone(Tone_Pin,700,10);
+        }
+        else
+        {
+          tone(Tone_Pin,250,10);
+          RoundTicCounter++;
+        }
+        for (int i=0; i<nbj; i++)
+        {
+          if (PlayersInGame[i])
+          {
+            if(Tic) ActivateRedLight(i);
+            else DeactivateRedLight(i);
+          }
+        }
+        
+        Tic=!Tic;
+        TicTimer=0;
+        TicTimerThreshold=(float)TicTimerThreshold*(float)(random(MIN2_TicTimerDecrementFactorMin, MIN2_TicTimerDecrementFactorMax))/100;
+        RoundNumTic++;
+        LOG_MIN2("TicTimerThreshold:");
+        LOG_MIN2(TicTimerThreshold);
+        LOG_MIN2("\n");
+      }
+
+      for (int i=0; i<nbj; i++)
+      {
+        CurrentState=ReadPlayerInput(i) && PlayersInGame[i];
+        if(CurrentState && !PreviousState[i] && PlayerPressCounter[i]<=MIN2_MaxClicks-2)
+        {
+          PlayerPressCounter[i]++;
+        }
+        PreviousState[i]=CurrentState;
+      }
+  
+      //Update Timers;
+      GameTimer++;
+      TicTimer++;
+      delay(1);
+    }while(TicTimerThreshold>RoundTicTimerThreshold);
+
+    delay(200);
+    TurnOffAllLights();
+    
+    LOG_MIN2("RoundComplete\n");
+    LOG_MIN2("RoundNumTic:");
+    LOG_MIN2(RoundNumTic);
+    LOG_MIN2("\n");
+
+    //Reset ClickGroups
+    for (int i=0; i<MIN2_MaxClicks; i++)
+    {
+      ClickGroups[i]=0;
+    }
+    
+    //Log Counts
+    for (int i=0; i<nbj; i++)
+    {
+      LOG_MIN2("ID: ");
+      LOG_MIN2(i);
+      LOG_MIN2(" Clicks: ");
+      LOG_MIN2(PlayerPressCounter[i]);
+      LOG_MIN2("\n");
+      ClickGroups[PlayerPressCounter[i]]++;
+    }
+    
+    //Step 1: Remove Largest group.
+    //Step 2: Remove Lowest clicker
+    //Step 3: Remove Highest clicker
+    
+    
+    delay(2500);
+  }while(Winner==-1);
+
+  //winning ceremony
   
 }
 
