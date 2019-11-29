@@ -30,6 +30,3 @@ float RelativeError(float TestValue,float TrueValue)
 */
   return Score;
 }
-
-
-

@@ -23,7 +23,7 @@ void MIN2()
   int ActivePlayers=0;
 
   //Init
-  for(int i=0; i<nbj; i++)
+  for (int i=0; i<nbj; i++)
   {
     PlayersInGame[i]=true;
   }
@@ -72,7 +72,7 @@ void MIN2()
     {
       if (TicTimer>=TicTimerThreshold)
       {
-        if(Tic)
+        if (Tic)
         {
           tone(Tone_Pin,700,10);
         }
@@ -85,7 +85,7 @@ void MIN2()
         {
           if (PlayersInGame[i])
           {
-            if(Tic) DeactivateRedLight(i);
+            if (Tic) DeactivateRedLight(i);
             else ActivateRedLight(i);
           }
         }
@@ -102,7 +102,7 @@ void MIN2()
       for (int i=0; i<nbj; i++)
       {
         CurrentState=ReadPlayerInput(i) && PlayersInGame[i];
-        if(CurrentState && !PreviousState[i] && PlayerPressCounter[i]<=MIN2_MaxClicks-2)
+        if (CurrentState && !PreviousState[i] && PlayerPressCounter[i]<=MIN2_MaxClicks-2)
         {
           PlayerPressCounter[i]++;
         }
@@ -138,7 +138,7 @@ void MIN2()
       LOG_MIN2(" Clicks: ");
       LOG_MIN2(PlayerPressCounter[i]);
       LOG_MIN2("\n");
-      if(PlayersInGame[i])
+      if (PlayersInGame[i])
       {
         ClickGroups[PlayerPressCounter[i]]++;
       }
@@ -155,11 +155,11 @@ void MIN2()
       LOG_MIN2(" ClickGroups[i]: ");
       LOG_MIN2(ClickGroups[i]);
       LOG_MIN2("\n");
-      if(ClickGroups[i]>0)
+      if (ClickGroups[i]>0)
       {
         NumActiveGroups++;
       }
-      if(ClickGroups[i]>LargestGroup_NumPlayers)
+      if (ClickGroups[i]>LargestGroup_NumPlayers)
       {
         LargestGroup_NumPlayers=ClickGroups[i];
       }
@@ -169,11 +169,11 @@ void MIN2()
     LOG_MIN2("GroupsToEliminate\n");
     for (int i=0; i<MIN2_MaxClicks; i++)
     {
-      if(ClickGroups[i]!=LargestGroup_NumPlayers && ClickGroups[i]>0)
+      if (ClickGroups[i]!=LargestGroup_NumPlayers && ClickGroups[i]>0)
       {
         AllGroupsTied=false;
       }
-      if(ClickGroups[i]==LargestGroup_NumPlayers)
+      if (ClickGroups[i]==LargestGroup_NumPlayers)
       {
         GroupsToEliminate[i]=true;
       }
@@ -193,13 +193,13 @@ void MIN2()
     LOG_MIN2(NumActiveGroups);
     LOG_MIN2("\n");
     
-    if(!AllGroupsTied || NumActiveGroups==1)
+    if (!AllGroupsTied || NumActiveGroups==1)
     {
       for (int i=0; i<nbj; i++)
       {
-        if(PlayersInGame[i])
+        if (PlayersInGame[i])
         {
-          if(GroupsToEliminate[PlayerPressCounter[i]])
+          if (GroupsToEliminate[PlayerPressCounter[i]])
           {
             RoundLoosers[i]=true;
             PlayersInGame[i]=false;
@@ -213,22 +213,24 @@ void MIN2()
     {
       OneUp();
     }
-    
-    ActivePlayers=CountActivePlayers(PlayersInGame);
+    ActivePlayers=CountActivePlayers(PlayersInGame, nbj);
     
     //Next Round.
     delay(500);
-
-
   }while(ActivePlayers>2);
 
-  TurnOffAllLights();
-  delay(500);
-  //winning ceremony
-  MultipleWinnerSoundAndLight(PlayersInGame);
-  
-  
   LOG_MIN2("END GAME\n");
+
+  //A winner is you
+  if (ActivePlayers>0)
+  {
+    TurnOffAllLights();
+    delay(500);
+    ActivateGreenLED(100);
+    //winning ceremony
+    MultipleWinnerSoundAndLight(PlayersInGame);
+    LOG_MIN2("END GAME2\n");
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

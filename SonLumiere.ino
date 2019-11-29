@@ -407,24 +407,24 @@ void AllLoosersSoundAndLight()
   TurnOffAllLights();
 }
 
-void MultipleWinnerSoundAndLight(bool ActivePlayers[])
+void MultipleWinnerSoundAndLight(bool ActivePlayers[nbj_max])
 {
   TurnOffAllLights();
-  for(int i=0; i<sizeof(ActivePlayers); i++)
+  for (int i=0; i<nbj_max; i++)
   {
-    if(ActivePlayers[i]) ActivateRedLight(i);
+    if (ActivePlayers[i]) ActivateRedLight(i);
   }
   
-  for (int j=0; j<2; j++)
+  for (int j=0; j<=2; j++)
   {
     WinnerSound();
     delay(350);
     TurnOffAllRedLights();
     ActivateGreenLED(100);
     delay(350);
-    for(int i=0; i<sizeof(ActivePlayers); i++)
+    for (int i=0; i<sizeof(ActivePlayers); i++)
     {
-      if(ActivePlayers[i]) ActivateRedLight(i);
+      if (ActivePlayers[i]) ActivateRedLight(i);
     }
     ActivateGreenLED(0);
   }
@@ -433,18 +433,9 @@ void MultipleWinnerSoundAndLight(bool ActivePlayers[])
 
 void WinnerSoundAndLight(int iPlayer)
 {
-  ActivateGreenLED(0);
-  ActivateRedLight(iPlayer);
-  for (int i=0; i<2; i++)
-  {
-    WinnerSound();
-    delay(350);
-    DeactivateRedLight(iPlayer);
-    ActivateGreenLED(100);
-    delay(350);
-    ActivateRedLight(iPlayer);
-    ActivateGreenLED(0);
-  }
+  bool Players[]={false};
+  Players[iPlayer]=true;
+  MultipleWinnerSoundAndLight(Players);
 }
 
 void SonTestMode()
