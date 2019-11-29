@@ -255,7 +255,8 @@ void NoHonteProbResets()
 void AdjustNumRoundsFullProb()
 {
   if (Game_Mode==Game_Mode_Original)          NumberOfRoundsForFullProb=5;
-  else if (Game_Mode==Game_Mode_Medium)       NumberOfRoundsForFullProb=8;
+  else if (Game_Mode==Game_Mode_Medium)       NumberOfRoundsForFullProb=7;
+  else if (Game_Mode==Game_Mode_Avance)       NumberOfRoundsForFullProb=9;
   else if (Game_Mode==Game_Mode_Expert)       NumberOfRoundsForFullProb=12;
   else if (Game_Mode==Game_Mode_Experimental) NumberOfRoundsForFullProb=12;
   else NumberOfRoundsForFullProb=4;

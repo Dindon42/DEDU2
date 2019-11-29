@@ -25,7 +25,6 @@ void MIN2()
   //Init
   for(int i=0; i<nbj; i++)
   {
-    PlayerPressCounter[i]=0;
     PlayersInGame[i]=true;
   }
   LOG_MIN2("========\n");
@@ -41,6 +40,7 @@ void MIN2()
     int RoundNumTic=0;
     bool RoundLoosers[nbj];
     int MIN2_MaxClicks;
+    ActivePlayers=0;
     
     LOG_MIN2("RoundTicTimerThreshold:");
     LOG_MIN2(RoundTicTimerThreshold);
@@ -48,22 +48,24 @@ void MIN2()
     
     ActivateGreenLED(100);
     ActivateGreenLED(24);
+    TurnOnAllRedLights();
     for (int i=0; i<nbj; i++)
     {
       RoundLoosers[i]=false;
       if (PlayersInGame[i])
       {
         ActivePlayers++;
-        DeactivateRedLight(i);
         PlayerPressCounter[i]=0;
       }
       else
       {
-        ActivateRedLight(i);
         PlayerPressCounter[i]=-1;
       }
     }
     MIN2_MaxClicks=ActivePlayers;
+    LOG_MIN2("MIN2_MaxClicks:");
+    LOG_MIN2(MIN2_MaxClicks);
+    LOG_MIN2("\n");
     
     //OneRound
     do
@@ -83,8 +85,8 @@ void MIN2()
         {
           if (PlayersInGame[i])
           {
-            if(Tic) ActivateRedLight(i);
-            else DeactivateRedLight(i);
+            if(Tic) DeactivateRedLight(i);
+            else ActivateRedLight(i);
           }
         }
         
@@ -144,11 +146,16 @@ void MIN2()
 
     //Step 1: Remove Largest group.
     int LargestGroup_NumPlayers=-1;
-    int NumActiveGroups=0;
     bool GroupsToEliminate[MIN2_MaxClicks]={false};
+    int NumActiveGroups=0;
     for (int i=0; i<MIN2_MaxClicks; i++)
     {
-      if(ClickGroups[i]!=0)
+      LOG_MIN2("Group ID: ");
+      LOG_MIN2(i);
+      LOG_MIN2(" ClickGroups[i]: ");
+      LOG_MIN2(ClickGroups[i]);
+      LOG_MIN2("\n");
+      if(ClickGroups[i]>0)
       {
         NumActiveGroups++;
       }
@@ -162,7 +169,7 @@ void MIN2()
     LOG_MIN2("GroupsToEliminate\n");
     for (int i=0; i<MIN2_MaxClicks; i++)
     {
-      if(ClickGroups[i]!=LargestGroup_NumPlayers)
+      if(ClickGroups[i]!=LargestGroup_NumPlayers && ClickGroups[i]>0)
       {
         AllGroupsTied=false;
       }
@@ -170,7 +177,7 @@ void MIN2()
       {
         GroupsToEliminate[i]=true;
       }
-      LOG_MIN2("ID: ");
+      LOG_MIN2("Group ID: ");
       LOG_MIN2(i);
       LOG_MIN2(" Eliminate?: ");
       LOG_MIN2(GroupsToEliminate[i]);
@@ -182,36 +189,32 @@ void MIN2()
     LOG_MIN2("AllGroupsTied: ");
     LOG_MIN2(AllGroupsTied);
     LOG_MIN2("\n");
+    LOG_MIN2("NumActiveGroups: ");
+    LOG_MIN2(NumActiveGroups);
+    LOG_MIN2("\n");
     
-    if(!AllGroupsTied)
+    if(!AllGroupsTied || NumActiveGroups==1)
     {
       for (int i=0; i<nbj; i++)
       {
-        if(GroupsToEliminate[PlayerPressCounter[i]])
+        if(PlayersInGame[i])
         {
-          RoundLoosers[i]=true;
-          PlayersInGame[i]=false;
-          ActivePlayers--;
+          if(GroupsToEliminate[PlayerPressCounter[i]])
+          {
+            RoundLoosers[i]=true;
+            PlayersInGame[i]=false;
+            ActivePlayers--;
+          }
         }
       }
       MultiLooserSoundAndLight(RoundLoosers);
     }
     else
     {
-      //All groups tied.
-      
-      //Step 2: Remove All Players In Lowest Clicker Group
-      //If Group Size of least clicks is 1, skip
-      
-      
-      //Step 3: Remove All Players In Highest Clicker Group
+      OneUp();
     }
-
-      ActivePlayers=0;
-      for (int i=0; i<nbj; i++)
-      {
-        if(PlayersInGame[i]) ActivePlayers++;
-      }
+    
+    ActivePlayers=CountActivePlayers(PlayersInGame);
     
     //Next Round.
     delay(500);
@@ -222,13 +225,10 @@ void MIN2()
   TurnOffAllLights();
   delay(500);
   //winning ceremony
-  for (int i=0; i<nbj; i++)
-      {
-  if(PlayersInGame[i]) ActivateRedLight(i);
-      }
+  MultipleWinnerSoundAndLight(PlayersInGame);
   
-  delay(2500);
-    LOG_MIN2("END GAME\n");
+  
+  LOG_MIN2("END GAME\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

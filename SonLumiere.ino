@@ -407,6 +407,30 @@ void AllLoosersSoundAndLight()
   TurnOffAllLights();
 }
 
+void MultipleWinnerSoundAndLight(bool ActivePlayers[])
+{
+  TurnOffAllLights();
+  for(int i=0; i<sizeof(ActivePlayers); i++)
+  {
+    if(ActivePlayers[i]) ActivateRedLight(i);
+  }
+  
+  for (int j=0; j<2; j++)
+  {
+    WinnerSound();
+    delay(350);
+    TurnOffAllRedLights();
+    ActivateGreenLED(100);
+    delay(350);
+    for(int i=0; i<sizeof(ActivePlayers); i++)
+    {
+      if(ActivePlayers[i]) ActivateRedLight(i);
+    }
+    ActivateGreenLED(0);
+  }
+  TurnOffAllLights();
+}
+
 void WinnerSoundAndLight(int iPlayer)
 {
   ActivateGreenLED(0);

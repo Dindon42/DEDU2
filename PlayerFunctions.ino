@@ -217,6 +217,15 @@ int NextPlayerInTeam(int CurrentPlayer,int iTeam,int iDirection)
   return -1;
 }
 
+int CountActivePlayers(bool PlayersInGame[])
+{
+  int ActivePlayers=0;
+  for (int i=0; i<sizeof(PlayersInGame); i++)
+  {
+    if(PlayersInGame[i]) ActivePlayers++;
+  }
+  return ActivePlayers;
+}
 
 
 
