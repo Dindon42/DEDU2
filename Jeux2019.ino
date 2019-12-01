@@ -21,6 +21,8 @@ void MIN2()
   bool PlayersInGame[nbj];
   bool CurrentState;
   int ActivePlayers=0;
+  bool TwoWinners=false;
+  
 
   //Init
   for (int i=0; i<nbj; i++)
@@ -145,6 +147,8 @@ void MIN2()
     }
 
     //Step 1: Remove Largest group.
+    int MinGroup=-1;
+    int MaxGroup=-1;
     int LargestGroup_NumPlayers=-1;
     bool GroupsToEliminate[MIN2_MaxClicks]={false};
     int NumActiveGroups=0;
@@ -157,6 +161,8 @@ void MIN2()
       LOG_MIN2("\n");
       if (ClickGroups[i]>0)
       {
+        if(MinGroup==-1) MinGroup=i;
+        if(i>MaxGroup) MaxGroup=i;
         NumActiveGroups++;
       }
       if (ClickGroups[i]>LargestGroup_NumPlayers)
@@ -192,45 +198,81 @@ void MIN2()
     LOG_MIN2("NumActiveGroups: ");
     LOG_MIN2(NumActiveGroups);
     LOG_MIN2("\n");
+    LOG_MIN2("MinGroup: ");
+    LOG_MIN2(MinGroup);
+    LOG_MIN2("\n");
+    LOG_MIN2("MaxGroup: ");
+    LOG_MIN2(MaxGroup);
+    LOG_MIN2("\n");
     
     if (!AllGroupsTied || NumActiveGroups==1)
     {
       for (int i=0; i<nbj; i++)
       {
-        if (PlayersInGame[i])
+        if (PlayersInGame[i] && GroupsToEliminate[PlayerPressCounter[i]])
         {
-          if (GroupsToEliminate[PlayerPressCounter[i]])
-          {
-            RoundLoosers[i]=true;
-            PlayersInGame[i]=false;
-            ActivePlayers--;
-          }
+          RoundLoosers[i]=true;
+          PlayersInGame[i]=false;
         }
       }
-      MultiLooserSoundAndLight(RoundLoosers);
+      MultiLooserSoundAndLight(RoundLoosers, nbj);
     }
     else
     {
-      OneUp();
+      //If All groups are tied and two players in game... Two Winners declared.
+      TwoWinners=ActivePlayers==2;
+      LOG_MIN2("TwoWinners: ");
+      LOG_MIN2(TwoWinners);
+      LOG_MIN2("\n");
+      
+      if (!TwoWinners)
+      {
+        //All groups are tied.
+        //Eliminate Min and Max Clickers.
+        for (int i=0; i<nbj; i++)
+        {
+          if (PlayersInGame[i] && (PlayerPressCounter[i]==MinGroup || PlayerPressCounter[i]==MaxGroup))
+          {
+            RoundLoosers[i]=true;
+            PlayersInGame[i]=false;
+          }
+        }
+        MultiLooserSoundAndLight(RoundLoosers, nbj);
+      }
     }
     ActivePlayers=CountActivePlayers(PlayersInGame, nbj);
-    
     //Next Round.
     delay(500);
-  }while(ActivePlayers>2);
+    LOG_MIN2("ActivePlayers: ");
+    LOG_MIN2(ActivePlayers);
+    LOG_MIN2("\n");
+    LOG_MIN2("TwoWinners: ");
+    LOG_MIN2(TwoWinners);
+    LOG_MIN2("\n");
+  }while(ActivePlayers>1 && !TwoWinners);
 
   LOG_MIN2("END GAME\n");
-
+  
+  TurnOffAllLights();
+  delay(700);
+  
   //A winner is you
   if (ActivePlayers>0)
   {
+    ControlPlayerRedLights(PlayersInGame, nbj, true, true);
+    ActivateGreenLED(20);
+    OneUp();
     TurnOffAllLights();
     delay(500);
-    ActivateGreenLED(100);
     //winning ceremony
-    MultipleWinnerSoundAndLight(PlayersInGame);
+    MultipleWinnerSoundAndLight(PlayersInGame, nbj);
     LOG_MIN2("END GAME2\n");
   }
+  else
+  {
+    AllLoosersSoundAndLight();
+  }
+  TurnOffAllLights();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -936,7 +978,7 @@ void TheButton()
         }
         else
         {
-          bool Loosers[nbj_max]={false};
+          bool Loosers[nbj]={false};
 
           for (int i=0; i<nbj; i++)
           {
@@ -950,7 +992,7 @@ void TheButton()
           }
           
           //They had enough time
-          MultiLooserSoundAndLight(Loosers);
+          MultiLooserSoundAndLight(Loosers, nbj);
         }
       }
     }

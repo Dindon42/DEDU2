@@ -137,6 +137,7 @@ int Equipes[16];
 int NbEquipes;
 int NbJoueursEq1;
 int NbJoueursEq2;
+int GlobalScore[nbj_max]={0};
 
 int const ParamChansons=3;
 int const NbNoteMax=42;
@@ -150,8 +151,8 @@ int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 int ChansonFacteurRandomMin;
 int ChansonFacteurRandomMax;
 int ChansonPourJeu=0;
-int FinalCtd1ID;
-int FinalCtd2ID;
+#define CHANSON_FinalCtd1ID 1
+#define CHANSON_FinalCtd2ID 2
 //Pour Chaque chanson:
 //0 =>Freq
 //1 =>Temps Actif
@@ -334,8 +335,7 @@ void loop()
   if (!SkipFraudeur)
   {
     //FacteurVitesse
-    int r=random(25,50) + (11 - vitesse) * random(100);
-    Delay_Fraudeur(r);
+    Delay_Fraudeur(CalculDelaiFraudeur(true));
   }
   
   TurnOffAllLights();

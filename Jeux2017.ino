@@ -15,7 +15,7 @@ void DeDuel()
   float Score=50;
   float ScoreFactor=1;
   float ScoreIncrease=0.27;
-  int Chanson=FinalCtd1ID;
+  int Chanson=CHANSON_FinalCtd1ID;
   long MusicCounter=0;
   long NextMusicEventCtr=-1;
   int MusicEventId=0;
@@ -162,13 +162,13 @@ void DeDuel()
         NextMusicEventCtr+=DelayBetweenSongs/FactVit;
         MusicEventId=0;
         
-        if (Chanson==FinalCtd1ID)
+        if (Chanson==CHANSON_FinalCtd1ID)
         {
-          Chanson=FinalCtd2ID;
+          Chanson=CHANSON_FinalCtd2ID;
         }
         else
         {
-          Chanson=FinalCtd1ID;
+          Chanson=CHANSON_FinalCtd1ID;
         }
         NombreNotes=SelectionChanson(Chanson);
       }

@@ -304,11 +304,11 @@ void OneUp()
   noTone(Tone_Pin);
 }
 
-void MultiLooserSoundAndLight(bool Loosers[nbj_max])
+void MultiLooserSoundAndLight(bool Loosers[], int i_nbj)
 {
   ActivateBlueLED(10);
   
-  for (int j=0; j<nbj_max;j++)
+  for (int j=0; j<i_nbj; j++)
   {
     if (Loosers[j]) ActivateRedLight(j);
   }
@@ -324,12 +324,12 @@ void MultiLooserSoundAndLight(bool Loosers[nbj_max])
   //Identify the Loosers
   for (int e=1; e<=4; e++)
   {
-    for (int j=0; j<nbj_max;j++)
+    for (int j=0; j<i_nbj; j++)
     {
       if (Loosers[j]) ActivateRedLight(j);
     }
     delay(500);
-    for (int j=0; j<nbj_max;j++)
+    for (int j=0; j<i_nbj; j++)
     {
       if (Loosers[j]) DeactivateRedLight(j);
     }
@@ -407,25 +407,29 @@ void AllLoosersSoundAndLight()
   TurnOffAllLights();
 }
 
-void MultipleWinnerSoundAndLight(bool ActivePlayers[nbj_max])
+void ControlPlayerRedLights(bool ActivePlayers[], int i_nbj, bool iControlValue, bool iControlActive)
+{
+  for (int i=0; i<i_nbj; i++)
+  {
+    if (iControlActive && ActivePlayers[i] || !iControlActive && !ActivePlayers[i])
+    {
+      SetRedLight(i,iControlValue);
+    }
+  }
+}
+
+void MultipleWinnerSoundAndLight(bool ActivePlayers[], int i_nbj)
 {
   TurnOffAllLights();
-  for (int i=0; i<nbj_max; i++)
-  {
-    if (ActivePlayers[i]) ActivateRedLight(i);
-  }
   
   for (int j=0; j<=2; j++)
   {
+    ControlPlayerRedLights(ActivePlayers, i_nbj, true, true);
     WinnerSound();
-    delay(350);
     TurnOffAllRedLights();
-    ActivateGreenLED(100);
-    delay(350);
-    for (int i=0; i<sizeof(ActivePlayers); i++)
-    {
-      if (ActivePlayers[i]) ActivateRedLight(i);
-    }
+    ActivateGreenLED(20);
+    delay(500);
+    ControlPlayerRedLights(ActivePlayers, i_nbj, false, false);
     ActivateGreenLED(0);
   }
   TurnOffAllLights();
@@ -433,9 +437,9 @@ void MultipleWinnerSoundAndLight(bool ActivePlayers[nbj_max])
 
 void WinnerSoundAndLight(int iPlayer)
 {
-  bool Players[]={false};
+  bool Players[nbj_max]={false};
   Players[iPlayer]=true;
-  MultipleWinnerSoundAndLight(Players);
+  MultipleWinnerSoundAndLight(Players, nbj_max);
 }
 
 void SonTestMode()

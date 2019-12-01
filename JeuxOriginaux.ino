@@ -1,3 +1,9 @@
+int CalculDelaiFraudeur(bool iNormalDelay)
+{
+  if(iNormalDelay)  return random(25,50) + (11 - vitesse) * random(100);
+  else return random(25,50) + (11 - vitesse) * random(50);
+}
+
 void Delay_Fraudeur(int r)
 {
   //Debut DELAY et TESTFRAUDEUR --------------------------------------
@@ -36,7 +42,7 @@ void Delay_Fraudeur(int r)
     MoveDEDUFlag(0);
     delay(500);
     TurnOffAllLights();
-    Delay_Fraudeur(random(25,70));
+    Delay_Fraudeur(CalculDelaiFraudeur(false));
   }
 }
 
@@ -74,32 +80,9 @@ void PQP()
     Winner=FirstActive(nbj_raw);
   }while (Winner == -1);
 
-  ActivateGreenLED(0);
+  WinnerSoundAndLight(Winner);
 
-  //Winner found, lights on/off!
-  for (int a=1; a<=3; a++)  
-  {
-    ActivateRedLight(Winner);
-    
-    for (int i=1; i<=120; i++)
-    {
-      Tone_Frequency=500 + 30 * i;
-      tone(Tone_Pin, Tone_Frequency, 3);
-      delay(3);
-    }
-    noTone(Tone_Pin);
-    delay (500);
-
-    
-    TurnOffAllRedLights();
-    
-    ActivateGreenLED(20);
-    delay(500);
-    ActivateGreenLED(0);
-  }
-  TurnOffAllLights();
-  delay(125);
-  
+  delay(200);
 }
 
 int MarqueurHonte(int iJoueurChanceux, int iSpinDelay)

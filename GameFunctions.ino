@@ -310,7 +310,7 @@ void LogGameName(int game_id, bool NewLine)
   }
   else if (game_id==Game_id_MIN2)
   {
-    LOG_GENERAL("MINORITE2");
+    LOG_GENERAL("MINORITE2   ");
   }
   else
   {

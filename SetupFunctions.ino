@@ -1,19 +1,43 @@
 /*PROB DE JEUX PAR CATEGORIE*/ 
 /*
-Mode 1
-Id:0 GI: 609 ->42.15%
-Id:1 PI: 404 ->27.96%
-Id:2 Eq: 235 ->16.26%
-Id:3 Au: 197 ->13.63%
-Id:4 Ho: 194 ->13.43%
+Mode Original
+Id:0 GI: 180 -> 33.33%
+Id:1 PI: 186 -> 34.44%
+Id:2 Eq:   0 -> 0.00%
+Id:3 Au: 174 -> 32.22%
+Id:4 Ho:  53 -> 9.81%
 */
 /*
-Mode 2
-Id:0 GI: 595 ->43.91%
-Id:1 PI: 425 ->31.37%
-Id:2 Eq: 257 ->18.97%
-Id:3 Au:  78 ->5.76%
-Id:4 Ho: 174 ->12.84%
+Mode Medium
+Id:0 GI: 256 -> 48.95%
+Id:1 PI: 143 -> 27.34%
+Id:2 Eq:  52 -> 9.94%
+Id:3 Au:  72 -> 13.77%
+Id:4 Ho:  38 -> 7.27%
+*/
+/*
+Mode Avance
+Id:0 GI: 259 -> 50.88%
+Id:1 PI: 144 -> 28.29%
+Id:2 Eq:  71 -> 13.95%
+Id:3 Au:  35 -> 6.88%
+Id:4 Ho:  61 -> 11.98%
+*/
+/*
+Mode Expert
+Id:0 GI: 251 -> 47.63%
+Id:1 PI: 155 -> 29.41%
+Id:2 Eq:  92 -> 17.46%
+Id:3 Au:  29 -> 5.50%
+Id:4 Ho:  60 -> 11.39%
+*/
+/*
+Mode Experimental
+Id:0 GI: 207 -> 41.73%
+Id:1 PI: 139 -> 28.02%
+Id:2 Eq: 128 -> 25.81%
+Id:3 Au:  22 -> 4.44%
+Id:4 Ho:  49 -> 9.88%
 */
 
 void DefineProbJeux()
@@ -119,9 +143,9 @@ void DefineProbJeux()
   GameProb[Game_id_TH][wMode]=90;
 
   //Équipe
-  GameProb[Game_id_MIN][wMode]=120;
-  GameProb[Game_id_TDD][wMode]=110;
-  GameProb[Game_id_JC][wMode]=110;
+  GameProb[Game_id_MIN][wMode]=110;
+  GameProb[Game_id_TDD][wMode]=120;
+  GameProb[Game_id_JC][wMode]=120;
   
   //Autres
   GameProb[Game_id_TO][wMode]=0;
@@ -139,8 +163,12 @@ void DefineProbJeux()
   //Add experimental modes here:
   GameProb[Game_id_SEQ][wMode]=120;
   GameProb[Game_id_TB][wMode]=120;
-  GameProb[Game_id_AR2][wMode]=120;
-  GameProb[Game_id_MIN2][wMode]=120;
+  GameProb[Game_id_AR2][wMode]=100;
+  GameProb[Game_id_MIN2][wMode]=80;
+  //Override for Min2, un peu plus de honte.
+  GameProb[Game_id_MIN][wMode]=80;
+  GameProb[Game_id_TH][wMode]=120;
+  GameProb[Game_id_AR][wMode]=100;
   
   //===================//
   
@@ -188,7 +216,7 @@ void DefineGameTypes()
   GameTypes[Game_id_PPV]=0;
   GameTypes[Game_id_JD]=0;
   GameTypes[Game_id_ED]=0;
-  GameTypes[Game_id_MIN2]=0;
+  GameTypes[Game_id_MIN2]=2;
    
   //1=Perdant individuel
   GameTypes[Game_id_DQP]=1;
