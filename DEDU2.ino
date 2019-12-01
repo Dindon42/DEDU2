@@ -42,22 +42,22 @@
 
 //DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
 //Comment out the following line too.
-//#define ENABLE_LOGGING
+#define ENABLE_LOGGING
 
 //Opt Gen
-#define SkipSetup false
+#define SkipSetup true
 #define nosound false
-#define SkipLights false
+#define SkipLights true
 
 //Opt Game
 #define ExclusiveGame false
-#define ExclusiveGame_ID Game_id_PB
+#define ExclusiveGame_ID Game_id_DUEL
 #define ExclusiveGame_DemoMode false
 #define ExclusiveGameDelay 0
 
 //Opt Repartiteur
-#define SkipFraudeur false
-#define SkipGame false
+#define SkipFraudeur true
+#define SkipGame true
 #define DelayIfSkipGame false
 #define DoNotShowGameProb false
 
@@ -70,11 +70,12 @@
 //SETUP IF SKIPPED:
 int nbj=10;
 int vitesse=10;
-int Game_Mode=4;
+int Game_Mode=Game_Mode_Experimental;
 //Demo Mode
 bool EnterDemo=false;
 bool AllModes=false;
 int JoueurHonte=-1;
+int JoueurPuissant=-1;
 //DEBUG END
 //=========================\\
 
@@ -298,6 +299,10 @@ void setup()
     DemoMode(AllModes);
     //Reset joueurhonte après la démo.
     JoueurHonte=-1;
+    for(int i=0; i<nbj_max; i++)
+    {
+      GlobalScore[i]=0;
+    }
   }
   
   if (!SkipSetup)

@@ -30,3 +30,17 @@ float RelativeError(float TestValue,float TrueValue)
 */
   return Score;
 }
+
+
+void UpdateWinner(int iPlayer)
+{
+  GlobalScore[iPlayer]++;
+}
+
+void UpdateWinners(bool Winners[], int NbPlayers)
+{
+  for (int i=0; i<NbPlayers; i++)
+  {
+    if(Winners[i]) GlobalScore[i]++;
+  }
+}

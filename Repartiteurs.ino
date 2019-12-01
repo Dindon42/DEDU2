@@ -65,13 +65,13 @@ void Repartiteur()
   LOG_GENERAL("================\n");
   
   PrepareGame(Jeu);
-  if (!SkipGame)
+  if (SkipGame)
   {
-    PlayGame(Jeu,false);
+    SimulateGame(Jeu);
   }
   else
   {
-    SimulateGame(Jeu);
+    PlayGame(Jeu,false);
   }
   ResetProbAfterGame(Jeu);
   CountJeux[Jeu]++;
@@ -88,6 +88,7 @@ void Repartiteur()
   TotalNbJeux++;
   LogGameCounts();
   LogGameCountsByType();
+  LogScore();
 
   //Reset Prob for special conditions
   NoHonteProbResets();

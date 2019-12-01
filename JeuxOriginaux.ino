@@ -81,7 +81,7 @@ void PQP()
   }while (Winner == -1);
 
   WinnerSoundAndLight(Winner);
-
+  UpdateWinner(Winner);
   delay(200);
 }
 

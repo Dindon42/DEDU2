@@ -216,7 +216,7 @@ void DefineGameTypes()
   GameTypes[Game_id_PPV]=0;
   GameTypes[Game_id_JD]=0;
   GameTypes[Game_id_ED]=0;
-  GameTypes[Game_id_MIN2]=2;
+  GameTypes[Game_id_MIN2]=0;
    
   //1=Perdant individuel
   GameTypes[Game_id_DQP]=1;

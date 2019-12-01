@@ -38,6 +38,33 @@ void LogTypeName(int type_id)
     LOG_GENERAL("Ho:");
   }
 }
+
+void LogScore()
+{
+  LOG_GENERAL("=========\n");
+  LOG_GENERAL("==SCORE==\n");
+  LOG_GENERAL("=========\n");
+  for(int i=0; i<nbj_max; i++)
+  {
+    LOG_GENERAL("ID: ");
+    LOG_GENERAL(i);
+    if (GlobalScore[i]<10)
+    {
+      LOG_GENERAL("   ");
+    }
+    else if (GlobalScore[i]<100)
+    {
+      LOG_GENERAL("  ");
+    }
+    else
+    {
+      LOG_GENERAL(" ");
+    }
+    LOG_GENERAL(GlobalScore[i]);
+    LOG_GENERAL("\n");
+  }
+}
+
 void LogGameCountsByType()
 {
   
@@ -99,6 +126,19 @@ void SimulateGame(int game_id)
   if (game_id==Game_id_MH || game_id==Game_id_TDD || game_id==Game_id_TH)
   {
     JoueurHonte=random(nbj);
+  }
+  if(game_id==Game_id_PQP  ||
+     game_id==Game_id_UC   ||
+     game_id==Game_id_DUEL ||
+     game_id==Game_id_PQR  ||
+     game_id==Game_id_TV   ||
+     game_id==Game_id_PB   ||
+     game_id==Game_id_PPV  ||
+     game_id==Game_id_JD   ||
+     game_id==Game_id_ED   ||
+     game_id==Game_id_MIN2)
+  {
+    GlobalScore[random(nbj)]++;
   }
 }
 
@@ -250,7 +290,7 @@ void LogGameName(int game_id, bool NewLine)
   }
   else if (game_id==Game_id_AR)
   {
-    LOG_GENERAL("Random      ");
+    LOG_GENERAL("All Random  ");
   }
   else if (game_id==Game_id_UC)
   {
@@ -306,11 +346,11 @@ void LogGameName(int game_id, bool NewLine)
   }
   else if (game_id==Game_id_AR2)
   {
-    LOG_GENERAL("ALL RANDOM 2");
+    LOG_GENERAL("All Random 2");
   }
   else if (game_id==Game_id_MIN2)
   {
-    LOG_GENERAL("MINORITE2   ");
+    LOG_GENERAL("Minorite 2  ");
   }
   else
   {

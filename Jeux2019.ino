@@ -267,6 +267,7 @@ void MIN2()
     //winning ceremony
     MultipleWinnerSoundAndLight(PlayersInGame, nbj);
     LOG_MIN2("END GAME2\n");
+    UpdateWinners(PlayersInGame, nbj);
   }
   else
   {

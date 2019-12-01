@@ -293,6 +293,7 @@ void DeDuel()
   ControlAllLights(false,0,0);
   delay(500);
   
+  UpdateWinner(Winner);
   if (TransfertHonte && Winner==Joueurs[1])
   {
     ///BRUIT ET TRANSFERT HONTE
@@ -719,7 +720,7 @@ void UltimateChallenge()
     DeactivateRedLight(Ultimatewinner);
     delay(500);
   }
-  
+  UpdateWinner(Ultimatewinner);
   ControlAllLights(false,0,0);
 }
 

@@ -147,6 +147,7 @@ void PPV()
 
   //Identify winner
   WinnerSoundAndLight(Winner);
+  UpdateWinner(Winner);
 
   //Reset
   delay(700);
@@ -287,6 +288,7 @@ void PressBattle()
 
   //Identify winner
   WinnerSoundAndLight(Winner);
+  UpdateWinner(Winner);
   
   //Reset
   delay(700);
@@ -519,6 +521,7 @@ void PQR()
 
   //Identify winner
   WinnerSoundAndLight(Winner);
+  UpdateWinner(Winner);
   delay(700);
   TurnOffAllLights();
   delay(25);
@@ -683,7 +686,7 @@ void TourVic()
   }while(Winner==-1);
 
   WinnerSoundAndLight(Winner);
-
+  UpdateWinner(Winner);
   //Low intensity
   delay(700);
   TurnOffAllLights();

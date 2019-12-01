@@ -328,6 +328,7 @@ void EstimeDedu()
     delay(500);
     MoveDEDUFlag(((float)Scores[Winner][2]/(float)Full_Cycle)*100);
     WinnerSoundAndLight(Winner);
+    UpdateWinner(Winner);
     
     MoveDEDUFlag(0);
     TurnOffAllLights();
@@ -720,11 +721,13 @@ void JeanDit()
   else if (JeanGagne)
   {
     WinnerSoundAndLight(Jean);
+    UpdateWinner(Jean);
   }
   else
   {
     //Identify winner
     WinnerSoundAndLight(Winner);
+    UpdateWinner(Winner);
   }
 
   //Reset
