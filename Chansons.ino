@@ -128,8 +128,8 @@ int SelectionChanson(int Numero)
       ChansonFacteurRandomMax=250;
       return NombreDeNotes;
     case 1:
-      pf=(float *)FurElise;
-      NombreDeNotes=sizeof(FurElise[0])/sizeof(float);
+      pf=(float*)ctd1;
+      NombreDeNotes=sizeof(ctd1[0])/sizeof(float);
       for (int i=0; i<ParamChansons; i++)
       {
           for (int j=0; j<NombreDeNotes; j++)
@@ -137,12 +137,12 @@ int SelectionChanson(int Numero)
               MaChanson[i][j]=pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      ChansonFacteurRandomMin=80;
-      ChansonFacteurRandomMax=130;
+      ChansonFacteurRandomMin=105;
+      ChansonFacteurRandomMax=155;
       return NombreDeNotes;
     case 2:
-      pf=(float *)FF6Over;
-      NombreDeNotes=sizeof(FF6Over[0])/sizeof(float);
+      pf=(float*)ctd2;
+      NombreDeNotes=sizeof(ctd2[0])/sizeof(float);
       for (int i=0; i<ParamChansons; i++)
       {
           for (int j=0; j<NombreDeNotes; j++)
@@ -150,8 +150,8 @@ int SelectionChanson(int Numero)
               MaChanson[i][j]=pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      ChansonFacteurRandomMin=130;
-      ChansonFacteurRandomMax=180;
+      ChansonFacteurRandomMin=100;
+      ChansonFacteurRandomMax=155;
       return NombreDeNotes;
     case 3:
       pf=(float *)Menuet;
@@ -219,9 +219,8 @@ int SelectionChanson(int Numero)
       ChansonFacteurRandomMax=150;
       return NombreDeNotes;
     case 8:
-      FinalCtd1ID=Numero;
-      pf=(float*)ctd1;
-      NombreDeNotes=sizeof(ctd1[0])/sizeof(float);
+      pf=(float *)FurElise;
+      NombreDeNotes=sizeof(FurElise[0])/sizeof(float);
       for (int i=0; i<ParamChansons; i++)
       {
           for (int j=0; j<NombreDeNotes; j++)
@@ -229,13 +228,12 @@ int SelectionChanson(int Numero)
               MaChanson[i][j]=pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      ChansonFacteurRandomMin=105;
-      ChansonFacteurRandomMax=155;
+      ChansonFacteurRandomMin=80;
+      ChansonFacteurRandomMax=130;
       return NombreDeNotes;
     case 9:
-      FinalCtd2ID=Numero;
-      pf=(float*)ctd2;
-      NombreDeNotes=sizeof(ctd2[0])/sizeof(float);
+      pf=(float *)FF6Over;
+      NombreDeNotes=sizeof(FF6Over[0])/sizeof(float);
       for (int i=0; i<ParamChansons; i++)
       {
           for (int j=0; j<NombreDeNotes; j++)
@@ -243,8 +241,8 @@ int SelectionChanson(int Numero)
               MaChanson[i][j]=pgm_read_float(pf+i*NombreDeNotes+j);
           }
       }
-      ChansonFacteurRandomMin=100;
-      ChansonFacteurRandomMax=155;
+      ChansonFacteurRandomMin=130;
+      ChansonFacteurRandomMax=180;
       return NombreDeNotes;
     default:
       pf=(float*)Tetris;
