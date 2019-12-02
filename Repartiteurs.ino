@@ -1,7 +1,6 @@
 void Repartiteur()
 {
   int max_prob;
-  int r;
   int Jeu;
   bool ShowGameProb=!DoNotShowGameProb;
   LOG_GENERAL("DEBUT REPARTITEUR\n");
@@ -45,19 +44,15 @@ void Repartiteur()
   {
     MaxProbAcc=max_prob;
   }
-  
-  // Debut REPARTITEUR
-  r=random(1,max_prob+1);
 
-  LOG_GENERAL("R:");
-  LOG_GENERAL(r);
-  LOG_GENERAL("\n");
-  
-  LOG_GENERAL("MAXPROB:");
-  LOG_GENERAL(max_prob);
-  LOG_GENERAL("\n");
 
-  Jeu=SelectGame(r);
+  do
+  {
+    Jeu=SelectGame(random(max_prob)+1);
+    LOG_GENERAL("MAXPROB:");
+    LOG_GENERAL(max_prob);
+    LOG_GENERAL("\n");
+  }while(ExclusiveGameType && ExclusiveGameType_ID != GameTypes[Jeu]);
   
   LOG_GENERAL("================\n");
   LOG_GENERAL("JEU:");

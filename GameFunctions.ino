@@ -100,6 +100,9 @@ void LogGameCountsByType()
 
 int SelectGame(int r)
 {
+  LOG_GENERAL("R:");
+  LOG_GENERAL(r);
+  LOG_GENERAL("\n");
   for (int i=0; i<NbJeux; i++)
   {
     if (r<=ProbAccumuleeJeux[i])

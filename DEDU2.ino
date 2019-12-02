@@ -98,6 +98,8 @@
 #define ExclusiveGameDelay 0
 
 //Opt Repartiteur
+#define ExclusiveGameType true
+#define ExclusiveGameType_ID Game_Type_GI
 #define SkipFraudeur false
 #define SkipGame false
 #define DelayIfSkipGame false
@@ -151,7 +153,7 @@ int MaxProbAcc=0;
 
 //Definitions
 //Pins
-#define myRandPin 0 //To initialize the random function
+#define RandomSeedPin 0 //To initialize the random function
 #define G 3 //Green LED ALL
 #define B 2 //Blue LED ALL
 
@@ -288,7 +290,7 @@ void setup()
   vitesse_raw=vitesse-1;
   
   //Initialize random sequence based on floating value from an unconnected pin.
-  randomSeed(analogRead(myRandPin));
+  randomSeed(analogRead(RandomSeedPin));
 
   //Attach to servo and move it to initial position
   Servo_BrasDEDU.attach(Servo_Pin);
@@ -297,7 +299,7 @@ void setup()
   //Toutes lumières G et B
   pinMode(G, OUTPUT);
   pinMode(B, OUTPUT);
-
+  
   DefineGameTypes();
   
   RedefinePlayerPins(true);
