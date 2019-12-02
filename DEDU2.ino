@@ -98,7 +98,7 @@
 #define ExclusiveGameDelay 0
 
 //Opt Repartiteur
-#define ExclusiveGameType true
+#define ExclusiveGameType false
 #define ExclusiveGameType_ID Game_Type_GI
 #define SkipFraudeur false
 #define SkipGame false
