@@ -1,13 +1,50 @@
+//Global includes.
 #include <Servo.h>
 #include <avr/pgmspace.h>
-#define NbJeux 25
+
+//            _____                    _____                    _____                    _____          
+//           /\    \                  /\    \                  /\    \                  /\    \         
+//          /::\    \                /::\    \                /::\    \                /::\____\        
+//         /::::\    \              /::::\    \              /::::\    \              /:::/    /        
+//        /::::::\    \            /::::::\    \            /::::::\    \            /:::/    /         
+//       /:::/\:::\    \          /:::/\:::\    \          /:::/\:::\    \          /:::/    /          
+//      /:::/  \:::\    \        /:::/__\:::\    \        /:::/  \:::\    \        /:::/    /           
+//     /:::/    \:::\    \      /::::\   \:::\    \      /:::/    \:::\    \      /:::/    /            
+//    /:::/    / \:::\    \    /::::::\   \:::\    \    /:::/    / \:::\    \    /:::/    /      _____  
+//   /:::/    /   \:::\ ___\  /:::/\:::\   \:::\    \  /:::/    /   \:::\ ___\  /:::/____/      /\    \ 
+//  /:::/____/     \:::|    |/:::/__\:::\   \:::\____\/:::/____/     \:::|    ||:::|    /      /::\____\
+//  \:::\    \     /:::|____|\:::\   \:::\   \::/    /\:::\    \     /:::|____||:::|____\     /:::/    /
+//   \:::\    \   /:::/    /  \:::\   \:::\   \/____/  \:::\    \   /:::/    /  \:::\    \   /:::/    / 
+//    \:::\    \ /:::/    /    \:::\   \:::\    \       \:::\    \ /:::/    /    \:::\    \ /:::/    /  
+//     \:::\    /:::/    /      \:::\   \:::\____\       \:::\    /:::/    /      \:::\    /:::/    /   
+//      \:::\  /:::/    /        \:::\   \::/    /        \:::\  /:::/    /        \:::\__/:::/    /    
+//       \:::\/:::/    /          \:::\   \/____/          \:::\/:::/    /          \::::::::/    /     
+//        \::::::/    /            \:::\    \               \::::::/    /            \::::::/    /      
+//         \::::/    /              \:::\____\               \::::/    /              \::::/    /       
+//          \::/____/                \::/    /                \::/____/                \::/____/        
+//           ~~                       \/____/                  ~~                       ~~              
+//==============\\
+//GLOBAL DEFINES\\
+//==============\\
+//GAME MODES
 #define NbModes 5
 #define Game_Mode_Original 0
 #define Game_Mode_Medium 1
 #define Game_Mode_Avance 2
 #define Game_Mode_Expert 3
 #define Game_Mode_Experimental 4
+
+//GAME TYPES
 #define NbGameTypes 5
+#define Game_Type_GI 0
+#define Game_Type_PI 1
+#define Game_Type_EQ 2
+#define Game_Type_AU 3
+#define Game_Type_PIH 51
+#define Game_Type_EQH 52
+
+//GAME ID
+#define NbJeux 25
 //Ordre utilisé pour le mode DÉMO  doit être consécutif de 0 à NbJeux-1.
 #define Game_id_PQP 0
 #define Game_id_PQR 1
@@ -36,32 +73,37 @@
 //Garder FFA comme dernier jeu
 #define Game_id_FFA 24
 
-//=========================\\
-//==         DEDU        ==\\
-//=========================\\
+//==================\\
+//END GLOBAL DEFINES\\
+//==================\\
 
-//DEBUGGING FLAGS => ALL FALSE FOR NORMAL GAME.
+
+//===================================\\
+//===         DEBUG FLAGS         ===\\
+//===  ALL FALSE FOR NORMAL GAME. ===\\
+//===================================\\
 //Comment out the following line too.
-#define ENABLE_LOGGING
+//Enable Logging
+//#define ENABLE_LOGGING
 
-//Opt Gen
-#define SkipSetup true
+//Opt Generales
+#define SkipSetup false
 #define nosound false
-#define SkipLights true
+#define SkipLights false
 
 //Opt Game
 #define ExclusiveGame false
-#define ExclusiveGame_ID Game_id_DUEL
+#define ExclusiveGame_ID Game_id_PQP
 #define ExclusiveGame_DemoMode false
 #define ExclusiveGameDelay 0
 
 //Opt Repartiteur
-#define SkipFraudeur true
-#define SkipGame true
+#define SkipFraudeur false
+#define SkipGame false
 #define DelayIfSkipGame false
 #define DoNotShowGameProb false
 
-//Opt Mus
+//Opt Musique
 #define MusicMode false
 #define MusicModeLumiere false
 #define SelectedSong 6
@@ -76,8 +118,13 @@ bool EnterDemo=false;
 bool AllModes=false;
 int JoueurHonte=-1;
 int JoueurPuissant=-1;
-//DEBUG END
 //=========================\\
+//===      DEBUG END    ===\\
+//=========================\\
+
+
+
+
 
 //Prob, Jeux
 int NumberOfRoundsForFullProb=4;
@@ -109,7 +156,6 @@ int MaxProbAcc=0;
 #define B 2 //Blue LED ALL
 
 int Tone_Pin=52;
-
 Servo Servo_BrasDEDU;
 //Position à l'arrêt du Servo (bâton rentré)
 #define Servo_LowPos 40
@@ -299,6 +345,7 @@ void setup()
     DemoMode(AllModes);
     //Reset joueurhonte après la démo.
     JoueurHonte=-1;
+    JoueurPuissant=-1;
     for(int i=0; i<nbj_max; i++)
     {
       GlobalScore[i]=0;
@@ -332,23 +379,14 @@ void loop()
     PlayExclusiveGame();
   }
   
-  //Normal loop starts here.
-  WaitForAllNonActive(nbj_raw);
-
-  TurnOffAllLights();
-  
   if (!SkipFraudeur)
   {
-    //FacteurVitesse
+    //Normal loop starts here.
+    WaitForAllNonActive(nbj_raw);
+    TurnOffAllLights();
     Delay_Fraudeur(CalculDelaiFraudeur(true));
+    TurnOffAllLights();
   }
-  
-  TurnOffAllLights();
   
   Repartiteur();
 }
-
-
-
-
-

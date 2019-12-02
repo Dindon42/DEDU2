@@ -79,7 +79,10 @@ void ReadInputToggleOutput(int NbInputs)
 //Returns HIGH or LOW
 bool ReadPlayerInput(int iPlayer)
 {
-  return digitalRead(PlayerInputPins[iPlayer])==HIGH;
+  bool ReverseInput=iPlayer==JoueurPuissant;
+  bool Input = digitalRead(PlayerInputPins[iPlayer])==HIGH;
+
+  return ReverseInput ? !Input : Input;
 }
 
 //Returns HIGH or LOW

@@ -88,7 +88,11 @@ void Repartiteur()
   TotalNbJeux++;
   LogGameCounts();
   LogGameCountsByType();
+
+  //Score
   LogScore();
+  //Special event
+  HighScoreSpecialEvent();
 
   //Reset Prob for special conditions
   NoHonteProbResets();

@@ -44,3 +44,68 @@ void UpdateWinners(bool Winners[], int NbPlayers)
     if(Winners[i]) GlobalScore[i]++;
   }
 }
+
+void HighScoreSpecialEvent()
+{
+  if(Game_Mode!=Game_Mode_Experimental) return;
+  
+  int Score_Diff_Threshold=JoueurPuissant==-1 ? 3 : 0;
+  int Score_1=-1;
+  int Score_1_Player;
+  int Score_2=-1;
+  bool Score_1_Tied;
+  for (int i=0; i<nbj_max; i++)
+  {
+    if(GlobalScore[i]==Score_1)
+    {
+      Score_1_Tied=true;
+    }
+    else if(GlobalScore[i]>Score_1)
+    {
+      Score_2=Score_1;
+      Score_1=GlobalScore[i];
+      Score_1_Player=i;
+      Score_1_Tied=false;
+    }
+  }
+  
+  LOG_GENERAL("===========================\n");
+  LOG_GENERAL("GLOBAL_SCORES_SPECIAL_EVENT\n");
+  LOG_GENERAL("Score_1:");
+  LOG_GENERAL(Score_1);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("Score_1_Player:");
+  LOG_GENERAL(Score_1_Player);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("Score_2:");
+  LOG_GENERAL(Score_2);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("Score_1_Tied:");
+  LOG_GENERAL(Score_1_Tied);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("===========================\n");
+  
+  if(Score_1>Score_2+Score_Diff_Threshold && Score_1_Player!=JoueurPuissant && !Score_1_Tied)
+  {
+    JoueurPuissant=Score_1_Player;
+    LOG_GENERAL("===========================\n");
+    LOG_GENERAL("NOUVEAU JOUEUR PUISSANT:");
+    LOG_GENERAL(Score_1_Player);
+    LOG_GENERAL("\n");
+    TurnOffAllLights();
+    if(!SkipLights)
+    {
+      for(int i=0; i<7; i++)
+      {
+        SetRedLight(Score_1_Player, i%2==0);
+        delay(200);
+      }
+    }
+    TurnOffAllLights();
+  }
+  LOG_GENERAL("JOUEUR PUISSANT:");
+  LOG_GENERAL(JoueurPuissant);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("===========================\n");
+}
+
