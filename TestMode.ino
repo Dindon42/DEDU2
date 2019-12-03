@@ -174,6 +174,7 @@ void PlayExclusiveGame()
     #ifdef ENABLE_LOGGING
       ActiveGameLogging[ExclusiveGame_ID]=true;
     #endif
+    PrepareGame(ExclusiveGame_ID);
     PlayGame(ExclusiveGame_ID,ExclusiveGame_DemoMode);
     delay(ExclusiveGameDelay);
   }while(1);
