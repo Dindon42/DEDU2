@@ -534,9 +534,10 @@ void PQR()
 #endif
 void TourVic()
 {
-  int LightDelay=22+nbj;
+  int LightDelay=5+random(nbj);
   int LightDelayIncrement=1;
-  int IncrementProb=10-nbj/2;
+  int LightDelayIncrementProb=4;
+  int LightDelayIncrementIncrementProb=12;
   int CurrentCounter=0;
   int LastPlayer=random(nbj);
   int CurrentPlayer=0;
@@ -547,7 +548,7 @@ void TourVic()
   bool ReadytoIncreaseIncrement=false;
   bool IgnorePresses=false;
   bool PlayerHasWon=false;
-  int SpamCheckDelay=55;
+  int SpamCheckDelay=125;
 
   if (random(2)==0)
   {
@@ -649,14 +650,17 @@ void TourVic()
         //If we reach the last guy, increment lightdelay
         if (CurrentPlayer==LastPlayer)
         {
-          LightDelay+=LightDelayIncrement;
-          LOG_TOURVIC("Increasing LightDelay:")
-          LOG_TOURVIC(LightDelay);
-          LOG_TOURVIC("\n");
-          
-          if (ReadytoIncreaseIncrement==true)
+          if(random(LightDelayIncrementProb)==0)
           {
-            if (random(IncrementProb)==0)
+            LightDelay+=LightDelayIncrement;
+            LOG_TOURVIC("Increasing LightDelay:")
+            LOG_TOURVIC(LightDelay);
+            LOG_TOURVIC("\n");
+          }
+          
+          if (ReadytoIncreaseIncrement)
+          {
+            if (random(LightDelayIncrementIncrementProb)==0)
             {
               LightDelayIncrement++;
               LOG_TOURVIC("Increasing Increment:")
