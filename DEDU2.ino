@@ -88,12 +88,12 @@
 
 //Opt Generales
 #define SkipSetup false
-#define nosound false
+#define NoSound false
 #define SkipLights false
 
 //Opt Game
 #define ExclusiveGame false
-#define ExclusiveGame_ID Game_id_PQP
+#define ExclusiveGame_ID Game_id_JC
 #define ExclusiveGame_DemoMode false
 #define ExclusiveGameDelay 0
 
@@ -276,7 +276,7 @@ void setup()
   LOG_GENERAL("SETUP STARTING\n");
   LOG_GENERAL("==============\n");
   //TONE
-  if (nosound)
+  if (NoSound)
   {
     Tone_Pin=9999;
   }
