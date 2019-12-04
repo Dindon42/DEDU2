@@ -972,7 +972,7 @@ void JeuChanson(int id_chanson)
   float Scores[2];
   
   NombreNotes=SelectionChanson(id_chanson);
-  AllocateTwoTeams(nbj_max);
+  AllocateTwoTeams(nbj);
   
   if (NbJoueursEq1>NbJoueursEq2 && FactorTeamSize==true)
   {
@@ -1596,7 +1596,7 @@ void AllRandom()
   LOG_RANDOM("\n");
   
   //Initial Lights setup: 50/50 Lit vs Not Lit
-  AllocateTwoTeams(nbj_max);
+  AllocateTwoTeams(nbj);
 
   //Fill Random Array
   do
@@ -1611,7 +1611,7 @@ void AllRandom()
        
        r2=random(nbj);
        
-       for (int j=0;j<=nbj_raw;j++)
+       for (int j=0; j<nbj; j++)
        {
         
         if (NewAssignment[j]==r2)
@@ -1635,7 +1635,7 @@ void AllRandom()
 
 
   //Activate Based on  assignment from previous call
-  for (int i=0; i<=nbj_raw; i++)
+  for (int i=0; i<nbj; i++)
   {
     if (Equipes[i]==0)
     {

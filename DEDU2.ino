@@ -84,16 +84,16 @@
 //===================================\\
 //Comment out the following line too.
 //Enable Logging
-//#define ENABLE_LOGGING
+#define ENABLE_LOGGING
 
 //Opt Generales
-#define SkipSetup false
+#define SkipSetup true
 #define NoSound false
 #define SkipLights false
 
 //Opt Game
-#define ExclusiveGame false
-#define ExclusiveGame_ID Game_id_JC
+#define ExclusiveGame true
+#define ExclusiveGame_ID Game_id_AR
 #define ExclusiveGame_DemoMode false
 #define ExclusiveGameDelay 0
 
@@ -112,7 +112,7 @@
 #define MusicRandFactVit false
 
 //SETUP IF SKIPPED:
-int nbj=10;
+int nbj=6;
 int vitesse=10;
 int Game_Mode=Game_Mode_Experimental;
 //Demo Mode

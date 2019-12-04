@@ -483,7 +483,7 @@ void AR2()
       else
       {
         //AUTOMATED PLAYERS DO RANDOM ACTION
-        CurrentState=random(RandFactor)==0;
+        //CurrentState=random(RandFactor)==0;
       }
       
       if (!PreviousState[i] && CurrentState && PlayersInGame[i])
