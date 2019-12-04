@@ -289,10 +289,11 @@ void AR2()
   //TUNABLES
   int RandFactor=random(10,25);
   int RandFactorModifThreshold=random(40,60);
+  #define AR2_NoBots true
   #define AR2_WinCondToggleRand 125
   #define AR2_ENDGAME_RANDFACTOR 75
-  #define DeduMasterClickMin 1
-  #define DeduMasterClickMax 5
+  #define AR2_DeduMasterClickMin 1
+  #define AR2_DeduMasterClickMax 5
   #define AR2_BUZZERS_MIN 10
   #define AR2_BUZZERS_MAX 12
   #define AR2_G_LED_MIN 13
@@ -341,7 +342,7 @@ void AR2()
   unsigned long RandIncreaseCounter=0;
   int DeduMaster=random(nbj);
   int DeduMasterClicks=0;
-  int DeduMasterNextAction=random(DeduMasterClickMin, DeduMasterClickMax);
+  int DeduMasterNextAction=random(AR2_DeduMasterClickMin, AR2_DeduMasterClickMax);
   int Looser=-1;
   bool GraceTimeOver=false;
   bool TriggerEndGame=false;
@@ -482,8 +483,17 @@ void AR2()
       }
       else
       {
-        //AUTOMATED PLAYERS DO RANDOM ACTION
-        //CurrentState=random(RandFactor)==0;
+        if(AR2_NoBots)
+        {
+          CurrentState=false;
+          if(TriggerEndGame) CurrentState=random(2)==0;
+        }
+        else
+        {
+          //AUTOMATED PLAYERS DO RANDOM ACTION
+          CurrentState=random(RandFactor)==0;
+        }
+        
       }
       
       if (!PreviousState[i] && CurrentState && PlayersInGame[i])
@@ -536,7 +546,7 @@ void AR2()
             //Compute next DEDUMASTER
             DeduMaster=random(nbj);
             DeduMasterClicks=0;
-            DeduMasterNextAction=random(DeduMasterClickMin, DeduMasterClickMax);
+            DeduMasterNextAction=random(AR2_DeduMasterClickMin, AR2_DeduMasterClickMax);
             LOG_AR2("DeduMaster: ");
             LOG_AR2(DeduMaster);
             LOG_AR2("\n");
