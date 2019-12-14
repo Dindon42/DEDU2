@@ -1,17 +1,16 @@
 void Repartiteur()
 {
   int max_prob;
-  int r;
   int Jeu;
   bool ShowGameProb=!DoNotShowGameProb;
   LOG_GENERAL("DEBUT REPARTITEUR\n");
   
-  for (int i=0 ; i<NbJeux ; i++)
+  for (int i=0; i<NbJeux; i++)
   {
     if (i==0)ProbAccumuleeJeux[i]=ProbIndivJeuxCurrent[i];
     else ProbAccumuleeJeux[i]=ProbAccumuleeJeux[i-1]+ProbIndivJeuxCurrent[i];
 
-    if(ShowGameProb)
+    if (ShowGameProb)
     {
       LogGameProb(i);
     }
@@ -19,7 +18,7 @@ void Repartiteur()
     //Update for next round
     ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
     
-    if(NotMoreThanMaxProb)
+    if (NotMoreThanMaxProb)
     {
       //Logique si le flag NotMoreThanMaxProb est ON.  Exclusion pour Honte et DEDU
       if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=Game_id_FFA && i!=Game_id_MH)
@@ -37,27 +36,23 @@ void Repartiteur()
   max_prob=ProbAccumuleeJeux[NbJeux-1];
 
   //Check for Min/Max of ProbAcc
-  if(max_prob<MinProbAcc)
+  if (max_prob<MinProbAcc)
   {
     MinProbAcc=max_prob;
   }
-  if(max_prob>MaxProbAcc)
+  if (max_prob>MaxProbAcc)
   {
     MaxProbAcc=max_prob;
   }
-  
-  // Debut REPARTITEUR
-  r = random(1,max_prob+1);
 
-  LOG_GENERAL("R:");
-  LOG_GENERAL(r);
-  LOG_GENERAL("\n");
-  
-  LOG_GENERAL("MAXPROB:");
-  LOG_GENERAL(max_prob);
-  LOG_GENERAL("\n");
 
-  Jeu = SelectGame(r);
+  do
+  {
+    Jeu=SelectGame(random(max_prob)+1);
+    LOG_GENERAL("MAXPROB:");
+    LOG_GENERAL(max_prob);
+    LOG_GENERAL("\n");
+  }while(ExclusiveGameType && ExclusiveGameType_ID != GameTypes[Jeu]);
   
   LOG_GENERAL("================\n");
   LOG_GENERAL("JEU:");
@@ -65,13 +60,13 @@ void Repartiteur()
   LOG_GENERAL("================\n");
   
   PrepareGame(Jeu);
-  if(!SkipGame)
+  if (SkipGame)
   {
-    PlayGame(Jeu,false);
+    SimulateGame(Jeu);
   }
   else
   {
-    SimulateGame(Jeu);
+    PlayGame(Jeu,false);
   }
   ResetProbAfterGame(Jeu);
   CountJeux[Jeu]++;
@@ -79,7 +74,7 @@ void Repartiteur()
   
   if (SkipGame)
   {
-    if(DelayIfSkipGame)
+    if (DelayIfSkipGame)
     {
       delay(2500);
     }
@@ -88,6 +83,11 @@ void Repartiteur()
   TotalNbJeux++;
   LogGameCounts();
   LogGameCountsByType();
+
+  //Score
+  LogScore();
+  //Special event
+  HighScoreSpecialEvent();
 
   //Reset Prob for special conditions
   NoHonteProbResets();

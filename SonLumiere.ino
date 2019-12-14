@@ -1,7 +1,7 @@
 //Sets or Resets the player red LED based on iState.
 void SetRedLight(int iPlayer, bool iOnState)
 {
-  if(iOnState) ActivateRedLight(iPlayer);
+  if (iOnState) ActivateRedLight(iPlayer);
   else DeactivateRedLight(iPlayer);
 }
 
@@ -44,7 +44,7 @@ void ActivateGreenLED(int Value)
   {
     Value=0;
   }
-  else if(Value>100)
+  else if (Value>100)
   {
     Value=100;
   }
@@ -81,7 +81,7 @@ void TurnOffNonActiveRedLights()
   //Deactivate Non-Active inputs
   for (int i=0; i<=nbj_raw;i++)
   {
-    if (ReadPlayerInput(i)==LOW)
+    if (!ReadPlayerInput(i))
     {
       DeactivateRedLight(i);
     }
@@ -101,18 +101,18 @@ void TurnOffNonActivePlayerRedLights()
 
 void ClignoteEtSon(int NbMax,int FreqStart, int FreqIncrease, int NbOffset)
 {
-  if(NbMax+NbOffset>9)
+  if (NbMax+NbOffset>9)
   {
     NbMax=9;
     NbOffset=0;
   }
   //Clignote + Son
-  for (int i = 0; i <= NbMax; i++)
+  for (int i=0; i<=NbMax; i++)
   {
     //Light and sound for valid players.
     ActivateRedLight(i);
     ActivateRedLight(i+NbOffset);
-    Tone_Frequency = FreqStart + FreqIncrease * i;
+    Tone_Frequency=FreqStart + FreqIncrease * i;
     tone(Tone_Pin, Tone_Frequency, 50);
     delay(100);
   }
@@ -144,16 +144,16 @@ void FlashAndBuzzAllActive()
   int NumBuzz=10;
   bool Activate=true;
   
-  NumActive = CheckAllActive(nbj_raw_max);
+  NumActive=CheckAllActive(nbj_raw_max);
 
   ActivateGreenLED(50);
   ActivateBlueLED(50);
   
-  for (int j=0; j<=NumBuzz ; j++)
+  for (int j=0; j<=NumBuzz; j++)
   {
-    for (int i=0; i<=nbj_raw_max ; i++)
+    for (int i=0; i<=nbj_raw_max; i++)
     {
-      if(InputState[i]==HIGH)
+      if (InputState[i])
       {
         if (Activate == true)
         {
@@ -170,7 +170,7 @@ void FlashAndBuzzAllActive()
 
 
     if (Activate==false) Activate= true;
-    else Activate = false;
+    else Activate=false;
     
   }
 
@@ -216,9 +216,9 @@ void ControlAllLights(bool RedState, int BlueLevel, int GreenLevel)
 
 void IlluminateTeamRedLights(int Team)
 {
-  for(int i=0 ; i<=nbj_raw ; i++)
+  for (int i=0; i<=nbj_raw; i++)
   {
-    if(Equipes[i]==Team)
+    if (Equipes[i]==Team)
     {
       ActivateRedLight(i);
     }
@@ -233,11 +233,11 @@ void IncrementDEDUFlag(float PercTravelIncrement)
 //0->100
 void MoveDEDUFlag(float PercTravel)
 {
-  if (PercTravel < 0)
+  if (PercTravel<0)
   {
     PercTravel=0;
   }
-  else if (PercTravel > 100)
+  else if (PercTravel>100)
   {
     PercTravel=100;
   }
@@ -260,7 +260,7 @@ float ServoAnglePercent()
   float MinPos=Servo_LowPos;
   float MaxPos=Servo_HighPos;
 
-  float Percent = ((float)Servo_BrasDEDU.read()-MinPos)/(MaxPos-MinPos);
+  float Percent=((float)Servo_BrasDEDU.read()-MinPos)/(MaxPos-MinPos);
   return Percent*100;
 }
 
@@ -277,9 +277,9 @@ void ReadySound(int SoundTime)
 
 void WinnerSound()
 {
-  for (int i = 1; i <= 120; i++)
+  for (int i=1; i<=120; i++)
   {
-    Tone_Frequency = 500 + 30 * i;
+    Tone_Frequency=500 + 30 * i;
     tone(Tone_Pin, Tone_Frequency, 3);
     delay(3);
   }
@@ -304,34 +304,34 @@ void OneUp()
   noTone(Tone_Pin);
 }
 
-void MultiLooserSoundAndLight(bool Loosers[nbj_max])
+void MultiLooserSoundAndLight(bool Loosers[], int i_nbj)
 {
   ActivateBlueLED(10);
   
-  for (int j=0; j<nbj_max;j++)
+  for (int j=0; j<i_nbj; j++)
   {
-    if(Loosers[j]) ActivateRedLight(j);
+    if (Loosers[j]) ActivateRedLight(j);
   }
   
-  for (int i = 0; i < 80; i++)
+  for (int i=0; i<80; i++)
   {
-    Tone_Frequency = 2000 - 20 * i;
+    Tone_Frequency=2000 - 20 * i;
     tone(Tone_Pin, Tone_Frequency);
     delay(10);
   }
   noTone(Tone_Pin);
 
   //Identify the Loosers
-  for (int e = 1; e <= 4; e++)
+  for (int e=1; e<=4; e++)
   {
-    for (int j=0; j<nbj_max;j++)
+    for (int j=0; j<i_nbj; j++)
     {
-      if(Loosers[j]) ActivateRedLight(j);
+      if (Loosers[j]) ActivateRedLight(j);
     }
     delay(500);
-    for (int j=0; j<nbj_max;j++)
+    for (int j=0; j<i_nbj; j++)
     {
-      if(Loosers[j]) DeactivateRedLight(j);
+      if (Loosers[j]) DeactivateRedLight(j);
     }
     delay(500);
   }
@@ -344,16 +344,16 @@ void SingleLooserSoundAndLight(int iPlayer)
 {
   ActivateBlueLED(10);
   ActivateRedLight(iPlayer);
-  for (int i = 0; i < 80; i++)
+  for (int i=0; i<80; i++)
   {
-    Tone_Frequency = 2000 - 20 * i;
+    Tone_Frequency=2000 - 20 * i;
     tone(Tone_Pin, Tone_Frequency);
     delay(10);
   }
   noTone(Tone_Pin);
 
   //Identify the Looser
-  for (int e = 1; e <= 4; e++)
+  for (int e=1; e<=4; e++)
   {
     ActivateRedLight(iPlayer);
     delay(500);
@@ -367,7 +367,7 @@ void SingleLooserSoundAndLight(int iPlayer)
 
 void LooserSoundAndLight(int iPlayer, bool extratoggles)
 {
-  for(int i=0 ; i<2 ; i++)
+  for (int i=0; i<2; i++)
   {
     ActivateRedLight(iPlayer);
     tone(Tone_Pin,500,500);
@@ -376,9 +376,9 @@ void LooserSoundAndLight(int iPlayer, bool extratoggles)
     delay(500);
   }
 
-  if(extratoggles)
+  if (extratoggles)
   {
-    for(int i=0 ; i<2 ; i++)
+    for (int i=0; i<2; i++)
     {
       ActivateRedLight(iPlayer);
       delay(500);
@@ -393,7 +393,7 @@ void AllLoosersSoundAndLight()
   ActivateBlueLED(20);
     
   //Sound for Loosers.
-  for(int i=0 ; i<4 ; i++)
+  for (int i=0; i<4; i++)
   {
     tone(Tone_Pin,800,700);
     DeactivateBlueLED();
@@ -407,20 +407,39 @@ void AllLoosersSoundAndLight()
   TurnOffAllLights();
 }
 
-void WinnerSoundAndLight(int iPlayer)
+void ControlPlayerRedLights(bool ActivePlayers[], int i_nbj, bool iControlValue, bool iControlActive)
 {
-  ActivateGreenLED(0);
-  ActivateRedLight(iPlayer);
-  for(int i=0 ; i<2 ; i++)
+  for (int i=0; i<i_nbj; i++)
   {
+    if (iControlActive && ActivePlayers[i] || !iControlActive && !ActivePlayers[i])
+    {
+      SetRedLight(i,iControlValue);
+    }
+  }
+}
+
+void MultipleWinnerSoundAndLight(bool ActivePlayers[], int i_nbj)
+{
+  TurnOffAllLights();
+  
+  for (int j=0; j<=2; j++)
+  {
+    ControlPlayerRedLights(ActivePlayers, i_nbj, true, true);
     WinnerSound();
-    delay(350);
-    DeactivateRedLight(iPlayer);
-    ActivateGreenLED(100);
-    delay(350);
-    ActivateRedLight(iPlayer);
+    TurnOffAllRedLights();
+    ActivateGreenLED(20);
+    delay(500);
+    ControlPlayerRedLights(ActivePlayers, i_nbj, false, false);
     ActivateGreenLED(0);
   }
+  TurnOffAllLights();
+}
+
+void WinnerSoundAndLight(int iPlayer)
+{
+  bool Players[nbj_max]={false};
+  Players[iPlayer]=true;
+  MultipleWinnerSoundAndLight(Players, nbj_max);
 }
 
 void SonTestMode()
@@ -433,8 +452,8 @@ void SonTestMode()
 
 void TicTac(int SilenceTime, int Repeats)
 {
-  if(Repeats<0) Repeats=1;
-  for(int i=0; i<Repeats; i++)
+  if (Repeats<0) Repeats=1;
+  for (int i=0; i<Repeats; i++)
   {
     tone(Tone_Pin,250,10);
     delay(SilenceTime);
@@ -448,9 +467,9 @@ void MaxRandom(int NumTimes, bool AllOff)
   MoveDEDUFlag(random(0,101));
   do
   {
-    for(int i=0;i<10; i++)
+    for (int i=0;i<10; i++)
     {
-      if(random(2)==0)
+      if (random(2)==0)
       {
         ActivateRedLight(i);
       }
@@ -466,7 +485,7 @@ void MaxRandom(int NumTimes, bool AllOff)
     delay(200);
   }while(NumTimes-->=0);
 
-  if(AllOff)
+  if (AllOff)
   {
     ControlAllLights(false,0,0);
     MoveDEDUFlag(0);

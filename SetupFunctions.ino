@@ -1,19 +1,43 @@
 /*PROB DE JEUX PAR CATEGORIE*/ 
 /*
-Mode 1
-Id:0 GI: 609 ->  42.15%
-Id:1 PI: 404 ->  27.96%
-Id:2 Eq: 235 ->  16.26%
-Id:3 Au: 197 ->  13.63%
-Id:4 Ho: 194 ->  13.43%
+Mode Original
+Id:0 GI: 180 -> 33.33%
+Id:1 PI: 186 -> 34.44%
+Id:2 Eq:   0 -> 0.00%
+Id:3 Au: 174 -> 32.22%
+Id:4 Ho:  53 -> 9.81%
 */
 /*
-Mode 2
-Id:0 GI: 595 ->  43.91%
-Id:1 PI: 425 ->  31.37%
-Id:2 Eq: 257 ->  18.97%
-Id:3 Au:  78 ->  5.76%
-Id:4 Ho: 174 ->  12.84%
+Mode Medium
+Id:0 GI: 256 -> 48.95%
+Id:1 PI: 143 -> 27.34%
+Id:2 Eq:  52 -> 9.94%
+Id:3 Au:  72 -> 13.77%
+Id:4 Ho:  38 -> 7.27%
+*/
+/*
+Mode Avance
+Id:0 GI: 259 -> 50.88%
+Id:1 PI: 144 -> 28.29%
+Id:2 Eq:  71 -> 13.95%
+Id:3 Au:  35 -> 6.88%
+Id:4 Ho:  61 -> 11.98%
+*/
+/*
+Mode Expert
+Id:0 GI: 251 -> 47.63%
+Id:1 PI: 155 -> 29.41%
+Id:2 Eq:  92 -> 17.46%
+Id:3 Au:  29 -> 5.50%
+Id:4 Ho:  60 -> 11.39%
+*/
+/*
+Mode Experimental
+Id:0 GI: 207 -> 41.73%
+Id:1 PI: 139 -> 28.02%
+Id:2 Eq: 128 -> 25.81%
+Id:3 Au:  22 -> 4.44%
+Id:4 Ho:  49 -> 9.88%
 */
 
 void DefineProbJeux()
@@ -41,39 +65,65 @@ void DefineProbJeux()
   
   //===================//
   
-  //Mode plus avancé, mais pas trop complexe.
+  //Mode plus avancé, mais pas trop complexe - 10 jeux.
   wMode=1;
   //Gagnant Unique
   GameProb[Game_id_PQP][wMode]=120;
   GameProb[Game_id_UC][wMode]=75;
-  GameProb[Game_id_Duel][wMode]=80;
   GameProb[Game_id_PB][wMode]=80;
   GameProb[Game_id_ED][wMode]=100;
   
   //Perdant Unique
   GameProb[Game_id_DQP][wMode]=40;
   GameProb[Game_id_PC][wMode]=90;
-  GameProb[Game_id_DQP2][wMode]=50;
   
   //Honte
   GameProb[Game_id_MH][wMode]=30;
 
   //Équipe
   GameProb[Game_id_MIN][wMode]=60;
-  GameProb[Game_id_TDD][wMode]=55;
   
   //Autres
   GameProb[Game_id_TO][wMode]=30;
   GameProb[Game_id_FFA][wMode]=45;
-    
-  //===================//
+    //===================//
   
-  //Mode le plus avancé. Avec qualité démontrée.
+  //Mode AVANCE - 15 jeux
   wMode=2;
   //Gagnant Unique
   GameProb[Game_id_PQP][wMode]=160;
   GameProb[Game_id_UC][wMode]=120;
-  GameProb[Game_id_Duel][wMode]=100;
+  GameProb[Game_id_DUEL][wMode]=100;
+  GameProb[Game_id_PB][wMode]=80;
+  GameProb[Game_id_PQR][wMode]=100;
+  GameProb[Game_id_ED][wMode]=120;
+  GameProb[Game_id_JD][wMode]=100;
+  
+  //Perdant Unique
+  GameProb[Game_id_DQP][wMode]=80;
+  GameProb[Game_id_DQP2][wMode]=80;
+  GameProb[Game_id_PC][wMode]=120;
+  GameProb[Game_id_PC2][wMode]=120;
+  
+  //Honte
+  GameProb[Game_id_MH][wMode]=70;
+
+  //Équipe
+  GameProb[Game_id_MIN][wMode]=120;
+  GameProb[Game_id_TDD][wMode]=110;
+  
+  //Autres
+  GameProb[Game_id_TO][wMode]=0;
+  GameProb[Game_id_FFA][wMode]=84;
+  
+  //===================//
+  
+  //Mode Expert - 20 jeux
+  wMode=3;
+  //Gagnant Unique
+  GameProb[Game_id_PQP][wMode]=160;
+  GameProb[Game_id_UC][wMode]=120;
+  GameProb[Game_id_DUEL][wMode]=100;
   GameProb[Game_id_PB][wMode]=80;
   GameProb[Game_id_PQR][wMode]=100;
   GameProb[Game_id_TV][wMode]=100;
@@ -93,9 +143,9 @@ void DefineProbJeux()
   GameProb[Game_id_TH][wMode]=90;
 
   //Équipe
-  GameProb[Game_id_MIN][wMode]=120;
-  GameProb[Game_id_TDD][wMode]=110;
-  GameProb[Game_id_JC][wMode]=110;
+  GameProb[Game_id_MIN][wMode]=110;
+  GameProb[Game_id_TDD][wMode]=120;
+  GameProb[Game_id_JC][wMode]=120;
   
   //Autres
   GameProb[Game_id_TO][wMode]=0;
@@ -103,22 +153,27 @@ void DefineProbJeux()
   //===================//
   
   //Mode EXPÉRIMENTAL.  Les nouveaux jeux passent par ici.
-  wMode=3;
+  wMode=4;
 
   //Set Game Probs to previous mode.
-  for (int i=0 ; i<NbJeux ; i++)
+  for (int i=0; i<NbJeux; i++)
   {
     GameProb[i][wMode]=GameProb[i][wMode-1];
   }
   //Add experimental modes here:
-  GameProb[Game_id_Seq][wMode]=120;
+  GameProb[Game_id_SEQ][wMode]=120;
   GameProb[Game_id_TB][wMode]=120;
-  GameProb[Game_id_AR2][wMode]=120;
+  GameProb[Game_id_AR2][wMode]=100;
+  GameProb[Game_id_MIN2][wMode]=80;
+  //Override for Min2, un peu plus de honte.
+  GameProb[Game_id_MIN][wMode]=80;
+  GameProb[Game_id_TH][wMode]=120;
+  GameProb[Game_id_AR][wMode]=100;
   
   //===================//
   
   //Initialization des Prob de base des jeux en fn du mode sélectionné.
-  for (int i =0 ; i<NbJeux ; i++)
+  for (int i =0; i<NbJeux; i++)
   {
     ProbIndivJeux[i]=GameProb[i][Game_Mode];
   }
@@ -135,7 +190,7 @@ void DefineProbJeux()
   }
 
   //Log Prob.
-  for (int i =0 ; i<NbJeux ; i++)
+  for (int i =0; i<NbJeux; i++)
   {
     LogBaseProb(i);
   }
@@ -143,53 +198,71 @@ void DefineProbJeux()
 
 void DefineGameTypes()
 {
+  //DEFINE GAME TYPES.
+  //SET DEFAULT TO -1;
+  for (int i=0; i<NbJeux; i++)
+  {
+    GameTypes[i]=-1;
+  }
+  
   //Types
   //0=Gagnant Individuel
-  GameTypes[Game_id_PQP]=0;
-  GameTypes[Game_id_UC]=0;
-  GameTypes[Game_id_Duel]=0;
-  GameTypes[Game_id_PQR]=0;
-  GameTypes[Game_id_TV]=0;
-  GameTypes[Game_id_PB]=0;
-  GameTypes[Game_id_PPV]=0;
-  GameTypes[Game_id_JD]=0;
-  GameTypes[Game_id_ED]=0;
+  GameTypes[Game_id_PQP]=Game_Type_GI;
+  GameTypes[Game_id_UC]=Game_Type_GI;
+  GameTypes[Game_id_DUEL]=Game_Type_GI;
+  GameTypes[Game_id_PQR]=Game_Type_GI;
+  GameTypes[Game_id_TV]=Game_Type_GI;
+  GameTypes[Game_id_PB]=Game_Type_GI;
+  GameTypes[Game_id_PPV]=Game_Type_GI;
+  GameTypes[Game_id_JD]=Game_Type_GI;
+  GameTypes[Game_id_ED]=Game_Type_GI;
+  GameTypes[Game_id_MIN2]=Game_Type_GI;
    
   //1=Perdant individuel
-  GameTypes[Game_id_DQP]=1;
-  GameTypes[Game_id_PC]=1;
-  GameTypes[Game_id_DQP2]=1;
-  GameTypes[Game_id_PC2]=1;
-  GameTypes[Game_id_AR]=1;
-  GameTypes[Game_id_AR2]=1;
+  GameTypes[Game_id_DQP]=Game_Type_PI;
+  GameTypes[Game_id_PC]=Game_Type_PI;
+  GameTypes[Game_id_DQP2]=Game_Type_PI;
+  GameTypes[Game_id_PC2]=Game_Type_PI;
+  GameTypes[Game_id_AR]=Game_Type_PI;
+  GameTypes[Game_id_AR2]=Game_Type_PI;
   
   //2=Jeu d'équipe
-  GameTypes[Game_id_MIN]=2;
-  GameTypes[Game_id_JC]=2;
-  GameTypes[Game_id_Seq]=2;
-  GameTypes[Game_id_TB]=2;
+  GameTypes[Game_id_MIN]=Game_Type_EQ;
+  GameTypes[Game_id_JC]=Game_Type_EQ;
+  GameTypes[Game_id_SEQ]=Game_Type_EQ;
+  GameTypes[Game_id_TB]=Game_Type_EQ;
   
   //3=Autres
-  GameTypes[Game_id_TO]=3;
-  GameTypes[Game_id_FFA]=3;
+  GameTypes[Game_id_TO]=Game_Type_AU;
+  GameTypes[Game_id_FFA]=Game_Type_AU;
   
   //51=Perdant indiv et honte
-  GameTypes[Game_id_MH]=51;
-  GameTypes[Game_id_TH]=51;
+  GameTypes[Game_id_MH]=Game_Type_PIH;
+  GameTypes[Game_id_TH]=Game_Type_PIH;
   
   //52=Équipe et honte
-  GameTypes[Game_id_TDD]=52;
+  GameTypes[Game_id_TDD]=Game_Type_EQH;
+
+  for (int i=0; i<NbJeux; i++)
+  {
+    if (GameTypes[i]==-1)
+    {
+      LOG_GENERAL("GAME_TYPE NON DEFINI POUR JEU: ");
+      LOG_GENERAL(i);
+      LOG_GENERAL("\n");
+    }
+  }
 }
 
 void AjustementProbJeuxInit()
 {
-  for (int i ; i<NbJeux; i++)
+  for (int i; i<NbJeux; i++)
   {
     ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
   }
   //MarqueurHonte initial élevé, FFA 0
   ProbIndivJeuxCurrent[Game_id_FFA]=0;
-  if(Game_Mode!=Game_Mode_Original)
+  if (Game_Mode!=Game_Mode_Original)
   {
     ProbIndivJeuxCurrent[Game_id_MH]=424;
   }
@@ -199,9 +272,9 @@ void AjustementProbJeuxInit()
 
 void NoHonteProbResets()
 {
-  if(JoueurHonte==-1)
+  if (JoueurHonte==-1)
   {
-    ProbIndivJeuxCurrent[Game_id_Duel]=0;
+    ProbIndivJeuxCurrent[Game_id_DUEL]=0;
     ProbIndivJeuxCurrent[Game_id_TH]=0;
     ProbIndivJeuxCurrent[Game_id_TDD]=0;
   }
@@ -209,10 +282,11 @@ void NoHonteProbResets()
 
 void AdjustNumRoundsFullProb()
 {
-  if(Game_Mode==Game_Mode_Original)          NumberOfRoundsForFullProb=5;
-  else if(Game_Mode==Game_Mode_Medium)       NumberOfRoundsForFullProb=8;
-  else if(Game_Mode==Game_Mode_Expert)       NumberOfRoundsForFullProb=12;
-  else if(Game_Mode==Game_Mode_Experimental) NumberOfRoundsForFullProb=12;
+  if (Game_Mode==Game_Mode_Original)          NumberOfRoundsForFullProb=5;
+  else if (Game_Mode==Game_Mode_Medium)       NumberOfRoundsForFullProb=7;
+  else if (Game_Mode==Game_Mode_Avance)       NumberOfRoundsForFullProb=9;
+  else if (Game_Mode==Game_Mode_Expert)       NumberOfRoundsForFullProb=12;
+  else if (Game_Mode==Game_Mode_Experimental) NumberOfRoundsForFullProb=12;
   else NumberOfRoundsForFullProb=4;
 }
 
@@ -248,11 +322,11 @@ bool NombreJoueurs()
     delay(NBJDELAY);
     count+=NBJDELAY;
     
-    if(count>DELAYREDEFINE) Redefine=true;
+    if (count>DELAYREDEFINE) Redefine=true;
     
   }while (ReadPlayerInput(nbj_raw) && !Redefine);
 
-  if(Redefine)
+  if (Redefine)
   {
     //Montre aux joueurs les sélections.
     ClignoteEtSon(nbj_raw,NBJ_BASETONE,NBJ_TONEINC,0);
@@ -267,7 +341,7 @@ void RedefinePlayerPins(bool Auto)
   #define OutPinInterval 2
   #define InPinStart 24
   #define InPinInterval 2
-  if(Auto)
+  if (Auto)
   {
     //Pin definitions
     for (int i=0; i<=nbj_raw_max;i++)
@@ -288,7 +362,7 @@ void RedefinePlayerPins(bool Auto)
   {
     int AssignedPins[nbj_max]={false};
     int NewPins[nbj_max];
-    for(int i=0; i<nbj_max ; i++)
+    for (int i=0; i<nbj_max; i++)
     {
       NewPins[i]=-1;
     }
@@ -296,7 +370,7 @@ void RedefinePlayerPins(bool Auto)
     ActivateBlueLED(100);
     tone(Tone_Pin, 1500, 400);
     
-    for(int i=0; i<nbj; i++)
+    for (int i=0; i<nbj; i++)
     {
       bool ValidAssignment;
       do
@@ -311,18 +385,18 @@ void RedefinePlayerPins(bool Auto)
         LOG_GENERAL(P);
         LOG_GENERAL("\n");
 
-        if(i!=0)
+        if (i!=0)
         {
-          for(int j=0; j<i; j++)
+          for (int j=0; j<i; j++)
           {
-            if(P==NewPins[j])
+            if (P==NewPins[j])
             {
               ValidAssignment=false;
             }
           }
         }
         
-        if(ValidAssignment)
+        if (ValidAssignment)
         {
           NewPins[i]=P;
           ActivateRedLight(P);
@@ -333,7 +407,7 @@ void RedefinePlayerPins(bool Auto)
     }
 
     LOG_GENERAL("Assigned Pins:\n");
-    for(int i=0; i<nbj_max; i++)
+    for (int i=0; i<nbj_max; i++)
     {
       LOG_GENERAL(i);
       LOG_GENERAL(":");
@@ -348,12 +422,12 @@ void RedefinePlayerPins(bool Auto)
     int TempPins[nbj];
     int TempPinAssigned[nbj_max]={false};
     int index;
-    for(int i=0; i<nbj; i++)
+    for (int i=0; i<nbj; i++)
     {
       int Min=99;
-      for(int j=0; j<nbj_max; j++)
+      for (int j=0; j<nbj_max; j++)
       {
-        if(AssignedPins[j]==true && TempPinAssigned[j]==false)
+        if (AssignedPins[j] && !TempPinAssigned[j])
         {
           index=j;
           break;
@@ -367,13 +441,13 @@ void RedefinePlayerPins(bool Auto)
       TempPinAssigned[index]=true;
     }
 
-    for(int i=0; i<nbj; i++)
+    for (int i=0; i<nbj; i++)
     {
       NewPins[i]=TempPins[i];
     }
     
     LOG_GENERAL("After Reordering Pins:\n");
-    for(int i=0; i<nbj_max; i++)
+    for (int i=0; i<nbj_max; i++)
     {
       LOG_GENERAL(i);
       LOG_GENERAL(":");
@@ -384,11 +458,11 @@ void RedefinePlayerPins(bool Auto)
     }
     
     //Assign the rest automatically
-    for(int i=nbj; i<nbj_max; i++)
+    for (int i=nbj; i<nbj_max; i++)
     {
-      for(int j=0; j<nbj_max; j++)
+      for (int j=0; j<nbj_max; j++)
       {
-        if(AssignedPins[j]==false)
+        if (!AssignedPins[j])
         {
           NewPins[i]=j;
           AssignedPins[j]=true;
@@ -398,7 +472,7 @@ void RedefinePlayerPins(bool Auto)
     }
         
     LOG_GENERAL("Final Reordering Pins with empty slots:\n");
-    for(int i=0; i<nbj_max; i++)
+    for (int i=0; i<nbj_max; i++)
     {
       LOG_GENERAL(i);
       LOG_GENERAL(":");
@@ -415,7 +489,7 @@ void RedefinePlayerPins(bool Auto)
     ActivateBlueLED(100);
 
     //Reassign the new pins
-    for(int i=0; i<nbj_max; i++)
+    for (int i=0; i<nbj_max; i++)
     {
       int Pin;
       Pin=OutPinStart+OutPinInterval*NewPins[i];
@@ -498,7 +572,7 @@ void GameMode()
     Game_Mode=Selection;
   }
   
-  if(OriginalSel<5)
+  if (OriginalSel<5)
   {
     ClignoteEtSon(Game_Mode,GM_BASETONE,GM_TONEINC,0);
   }
@@ -507,22 +581,16 @@ void GameMode()
     ClignoteEtSon(Game_Mode,GM_BASETONE,GM_TONEINC,5);
   }
 
-  if(EnterDemo)
+  if (EnterDemo)
   {
     delay(750);
-    if(ReadPlayerInput(OriginalSel)==HIGH)
+    if (ReadPlayerInput(OriginalSel))
     {
       AllModes=true;
       ClignoteEtSon(Game_Mode,GM_BASETONE,GM_TONEINC,5);
     }
   }
   
-}
-
-void AjustementDelaiHonte()
-{
-  DelaiPetiteHonte=90 - nbj * 5;
-  DelaiHonte=160 - nbj * 7;
 }
 
 void LogSetupParams()
@@ -546,7 +614,7 @@ void LogSetupParams()
   LOG_GENERAL(JoueurHonte);
   LOG_GENERAL("\n");
   LOG_GENERAL("Pins des Joueurs:\n");
-  for (int i=0; i<nbj_max ; i++)
+  for (int i=0; i<nbj_max; i++)
   {
     LOG_GENERAL(i);
     LOG_GENERAL(": In:");

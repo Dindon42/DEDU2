@@ -2,7 +2,7 @@ void UpdateCountByType(int jeu)
 {
   int TempType=GameTypes[jeu];
 
-  if(TempType>=50)
+  if (TempType>=50)
   {
     CountType[4]++;
     TempType-=50;
@@ -17,42 +17,69 @@ void LogTypeName(int type_id)
   //2 Eq
   //3 Au
   //4 Ho
-  if(type_id==0)
+  if (type_id==0)
   {
     LOG_GENERAL("GI:");
   }
-  else if(type_id==1)
+  else if (type_id==1)
   {
     LOG_GENERAL("PI:");
   }
-  else if(type_id==2)
+  else if (type_id==2)
   {
     LOG_GENERAL("Eq:");
   }
-  else if(type_id==3)
+  else if (type_id==3)
   {
     LOG_GENERAL("Au:");
   }
-  else if(type_id==4)
+  else if (type_id==4)
   {
     LOG_GENERAL("Ho:");
   }
 }
+
+void LogScore()
+{
+  LOG_GENERAL("=========\n");
+  LOG_GENERAL("==SCORE==\n");
+  LOG_GENERAL("=========\n");
+  for(int i=0; i<nbj_max; i++)
+  {
+    LOG_GENERAL("ID: ");
+    LOG_GENERAL(i);
+    if (GlobalScore[i]<10)
+    {
+      LOG_GENERAL("   ");
+    }
+    else if (GlobalScore[i]<100)
+    {
+      LOG_GENERAL("  ");
+    }
+    else
+    {
+      LOG_GENERAL(" ");
+    }
+    LOG_GENERAL(GlobalScore[i]);
+    LOG_GENERAL("\n");
+  }
+}
+
 void LogGameCountsByType()
 {
   
   LOG_GENERAL("COUNTS BY TYPE\n");
-  for(int i=0 ; i<NbGameTypes ; i++)
+  for (int i=0; i<NbGameTypes; i++)
   {
     LOG_GENERAL("Id:");
     LOG_GENERAL(i);
     LOG_GENERAL(" ");
     LogTypeName(i);
-    if(CountType[i]<10)
+    if (CountType[i]<10)
     {
       LOG_GENERAL("   ");
     }
-    else if(CountType[i]<100)
+    else if (CountType[i]<100)
     {
       LOG_GENERAL("  ");
     }
@@ -61,8 +88,8 @@ void LogGameCountsByType()
       LOG_GENERAL(" ");
     }
     LOG_GENERAL(CountType[i]);
-    LOG_GENERAL(" -> ");
-    if((float)CountType[i]/(float)TotalNbJeux<10)
+    LOG_GENERAL(" ->");
+    if ((float)CountType[i]/(float)TotalNbJeux<10)
     {
       LOG_GENERAL(" ");
     }
@@ -73,20 +100,23 @@ void LogGameCountsByType()
 
 int SelectGame(int r)
 {
-  for(int i=0 ; i<NbJeux ; i++)
+  LOG_GENERAL("R:");
+  LOG_GENERAL(r);
+  LOG_GENERAL("\n");
+  for (int i=0; i<NbJeux; i++)
   {
-    if (r <= ProbAccumuleeJeux[i])
+    if (r<=ProbAccumuleeJeux[i])
     {
       return i;
     }
   }
-  //Default => Should not happen.
+  //Default =>Should not happen.
   return Game_id_PQP;
 }
 
 void PrepareGame(int game_id)
 {
-  if(game_id==Game_id_JC)
+  if (game_id==Game_id_JC)
   {
     int c=CountJeux[Game_id_JC]%NombreChansons;
     BesoinOrdreChansons(c);
@@ -96,15 +126,28 @@ void PrepareGame(int game_id)
 
 void SimulateGame(int game_id)
 {
-  if(game_id==Game_id_MH || game_id==Game_id_TDD || game_id==Game_id_TH)
+  if (game_id==Game_id_MH || game_id==Game_id_TDD || game_id==Game_id_TH)
   {
     JoueurHonte=random(nbj);
+  }
+  if(game_id==Game_id_PQP  ||
+     game_id==Game_id_UC   ||
+     game_id==Game_id_DUEL ||
+     game_id==Game_id_PQR  ||
+     game_id==Game_id_TV   ||
+     game_id==Game_id_PB   ||
+     game_id==Game_id_PPV  ||
+     game_id==Game_id_JD   ||
+     game_id==Game_id_ED   ||
+     game_id==Game_id_MIN2)
+  {
+    GlobalScore[random(nbj)]++;
   }
 }
 
 void PlayGame(int game_id, bool DemoMode)
 {
-  if(game_id==Game_id_PQP)
+  if (game_id==Game_id_PQP)
   {
     PQP();
   }
@@ -148,7 +191,7 @@ void PlayGame(int game_id, bool DemoMode)
   {
     UltimateChallenge();
   }
-  else if (game_id==Game_id_Duel)
+  else if (game_id==Game_id_DUEL)
   {
     DeDuel();
   }
@@ -188,7 +231,7 @@ void PlayGame(int game_id, bool DemoMode)
   {
     EstimeDedu();
   }
-  else if (game_id==Game_id_Seq)
+  else if (game_id==Game_id_SEQ)
   {
     SequenceGlobale(DemoMode);
   }
@@ -200,6 +243,10 @@ void PlayGame(int game_id, bool DemoMode)
   {
     AR2();
   }
+  else if (game_id==Game_id_MIN2)
+  {
+    MIN2();
+  }
   else
   {
     PQP();
@@ -208,7 +255,7 @@ void PlayGame(int game_id, bool DemoMode)
 
 void LogGameName(int game_id, bool NewLine)
 {
-  if(game_id==Game_id_PQP)
+  if (game_id==Game_id_PQP)
   {
     LOG_GENERAL("PQP         ");
   }
@@ -246,13 +293,13 @@ void LogGameName(int game_id, bool NewLine)
   }
   else if (game_id==Game_id_AR)
   {
-    LOG_GENERAL("Random      ");
+    LOG_GENERAL("All Random  ");
   }
   else if (game_id==Game_id_UC)
   {
     LOG_GENERAL("Ulti        ");
   }
-  else if (game_id==Game_id_Duel)
+  else if (game_id==Game_id_DUEL)
   {
     LOG_GENERAL("DeDuel      ");
   }
@@ -292,7 +339,7 @@ void LogGameName(int game_id, bool NewLine)
   {
     LOG_GENERAL("EstimeDedu  ");
   }
-  else if (game_id==Game_id_Seq)
+  else if (game_id==Game_id_SEQ)
   {
     LOG_GENERAL("Sequence G  ");
   }
@@ -302,13 +349,17 @@ void LogGameName(int game_id, bool NewLine)
   }
   else if (game_id==Game_id_AR2)
   {
-    LOG_GENERAL("ALL RANDOM 2");
+    LOG_GENERAL("All Random 2");
+  }
+  else if (game_id==Game_id_MIN2)
+  {
+    LOG_GENERAL("Minorite 2  ");
   }
   else
   {
     LOG_GENERAL("PQP         ");
   }
-  if(NewLine) LOG_GENERAL("\n");
+  if (NewLine) LOG_GENERAL("\n");
 }
 
 void ResetProbAfterGame(int game_id)
@@ -317,35 +368,36 @@ void ResetProbAfterGame(int game_id)
   ResetGameProb(game_id);
 
   //Check specific games and reset links.
-  if (game_id==Game_id_DQP)
-  {
-    ResetGameProb(Game_id_DQP2);
-  }
-  else if (game_id==Game_id_DQP2)
+  if (game_id==Game_id_DQP || game_id==Game_id_DQP2)
   {
     ResetGameProb(Game_id_DQP);
+    ResetGameProb(Game_id_DQP2);
   }
-  else if (game_id==Game_id_PC)
-  {
-    DivideGameProb(Game_id_PC2,2);
-  }
-  else if (game_id==Game_id_PC2)
+  else if (game_id==Game_id_PC || game_id==Game_id_PC2)
   {
     DivideGameProb(Game_id_PC,2);
+    DivideGameProb(Game_id_PC2,2);
   }
-  else if (game_id==Game_id_MH)
+  else if (game_id==Game_id_MH || game_id==Game_id_TH)
   {
     ResetProbHonte();
-  }
-  else if (game_id==Game_id_TH)
-  {
     ResetProbHonte();
+  }
+  else if (game_id==Game_id_AR || game_id==Game_id_AR2)
+  {
+    DivideGameProb(Game_id_AR,2);
+    DivideGameProb(Game_id_AR2,2);
+  }
+  else if (game_id==Game_id_MIN || game_id==Game_id_MIN2)
+  {
+    DivideGameProb(Game_id_MIN,2);
+    DivideGameProb(Game_id_MIN2,2);
   }
 }
 
 void ResetGameProb(int game_id)
 {
-  if(Game_Mode==Game_Mode_Original)
+  if (Game_Mode==Game_Mode_Original)
   {
     DivideGameProb(game_id,2);
   }
@@ -364,7 +416,7 @@ void ResetProbHonte()
 {
   ResetGameProb(Game_id_TH);
   ResetGameProb(Game_id_MH);
-  DivideGameProb(Game_id_Duel,2);
+  DivideGameProb(Game_id_DUEL,2);
   DivideGameProb(Game_id_TDD,2);
 }
 
@@ -379,7 +431,7 @@ void LogGameCounts()
   LOG_GENERAL(TotalNbJeux);
   LOG_GENERAL("\n");
 
-  for(int i=0 ; i<NbJeux ; i++)
+  for (int i=0; i<NbJeux; i++)
   {
     LOG_GENERAL("Id: ");
     LOG_GENERAL(i);

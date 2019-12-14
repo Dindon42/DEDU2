@@ -14,7 +14,7 @@ void TestMode()
   {
     NumAct=IlluminateActiveExtinguishNonActive(nbj_raw_max);
     delay(1);
-    if(NumAct<5)
+    if (NumAct<5)
     {
       ActivateGreenLED(20);
       ActivateBlueLED(0);
@@ -37,12 +37,12 @@ void DemoMode(bool AllModes)
   int IndivDelay=2;
   int DelayGame=25;
   unsigned const long CounterPlaySame=2500/DelayGame;
-  int PrevInputState[nbj_max]={LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW,LOW};
+  bool PrevInputState[nbj_max]={false};
   bool Player1Controls=true;
   int MaxP=nbj;
   int GameDelay=1000;
 
-  if(Player1Controls)
+  if (Player1Controls)
   {
     MaxP=1;
   }
@@ -54,16 +54,16 @@ void DemoMode(bool AllModes)
   SonTestMode();
 
   delay(GameDelay);
-  for(int i=0 ; i<NbJeux;i++)
+  for (int i=0; i<NbJeux-1;i++)
   {
     //If the game mode is 0, play games that have non-0 Prob
     //If the game mode is non-0, play games that did not exist in previous mode.
     //If AllModes, Demo all modes.
-    if(
+    if (
       (Game_Mode==Game_Mode_Original && ProbIndivJeux[i]!=0) ||
-      (Game_Mode >Game_Mode_Original && GameProb[i][Game_Mode]!=0 && GameProb[i][Game_Mode-1]==0 && ProbIndivJeux[i]!=0) ||
+      (Game_Mode>Game_Mode_Original && GameProb[i][Game_Mode]!=0 && GameProb[i][Game_Mode-1]==0 && ProbIndivJeux[i]!=0) ||
        AllModes && ProbIndivJeux[i]!=0)
-    {  
+    {
       LOG_GENERAL("JEU:");
       LogGameName(i,true);
       if (!SkipGame)
@@ -84,11 +84,11 @@ void DemoMode(bool AllModes)
           {
             Counter++;
             GoToNext=false;
-            for(int j=0 ; j<MaxP ;j++)
+            for (int j=0; j<MaxP ;j++)
             {
-              if(ReadPlayerInput(j)==HIGH)
+              if (ReadPlayerInput(j))
               {
-                if(PrevInputState[j]==LOW)
+                if (!PrevInputState[j])
                 {
                   Counter=0;
                   LOG_GENERAL("TOGGLE:");
@@ -101,13 +101,13 @@ void DemoMode(bool AllModes)
                   LOG_GENERAL(PrevInputState[j]);
                   LOG_GENERAL("\n");
                   
-                  PrevInputState[j]=HIGH;
+                  PrevInputState[j]=true;
                   ToggleOutput(j);
                 }
               }
               else
               {
-                PrevInputState[j]=LOW;
+                PrevInputState[j]=false;
               }
               delay(IndivDelay);
             }
@@ -115,7 +115,7 @@ void DemoMode(bool AllModes)
             
             NumActOut=CheckAllActiveOutputs(nbj_raw);
             
-            if(NumActOut==MaxP)
+            if (NumActOut==MaxP)
             {
               GoToNext=true;
             }
@@ -137,5 +137,46 @@ void DemoMode(bool AllModes)
   LOG_GENERAL("==============\n");
   LOG_GENERAL("=  DEMO FIN  =\n");
   LOG_GENERAL("==============\n");
+}
+
+void EndlessMusicMode()
+{
+  do
+  {
+    int r;
+    LOG_GENERAL("\n");
+    LOG_GENERAL("MUSIC MODE");
+    LOG_GENERAL("\n");
+    if (SelectedSong==-1)
+    {
+      LOG_GENERAL("Random Song:");
+      r=random(NombreChansons);
+    }
+    else
+    {
+      LOG_GENERAL("Selected Song:");
+      r=SelectedSong;
+    }
+    LOG_GENERAL(r);
+    LOG_GENERAL("\n");
+    JoueChanson(r, 1, MusicRandFactVit, MusicModeLumiere);
+    delay(2500);
+  }while(1);
+}
+
+void PlayExclusiveGame()
+{
+  do
+  {
+    LOG_GENERAL("\n");
+    LOG_GENERAL("EXCLUSIVE MODE");
+    LOG_GENERAL("\n");
+    #ifdef ENABLE_LOGGING
+      ActiveGameLogging[ExclusiveGame_ID]=true;
+    #endif
+    PrepareGame(ExclusiveGame_ID);
+    PlayGame(ExclusiveGame_ID,ExclusiveGame_DemoMode);
+    delay(ExclusiveGameDelay);
+  }while(1);
 }
 

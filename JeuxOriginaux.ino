@@ -1,15 +1,21 @@
+int CalculDelaiFraudeur(bool iNormalDelay)
+{
+  if(iNormalDelay)  return random(25,50) + (11 - vitesse) * random(100);
+  else return random(25,50) + (11 - vitesse) * random(50);
+}
+
 void Delay_Fraudeur(int r)
 {
   //Debut DELAY et TESTFRAUDEUR --------------------------------------
   //Délai entre les jeux.
   //Pendant ce temps, si un joueur appuie sur sa manette, sa lumière rouge allume.  Même chose pour les voisins.
   int LoopsToGo=20;
-  bool AtLeastOneActive = false;
-  bool TriggerEnd = false;
+  bool AtLeastOneActive=false;
+  bool TriggerEnd=false;
   int x=0;
   
-  //r = Nombre de fois où la boucle fraudeur va s'exécuter avant de passer au répartiteur.
-  for (int a = 1; a <= r; a++)
+  //r=Nombre de fois où la boucle fraudeur va s'exécuter avant de passer au répartiteur.
+  for (int a=1; a<=r; a++)
   {
     AtLeastOneActive=ReadInputActivateOutput(nbj_raw);
     if (AtLeastOneActive)
@@ -30,13 +36,13 @@ void Delay_Fraudeur(int r)
   }
 
   //Fraudeurs identifiés
-  if (x > 0)
+  if (x>0)
   {
     delay(500);
     MoveDEDUFlag(0);
     delay(500);
     TurnOffAllLights();
-    Delay_Fraudeur(random(25,70));
+    Delay_Fraudeur(CalculDelaiFraudeur(false));
   }
 }
 
@@ -47,8 +53,8 @@ void Delay_Fraudeur(int r)
 #endif
 void PQP()
 {
-  int Winner = -1;
-  int r = random(5);
+  int Winner=-1;
+  int r=random(5);
   int r2=random(2,100);
   
   LOG_PQP("r:");
@@ -74,32 +80,9 @@ void PQP()
     Winner=FirstActive(nbj_raw);
   }while (Winner == -1);
 
-  ActivateGreenLED(0);
-
-  //Winner found, lights on/off!
-  for (int a = 1 ; a <= 3 ; a++)  
-  {
-    ActivateRedLight(Winner);
-    
-    for (int i = 1; i <= 120; i++)
-    {
-      Tone_Frequency = 500 + 30 * i;
-      tone(Tone_Pin, Tone_Frequency, 3);
-      delay(3);
-    }
-    noTone(Tone_Pin);
-    delay (500);
-
-    
-    TurnOffAllRedLights();
-    
-    ActivateGreenLED(20);
-    delay(500);
-    ActivateGreenLED(0);
-  }
-  TurnOffAllLights();
-  delay(125);
-  
+  WinnerSoundAndLight(Winner);
+  UpdateWinner(Winner);
+  delay(200);
 }
 
 int MarqueurHonte(int iJoueurChanceux, int iSpinDelay)
@@ -108,7 +91,7 @@ int MarqueurHonte(int iJoueurChanceux, int iSpinDelay)
   int Winner;
   int SpinDelay;
   
-  if(iJoueurChanceux==-1)
+  if (iJoueurChanceux==-1)
   {
     Winner=random(nbj);
   }
@@ -117,22 +100,22 @@ int MarqueurHonte(int iJoueurChanceux, int iSpinDelay)
     Winner=iJoueurChanceux;
   }
   //Délai entre chaque clignotement
-  if(iSpinDelay==-1)
+  if (iSpinDelay==-1)
   {
-    SpinDelay = DelaiHonte;
+    SpinDelay=DelaiHonte;
   }
   else
   {
-    SpinDelay = iSpinDelay;
+    SpinDelay=iSpinDelay;
   }
   
   //Tout bleu pour commencer
   ActivateBlueLED(20);
 
   //Spin the wheel!
-  for (SpinDelay ; SpinDelay >= 1; SpinDelay -= 5)
+  for (SpinDelay; SpinDelay>= 1; SpinDelay -= 5)
   {
-    for (int i = 0; i <= nbj_raw; i++)
+    for (int i=0; i<=nbj_raw; i++)
     {
       tone(Tone_Pin, 3500, 10);
       ActivateRedLight(i);
@@ -147,7 +130,7 @@ int MarqueurHonte(int iJoueurChanceux, int iSpinDelay)
   ActivateBlueLED(6);
 
   //Identify the Winner
-  for (int e = 1; e <= 4; e++) {
+  for (int e=1; e<=4; e++) {
     tone(Tone_Pin, 3500, 10);
     ActivateRedLight(Winner);
     delay(500);
@@ -171,15 +154,15 @@ void TrompeOeil()
   LOG_TROMPE("TROMPE");
   LOG_TROMPE("\n");
   
-  int NumActive = -1;
-  int maxIter = random(2500,4500);
-  int maxIter_Sheep = 2500;
-  int IterVert = random(30,35);
+  int NumActive=-1;
+  int maxIter=random(2500,4500);
+  int maxIter_Sheep=2500;
+  int IterVert=random(30,35);
   bool SwitchColor=false;
-  bool SwitchToRed = false;
-  int ToRED = IterVert+50;
+  bool SwitchToRed=false;
+  int ToRED=IterVert+50;
   int ProbVert=4;
-  bool GreenFirst = (random(ProbVert)==0);
+  bool GreenFirst=(random(ProbVert)==0);
   
   LOG_TROMPE("Game_Mode:");
   LOG_TROMPE(Game_Mode);
@@ -198,12 +181,12 @@ void TrompeOeil()
 
   //Initialize Loosers Array
   int Loosers[nbj];
-  for (int i=0 ; i<=nbj_raw;i++)
+  for (int i=0; i<=nbj_raw;i++)
   {
     Loosers[i]=0;
   }
   
-  if(GreenFirst)
+  if (GreenFirst)
   {
     //Init lights as green!
     ActivateGreenLED(random(1,5));
@@ -214,10 +197,10 @@ void TrompeOeil()
     TurnOnAllRedLights();
   }
 
-  for (int i = 0; i <= maxIter; i++)
+  for (int i=0; i<=maxIter; i++)
   {
 
-    if(SwitchColor==false && i>IterVert && GreenFirst)
+    if (!SwitchColor && i>IterVert && GreenFirst)
     {
       SwitchColor=true;
       ActivateGreenLED(0);
@@ -225,7 +208,7 @@ void TrompeOeil()
       LOG_TROMPE("\n");  
     }
 
-    if(SwitchToRed==false && i>ToRED && GreenFirst)
+    if (!SwitchToRed && i>ToRED && GreenFirst)
     {
       SwitchToRed=true;
       TurnOnAllRedLights();
@@ -234,7 +217,7 @@ void TrompeOeil()
     }
     
     Looser=FirstActive(nbj_raw);
-    if (Looser >= 0) 
+    if (Looser>= 0) 
     {
       TurnOffAllRedLights();
       ActivateGreenLED(0);
@@ -246,13 +229,13 @@ void TrompeOeil()
     delay(1);
   }
 
-  if (Looser >= 0)
-  { 
-    for (int j = 0; j <= maxIter_Sheep; j++)
+  if (Looser>= 0)
+  {
+    for (int j=0; j<=maxIter_Sheep; j++)
     {
-      for (int i=0 ; i<=nbj_raw;i++)
+      for (int i=0; i<=nbj_raw;i++)
       {
-        if(ReadPlayerInput(i)==HIGH && Loosers[i]==0)
+        if (ReadPlayerInput(i) && Loosers[i]==0)
         {
           Loosers[i]=1;
           ActivateRedLight(i);
@@ -273,18 +256,18 @@ void TrompeOeil()
 void DQP()
 {
   int z;
-  int Perdant = -1;
+  int Perdant=-1;
 
   //init lights as purple
   ActivateBlueLED(100);
   TurnOnAllRedLights();
   
-  z = nbj;
+  z=nbj;
 
   do
   {
     z=z-ReadInputDeactivateOutputIfActive(nbj_raw);
-  }while (z != 1);
+  }while (z!=1);
   Perdant=FirstActiveOutput(nbj_raw);
 
   TurnOffNonActivePlayerRedLights();
@@ -297,12 +280,12 @@ void DQP()
 //Debut FFA
 void FFA()
 {
-  float myRand1 = random(280,400)/100;
-  int myRand2 = random(25,32);
+  float myRand1=random(280,400)/100;
+  int myRand2=random(25,32);
   
   JoueChanson(0,myRand1,false, true);
   
-  for (int e = 1; e <= myRand2; e++) {
+  for (int e=1; e<=myRand2; e++) {
 
     MoveDEDUFlag(100-random(20));
 
