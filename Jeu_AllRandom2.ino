@@ -7,11 +7,11 @@
 void AR2()
 {
   //TUNABLES
-  int RandFactor=random(10,25);
-  int RandFactorModifThreshold=random(40,60);
-  #define AR2_NoBots true
-  #define AR2_WinCondToggleRand 125
-  #define AR2_ENDGAME_RANDFACTOR 75
+  int RandFactor=random(11,62);
+  int RandFactorModifThreshold=random(42,84);
+  #define AR2_NoBots false
+  int AR2_WinCondToggleRand=random(125,200);
+  #define AR2_ENDGAME_RANDFACTOR 50
   #define AR2_DeduMasterClickMin 1
   #define AR2_DeduMasterClickMax 5
   #define AR2_BUZZERS_MIN 10
@@ -24,11 +24,31 @@ void AR2()
   #define AR2_GB_LED_MAX 15
   //MAX NUMASSIGNMENTS NE PEUT PAS ÊTRE PLUS GRAND QUE LA GRANDEUR DE ARRAY EQUIPES-nbj.
   #define AR2_NumAssignments 16
-  #define AR2_GAMEDELAY 20
-  #define AR2_GRACETIME 7242
+  int AR2_GAMEDELAY=random(10,25);
+  int AR2_GRACETIME=random(7242,10042);
   #define AR2_NOTETIME 200
   //END TUNABLES
 
+  //LOG
+  LOG_AR2("=--=--=\n");
+  LOG_AR2("=-AR2-=\n");
+  LOG_AR2("=--=--=\n");
+  LOG_AR2("RandFactor: ");
+  LOG_AR2(RandFactor);
+  LOG_AR2("\n");
+  LOG_AR2("RandFactorModifThreshold: ");
+  LOG_AR2(RandFactorModifThreshold);
+  LOG_AR2("\n");
+  LOG_AR2("AR2_GAMEDELAY: ");
+  LOG_AR2(AR2_GAMEDELAY);
+  LOG_AR2("\n");
+  LOG_AR2("AR2_GRACETIME: ");
+  LOG_AR2(AR2_GRACETIME);
+  LOG_AR2("\n");
+  LOG_AR2("AR2_WinCondToggleRand: ");
+  LOG_AR2(AR2_WinCondToggleRand);
+  LOG_AR2("\n");
+  
   
   //LUMIERES
   if (!SkipLights)
@@ -52,9 +72,6 @@ void AR2()
     PlayersInGame[i]=true;
     OutputMapping[i]=-1;
   }
-  LOG_AR2("=--=--=\n");
-  LOG_AR2("=-AR2-=\n");
-  LOG_AR2("=--=--=\n");
   //int LightMapping[4]={0,6,15,24};
   int LightMapping[4]={0,8,24,42};
   int ToneMapping[8]={261,293,329,350,392,440,494,523};
@@ -167,21 +184,18 @@ void AR2()
   {
     if (RandIncreaseCounter>RandFactorModifThreshold)
     {
-      LOG_AR2("New RandFactor: ");
-      LOG_AR2(RandFactor);
-      LOG_AR2("\n");
-      
       //Speed up The AutoBots at end of game
       if (TriggerEndGame)
       {
-        RandFactor--;
-        RandFactorModifThreshold--;
+        if(RandFactor>3) RandFactor--;
       }
       else
       {
         RandFactor++;
-        RandFactorModifThreshold++;
       }
+      LOG_AR2("New RandFactor: ");
+      LOG_AR2(RandFactor);
+      LOG_AR2("\n");
       RandIncreaseCounter=0;
     }
     
@@ -225,25 +239,12 @@ void AR2()
         //Slowly stop auto-spammers as they reach goal condition
         if (TriggerEndGame && i!=Looser)
         {
-          if (WinCondition==0)
+          if (WinCondition==0 && !OutputArray[i] || WinCondition==nbj && OutputArray[i])
           {
-            if (!OutputArray[i])
-            {
-              LOG_AR2("One Less: ");
-              LOG_AR2(i);
-              LOG_AR2("\n");
-              PlayersInGame[i]=false;
-            }
-          }
-          else
-          {
-            if (OutputArray[i])
-            {
-              LOG_AR2("One Less: ");
-              LOG_AR2(i);
-              LOG_AR2("\n");
-              PlayersInGame[i]=false;
-            }
+            LOG_AR2("One Less: ");
+            LOG_AR2(i);
+            LOG_AR2("\n");
+            PlayersInGame[i]=false;
           }
         }
 
@@ -295,6 +296,7 @@ void AR2()
     if (abs(CountActivePlayers(OutputArray, nbj)-WinCondition)==1 && !TriggerEndGame  && GraceTimeOver)
     {
       LOG_AR2("Trigger End Game\n");
+      LOG_AR2("\n");
       RandFactor=AR2_ENDGAME_RANDFACTOR;
       TriggerEndGame=true;
       //Identify the Looser based on wincondition

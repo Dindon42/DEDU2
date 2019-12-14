@@ -9,8 +9,6 @@ void AllRandom()
   int NewAssignment[nbj_max]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
   bool NumAlreadyAllocated=false;
   int PosAssigned=0;
-  int r;
-  int r2;
   bool PreviousState[nbj_max]={false};
   bool LightState[nbj_max]={false};
   int OutputSum;
@@ -54,54 +52,42 @@ void AllRandom()
   //Initial Lights setup: 50/50 Lit vs Not Lit
   AllocateTwoTeams(nbj);
 
+  LOG_RANDOM("New Assignments\n");
   //Fill Random Array
-  do
+  for(int i=0 ; i<nbj; i++)
   {
-    r=random(nbj);
-    
-    if (NewAssignment[r]==-1)
+    do
     {
-      do
+     NumAlreadyAllocated=false;
+     
+     int r=random(nbj_max);
+     
+     for (int j=0; j<i; j++)
+     {
+      if (NewAssignment[j]==r)
       {
-       NumAlreadyAllocated=false;
-       
-       r2=random(nbj);
-       
-       for (int j=0; j<nbj; j++)
-       {
-        
-        if (NewAssignment[j]==r2)
-        {
-          
-          NumAlreadyAllocated=true;
-          break;
-        }
-       }
+        NumAlreadyAllocated=true;
+        break;
+      }
+     }
+     if (!NumAlreadyAllocated)
+     {
+      NewAssignment[i]=r;
+     }
+    }while(NewAssignment[i]==-1);
 
-       if (!NumAlreadyAllocated)
-       {
-        NewAssignment[r]=r2;
-        PosAssigned++;
-       }
-       
-      }while(NewAssignment[r]==-1);
-    }
-  }while(PosAssigned<nbj);
-
-
-
-  //Activate Based on  assignment from previous call
-  for (int i=0; i<nbj; i++)
-  {
+    //Initial light state
     if (Equipes[i]==0)
     {
       ActivateRedLight(NewAssignment[i]);
       LightState[i]=true;
     }
-    LOG_RANDOM("Player:");
+    LOG_RANDOM("ID: ");
     LOG_RANDOM(i);
-    LOG_RANDOM("  Light:");
+    LOG_RANDOM(" Light: ");
     LOG_RANDOM(NewAssignment[i]);
+    LOG_RANDOM(" InitState: ");
+    LOG_RANDOM(LightState[i]);
     LOG_RANDOM("\n");
   }
   
@@ -116,7 +102,6 @@ void AllRandom()
     Wincondition=nbj-1;
     MoveDEDUFlag(100);
   }
-
   delay(800);
   ReadySound(500);
 

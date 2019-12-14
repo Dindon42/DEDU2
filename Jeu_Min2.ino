@@ -5,6 +5,7 @@
 #endif
 void MIN2()
 {
+  #define ExtraRoundsFor2Players false
   #define MIN2_StartTicTimerThreshold  825
   #define MIN2_EndTicTimerThresholdMin 350
   #define MIN2_EndTicTimerThresholdMax 425
@@ -238,6 +239,15 @@ void MIN2()
       }
     }
     ActivePlayers=CountActivePlayers(PlayersInGame, nbj);
+
+    if(!ExtraRoundsFor2Players)
+    {
+      TwoWinners=ActivePlayers==2;
+      LOG_MIN2("TwoWinners: ");
+      LOG_MIN2(TwoWinners);
+      LOG_MIN2("\n");
+    }
+    
     //Next Round.
     delay(500);
     LOG_MIN2("ActivePlayers: ");

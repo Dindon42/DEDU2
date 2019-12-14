@@ -48,8 +48,8 @@ void UpdateWinners(bool Winners[], int NbPlayers)
 void HighScoreSpecialEvent()
 {
   if(Game_Mode!=Game_Mode_Experimental) return;
-  
-  int Score_Diff_Threshold=JoueurPuissant==-1 ? 3 : 0;
+  int Score_Min = 5;
+  int Score_Diff_Threshold=JoueurPuissant==-1 ? 2 : 0;
   int Score_1=-1;
   int Score_1_Player;
   int Score_2=-1;
@@ -85,7 +85,7 @@ void HighScoreSpecialEvent()
   LOG_GENERAL("\n");
   LOG_GENERAL("===========================\n");
   
-  if(Score_1>Score_2+Score_Diff_Threshold && Score_1_Player!=JoueurPuissant && !Score_1_Tied)
+  if(Score_1>Score_2+Score_Diff_Threshold && Score_1_Player!=JoueurPuissant && !Score_1_Tied && Score_1>Score_Min)
   {
     JoueurPuissant=Score_1_Player;
     LOG_GENERAL("===========================\n");

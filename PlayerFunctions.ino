@@ -50,9 +50,7 @@ void AllocateTwoTeams(int NbjToAllocate)
   
   LOG_GENERAL("NbjToAllocate: ");
   LOG_GENERAL(NbjToAllocate);
-  LOG_GENERAL("\n");
-  LOG_GENERAL("Assignments");
-  LOG_GENERAL("\n");
+  LOG_GENERAL("\nAssignations des équipes\n");
   for (int i=0; i<NbjToAllocate; i++)
   {
     LOG_GENERAL("ID: ");
@@ -61,6 +59,7 @@ void AllocateTwoTeams(int NbjToAllocate)
     LOG_GENERAL(Equipes[i]);
     LOG_GENERAL("\n");
   }
+  LOG_GENERAL("=====\n");
 }
 
 void AllocateTwoConsecutiveTeams()
