@@ -87,62 +87,8 @@ void PQP()
 
 int MarqueurHonte(int iJoueurChanceux, int iSpinDelay)
 {
-  //Joueur chanceux
-  int Winner;
-  int SpinDelay;
-  
-  if (iJoueurChanceux==-1)
-  {
-    Winner=random(nbj);
-  }
-  else
-  {
-    Winner=iJoueurChanceux;
-  }
-  //Délai entre chaque clignotement
-  if (iSpinDelay==-1)
-  {
-    SpinDelay=DelaiHonte;
-  }
-  else
-  {
-    SpinDelay=iSpinDelay;
-  }
-  
-  //Tout bleu pour commencer
-  ActivateBlueLED(20);
-
-  //Spin the wheel!
-  for (SpinDelay; SpinDelay>= 1; SpinDelay -= 5)
-  {
-    for (int i=0; i<=nbj_raw; i++)
-    {
-      tone(Tone_Pin, 3500, 10);
-      ActivateRedLight(i);
-      delay(SpinDelay);
-      DeactivateRedLight(i);
-    }
-  }
-  
-  noTone(Tone_Pin);
-
-  //Low intensity
-  ActivateBlueLED(6);
-
-  //Identify the Winner
-  for (int e=1; e<=4; e++) {
-    tone(Tone_Pin, 3500, 10);
-    ActivateRedLight(Winner);
-    delay(500);
-    DeactivateRedLight(Winner);
-    delay(500);
-  }
-
-  //Blue off.
-  DeactivateBlueLED();
-
-  return Winner;
- }
+  return LumiereHonte(iJoueurChanceux, iSpinDelay, true, false);
+}
 
 #ifdef ENABLE_LOGGING
   #define LOG_TROMPE(a) LOG_GAME(Game_id_TO,a)

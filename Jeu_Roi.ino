@@ -84,7 +84,8 @@ void ROI()
       DeactivateRedLight(VotePlayer);
       delay(300);
     }
-
+    delay(1000);
+    
     //One round complete - computing.
     int MaxScore=0;
     int MaxPlayer=-1;
@@ -106,19 +107,18 @@ void ROI()
       }
     }
 
-    //Ce que je veux:
-    /*
-     * Si tous les joueurs sont à égalité, faire une ronde de plus.
-     * S'ils sont encore à égalité, choisir un random.
-     * Sinon, 
-     */
+    //Activate red lights for players in game.
+    for(int i=0; i<nbj; i++)
+    {
+      if(PlayersInGame[i]) ActivateRedLight(i);
+    }
     
     bool AllPlayersTied=NumTiedPlayers==PlayersStartOfRound;
     //Compute what to do if all players are tied.
     if (AllPlayersTied && ExtraRoundAllPlayersTied)
     {
-      //Do nothing.
-      //Record that we have done the extra round.
+      TiedSoundAndLight();
+      //Record that we have exhausted our extra round.
       ExtraRoundAllPlayersTied=false;
     }
     else
@@ -127,17 +127,55 @@ void ROI()
       if(NumTiedPlayers==0)
       {
         NouveauRoi=MaxPlayer;
+FanfareFF3();
+        WinnerSoundAndLight(NouveauRoi);
+        
+        LumiereHonte(NouveauRoi, DelaiPetiteHonte, false, true);
       }
-      //All players are tied?  Pick at random between them.
+      //All players are tied? AGAIN??  Pick at random between them.
       else if(AllPlayersTied && !ExtraRoundAllPlayersTied)
       {
         int JoueurActifChanceux=random(PlayersStartOfRound);
-        for(int i=0; inbj
+        int ActiveCounter=0;
+        for(int i=0; i<nbj; i++)
+        {
+          if(ActiveCounter==JoueurActifChanceux && PlayersInGame[i])
+          {
+            NouveauRoi=i;
+            break;
+          }
+          else if(PlayersInGame[i])
+          {
+            ActiveCounter++;
+          }
+        }
+        
+        TiedSoundAndLight();
+        LumiereHonte(NouveauRoi, (DelaiPetiteHonte+DelaiHonte)/2, false, true);        
       }
-
+      //Not single winner, Not all players tied.  Eliminate non-Max-score players.
+      else
+      {
+        //Run Through the scores
+        for(int iScore=0; iScore<MaxScore; iScore++)
+        {
+          int init=random(nbj);
+          //Run through the players for each score up to Max.
+          for(int cur=init; cur<init+nbj; cur++)
+          {
+            int i=cur%nbj;
+            //Deactivate this player.
+            if(Score[i]==iScore)
+            {
+              LooserSoundAndLight(i, true);
+              PlayersInGame[i]=false;
+            }
+          }
+        }
+      }
+      //Reset ExtraRound if we get to here.
       if(!ExtraRoundAllPlayersTied) ExtraRoundAllPlayersTied=true;
-    }
-    
+    } 
   }while(NouveauRoi==-1);
 
   //Enregistrer le nouveu roi.
