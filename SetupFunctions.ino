@@ -262,8 +262,9 @@ void AjustementProbJeuxInit()
   {
     ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
   }
-  //MarqueurHonte initial élevé, FFA 0
+  //MarqueurHonte initial élevé, FFA et ROI 0
   ProbIndivJeuxCurrent[Game_id_FFA]=0;
+  ProbIndivJeuxCurrent[Game_id_ROI]=0;
   if (Game_Mode!=Game_Mode_Original)
   {
     ProbIndivJeuxCurrent[Game_id_MH]=424;
