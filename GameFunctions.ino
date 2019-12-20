@@ -247,6 +247,10 @@ void PlayGame(int game_id, bool DemoMode)
   {
     MIN2();
   }
+  else if (game_id==Game_id_ROI)
+  {
+    ROI();
+  }
   else
   {
     PQP();
@@ -355,6 +359,10 @@ void LogGameName(int game_id, bool NewLine)
   {
     LOG_GENERAL("Minorite 2  ");
   }
+  else if (game_id==Game_id_ROI)
+  {
+    LOG_GENERAL("Roi         ");
+  }
   else
   {
     LOG_GENERAL("PQP         ");
@@ -393,6 +401,16 @@ void ResetProbAfterGame(int game_id)
     DivideGameProb(Game_id_MIN,2);
     DivideGameProb(Game_id_MIN2,2);
   }
+
+  //Additional condition for ROI, should only happen 
+  if(TotalNbJeux<MinRoundsRoi)
+  {
+    ResetGameProb(Game_id_ROI);
+  }
+  else if(JoueurRoi==-1)
+  {
+    MultGameProb(Game_id_ROI,2);
+  }
 }
 
 void ResetGameProb(int game_id)
@@ -410,6 +428,11 @@ void ResetGameProb(int game_id)
 void DivideGameProb(int game_id,int divisor)
 {
   ProbIndivJeuxCurrent[game_id]=ProbIndivJeuxCurrent[game_id]/divisor;
+}
+
+void MultGameProb(int game_id,double mult)
+{
+  ProbIndivJeuxCurrent[game_id]=ProbIndivJeuxCurrent[game_id] * mult;
 }
 
 void ResetProbHonte()

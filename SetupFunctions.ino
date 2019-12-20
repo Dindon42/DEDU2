@@ -165,6 +165,7 @@ void DefineProbJeux()
   GameProb[Game_id_TB][wMode]=120;
   GameProb[Game_id_AR2][wMode]=100;
   GameProb[Game_id_MIN2][wMode]=80;
+  GameProb[Game_id_ROI][wMode]=80;
   //Override for Min2, un peu plus de honte.
   GameProb[Game_id_MIN][wMode]=80;
   GameProb[Game_id_TH][wMode]=120;
@@ -235,6 +236,7 @@ void DefineGameTypes()
   //3=Autres
   GameTypes[Game_id_TO]=Game_Type_AU;
   GameTypes[Game_id_FFA]=Game_Type_AU;
+  GameTypes[Game_id_ROI]=Game_Type_AU;
   
   //51=Perdant indiv et honte
   GameTypes[Game_id_MH]=Game_Type_PIH;

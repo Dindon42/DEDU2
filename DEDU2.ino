@@ -70,8 +70,9 @@
 #define Game_id_TB 21
 #define Game_id_AR2 22
 #define Game_id_MIN2 23
+#define Game_id_ROI 24
 //Garder FFA comme dernier jeu
-#define Game_id_FFA 24
+#define Game_id_FFA 25
 
 //==================\\
 //END GLOBAL DEFINES\\
@@ -120,15 +121,14 @@ bool EnterDemo=false;
 bool AllModes=false;
 int JoueurHonte=-1;
 int JoueurPuissant=-1;
+int JoueurRoi=-1;
 //=========================\\
 //===      DEBUG END    ===\\
 //=========================\\
 
 
-
-
-
 //Prob, Jeux
+#define MinRoundsRoi 20
 int NumberOfRoundsForFullProb=4;
 int CountJeux[NbJeux]={0};
 int CountType[NbGameTypes]={0};
