@@ -1,15 +1,22 @@
+
+#ifdef ENABLE_LOGGING
+  #define LOG_ROI(a) LOG_GAME(Game_id_ROI,a)
+#else
+  #define LOG_ROI(a)
+#endif
 void ROI()
 {
   int NouveauRoi=-1;
   int Score[nbj];
   unsigned long GameTimer=0;
   #define ROI_GAMEDELAY 1
-  #define PerPlayerDelay 4000
+  #define PerPlayerDelay 2000
   bool PlayersInGame[nbj];
   bool PreviousState[nbj];
   bool VoteRecorded[nbj];
   bool HasReleased[nbj];
   bool ExtraRoundAllPlayersTied=true;
+  #define AbsoluteMaxScore nbj+1
   //Signature Lumineuse
   //Musique glorieuse
   //Musique pendant 
@@ -49,10 +56,13 @@ void ROI()
       GameTimer=0;
       for(int i=0; i<nbj; i++)
       {
-        VoteRecorded[i]=0;
+        VoteRecorded[i]=false;
         HasReleased[i]=false;
       }
-
+      
+      LOG_ROI("Vote For Player: ");
+      LOG_ROI(VotePlayer);
+      LOG_ROI("\n");
       //Main Vote For Player Loop
       do
       {
@@ -67,10 +77,13 @@ void ROI()
           {
             HasReleased[i]=true;
           }
-
+          
           //Check condition to count score.
-          if(CurrentState && !PreviousState && !VoteRecorded[i] && HasReleased[i])
+          if(CurrentState && !PreviousState[i] && !VoteRecorded[i] && HasReleased[i])
           {
+            LOG_ROI("Player ");
+            LOG_ROI(i);
+            LOG_ROI(" has voted\n");
             Score[i]++;
             VoteRecorded[i]=true;
           }
@@ -85,6 +98,16 @@ void ROI()
       delay(300);
     }
     delay(1000);
+
+    //Print scores
+    for(int i=0; i<nbj; i++)
+    {
+      LOG_ROI("Player ");
+      LOG_ROI(i);
+      LOG_ROI(" Score: ");
+      LOG_ROI(Score[i]);
+      LOG_ROI("\n");
+    }
     
     //One round complete - computing.
     int MaxScore=0;
@@ -100,12 +123,23 @@ void ROI()
         NumTiedPlayers=0;
         MaxScore=Score[i];
         MaxPlayer=i;
+        LOG_ROI("New Max Score: ");
+        LOG_ROI(MaxScore);
+        LOG_ROI("\n");
+        LOG_ROI("Player: ");
+        LOG_ROI(MaxPlayer);
+        LOG_ROI("\n");
       }
       else if(Score[i]==MaxScore)
       {
+        LOG_ROI("Player: ");
+        LOG_ROI(i);
+        LOG_ROI("tied for max score\n");
         NumTiedPlayers++;
       }
     }
+
+    
 
     //Activate red lights for players in game.
     for(int i=0; i<nbj; i++)
@@ -117,6 +151,7 @@ void ROI()
     //Compute what to do if all players are tied.
     if (AllPlayersTied && ExtraRoundAllPlayersTied)
     {
+      LOG_ROI("All Players tied. Doing an extra round.\n");
       TiedSoundAndLight();
       //Record that we have exhausted our extra round.
       ExtraRoundAllPlayersTied=false;
@@ -126,8 +161,9 @@ void ROI()
       //Single winner condition (No Tied Players)
       if(NumTiedPlayers==0)
       {
+        LOG_ROI("Single Victor.\n");
         NouveauRoi=MaxPlayer;
-FanfareFF3();
+        
         WinnerSoundAndLight(NouveauRoi);
         
         LumiereHonte(NouveauRoi, DelaiPetiteHonte, false, true);
@@ -135,6 +171,7 @@ FanfareFF3();
       //All players are tied? AGAIN??  Pick at random between them.
       else if(AllPlayersTied && !ExtraRoundAllPlayersTied)
       {
+        LOG_ROI("All Players tied and they had expended the extra round.\n");
         int JoueurActifChanceux=random(PlayersStartOfRound);
         int ActiveCounter=0;
         for(int i=0; i<nbj; i++)
@@ -156,26 +193,32 @@ FanfareFF3();
       //Not single winner, Not all players tied.  Eliminate non-Max-score players.
       else
       {
+        LOG_ROI("Tied Winners, but not all players tied.\n");
         //Run Through the scores
         for(int iScore=0; iScore<MaxScore; iScore++)
         {
-          int init=random(nbj);
+          bool PlayersToDeactivate[nbj];
+          MoveDEDUFlag(iScore*(float)(100/AbsoluteMaxScore));
+          delay(1000);
           //Run through the players for each score up to Max.
-          for(int cur=init; cur<init+nbj; cur++)
+          for(int i=0; i<nbj; i++)
           {
-            int i=cur%nbj;
+            PlayersToDeactivate[i]=false;
             //Deactivate this player.
             if(Score[i]==iScore)
             {
-              LooserSoundAndLight(i, true);
+              PlayersToDeactivate[i]=true;
               PlayersInGame[i]=false;
             }
           }
         }
+        MoveDEDUFlag(0);
       }
       //Reset ExtraRound if we get to here.
       if(!ExtraRoundAllPlayersTied) ExtraRoundAllPlayersTied=true;
-    } 
+    }
+    LOG_ROI("Tied Winners, but not all players tied.\n");
+    delay(2000)
   }while(NouveauRoi==-1);
 
   //Enregistrer le nouveu roi.
