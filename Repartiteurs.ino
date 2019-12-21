@@ -45,7 +45,6 @@ void Repartiteur()
     MaxProbAcc=max_prob;
   }
 
-
   do
   {
     Jeu=SelectGame(random(max_prob)+1);

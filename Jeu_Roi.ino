@@ -10,17 +10,38 @@ void ROI()
   int Score[nbj];
   unsigned long GameTimer=0;
   #define ROI_GAMEDELAY 1
-  #define PerPlayerDelay 2000
+  #define PerPlayerDelay 3000
   bool PlayersInGame[nbj];
   bool PreviousState[nbj];
   bool VoteRecorded[nbj];
   bool HasReleased[nbj];
   bool ExtraRoundAllPlayersTied=true;
   #define AbsoluteMaxScore nbj+1
-  //Signature Lumineuse
-  //Musique glorieuse
-  //Musique pendant 
 
+  //Lumieres
+  if(!SkipLights)
+  {
+    ActivateRedLight(0);
+    ActivateRedLight(4);
+    ActivateRedLight(5);
+    ActivateRedLight(9);
+
+    for(int i=0; i<100; i++)
+    {
+      ActivateGreenLED(i/4);
+      delay(30);
+      MoveDEDUFlag(i);
+    }
+    OCanada();
+    TurnOffAllRedLights();
+    MoveDEDUFlag(0);
+    ActivateGreenLED(0);
+    delay(200);
+    ReadySound(600);
+    delay(800);
+  }
+  
+  
   //Initialization
   for(int i=0; i<nbj; i++)
   {
@@ -112,7 +133,7 @@ void ROI()
     //One round complete - computing.
     int MaxScore=0;
     int MaxPlayer=-1;
-    int NumTiedPlayers=-1;
+    int NumTiedPlayers=0;
     for(int i=0; i<nbj; i++)
     {
       //Do not compute Players that are out of game.
@@ -146,11 +167,29 @@ void ROI()
     }
     
     bool AllPlayersTied=NumTiedPlayers==PlayersStartOfRound;
+
+    LOG_ROI("PlayersStartOfRound:");
+    LOG_ROI(PlayersStartOfRound);
+    LOG_ROI("\n");
+    LOG_ROI("NumTiedPlayers:");
+    LOG_ROI(NumTiedPlayers);
+    LOG_ROI("\n");
+    LOG_ROI("All Players tied?? ");
+    LOG_ROI(AllPlayersTied);
+    LOG_ROI("\n");
+
+    if(AllPlayersTied)
+    {
+      OneUp();
+      delay(1500);
+      TurnOffAllRedLights();
+      delay(500);
+    }
+    
     //Compute what to do if all players are tied.
     if (AllPlayersTied && ExtraRoundAllPlayersTied)
     {
       LOG_ROI("All Players tied. Doing an extra round.\n");
-      TiedSoundAndLight();
       //Record that we have exhausted our extra round.
       ExtraRoundAllPlayersTied=false;
     }
@@ -174,9 +213,7 @@ void ROI()
             ActiveCounter++;
           }
         }
-        
-        TiedSoundAndLight();
-        LumiereHonte(NouveauRoi, (DelaiPetiteHonte+DelaiHonte)/2, false, true);
+        LumiereHonte(NouveauRoi, (DelaiHonte+DelaiPetiteHonte)/2, false, true);
       }
       //Not single winner, Not all players tied.  Eliminate non-Max-score players.
       else
@@ -230,16 +267,15 @@ void ROI()
           LOG_ROI("Single Victor.\n");
           NouveauRoi=MaxPlayer;
           
-          WinnerSoundAndLight(NouveauRoi);
-          
+          FF3Fanfare();
           LumiereHonte(NouveauRoi, DelaiPetiteHonte, false, true);
         }
         else
         {
           OneUp();
-          //Prep Next Round.
-          delay(1200);
+          delay(1500);
           TurnOffAllRedLights();
+          delay(500);
         }
         
       }

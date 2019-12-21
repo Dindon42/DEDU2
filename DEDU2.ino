@@ -99,8 +99,8 @@
 #define ExclusiveGameDelay 0
 
 //Opt Repartiteur
-#define ExclusiveGameType false
-#define ExclusiveGameType_ID Game_Type_GI
+bool ExclusiveGameType false
+int ExclusiveGameType_ID Game_Type_GI
 #define SkipFraudeur false
 #define SkipGame false
 #define DelayIfSkipGame false
@@ -195,20 +195,31 @@ int OrdreJoueurs[NbNoteMax];
 #define DelaiHonte 160 - nbj * 7
 
 ////Chansons.
-#define NombreChansons 12
+#define NombreChansons 12 //Pour jeux.
 int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 int ChansonFacteurRandomMin;
 int ChansonFacteurRandomMax;
 int ChansonPourJeu=0;
 #define CHANSON_FinalCtd1ID 1
 #define CHANSON_FinalCtd2ID 2
+#define CHANSON_FF3Win 12
+#define CHANSON_CAN 13
 //Pour Chaque chanson:
 //0 =>Freq
 //1 =>Temps Actif
 //2 =>Temps Silence Après
 float MaChanson[ParamChansons][NbNoteMax];
 //Definition des arrays de chansons.
-
+const PROGMEM float CAN[3][10] = {
+    {392,466.2,466.2,311.1,349.2,392,415.3,466.2,523.3,349.2},
+    {1979.2,1458.3,479.2,2916.7,979.2,979.2,979.2,979.2,979.2,2000},
+    {20.8,50.7,20.8,83.3,20.8,20.8,20.8,20.8,20.8,0}
+    };
+const PROGMEM float FF3Win[3][9] = {
+    {293.7,293.7,293.7,293.7,233.1,261.6,293.7,261.6,293.7},
+    {150,166.7,166.7,1000,958.3,958.3,225,316.7,3000},
+    {166.7,166.7,166.7,0,41.7,41.7,441.7,16.7,0}
+    };
 const PROGMEM float Figaro[3][46] = {
     {207.7,246.9,233.1,185,207.7,246.9,233.1,185,207.7,246.9,233.1,185,207.7,246.9,277.2,246.9,277.2,246.9,185,207.7,370,329.6,311.1,277.2,311.1,370,207.7,246.9,233.1,185,207.7,246.9,233.1,185,207.7,246.9,233.1,185,207.7,246.9,277.2,246.9,277.2,311.1,246.9,277.2},
     {885.4,885.4,1406.2,250,442.7,442.7,442.7,442.7,500,442.7,442.7,125,125,161.5,750,442.7,442.7,937.5,937.5,937.5,468.7,468.7,468.7,468.7,468.7,468.7,937.5,911.5,1432.3,250,442.7,442.7,442.7,442.7,442.7,442.7,442.7,125,125,166.7,937.5,442.7,442.7,963.5,963.5,2687.5},

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using Commons.Music.Midi;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace MidiToDedu
@@ -30,7 +31,7 @@ namespace MidiToDedu
 
       // Read the file and display it line by line.  
       string BaseDir = @"C:\temp\";
-      string File = "Figaro";
+      string File = "CAN_LONG";
       string ExtOutput = ".txt";
       string ExtInput = ".mid";
 
@@ -45,7 +46,7 @@ namespace MidiToDedu
 
         double TickToMicroSecond = DefaultTickToMicroSecond;
         if (SMFR.Music.DeltaTimeSpec != 0) TickToMicroSecond = DefaultTickToMicroSecond * (DefaultBPM / (double) SMFR.Music.DeltaTimeSpec);
-
+        
         foreach (MidiMessage M in SMFR.Music.Tracks[1].Messages)
         {
           var E = M.Event;

@@ -257,7 +257,7 @@ int SelectionChanson(int Numero)
       ChansonFacteurRandomMin=115;
       ChansonFacteurRandomMax=160;
       return NombreDeNotes;
-    default:
+    case 11:
       pf = (float*)Figaro;
       NombreDeNotes = sizeof(Figaro[0]) / sizeof(float);      
       
@@ -272,6 +272,34 @@ int SelectionChanson(int Numero)
       ChansonFacteurRandomMin = 125;
       ChansonFacteurRandomMax = 180;
       return NombreDeNotes;
+    //Max pour JeuChanson - Les tounes ci-bas ne peuvent jouer.
+    case 12:
+      pf = (float*)FF3Win;
+      NombreDeNotes = sizeof(FF3Win[0]) / sizeof(float);
+      for (int i = 0; i < ParamChansons; i++)
+      {
+          for (int j = 0; j < NombreDeNotes; j++)
+          {
+              MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
+          }
+      }
+      ChansonFacteurRandomMin = 200;
+      ChansonFacteurRandomMax = 200;
+      return NombreDeNotes;
+    default:
+      pf = (float*)CAN;
+      NombreDeNotes = sizeof(CAN[0]) / sizeof(float);
+      for (int i = 0; i < ParamChansons; i++)
+      {
+          for (int j = 0; j < NombreDeNotes; j++)
+          {
+              MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
+          }
+      }
+      ChansonFacteurRandomMin = 300;
+      ChansonFacteurRandomMax = 300;
+      return NombreDeNotes;
+
   }
 }
 

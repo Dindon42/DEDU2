@@ -304,6 +304,16 @@ void OneUp()
   noTone(Tone_Pin);
 }
 
+void FF3Fanfare()
+{
+  JoueChanson(CHANSON_FF3Win, 1, true, false);
+}
+void OCanada()
+{
+  JoueChanson(CHANSON_CAN, 1, true, false);
+}
+
+
 void TiedSoundAndLight()
 {
   ActivateGreenLED(100);

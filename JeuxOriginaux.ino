@@ -10,15 +10,13 @@ void Delay_Fraudeur(int r)
   //Délai entre les jeux.
   //Pendant ce temps, si un joueur appuie sur sa manette, sa lumière rouge allume.  Même chose pour les voisins.
   int LoopsToGo=20;
-  bool AtLeastOneActive=false;
   bool TriggerEnd=false;
   int x=0;
   
   //r=Nombre de fois où la boucle fraudeur va s'exécuter avant de passer au répartiteur.
   for (int a=1; a<=r; a++)
   {
-    AtLeastOneActive=ReadInputActivateOutput(nbj_raw);
-    if (AtLeastOneActive)
+    if (ReadInputActivateOutput(nbj_raw))
     {
       TriggerEnd=true;
       x=1;
@@ -44,6 +42,12 @@ void Delay_Fraudeur(int r)
     TurnOffAllLights();
     Delay_Fraudeur(CalculDelaiFraudeur(false));
   }
+
+  //Inclure une logique pour looper plus efficacement dans delay_fraudeur.
+  //Inclure une logique pour enregistrer les clic du roi.
+  //Inclure une logique pour modifier ExclusiveGameType et ExclusiveGameTypeID
+  
+  return 0;
 }
 
 #ifdef ENABLE_LOGGING
