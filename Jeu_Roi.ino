@@ -84,7 +84,7 @@ void ROI()
             LOG_ROI("Player ");
             LOG_ROI(i);
             LOG_ROI(" has voted\n");
-            Score[i]++;
+            Score[VotePlayer]++;
             VoteRecorded[i]=true;
           }
           
@@ -112,7 +112,7 @@ void ROI()
     //One round complete - computing.
     int MaxScore=0;
     int MaxPlayer=-1;
-    int NumTiedPlayers=0;
+    int NumTiedPlayers=-1;
     for(int i=0; i<nbj; i++)
     {
       //Do not compute Players that are out of game.
@@ -120,7 +120,7 @@ void ROI()
       
       if(Score[i]>MaxScore)
       {
-        NumTiedPlayers=0;
+        NumTiedPlayers=1;
         MaxScore=Score[i];
         MaxPlayer=i;
         LOG_ROI("New Max Score: ");
@@ -138,9 +138,7 @@ void ROI()
         NumTiedPlayers++;
       }
     }
-
     
-
     //Activate red lights for players in game.
     for(int i=0; i<nbj; i++)
     {
@@ -158,18 +156,8 @@ void ROI()
     }
     else
     {
-      //Single winner condition (No Tied Players)
-      if(NumTiedPlayers==0)
-      {
-        LOG_ROI("Single Victor.\n");
-        NouveauRoi=MaxPlayer;
-        
-        WinnerSoundAndLight(NouveauRoi);
-        
-        LumiereHonte(NouveauRoi, DelaiPetiteHonte, false, true);
-      }
       //All players are tied? AGAIN??  Pick at random between them.
-      else if(AllPlayersTied && !ExtraRoundAllPlayersTied)
+      if(AllPlayersTied && !ExtraRoundAllPlayersTied)
       {
         LOG_ROI("All Players tied and they had expended the extra round.\n");
         int JoueurActifChanceux=random(PlayersStartOfRound);
@@ -188,39 +176,82 @@ void ROI()
         }
         
         TiedSoundAndLight();
-        LumiereHonte(NouveauRoi, (DelaiPetiteHonte+DelaiHonte)/2, false, true);        
+        LumiereHonte(NouveauRoi, (DelaiPetiteHonte+DelaiHonte)/2, false, true);
       }
       //Not single winner, Not all players tied.  Eliminate non-Max-score players.
       else
       {
-        LOG_ROI("Tied Winners, but not all players tied.\n");
+        LOG_ROI("Ceremonie d'élimination\n");
         //Run Through the scores
         for(int iScore=0; iScore<MaxScore; iScore++)
         {
           bool PlayersToDeactivate[nbj];
-          MoveDEDUFlag(iScore*(float)(100/AbsoluteMaxScore));
-          delay(1000);
+          int numPlayersToDeactivate=0;
           //Run through the players for each score up to Max.
           for(int i=0; i<nbj; i++)
           {
             PlayersToDeactivate[i]=false;
             //Deactivate this player.
-            if(Score[i]==iScore)
+            if(Score[i]==iScore && PlayersInGame[i])
             {
               PlayersToDeactivate[i]=true;
+              numPlayersToDeactivate++;
               PlayersInGame[i]=false;
             }
           }
+          
+          MoveDEDUFlag(iScore*((float)100/(float)AbsoluteMaxScore));
+          delay(500);
+          
+          if(numPlayersToDeactivate>0)
+          {
+            delay(800);
+            for(int j=0; j<5; j++)
+            {
+              for(int i=0; i<nbj; i++)
+              {
+                if(PlayersToDeactivate[i])
+                {
+                  SetRedLight(i, !ReadPlayerOutput(i));
+                }
+              }
+              delay(300);
+            }
+          }
         }
+
+        //We have reached maxscore. The remaining players have won the round.
         MoveDEDUFlag(0);
+        delay(1500);
+        
+        //Single winner condition (No Tied Players)
+        if(NumTiedPlayers==1)
+        {
+          LOG_ROI("Single Victor.\n");
+          NouveauRoi=MaxPlayer;
+          
+          WinnerSoundAndLight(NouveauRoi);
+          
+          LumiereHonte(NouveauRoi, DelaiPetiteHonte, false, true);
+        }
+        else
+        {
+          OneUp();
+          //Prep Next Round.
+          delay(1200);
+          TurnOffAllRedLights();
+        }
+        
       }
       //Reset ExtraRound if we get to here.
       if(!ExtraRoundAllPlayersTied) ExtraRoundAllPlayersTied=true;
     }
-    LOG_ROI("Tied Winners, but not all players tied.\n");
-    delay(2000)
+    LOG_ROI("END OF ROUND.\n");
+    LOG_ROI("NouveauRoi");
+    LOG_ROI(NouveauRoi);
+    LOG_ROI("\n");
+    delay(500);
   }while(NouveauRoi==-1);
-
   //Enregistrer le nouveu roi.
   JoueurRoi=NouveauRoi;
 }
