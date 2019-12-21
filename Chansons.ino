@@ -48,7 +48,7 @@ void DefinirOrdreChansons()
   LOG_GENERAL("\n");
 }
 
-void JoueChanson(int Chanson,float FacteurVitesse, bool RandVitesse, bool Lumiere)
+void JoueChanson(int Chanson, float FacteurVitesse, bool RandVitesse, bool Lumiere)
 {
   int NombreNotes=SelectionChanson(Chanson);
   int myRand;
@@ -244,18 +244,33 @@ int SelectionChanson(int Numero)
       ChansonFacteurRandomMin=130;
       ChansonFacteurRandomMax=180;
       return NombreDeNotes;
-    default:
+    case 10:
       pf=(float*)Tetris;
       NombreDeNotes=sizeof(Tetris[0])/sizeof(float);
       for (int i=0; i<ParamChansons; i++)
       {
-          for (int j=0; j<NombreDeNotes; j++)
-          {
-              MaChanson[i][j]=pgm_read_float(pf+i*NombreDeNotes+j);
-          }
+        for (int j=0; j<NombreDeNotes; j++)
+        {
+          MaChanson[i][j]=pgm_read_float(pf+i*NombreDeNotes+j);
+        }
       }
       ChansonFacteurRandomMin=115;
       ChansonFacteurRandomMax=160;
+      return NombreDeNotes;
+    default:
+      pf = (float*)Figaro;
+      NombreDeNotes = sizeof(Figaro[0]) / sizeof(float);      
+      
+
+      for (int i = 0; i < ParamChansons; i++)
+      {
+        for (int j = 0; j < NombreDeNotes; j++)
+        {
+          MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);
+        }
+      }
+      ChansonFacteurRandomMin = 125;
+      ChansonFacteurRandomMax = 180;
       return NombreDeNotes;
   }
 }

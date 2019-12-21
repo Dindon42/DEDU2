@@ -1,188 +1,175 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
+using Commons.Music.Midi;
+using System.Collections.Generic;
 
 namespace MidiToDedu
 {
-    class MidiToDEDUConverter
+  class MidiToDEDUConverter
+  {
+    public class Note
     {
-        static void Main(string[] args)
-        {
-
-            const string tone = "tone(tonePin,";
-            const string delay = "delay(";
-            const int MaxDataCnt = 3;
-
-            double DoubleFromText;
-            bool LastWasDelay = false;
-
-            char[] commaSeparator = new char[] { '(', ',', ')' };
-
-            string line;
-            string substring;
-            string[] stringcomponents;
-            int DataTripletCounter = 0;
-            int DataCounter = 0;
-            int index;
-
-            double[,] MyValues = new double[100, 3];
-
-            // Read the file and display it line by line.  
-            string BaseDir = "C:\\temp\\TEST\\";
-            string File = "Tetris";
-            string Ext = ".txt";
-
-            System.IO.StreamReader Infile = new System.IO.StreamReader(BaseDir + File + Ext);
-            System.IO.StreamWriter Outfile = new System.IO.StreamWriter(BaseDir + File + "_converted" + Ext);
-
-            //InputFormat
-            /*
-            tone(tonePin, 195, 254.1664125);
-            delay(338.88855);
-            delay(124.999875);
-            tone(tonePin, 195, 261.80529375);
-            delay(349.073725);
-            delay(109.25915);
-             * */
-
-            //OutputFormat:
-            /*
-            float ChansonDEDU[3][18] = {
-                {196,196,196,247,247,261,261,349,247,196,196,294,247,196,330,294,247,261},
-                {150,150,150,300,300,300,300,600,150,150,150,150,150,150,600,150,150,600},
-                {100,200,100,200,200,200,200,200,100,200,100,200,100,400,400,200,100,200},
-                };
-            */
-
-            while ((line = Infile.ReadLine()) != null)
-            {
-
-                if (line.IndexOf(tone) != -1)
-                {
-                    index = line.IndexOf(tone);
-                    System.Console.WriteLine("Index: {0}", index);
-
-                    LastWasDelay = false;
-
-                    substring = line.Substring(index);
-                    stringcomponents = substring.Split(commaSeparator);
-
-                    foreach (string str in stringcomponents)
-                    {
-                        Console.WriteLine(str);
-                        if (double.TryParse(str, out DoubleFromText))
-                        {
-                            Console.WriteLine(str);
-                            Console.WriteLine(DoubleFromText);
-                            MyValues[DataTripletCounter, DataCounter] = DoubleFromText;
-                            DataCounter++;
-                            if (DataCounter == MaxDataCnt)
-                            {
-                                DataCounter = 0;
-                                DataTripletCounter++;
-                            }
-                        }
-                    }
-                }
-                else if (line.IndexOf(delay) != -1)
-                {
-                    index = line.IndexOf(delay);
-                    System.Console.WriteLine("Index: {0}", index);
-
-                    substring = line.Substring(index);
-                    stringcomponents = substring.Split(commaSeparator);
-                    foreach (string str in stringcomponents)
-                    {
-                        Console.WriteLine(str);
-                        if (double.TryParse(str, out DoubleFromText))
-                        {
-
-                            if (LastWasDelay == true)
-                            {
-                                Console.WriteLine(str);
-                                Console.WriteLine(DoubleFromText);
-                                MyValues[DataTripletCounter - 1, 2] += DoubleFromText;
-                                DataCounter = 0; ;
-                            }
-                            else
-                            {
-                                Console.WriteLine(str);
-                                Console.WriteLine(DoubleFromText);
-                                MyValues[DataTripletCounter, DataCounter] = DoubleFromText - MyValues[DataTripletCounter, DataCounter - 1];
-                                DataCounter++;
-                                if (DataCounter == MaxDataCnt)
-                                {
-                                    DataCounter = 0;
-                                    DataTripletCounter++;
-                                }
-                            }
-                            LastWasDelay = true;
-                        }
-                    }
-                }
-            }
-
-            Outfile.WriteLine("");
-            Outfile.WriteLine("const PROGMEM float " + File + "[" + MaxDataCnt + "][" + DataTripletCounter + "] = {");
-            Outfile.Write("    {");
-            for (int i = 0; i < DataTripletCounter; i++)
-            {
-                if (i < DataTripletCounter - 1)
-                    Outfile.Write(Math.Round(MyValues[i, 0], 1) + ",");
-                else
-                    Outfile.Write(Math.Round(MyValues[i, 0], 1));
-            }
-            Outfile.Write("},\n");
-            Outfile.Write("    {");
-            for (int i = 0; i < DataTripletCounter; i++)
-            {
-                if (i < DataTripletCounter - 1)
-                    Outfile.Write(Math.Round(MyValues[i, 1], 1) + ",");
-                else
-                    Outfile.Write(Math.Round(MyValues[i, 1], 1));
-            }
-            Outfile.Write("},\n");
-            Outfile.Write("    {");
-            for (int i = 0; i < DataTripletCounter; i++)
-            {
-                if (i < DataTripletCounter - 1)
-                    Outfile.Write(Math.Round(MyValues[i, 2], 1) + ",");
-                else
-                    Outfile.Write(Math.Round(MyValues[i, 2], 1));
-            }
-            Outfile.Write("},\n");
-            Outfile.WriteLine("    };");
-
-
-            Outfile.WriteLine("");
-            Outfile.WriteLine("");
-            Outfile.WriteLine("");
-            Outfile.WriteLine("");
-            Outfile.WriteLine("");
-            Outfile.WriteLine("");
-            Outfile.WriteLine("");
-            Outfile.WriteLine("case XXXX:");
-            Outfile.WriteLine("  pf = (float*)" + File + ";");
-            Outfile.WriteLine("  NombreDeNotes = sizeof(" + File + "[0]) / sizeof(float);");
-            Outfile.WriteLine("  for (int i = 0; i < ParamChansons; i++)");
-            Outfile.WriteLine("  {");
-            Outfile.WriteLine("      for (int j = 0; j < NombreDeNotes; j++)");
-            Outfile.WriteLine("      {");
-            Outfile.WriteLine("          MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);");
-            Outfile.WriteLine("      }");
-            Outfile.WriteLine("  }");
-            Outfile.WriteLine("  RandomMin = XXXX;");
-            Outfile.WriteLine("  RandomMax = XXXX;");
-            Outfile.WriteLine("  return NombreDeNotes;");
-
-            Infile.Close();
-            Outfile.Close();
-
-            System.Console.WriteLine("Export Complete");
-            // Suspend the screen.  
-            //System.Console.ReadLine();
-        }
+      public double Freq { get; set; }
+      public int MidiNote { get; set; }
+      public double Duration { get; set; }
+      public double SilenceAfter { get; set; }
     }
+
+    static void Main(string[] args)
+    {
+      SmfReader SMFR = new SmfReader();
+      const int NOTEONSTART = 0x90;
+      const int NOTEONEND = 0x9F;
+      const int NOTEOFFSTART = 0x80;
+      const int NOTEOFFEND = 0x8F;
+      bool ExpectingNoteOff = false;
+      bool ExpectingNoteOn = true;
+      const double DefaultBPM = 120;
+      const double DefaultTickToMicroSecond = 8.33333;
+
+      // Read the file and display it line by line.  
+      string BaseDir = @"C:\temp\";
+      string File = "Figaro";
+      string ExtOutput = ".txt";
+      string ExtInput = ".mid";
+
+      string Infile = BaseDir + File + ExtInput;
+      System.IO.StreamWriter Outfile = new System.IO.StreamWriter(BaseDir + File + "_converted" + ExtOutput);
+      List<Note> Chanson = new List<Note>();
+      List<string> Warnings = new List<string>();
+
+      using (FileStream FS = System.IO.File.OpenRead(Infile))
+      {
+        SMFR.Read(FS);
+
+        double TickToMicroSecond = DefaultTickToMicroSecond;
+        if (SMFR.Music.DeltaTimeSpec != 0) TickToMicroSecond = DefaultTickToMicroSecond * (DefaultBPM / (double) SMFR.Music.DeltaTimeSpec);
+
+        foreach (MidiMessage M in SMFR.Music.Tracks[1].Messages)
+        {
+          var E = M.Event;
+
+          //NOTE ON
+          if (M.Event.EventType >= NOTEONSTART && M.Event.EventType <= NOTEONEND)
+          {
+            //Start new note
+            if (ExpectingNoteOn)
+            {
+              //Close previous note.
+              if(Chanson.Count!=0)
+              {
+                Chanson[Chanson.Count-1].SilenceAfter = M.DeltaTime * TickToMicroSecond;
+              }
+              Chanson.Add(new Note()
+              {
+                MidiNote = E.Msb,
+                Freq = E.Frequency(),
+                Duration = 0,
+                SilenceAfter = 0
+              });
+            }
+            //Close Previous note
+            else
+            {
+              int PrevNote = Chanson.Count - 1;
+              Warnings.Add("Unexpected note ON after note number: " + Chanson.Count + " MidiNote: " + Chanson[PrevNote].MidiNote);
+              Chanson[PrevNote].Duration = M.DeltaTime * TickToMicroSecond;
+              Chanson[PrevNote].SilenceAfter = 0;
+            }
+            ExpectingNoteOff = true;
+            ExpectingNoteOn = false;
+          }
+
+          //NOTE OFF
+          if (M.Event.EventType >= NOTEOFFSTART && M.Event.EventType <= NOTEOFFEND)
+          {
+            if (ExpectingNoteOff)
+            {
+              ExpectingNoteOff = false;
+              ExpectingNoteOn = true;
+              Chanson[Chanson.Count-1].Duration = M.DeltaTime * TickToMicroSecond;
+            }
+            else
+            {
+              Warnings.Add("Unexpected note OFF after note number: " + Chanson.Count + " MidiNote: " + Chanson[Chanson.Count-1].MidiNote);
+            }
+          }
+        }
+      }
+      
+      const int MaxDataCnt = 3;
+
+      //OutputFormat:
+      /*
+      float ChansonDEDU[3][18] = {
+          {196,196,196,247,247,261,261,349,247,196,196,294,247,196,330,294,247,261},
+          {150,150,150,300,300,300,300,600,150,150,150,150,150,150,600,150,150,600},
+          {100,200,100,200,200,200,200,200,100,200,100,200,100,400,400,200,100,200},
+          };
+      */
+      int DataTripletCounter = Chanson.Count;
+      Outfile.WriteLine("");
+      Outfile.WriteLine("const PROGMEM float " + File + "[" + MaxDataCnt + "][" + DataTripletCounter + "] = {");
+      Outfile.Write("    {");
+      for (int i = 0; i < DataTripletCounter; i++)
+      {
+        Outfile.Write(Math.Round(Chanson[i].Freq, 1));
+        if (i < DataTripletCounter - 1) Outfile.Write(",");
+          
+      }
+      Outfile.Write("},\n");
+      Outfile.Write("    {");
+      for (int i = 0; i < DataTripletCounter; i++)
+      {
+        Outfile.Write(Math.Round(Chanson[i].Duration, 1));
+        if (i < DataTripletCounter - 1) Outfile.Write(",");
+      }
+      Outfile.Write("},\n");
+      Outfile.Write("    {");
+      for (int i = 0; i < DataTripletCounter; i++)
+      {
+        Outfile.Write(Math.Round(Chanson[i].SilenceAfter, 1));
+        if (i < DataTripletCounter - 1) Outfile.Write(",");
+      }
+      Outfile.Write("}\n");
+      Outfile.WriteLine("    };");
+
+
+      Outfile.WriteLine("");
+      Outfile.WriteLine("");
+      Outfile.WriteLine("");
+      Outfile.WriteLine("");
+      Outfile.WriteLine("");
+      Outfile.WriteLine("");
+      Outfile.WriteLine("");
+      Outfile.WriteLine("case XXXX:");
+      Outfile.WriteLine("  pf = (float*)" + File + ";");
+      Outfile.WriteLine("  NombreDeNotes = sizeof(" + File + "[0]) / sizeof(float);");
+      Outfile.WriteLine("  for (int i = 0; i < ParamChansons; i++)");
+      Outfile.WriteLine("  {");
+      Outfile.WriteLine("      for (int j = 0; j < NombreDeNotes; j++)");
+      Outfile.WriteLine("      {");
+      Outfile.WriteLine("          MaChanson[i][j] = pgm_read_float(pf+i*NombreDeNotes+j);");
+      Outfile.WriteLine("      }");
+      Outfile.WriteLine("  }");
+      Outfile.WriteLine("  ChansonFacteurRandomMin = XXXX;");
+      Outfile.WriteLine("  ChansonFacteurRandomMax = XXXX;");
+      Outfile.WriteLine("  return NombreDeNotes;");
+      Outfile.WriteLine("\n\n\n");
+      Outfile.WriteLine("ErrorLog count: " + Warnings.Count);
+      foreach (string w in Warnings)
+      {
+        Outfile.WriteLine(w);
+      }
+
+
+
+      Outfile.Close();
+
+      System.Console.WriteLine("Export Complete");
+      // Suspend the screen.  
+      //System.Console.ReadLine();
+    }
+  }
 }
