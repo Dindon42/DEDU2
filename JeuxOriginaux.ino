@@ -4,50 +4,131 @@ int CalculDelaiFraudeur(bool iNormalDelay)
   else return random(25,50) + (11 - vitesse) * random(50);
 }
 
-void Delay_Fraudeur(int r)
+void Delay_Fraudeur(unsigned int NumRoundsToWait)
 {
+  bool PreviousState[nbj];
   //Debut DELAY et TESTFRAUDEUR --------------------------------------
-  //Délai entre les jeux.
-  //Pendant ce temps, si un joueur appuie sur sa manette, sa lumière rouge allume.  Même chose pour les voisins.
-  int LoopsToGo=20;
-  bool TriggerEnd=false;
-  int x=0;
   
-  //r=Nombre de fois où la boucle fraudeur va s'exécuter avant de passer au répartiteur.
-  for (int a=1; a<=r; a++)
+  //Boucle d'attente entre les jeux.
+  //Normalement: faire un countdown tranquille pendant que le temps s'écoule.
+  //Si qqn clique, illuminer sa lumière et monter le DEDU.
+  //Si d'autres cliquent, illuminer leur lumière.
+  //Si le roi clique, illuminer les LED en alternance 0,1,2,3,0...
+  //À la fin, envoyer le choix du roi.
+  unsigned int RoundCounter=0;
+  unsigned int LightOffCounter=0;
+  #define FraudeurExtraRoundsMin 20
+  #define FraudeurExtraRoundsMax 80
+  #define PetitFraudeurExtraRoundsMin  5
+  #define PetitFraudeurExtraRoundsMax 20
+  int ExtraDelai;
+
+  int SelectedGameType=-1;
+  unsigned int GameTypeSelLightOffCounter=0;
+  #define Delai_GameTypeSel 5
+  #define MAX_GAMETYPE 2
+  
+  do
   {
-    if (ReadInputActivateOutput(nbj_raw))
+    bool Fraudeur=false;
+    for (int i=0; i<nbj; i++)
     {
-      TriggerEnd=true;
-      x=1;
-      //Play tone and raise flag.
-      tone(Tone_Pin, 1500, 400);
-      MoveDEDUFlag(25);
+      bool CurrentState = ReadPlayerInput(i);
+      if(CurrentState && !PreviousState[i] && i==JoueurRoi && !Fraudeur)
+      {
+        SelectedGameType++;
+        if(SelectedGameType>MAX_GAMETYPE) SelectedGameType=-1;
+        GameTypeSelLightOffCounter=RoundCounter+Delai_GameTypeSel;
+        if(NumRoundsToWait<GameTypeSelLightOffCounter)
+        {
+          NumRoundsToWait+=random(PetitFraudeurExtraRoundsMin, PetitFraudeurExtraRoundsMax);
+        }
+
+        //Activate all lights that correspond to the selected mode.
+        for(int i=0; i<=SelectedGameType; i++)
+        {
+          ActivateRedLight(i);
+        }
+      }
+      
+      if (CurrentState && !PreviousState[i] && i!=JoueurRoi)
+      {
+        //Nouveau Fraudeur
+        //Activate the output
+        if(!Fraudeur) 
+        {
+          TurnOffAllRedLights();
+          ExtraDelai=random(FraudeurExtraRoundsMin, FraudeurExtraRoundsMax);
+          MoveDEDUFlag(random(25,60));
+        }
+        else
+        {
+          ExtraDelai=random(PetitFraudeurExtraRoundsMin, PetitFraudeurExtraRoundsMax);
+        }
+        ActivateRedLight(i);
+        
+        if(NumRoundsToWait<20)
+        {
+          NumRoundsToWait=20;
+        }
+        NumRoundsToWait += ExtraDelai;
+        LightOffCounter = RoundCounter+ExtraDelai;
+        Fraudeur=true;
+      }
+      PreviousState[i] = CurrentState;
     }
-    if (TriggerEnd == true)
+    
+    if (Fraudeur)
     {
-      TriggerEnd=false;
-      a=r-LoopsToGo;
+      tone(Tone_Pin, 1500, 200);
     }
+    else if(RoundCounter>GameTypeSelLightOffCounter)
+    {
+      TurnOffAllRedLights();
+    }
+
+    if(RoundCounter>LightOffCounter)
+    {
+      Fraudeur=false;
+      TurnOffAllRedLights();
+      MoveDEDUFlag(0);
+    }
+    
     //Internal delay
     delay(40);
-  }
-
-  //Fraudeurs identifiés
-  if (x>0)
-  {
-    delay(500);
-    MoveDEDUFlag(0);
-    delay(500);
-    TurnOffAllLights();
-    Delay_Fraudeur(CalculDelaiFraudeur(false));
-  }
+    RoundCounter++;
+  }while(RoundCounter<NumRoundsToWait);
 
   //Inclure une logique pour looper plus efficacement dans delay_fraudeur.
   //Inclure une logique pour enregistrer les clic du roi.
   //Inclure une logique pour modifier ExclusiveGameType et ExclusiveGameTypeID
+  bool ExclGameType=true;
+  int TypeId;
+  switch(SelectedGameType)
+  {
+    case 0:
+    {
+      TypeId=Game_Type_GI;
+    }
+    case 1:
+    {
+      TypeId=Game_Type_PI;
+    }
+    case 2:
+    {
+      TypeId=Game_Type_EQ;
+    }
+    default:
+    {
+      ExclGameType=false;
+    }
+  }
   
-  return 0;
+  if(!OverrideGameTypeFromFraudeur)
+  {
+    ExclusiveGameType=ExclGameType;
+    ExclusiveGameType_ID=TypeId;
+  }
 }
 
 #ifdef ENABLE_LOGGING

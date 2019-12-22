@@ -99,8 +99,9 @@
 #define ExclusiveGameDelay 0
 
 //Opt Repartiteur
-bool ExclusiveGameType false
-int ExclusiveGameType_ID Game_Type_GI
+bool ExclusiveGameType=false;
+int ExclusiveGameType_ID=Game_Type_GI;
+#define OverrideGameTypeFromFraudeur false
 #define SkipFraudeur false
 #define SkipGame false
 #define DelayIfSkipGame false
