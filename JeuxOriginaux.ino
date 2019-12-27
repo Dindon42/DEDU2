@@ -136,16 +136,10 @@ void Delay_Fraudeur(unsigned int NumRoundsToWait)
   LOG_GENERAL("FRAUDEURTERMINE\n");
   LOG_GENERAL("===============\n");
   
-  //Inclure une logique pour looper plus efficacement dans delay_fraudeur.
-  //Inclure une logique pour enregistrer les clic du roi.
-  //Inclure une logique pour modifier ExclusiveGameType et ExclusiveGameTypeID
-  bool ExclGameType=SelectedGameType!=-1;
-  int TypeId=SelectedGameType;
-  
   if(!OverrideGameTypeFromFraudeur)
   {
-    ExclusiveGameType=ExclGameType;
-    ExclusiveGameType_ID=TypeId;
+    ExclusiveGameType=SelectedGameType!=-1;
+    ExclusiveGameType_ID=SelectedGameType;
   }
   
   LOG_GENERAL("ExclusiveGameType: ");

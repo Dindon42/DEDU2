@@ -616,6 +616,12 @@ void LogSetupParams()
   LOG_GENERAL("JoueurHonte:");
   LOG_GENERAL(JoueurHonte);
   LOG_GENERAL("\n");
+  LOG_GENERAL("JoueurPuissant:");
+  LOG_GENERAL(JoueurPuissant);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("JoueurRoi:");
+  LOG_GENERAL(JoueurRoi);
+  LOG_GENERAL("\n");
   LOG_GENERAL("Pins des Joueurs:\n");
   for (int i=0; i<nbj_max; i++)
   {

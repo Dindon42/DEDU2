@@ -86,7 +86,7 @@
 //===================================\\
 //Comment out the following line too.
 //Enable Logging
-//#define ENABLE_LOGGING
+#define ENABLE_LOGGING
 
 //Opt Generales
 #define SkipSetup false
@@ -197,7 +197,7 @@ int OrdreJoueurs[NbNoteMax];
 #define DelaiHonte 160 - nbj * 7
 
 ////Chansons.
-#define NombreChansons 12 //Pour jeux.
+#define NombreChansons 11 //Pour jeux.
 int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 int ChansonFacteurRandomMin;
 int ChansonFacteurRandomMax;
