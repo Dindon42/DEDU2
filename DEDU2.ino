@@ -45,7 +45,7 @@
 #define Game_Type_EQH 52
 
 //GAME ID
-#define NbJeux 25
+#define NbJeux 26
 //Ordre utilisé pour le mode DÉMO  doit être consécutif de 0 à NbJeux-1.
 #define Game_id_PQP 0
 #define Game_id_PQR 1
@@ -86,7 +86,7 @@
 //===================================\\
 //Comment out the following line too.
 //Enable Logging
-#define ENABLE_LOGGING
+//#define ENABLE_LOGGING
 
 //Opt Generales
 #define SkipSetup false
@@ -358,22 +358,18 @@ void setup()
     DemoMode(AllModes);
     //Reset joueurspec après la démo.
     ResetJoueursSpeciaux();
-    
-    for(int i=0; i<nbj_max; i++)
-    {
-      GlobalScore[i]=0;
-    }
   }
-
-  LogSetupParams();
-
+  
   AdjustNumRoundsFullProb();
   
   DefineProbJeux();
   //Ajustement initial des prob pour les jeux.  Quelques cas spéciaux.
   AjustementProbJeuxInit();
-
   
+  for(int i=0; i<nbj_max; i++)
+  {
+    GlobalScore[i]=0;
+  }
   for(int i=0; i<NbJeux; i++)
   {
     CountJeux[i]=0;
@@ -389,6 +385,7 @@ void setup()
     JoueChanson(0,3,false, true);
   }
   
+  LogSetupParams();
   LOG_GENERAL("==============\n");
   LOG_GENERAL("  SETUP END   \n");
   LOG_GENERAL("==============\n");
@@ -409,6 +406,11 @@ void loop()
   {
     PlayExclusiveGame();
   }
+
+
+  LOG_GENERAL("nbj_raw:");
+  LOG_GENERAL(nbj_raw);
+  LOG_GENERAL("\n");
   
   if (!SkipFraudeur)
   {
@@ -418,6 +420,10 @@ void loop()
     Delay_Fraudeur(CalculDelaiFraudeur(true));
     TurnOffAllLights();
   }
+  
+  LOG_GENERAL("nbj_raw:");
+  LOG_GENERAL(nbj_raw);
+  LOG_GENERAL("\n");
   
   Repartiteur();
 }

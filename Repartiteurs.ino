@@ -105,7 +105,6 @@ void Repartiteur()
   LOG_GENERAL(JoueurRoi);
   LOG_GENERAL("\n");
   
-  
   LOG_GENERAL("FIN REPARTITEUR\n");
   LOG_GENERAL("===============\n");
   LOG_GENERAL("\n");
