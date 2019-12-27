@@ -40,6 +40,7 @@
 #define Game_Type_PI 1
 #define Game_Type_EQ 2
 #define Game_Type_AU 3
+#define Game_Type_HO 4
 #define Game_Type_PIH 51
 #define Game_Type_EQH 52
 
@@ -85,12 +86,12 @@
 //===================================\\
 //Comment out the following line too.
 //Enable Logging
-//#define ENABLE_LOGGING
+#define ENABLE_LOGGING
 
 //Opt Generales
-#define SkipSetup false
+#define SkipSetup true
 #define NoSound false
-#define SkipLights false
+#define SkipLights true
 
 //Opt Game
 #define ExclusiveGame false
@@ -102,8 +103,8 @@
 bool ExclusiveGameType=false;
 int ExclusiveGameType_ID=Game_Type_GI;
 #define OverrideGameTypeFromFraudeur false
-#define SkipFraudeur false
-#define SkipGame false
+#define SkipFraudeur true
+#define SkipGame true
 #define DelayIfSkipGame false
 #define DoNotShowGameProb false
 
@@ -324,8 +325,7 @@ void setup()
   
   if (!SkipSetup && !MusicMode)
   {
-    JoueurHonte=-1;
-    
+    ResetJoueursSpeciaux();
     WaitForAllNonActive(nbj_raw_max);
     
     // NBJ - Nombre de Joueurs
@@ -352,6 +352,19 @@ void setup()
       RedefinePlayerPins(false);
     }
   }
+
+  if (EnterDemo)
+  {
+    DemoMode(AllModes);
+    //Reset joueurspec après la démo.
+    ResetJoueursSpeciaux();
+    
+    for(int i=0; i<nbj_max; i++)
+    {
+      GlobalScore[i]=0;
+    }
+  }
+
   LogSetupParams();
 
   AdjustNumRoundsFullProb();
@@ -360,16 +373,14 @@ void setup()
   //Ajustement initial des prob pour les jeux.  Quelques cas spéciaux.
   AjustementProbJeuxInit();
 
-  if (EnterDemo)
+  
+  for(int i=0; i<NbJeux; i++)
   {
-    DemoMode(AllModes);
-    //Reset joueurhonte après la démo.
-    JoueurHonte=-1;
-    JoueurPuissant=-1;
-    for(int i=0; i<nbj_max; i++)
-    {
-      GlobalScore[i]=0;
-    }
+    CountJeux[i]=0;
+  }
+  for(int i=0; i<NbGameTypes; i++)
+  {
+    CountType[i]=0;
   }
   
   if (!SkipSetup)

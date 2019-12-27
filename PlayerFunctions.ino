@@ -228,3 +228,4 @@ int CountActivePlayers(bool PlayersInGame[], int NbPlayers)
   }
   return ActivePlayers;
 }
+
