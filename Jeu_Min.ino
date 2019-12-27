@@ -75,17 +75,7 @@ void MIN()
   }
   else//NoLoosers, start over.
   {
-    ActivateGreenLED(100);
-    OneUp();
-    for (int i=0; i<4; i++)
-    {
-      DeactivateGreenLED();
-      delay(LightDelay);
-      ActivateGreenLED(100);
-      delay(LightDelay);
-    }
-    
-    TurnOffAllLights();
+    TiedSoundAndLight();
     noloosers=true;
   }
 

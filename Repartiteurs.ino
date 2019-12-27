@@ -20,15 +20,10 @@ void Repartiteur()
     
     if (NotMoreThanMaxProb)
     {
-      //Logique si le flag NotMoreThanMaxProb est ON.  Exclusion pour Honte et DEDU
-      if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=Game_id_FFA && i!=Game_id_MH)
+      //Logique si le flag NotMoreThanMaxProb est ON.  Exclusion pour les évenements speciaux.
+      if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=Game_id_FFA && i!=Game_id_MH && i!=Game_id_ROI)
       {
         ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
-      }
-      //Special case for marqueurhonte et DEDU qui peuvent monter au-dessus de leur limite peu importe...
-      else if (i==Game_id_FFA || i==Game_id_MH)
-      {
-        ProbIndivJeuxCurrent[i]+=(ProbIndivJeux[i]/NumberOfRoundsForFullProb);
       }
     }
   }
@@ -44,7 +39,6 @@ void Repartiteur()
   {
     MaxProbAcc=max_prob;
   }
-
 
   do
   {
@@ -104,7 +98,12 @@ void Repartiteur()
   LOG_GENERAL("JoueurHonte:");
   LOG_GENERAL(JoueurHonte);
   LOG_GENERAL("\n");
-  
+  LOG_GENERAL("JoueurPuissant:");
+  LOG_GENERAL(JoueurPuissant);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("JoueurRoi:");
+  LOG_GENERAL(JoueurRoi);
+  LOG_GENERAL("\n");
   
   LOG_GENERAL("FIN REPARTITEUR\n");
   LOG_GENERAL("===============\n");

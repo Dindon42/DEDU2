@@ -304,6 +304,31 @@ void OneUp()
   noTone(Tone_Pin);
 }
 
+void FF3Fanfare()
+{
+  JoueChanson(CHANSON_FF3Win, 1, true, false);
+}
+void OCanada()
+{
+  JoueChanson(CHANSON_CAN, 1, true, false);
+}
+
+
+void TiedSoundAndLight()
+{
+  ActivateGreenLED(100);
+  OneUp();
+  for (int i=0; i<4; i++)
+  {
+    DeactivateGreenLED();
+    delay(800);
+    ActivateGreenLED(100);
+    delay(800);
+  }
+  
+  TurnOffAllLights();
+}
+
 void MultiLooserSoundAndLight(bool Loosers[], int i_nbj)
 {
   ActivateBlueLED(10);
@@ -490,5 +515,66 @@ void MaxRandom(int NumTimes, bool AllOff)
     ControlAllLights(false,0,0);
     MoveDEDUFlag(0);
   }
+}
+
+int LumiereHonte(int iJoueurChanceux, int iSpinDelay, bool Bleu, bool Vert)
+{
+  //Joueur chanceux
+  int Winner;
+  int SpinDelay;
+  
+  if (iJoueurChanceux==-1)
+  {
+    Winner=random(nbj);
+  }
+  else
+  {
+    Winner=iJoueurChanceux;
+  }
+  //Délai entre chaque clignotement
+  if (iSpinDelay==-1)
+  {
+    SpinDelay=DelaiHonte;
+  }
+  else
+  {
+    SpinDelay=iSpinDelay;
+  }
+  
+  if(Bleu) ActivateBlueLED(20);
+  if(Vert) ActivateGreenLED(20);
+
+  //Spin the wheel!
+  for (SpinDelay; SpinDelay>= 1; SpinDelay -= 5)
+  {
+    for (int i=0; i<=nbj_raw; i++)
+    {
+      tone(Tone_Pin, 3500, 10);
+      ActivateRedLight(i);
+      delay(SpinDelay);
+      DeactivateRedLight(i);
+    }
+  }
+  
+  noTone(Tone_Pin);
+
+  //Low intensity
+  if(Bleu) ActivateBlueLED(6);
+  if(Vert) ActivateGreenLED(6);
+
+  //Identify the Winner
+  for (int e=1; e<=4; e++) {
+    tone(Tone_Pin, 3500, 10);
+    ActivateRedLight(Winner);
+    delay(500);
+    DeactivateRedLight(Winner);
+    delay(500);
+  }
+
+  //Blue off.
+  DeactivateBlueLED();
+  DeactivateGreenLED();
+
+  return Winner;
 }
 

@@ -1,20 +1,3 @@
-//Reads all input pins, if HIGH, activate the OUTPUT. If at least one is active, return TRUE
-bool ReadInputActivateOutput(int NbInputs)
-{
-  bool AtLeastOneHIGH=false;
-  
-  for (int i=0; i<=NbInputs; i++)
-  {
-    if (ReadPlayerInput(i))
-    {
-      //Activate the output
-      ActivateRedLight(i);
-      AtLeastOneHIGH=true;
-    }
-  }
-  return AtLeastOneHIGH;
-}
-
 int IlluminateActiveExtinguishNonActive(int NbInputs)
 {
   int NumActive=0;

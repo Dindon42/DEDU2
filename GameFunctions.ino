@@ -4,7 +4,7 @@ void UpdateCountByType(int jeu)
 
   if (TempType>=50)
   {
-    CountType[4]++;
+    CountType[Game_Type_HO]++;
     TempType-=50;
   }
   CountType[TempType]++;
@@ -126,22 +126,36 @@ void PrepareGame(int game_id)
 
 void SimulateGame(int game_id)
 {
-  if (game_id==Game_id_MH || game_id==Game_id_TDD || game_id==Game_id_TH)
+  if(game_id==Game_id_ROI)
+  {
+    int TempRoi;
+    do
+    {
+      TempRoi=random(nbj);
+    }while(TempRoi==JoueurRoi);
+    JoueurRoi=TempRoi;
+  }
+  
+  if(game_id==Game_id_MH || game_id==Game_id_TDD || game_id==Game_id_TH)
   {
     JoueurHonte=random(nbj);
   }
-  if(game_id==Game_id_PQP  ||
-     game_id==Game_id_UC   ||
-     game_id==Game_id_DUEL ||
-     game_id==Game_id_PQR  ||
-     game_id==Game_id_TV   ||
-     game_id==Game_id_PB   ||
-     game_id==Game_id_PPV  ||
-     game_id==Game_id_JD   ||
-     game_id==Game_id_ED   ||
-     game_id==Game_id_MIN2)
+  
+  if(GameTypes[game_id]==Game_Type_GI || GameTypes[game_id]-50==Game_Type_GI);
   {
-    GlobalScore[random(nbj)]++;
+    int TempWinner;
+    bool KeepGoing;
+    
+    do
+    {
+      KeepGoing=false;
+      TempWinner=random(nbj);
+      if(TempWinner==JoueurPuissant)
+      {
+        KeepGoing=random(2)==0;
+      }
+    }while(KeepGoing);
+    GlobalScore[TempWinner]++;
   }
 }
 
@@ -247,6 +261,10 @@ void PlayGame(int game_id, bool DemoMode)
   {
     MIN2();
   }
+  else if (game_id==Game_id_ROI)
+  {
+    ROI();
+  }
   else
   {
     PQP();
@@ -349,11 +367,15 @@ void LogGameName(int game_id, bool NewLine)
   }
   else if (game_id==Game_id_AR2)
   {
-    LOG_GENERAL("All Random 2");
+    LOG_GENERAL("AR2         ");
   }
   else if (game_id==Game_id_MIN2)
   {
-    LOG_GENERAL("Minorite 2  ");
+    LOG_GENERAL("MIN2        ");
+  }
+  else if (game_id==Game_id_ROI)
+  {
+    LOG_GENERAL("Roi         ");
   }
   else
   {
@@ -393,6 +415,16 @@ void ResetProbAfterGame(int game_id)
     DivideGameProb(Game_id_MIN,2);
     DivideGameProb(Game_id_MIN2,2);
   }
+
+  //Additional condition for ROI, should only happen if -1
+  if(TotalNbJeux<MinRoundsRoi)
+  {
+    ResetGameProb(Game_id_ROI);
+  }
+  else if(JoueurRoi==-1)
+  {
+    MultGameProb(Game_id_ROI,2);
+  }
 }
 
 void ResetGameProb(int game_id)
@@ -410,6 +442,11 @@ void ResetGameProb(int game_id)
 void DivideGameProb(int game_id,int divisor)
 {
   ProbIndivJeuxCurrent[game_id]=ProbIndivJeuxCurrent[game_id]/divisor;
+}
+
+void MultGameProb(int game_id,double mult)
+{
+  ProbIndivJeuxCurrent[game_id]=ProbIndivJeuxCurrent[game_id] * mult;
 }
 
 void ResetProbHonte()
@@ -492,4 +529,12 @@ void LogGameProb(int game_id)
     }
     LOG_GENERAL(ProbAccumuleeJeux[game_id]);
     LOG_GENERAL("\n");
+}
+
+
+void ResetJoueursSpeciaux()
+{
+  JoueurHonte=-1;
+  JoueurRoi=-1;
+  JoueurPuissant=-1;
 }

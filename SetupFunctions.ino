@@ -165,6 +165,7 @@ void DefineProbJeux()
   GameProb[Game_id_TB][wMode]=120;
   GameProb[Game_id_AR2][wMode]=100;
   GameProb[Game_id_MIN2][wMode]=80;
+  GameProb[Game_id_ROI][wMode]=80;
   //Override for Min2, un peu plus de honte.
   GameProb[Game_id_MIN][wMode]=80;
   GameProb[Game_id_TH][wMode]=120;
@@ -235,6 +236,7 @@ void DefineGameTypes()
   //3=Autres
   GameTypes[Game_id_TO]=Game_Type_AU;
   GameTypes[Game_id_FFA]=Game_Type_AU;
+  GameTypes[Game_id_ROI]=Game_Type_AU;
   
   //51=Perdant indiv et honte
   GameTypes[Game_id_MH]=Game_Type_PIH;
@@ -260,8 +262,9 @@ void AjustementProbJeuxInit()
   {
     ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
   }
-  //MarqueurHonte initial élevé, FFA 0
+  //MarqueurHonte initial élevé, FFA et ROI 0
   ProbIndivJeuxCurrent[Game_id_FFA]=0;
+  ProbIndivJeuxCurrent[Game_id_ROI]=0;
   if (Game_Mode!=Game_Mode_Original)
   {
     ProbIndivJeuxCurrent[Game_id_MH]=424;
@@ -612,6 +615,12 @@ void LogSetupParams()
   LOG_GENERAL("\n");
   LOG_GENERAL("JoueurHonte:");
   LOG_GENERAL(JoueurHonte);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("JoueurPuissant:");
+  LOG_GENERAL(JoueurPuissant);
+  LOG_GENERAL("\n");
+  LOG_GENERAL("JoueurRoi:");
+  LOG_GENERAL(JoueurRoi);
   LOG_GENERAL("\n");
   LOG_GENERAL("Pins des Joueurs:\n");
   for (int i=0; i<nbj_max; i++)

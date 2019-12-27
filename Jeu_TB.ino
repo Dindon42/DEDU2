@@ -130,7 +130,6 @@ void TheButton()
           {
             ActivateRedLight(i);
             delay(100);
-            //OneUp();
           }
           
           GameSequence[SeqProgress]=i;

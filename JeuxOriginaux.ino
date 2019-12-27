@@ -1,49 +1,153 @@
 int CalculDelaiFraudeur(bool iNormalDelay)
 {
-  if(iNormalDelay)  return random(25,50) + (11 - vitesse) * random(100);
+  if(iNormalDelay)  return random(50,80) + (11 - vitesse) * random(100);
   else return random(25,50) + (11 - vitesse) * random(50);
 }
 
-void Delay_Fraudeur(int r)
+void Delay_Fraudeur(unsigned int NumRoundsToWait)
 {
+  bool PreviousState[nbj];
   //Debut DELAY et TESTFRAUDEUR --------------------------------------
-  //Délai entre les jeux.
-  //Pendant ce temps, si un joueur appuie sur sa manette, sa lumière rouge allume.  Même chose pour les voisins.
-  int LoopsToGo=20;
-  bool AtLeastOneActive=false;
-  bool TriggerEnd=false;
-  int x=0;
   
-  //r=Nombre de fois où la boucle fraudeur va s'exécuter avant de passer au répartiteur.
-  for (int a=1; a<=r; a++)
+  //Boucle d'attente entre les jeux.
+  //Normalement: faire un countdown tranquille pendant que le temps s'écoule.
+  //Si qqn clique, illuminer sa lumière et monter le DEDU.
+  //Si d'autres cliquent, illuminer leur lumière.
+  //Si le roi clique, illuminer les LED en alternance 0,1,2,3,0...
+  //À la fin, envoyer le choix du roi.
+  unsigned int RoundCounter=0;
+  unsigned int LightOffCounter=0;
+  #define FraudeurExtraRoundsMin  60
+  #define FraudeurExtraRoundsMax 100
+  #define PetitFraudeurExtraRoundsMin  5
+  #define PetitFraudeurExtraRoundsMax 20
+  int ExtraDelai;
+
+  int SelectedGameType=-1;
+  unsigned int GameTypeSelLightOffCounter=0;
+  #define Delai_GameTypeSel 10
+  #define MAX_GAMETYPE 2
+  
+  bool Fraudeur=false;
+  
+  LOG_GENERAL("NumRoundsToWait: ");
+  LOG_GENERAL(NumRoundsToWait);
+  LOG_GENERAL("\n"); 
+  LOG_GENERAL("JoueurRoi: ");
+  LOG_GENERAL(JoueurRoi);
+  LOG_GENERAL("\n"); 
+  
+  do
   {
-    AtLeastOneActive=ReadInputActivateOutput(nbj_raw);
-    if (AtLeastOneActive)
+    for (int i=0; i<nbj; i++)
     {
-      TriggerEnd=true;
-      x=1;
-      //Play tone and raise flag.
-      tone(Tone_Pin, 1500, 400);
-      MoveDEDUFlag(25);
+      bool CurrentState = ReadPlayerInput(i);
+
+      if(CurrentState && !PreviousState[i] && i==JoueurRoi && !Fraudeur)
+      {
+        SelectedGameType++;
+        if(SelectedGameType>MAX_GAMETYPE)
+        {
+          SelectedGameType=-1;
+          TurnOffAllRedLights();
+        }
+        
+        GameTypeSelLightOffCounter=RoundCounter+Delai_GameTypeSel;
+        
+        if(NumRoundsToWait-RoundCounter<40)
+        {
+          LOG_GENERAL("Rectification NumRoundsToWait\n");
+          NumRoundsToWait=RoundCounter+40;
+        }
+        
+        if(NumRoundsToWait<GameTypeSelLightOffCounter)
+        {
+          NumRoundsToWait+=random(PetitFraudeurExtraRoundsMin, PetitFraudeurExtraRoundsMax);
+        }
+
+        //Activate all lights that correspond to the selected mode.
+        for(int i=0; i<=SelectedGameType; i++)
+        {
+          ActivateRedLight(i);
+        }
+      }
+      
+      if (CurrentState && !PreviousState[i] && i!=JoueurRoi && !ReadPlayerOutput(i))
+      {
+        //Nouveau Fraudeur
+        //Activate the output
+        if(!Fraudeur) 
+        {
+          LOG_GENERAL("Premier Fraudeur\n");
+          TurnOffAllRedLights();
+          ExtraDelai=random(FraudeurExtraRoundsMin, FraudeurExtraRoundsMax);
+          MoveDEDUFlag(random(25,60));
+          tone(Tone_Pin, 1500, 200);
+          LightOffCounter = RoundCounter+ExtraDelai;
+        }
+        else
+        {
+          ExtraDelai=random(PetitFraudeurExtraRoundsMin, PetitFraudeurExtraRoundsMax);
+          LightOffCounter += ExtraDelai;
+        }
+        ActivateRedLight(i);
+        
+        LOG_GENERAL("Ajout Delai: ");
+        LOG_GENERAL(ExtraDelai);
+        LOG_GENERAL("\n");        
+        
+        if(NumRoundsToWait-RoundCounter<40)
+        {
+          LOG_GENERAL("Rectification NumRoundsToWait\n");
+          NumRoundsToWait=RoundCounter+40;
+        }
+        NumRoundsToWait += ExtraDelai;
+        
+        Fraudeur=true;
+      }
+      PreviousState[i] = CurrentState;
     }
-    if (TriggerEnd == true)
+    
+    if(!Fraudeur && RoundCounter>GameTypeSelLightOffCounter)
     {
-      TriggerEnd=false;
-      a=r-LoopsToGo;
+      TurnOffAllRedLights();
     }
+
+    if(RoundCounter > LightOffCounter && Fraudeur)
+    {
+      Fraudeur=false;
+      TurnOffAllRedLights();
+      MoveDEDUFlag(0);
+      LOG_GENERAL("Retour à la normale\n");
+      LOG_GENERAL("NumRoundsToWait: ");
+      LOG_GENERAL(NumRoundsToWait);
+      LOG_GENERAL("\n");
+      LOG_GENERAL("RoundCounter: ");
+      LOG_GENERAL(RoundCounter);
+      LOG_GENERAL("\n");
+    }
+    
     //Internal delay
     delay(40);
-  }
+    RoundCounter++;
+  }while(RoundCounter<NumRoundsToWait);
 
-  //Fraudeurs identifiés
-  if (x>0)
+  LOG_GENERAL("===============\n");
+  LOG_GENERAL("FRAUDEURTERMINE\n");
+  LOG_GENERAL("===============\n");
+  
+  if(!OverrideGameTypeFromFraudeur)
   {
-    delay(500);
-    MoveDEDUFlag(0);
-    delay(500);
-    TurnOffAllLights();
-    Delay_Fraudeur(CalculDelaiFraudeur(false));
+    ExclusiveGameType=SelectedGameType!=-1;
+    ExclusiveGameType_ID=SelectedGameType;
   }
+  
+  LOG_GENERAL("ExclusiveGameType: ");
+  LOG_GENERAL(ExclusiveGameType);
+  LOG_GENERAL("\n"); 
+  LOG_GENERAL("ExclusiveGameType_ID: ");
+  LOG_GENERAL(ExclusiveGameType_ID);
+  LOG_GENERAL("\n"); 
 }
 
 #ifdef ENABLE_LOGGING
@@ -87,62 +191,8 @@ void PQP()
 
 int MarqueurHonte(int iJoueurChanceux, int iSpinDelay)
 {
-  //Joueur chanceux
-  int Winner;
-  int SpinDelay;
-  
-  if (iJoueurChanceux==-1)
-  {
-    Winner=random(nbj);
-  }
-  else
-  {
-    Winner=iJoueurChanceux;
-  }
-  //Délai entre chaque clignotement
-  if (iSpinDelay==-1)
-  {
-    SpinDelay=DelaiHonte;
-  }
-  else
-  {
-    SpinDelay=iSpinDelay;
-  }
-  
-  //Tout bleu pour commencer
-  ActivateBlueLED(20);
-
-  //Spin the wheel!
-  for (SpinDelay; SpinDelay>= 1; SpinDelay -= 5)
-  {
-    for (int i=0; i<=nbj_raw; i++)
-    {
-      tone(Tone_Pin, 3500, 10);
-      ActivateRedLight(i);
-      delay(SpinDelay);
-      DeactivateRedLight(i);
-    }
-  }
-  
-  noTone(Tone_Pin);
-
-  //Low intensity
-  ActivateBlueLED(6);
-
-  //Identify the Winner
-  for (int e=1; e<=4; e++) {
-    tone(Tone_Pin, 3500, 10);
-    ActivateRedLight(Winner);
-    delay(500);
-    DeactivateRedLight(Winner);
-    delay(500);
-  }
-
-  //Blue off.
-  DeactivateBlueLED();
-
-  return Winner;
- }
+  return LumiereHonte(iJoueurChanceux, iSpinDelay, true, false);
+}
 
 #ifdef ENABLE_LOGGING
   #define LOG_TROMPE(a) LOG_GAME(Game_id_TO,a)

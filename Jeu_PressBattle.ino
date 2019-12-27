@@ -1,4 +1,3 @@
-
 #ifdef ENABLE_LOGGING
   #define LOG_PB(a) LOG_GAME(Game_id_PB,a)
 #else
