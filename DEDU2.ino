@@ -86,12 +86,12 @@
 //===================================\\
 //Comment out the following line too.
 //Enable Logging
-#define ENABLE_LOGGING
+//#define ENABLE_LOGGING
 
 //Opt Generales
-#define SkipSetup true
+#define SkipSetup false
 #define NoSound false
-#define SkipLights true
+#define SkipLights false
 
 //Opt Game
 #define ExclusiveGame false
@@ -103,8 +103,8 @@
 bool ExclusiveGameType=false;
 int ExclusiveGameType_ID=Game_Type_GI;
 #define OverrideGameTypeFromFraudeur false
-#define SkipFraudeur true
-#define SkipGame true
+#define SkipFraudeur false
+#define SkipGame false
 #define DelayIfSkipGame false
 #define DoNotShowGameProb false
 

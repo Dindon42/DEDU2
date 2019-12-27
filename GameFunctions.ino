@@ -134,7 +134,6 @@ void SimulateGame(int game_id)
       TempRoi=random(nbj);
     }while(TempRoi==JoueurRoi);
     JoueurRoi=TempRoi;
-    delay(8000);
   }
   
   if(game_id==Game_id_MH || game_id==Game_id_TDD || game_id==Game_id_TH)
@@ -142,18 +141,21 @@ void SimulateGame(int game_id)
     JoueurHonte=random(nbj);
   }
   
-  if(game_id==Game_id_PQP  ||
-     game_id==Game_id_UC   ||
-     game_id==Game_id_DUEL ||
-     game_id==Game_id_PQR  ||
-     game_id==Game_id_TV   ||
-     game_id==Game_id_PB   ||
-     game_id==Game_id_PPV  ||
-     game_id==Game_id_JD   ||
-     game_id==Game_id_ED   ||
-     game_id==Game_id_MIN2)
+  if(GameTypes[game_id]==Game_Type_GI || GameTypes[game_id]-50==Game_Type_GI);
   {
-    GlobalScore[random(nbj)]++;
+    int TempWinner;
+    bool KeepGoing;
+    
+    do
+    {
+      KeepGoing=false;
+      TempWinner=random(nbj);
+      if(TempWinner==JoueurPuissant)
+      {
+        KeepGoing=random(2)==0;
+      }
+    }while(KeepGoing);
+    GlobalScore[TempWinner]++;
   }
 }
 

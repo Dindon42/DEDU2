@@ -45,14 +45,29 @@ void UpdateWinners(bool Winners[], int NbPlayers)
   }
 }
 
+int CalculateDiffThresh()
+{
+  if(JoueurPuissant!=-1) return 0;
+
+  if(TotalNbJeux < 20)
+  {
+    return 2;
+  }
+  else if(TotalNbJeux < 30)
+  {
+    return 1;
+  }
+  else return 0;
+}
+
 void HighScoreSpecialEvent()
 {
   if(Game_Mode!=Game_Mode_Experimental) return;
   int Score_Min = 5;
-  int Score_Diff_Threshold=JoueurPuissant==-1 ? 2 : 0;
-  int Score_1=-1;
+  int Score_Diff_Threshold=CalculateDiffThresh();
+  int Score_1 = -1;
   int Score_1_Player;
-  int Score_2=-1;
+  int Score_2 = -1;
   bool Score_1_Tied;
   for (int i=0; i<nbj_max; i++)
   {
