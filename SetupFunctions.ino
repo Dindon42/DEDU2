@@ -121,7 +121,7 @@ void DefineProbJeux()
   //Mode Expert - 20 jeux
   wMode=3;
   //Gagnant Unique
-  GameProb[Game_id_PQP][wMode]=160;
+  GameProb[Game_id_PQP][wMode]=200;
   GameProb[Game_id_UC][wMode]=120;
   GameProb[Game_id_DUEL][wMode]=100;
   GameProb[Game_id_PB][wMode]=80;
@@ -140,7 +140,7 @@ void DefineProbJeux()
   
   //Honte
   GameProb[Game_id_MH][wMode]=70;
-  GameProb[Game_id_TH][wMode]=90;
+  GameProb[Game_id_TH][wMode]=120;
 
   //Équipe
   GameProb[Game_id_MIN][wMode]=110;
