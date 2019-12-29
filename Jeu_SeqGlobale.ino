@@ -9,7 +9,7 @@ void SequenceGlobale(bool DemoMode)
   //Tunables
   #define MaxGameCounterFailAll 1000
   #define GameLengthPlayerFactorMin 1
-  #define GameLengthPlayerFactorMax 3
+  #define GameLengthPlayerFactorMax 2
   #define GameLengthPlayerFactorDemo 1
   #define MaxInvalSeqMD 100
   #define MaxInvalSeqVT 400
@@ -38,7 +38,7 @@ void SequenceGlobale(bool DemoMode)
   //Game vars
   #define GamedelaySeq 15
   int GameCounter;
-  int GameLength=DemoMode ? (nbj*GameLengthPlayerFactorDemo)+2 : random(nbj*GameLengthPlayerFactorMin+2,nbj*GameLengthPlayerFactorMax+1);
+  int GameLength=DemoMode ? (nbj*GameLengthPlayerFactorDemo)+2 : random((nbj*GameLengthPlayerFactorMin)+2,(nbj*GameLengthPlayerFactorMax)+1);
   if (GameLength%nbj==0) GameLength++;
   int GameProgressInit=random(JumpMin,JumpMax+1);
   int GameProgress=GameProgressInit;

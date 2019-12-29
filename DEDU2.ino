@@ -130,7 +130,8 @@ int JoueurRoi=-1;
 
 
 //Prob, Jeux
-#define MinRoundsRoi 20
+#define MinRoundsRoi 10
+#define Score_Min_JoueurPuissant 3
 int NumberOfRoundsForFullProb=4;
 int CountJeux[NbJeux]={0};
 int CountType[NbGameTypes]={0};

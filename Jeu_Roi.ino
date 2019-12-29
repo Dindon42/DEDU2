@@ -10,7 +10,7 @@ void ROI()
   int Score[nbj];
   unsigned long GameTimer=0;
   #define ROI_GAMEDELAY 1
-  #define PerPlayerDelay 3000
+  #define PerPlayerDelay 2424
   bool PlayersInGame[nbj];
   bool PreviousState[nbj];
   bool VoteRecorded[nbj];

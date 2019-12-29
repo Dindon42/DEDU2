@@ -40,14 +40,31 @@ void Repartiteur()
     MaxProbAcc=max_prob;
   }
 
+  #define MaxSelect 300
+  int Select=0;
+  bool GoodGame;
   do
   {
+    GoodGame=false;
     Jeu=SelectGame(random(max_prob)+1);
     LOG_GENERAL("MAXPROB:");
     LOG_GENERAL(max_prob);
     LOG_GENERAL("\n");
-  }while(ExclusiveGameType && ExclusiveGameType_ID != GameTypes[Jeu]);
+    Select++;
+
+    if(ExclusiveGameType_ID < Game_Type_AU && (GameTypes[Jeu] == ExclusiveGameType_ID  || GameTypes[Jeu]-50 == ExclusiveGameType_ID))
+    {
+      GoodGame=true;
+    }
+    else if(ExclusiveGameType_ID >= Game_Type_AU && (GameTypes[Jeu] >= ExclusiveGameType_ID  || GameTypes[Jeu]-50 >= ExclusiveGameType_ID))
+    {
+      GoodGame=true;
+    }
+  }while(ExclusiveGameType && Select<MaxSelect && !GoodGame);
   
+  LOG_GENERAL("Select: ");
+  LOG_GENERAL(Select);
+  LOG_GENERAL("\n");
   LOG_GENERAL("================\n");
   LOG_GENERAL("JEU:");
   LogGameName(Jeu,true);

@@ -6,7 +6,7 @@
 void TheButton()
 {
   //Tunables
-  #define GameEndCounterPlayerFactorMin 70
+  #define GameEndCounterPlayerFactorMin 60
   #define GameEndCounterPlayerFactorMax 120
   #define ProbNoLight 0
   //Tunbles END

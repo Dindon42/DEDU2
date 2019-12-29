@@ -26,7 +26,7 @@ void Delay_Fraudeur(unsigned int NumRoundsToWait)
   int SelectedGameType=-1;
   unsigned int GameTypeSelLightOffCounter=0;
   #define Delai_GameTypeSel 10
-  #define MAX_GAMETYPE 2
+  #define MAX_GAMETYPE 3
   
   bool Fraudeur=false;
   
