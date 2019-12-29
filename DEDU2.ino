@@ -353,7 +353,9 @@ void setup()
       RedefinePlayerPins(false);
     }
   }
-
+  
+  DefineProbJeux();
+  
   if (EnterDemo)
   {
     DemoMode(AllModes);
@@ -362,8 +364,6 @@ void setup()
   }
   
   AdjustNumRoundsFullProb();
-  
-  DefineProbJeux();
   //Ajustement initial des prob pour les jeux.  Quelques cas spéciaux.
   AjustementProbJeuxInit();
   
@@ -407,11 +407,6 @@ void loop()
   {
     PlayExclusiveGame();
   }
-
-
-  LOG_GENERAL("nbj_raw:");
-  LOG_GENERAL(nbj_raw);
-  LOG_GENERAL("\n");
   
   if (!SkipFraudeur)
   {
@@ -421,10 +416,6 @@ void loop()
     Delay_Fraudeur(CalculDelaiFraudeur(true));
     TurnOffAllLights();
   }
-  
-  LOG_GENERAL("nbj_raw:");
-  LOG_GENERAL(nbj_raw);
-  LOG_GENERAL("\n");
   
   Repartiteur();
 }

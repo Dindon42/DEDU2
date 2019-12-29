@@ -59,9 +59,10 @@ void DemoMode(bool AllModes)
     //If the game mode is 0, play games that have non-0 Prob
     //If the game mode is non-0, play games that did not exist in previous mode.
     //If AllModes, Demo all modes.
+    
     if (
-      (Game_Mode==Game_Mode_Original && ProbIndivJeux[i]!=0) ||
-      (Game_Mode>Game_Mode_Original && GameProb[i][Game_Mode]!=0 && GameProb[i][Game_Mode-1]==0 && ProbIndivJeux[i]!=0) ||
+      (Game_Mode==Game_Mode_Original && GameProb[i][Game_Mode]!=0) ||
+      (Game_Mode>Game_Mode_Original && GameProb[i][Game_Mode]!=0 && GameProb[i][Game_Mode-1]==0) ||
        AllModes && ProbIndivJeux[i]!=0)
     {
       LOG_GENERAL("JEU:");
