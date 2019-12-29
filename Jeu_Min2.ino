@@ -46,7 +46,6 @@ void MIN2()
     LOG_MIN2(RoundTicTimerThreshold);
     LOG_MIN2("\n");
     
-    ActivateGreenLED(100);
     ActivateGreenLED(24);
     TurnOnAllRedLights();
     for (int i=0; i<nbj; i++)

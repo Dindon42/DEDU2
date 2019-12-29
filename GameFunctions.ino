@@ -417,7 +417,7 @@ void ResetProbAfterGame(int game_id)
   }
 
   //Additional condition for ROI, should only happen if -1
-  if(TotalNbJeux<MinRoundsRoi)
+  if(TotalNbJeux<MinRoundsRoi && JoueurRoi==-1)
   {
     ResetGameProb(Game_id_ROI);
   }

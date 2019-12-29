@@ -43,6 +43,7 @@
 #define Game_Type_HO 4
 #define Game_Type_PIH 51
 #define Game_Type_EQH 52
+#define MAX_GAMETYPE_ROI Game_Type_EQ
 
 //GAME ID
 #define NbJeux 26
@@ -95,7 +96,7 @@
 
 //Opt Game
 #define ExclusiveGame false
-#define ExclusiveGame_ID Game_id_AR2
+#define ExclusiveGame_ID Game_id_ROI
 #define ExclusiveGame_DemoMode false
 #define ExclusiveGameDelay 0
 
@@ -130,7 +131,7 @@ int JoueurRoi=-1;
 
 
 //Prob, Jeux
-#define MinRoundsRoi 10
+#define MinRoundsRoi 3
 #define Score_Min_JoueurPuissant 3
 int NumberOfRoundsForFullProb=4;
 int CountJeux[NbJeux]={0};

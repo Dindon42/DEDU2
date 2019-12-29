@@ -52,11 +52,11 @@ void Repartiteur()
     LOG_GENERAL("\n");
     Select++;
 
-    if(ExclusiveGameType_ID < Game_Type_AU && (GameTypes[Jeu] == ExclusiveGameType_ID  || GameTypes[Jeu]-50 == ExclusiveGameType_ID))
+    if(ExclusiveGameType_ID < MAX_GAMETYPE_ROI && (GameTypes[Jeu] == ExclusiveGameType_ID  || GameTypes[Jeu]-50 == ExclusiveGameType_ID))
     {
       GoodGame=true;
     }
-    else if(ExclusiveGameType_ID >= Game_Type_AU && (GameTypes[Jeu] >= ExclusiveGameType_ID  || GameTypes[Jeu]-50 >= ExclusiveGameType_ID))
+    else if(ExclusiveGameType_ID >= MAX_GAMETYPE_ROI && (GameTypes[Jeu] >= ExclusiveGameType_ID  || GameTypes[Jeu]-50 >= ExclusiveGameType_ID))
     {
       GoodGame=true;
     }

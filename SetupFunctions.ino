@@ -164,10 +164,10 @@ void DefineProbJeux()
   GameProb[Game_id_SEQ][wMode]=120;
   GameProb[Game_id_TB][wMode]=120;
   GameProb[Game_id_AR2][wMode]=100;
-  GameProb[Game_id_MIN2][wMode]=80;
+  GameProb[Game_id_MIN2][wMode]=0;
   GameProb[Game_id_ROI][wMode]=80;
   //Override for Min2, un peu plus de honte.
-  GameProb[Game_id_MIN][wMode]=80;
+  //GameProb[Game_id_MIN][wMode]=80;
   GameProb[Game_id_TH][wMode]=120;
   GameProb[Game_id_AR][wMode]=100;
   

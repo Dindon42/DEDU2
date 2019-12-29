@@ -17,7 +17,8 @@ void ROI()
   bool HasReleased[nbj];
   bool ExtraRoundAllPlayersTied=true;
   #define AbsoluteMaxScore nbj+1
-
+  #define MaxOneVotePerRound true
+  
   //Lumieres
   if(!SkipLights)
   {
@@ -64,60 +65,64 @@ void ROI()
     for(int i=0; i<nbj; i++)
     {
       Score[i]=0;
+      VoteRecorded[i]=false;
     }
-    
-    //Scroll through all players.  Wait a decent amount of time at each to record vote.
-    for(int VotePlayer=0; VotePlayer<nbj ; VotePlayer++)
+
+    do
     {
-      //Skip Les joueurs qui ont éliminé dans les rondes précédentes.
-      if(!PlayersInGame[VotePlayer]) continue;
-      
-      ActivateRedLight(VotePlayer);
-      //Reset GameTimer at each player
-      GameTimer=0;
-      for(int i=0; i<nbj; i++)
+      //Scroll through all players.  Wait a decent amount of time at each to record vote.
+      for(int VotePlayer=0; VotePlayer<nbj ; VotePlayer++)
       {
-        VoteRecorded[i]=false;
-        HasReleased[i]=false;
-      }
-      
-      LOG_ROI("Vote For Player: ");
-      LOG_ROI(VotePlayer);
-      LOG_ROI("\n");
-      //Main Vote For Player Loop
-      do
-      {
-        //Scan through all players to see if they vote.
+        //Skip Les joueurs qui ont éliminé dans les rondes précédentes.
+        if(!PlayersInGame[VotePlayer]) continue;
+        
+        ActivateRedLight(VotePlayer);
+        //Reset GameTimer at each player
+        GameTimer=0;
         for(int i=0; i<nbj; i++)
         {
-          //Read new state
-          bool CurrentState=ReadPlayerInput(i);
-
-          //Record that player has released
-          if(!CurrentState && !HasReleased[i])
-          {
-            HasReleased[i]=true;
-          }
-          
-          //Check condition to count score.
-          if(CurrentState && !PreviousState[i] && !VoteRecorded[i] && HasReleased[i])
-          {
-            LOG_ROI("Player ");
-            LOG_ROI(i);
-            LOG_ROI(" has voted\n");
-            Score[VotePlayer]++;
-            VoteRecorded[i]=true;
-          }
-          
-          //Save State
-          PreviousState[i]=CurrentState;
+          if(!MaxOneVotePerRound) VoteRecorded[i]=false;
+          HasReleased[i]=false;
         }
-        delay(ROI_GAMEDELAY);
-        GameTimer++;
-      }while(GameTimer<PerPlayerDelay);
-      DeactivateRedLight(VotePlayer);
-      delay(300);
-    }
+        
+        LOG_ROI("Vote For Player: ");
+        LOG_ROI(VotePlayer);
+        LOG_ROI("\n");
+        //Main Vote For Player Loop
+        do
+        {
+          //Scan through all players to see if they vote.
+          for(int i=0; i<nbj; i++)
+          {
+            //Read new state
+            bool CurrentState=ReadPlayerInput(i);
+  
+            //Record that player has released
+            if(!CurrentState && !HasReleased[i])
+            {
+              HasReleased[i]=true;
+            }
+            
+            //Check condition to count score.
+            if(CurrentState && !PreviousState[i] && !VoteRecorded[i] && HasReleased[i])
+            {
+              LOG_ROI("Player ");
+              LOG_ROI(i);
+              LOG_ROI(" has voted\n");
+              Score[VotePlayer]++;
+              VoteRecorded[i]=true;
+            }
+            
+            //Save State
+            PreviousState[i]=CurrentState;
+          }
+          delay(ROI_GAMEDELAY);
+          GameTimer++;
+        }while(GameTimer<PerPlayerDelay);
+        DeactivateRedLight(VotePlayer);
+        delay(300);
+      }
+    }while(MaxOneVotePerRound && CountActivePlayers(VoteRecorded, nbj)!=nbj);
     delay(1000);
 
     //Print scores

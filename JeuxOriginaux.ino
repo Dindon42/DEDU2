@@ -22,11 +22,10 @@ void Delay_Fraudeur(unsigned int NumRoundsToWait)
   #define PetitFraudeurExtraRoundsMin  5
   #define PetitFraudeurExtraRoundsMax 20
   int ExtraDelai;
-
+  #define RoiLumiere false
   int SelectedGameType=-1;
   unsigned int GameTypeSelLightOffCounter=0;
   #define Delai_GameTypeSel 10
-  #define MAX_GAMETYPE 3
   
   bool Fraudeur=false;
   
@@ -46,7 +45,7 @@ void Delay_Fraudeur(unsigned int NumRoundsToWait)
       if(CurrentState && !PreviousState[i] && i==JoueurRoi && !Fraudeur)
       {
         SelectedGameType++;
-        if(SelectedGameType>MAX_GAMETYPE)
+        if(SelectedGameType>MAX_GAMETYPE_ROI)
         {
           SelectedGameType=-1;
           TurnOffAllRedLights();
@@ -66,10 +65,14 @@ void Delay_Fraudeur(unsigned int NumRoundsToWait)
         }
 
         //Activate all lights that correspond to the selected mode.
-        for(int i=0; i<=SelectedGameType; i++)
+        if(RoiLumiere)
         {
-          ActivateRedLight(i);
+          for(int i=0; i<=SelectedGameType; i++)
+          {
+            ActivateRedLight(i);
+          }
         }
+        else(MoveDEDUFlag(SelectedGameType+1));
       }
       
       if (CurrentState && !PreviousState[i] && i!=JoueurRoi && !ReadPlayerOutput(i))
@@ -91,6 +94,7 @@ void Delay_Fraudeur(unsigned int NumRoundsToWait)
           LightOffCounter += ExtraDelai;
         }
         ActivateRedLight(i);
+        MultGameProb(Game_id_ROI,1.05);
         
         LOG_GENERAL("Ajout Delai: ");
         LOG_GENERAL(ExtraDelai);
