@@ -11,19 +11,19 @@ void AR2()
   int RandFactorModifThreshold=random(42,84);
   #define AR2_NoBots false
   int AR2_WinCondToggleRand=random(125,200);
-  #define AR2_ENDGAME_RANDFACTOR 50
+  #define AR2_ENDGAME_RANDFACTOR 2
   #define AR2_DeduMasterClickMin 1
   #define AR2_DeduMasterClickMax 5
   #define AR2_BUZZERS_MIN 10
-  #define AR2_BUZZERS_MAX 12
-  #define AR2_G_LED_MIN 13
-  #define AR2_G_LED_MAX 13
-  #define AR2_B_LED_MIN 14
-  #define AR2_B_LED_MAX 14
-  #define AR2_GB_LED_MIN 15
+  #define AR2_BUZZERS_MAX 11
+  #define AR2_G_LED_MIN 12  //Always G before B
+  #define AR2_G_LED_MAX 12
+  #define AR2_B_LED_MIN 13
+  #define AR2_B_LED_MAX 13
+  #define AR2_GB_LED_MIN 15  //Always BG after the others.  Disabled for now.
   #define AR2_GB_LED_MAX 15
   //MAX NUMASSIGNMENTS NE PEUT PAS ÊTRE PLUS GRAND QUE LA GRANDEUR DE ARRAY EQUIPES-nbj.
-  #define AR2_NumAssignments 16
+  #define AR2_NumAssignments 14
   int AR2_GAMEDELAY=random(10,25);
   int AR2_GRACETIME=random(7242,10042);
   #define AR2_NOTETIME 200
@@ -74,7 +74,8 @@ void AR2()
   }
   //int LightMapping[4]={0,6,15,24};
   int LightMapping[4]={0,8,24,42};
-  int ToneMapping[8]={261,293,329,350,392,440,494,523};
+  //int ToneMapping[8]={261,293,329,350,392,440,494,523};
+  int ToneMapping[8]={329,440,587,784,1046,1396,1975,2637};
   unsigned long GameCounter=0;
   unsigned long RandIncreaseCounter=0;
   int DeduMaster=random(nbj);
