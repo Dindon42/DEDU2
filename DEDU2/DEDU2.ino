@@ -1,7 +1,3 @@
-//Global includes.
-#include <Servo.h>
-#include <avr/pgmspace.h>
-
 //            _____                    _____                    _____                    _____          
 //           /\    \                  /\    \                  /\    \                  /\    \         
 //          /::\    \                /::\    \                /::\    \                /::\____\        
@@ -23,6 +19,16 @@
 //         \::::/    /              \:::\____\               \::::/    /              \::::/    /       
 //          \::/____/                \::/    /                \::/____/                \::/____/        
 //           ~~                       \/____/                  ~~                       ~~              
+
+
+
+//===============\\
+//GLOBAL INCLUDES\\
+//===============\\
+#include <Servo.h>
+#include <avr/pgmspace.h>
+
+
 //==============\\
 //GLOBAL DEFINES\\
 //==============\\
@@ -36,43 +42,44 @@
 
 //GAME TYPES
 #define NbGameTypes 5
-#define Game_Type_GI 0
-#define Game_Type_PI 1
-#define Game_Type_EQ 2
-#define Game_Type_AU 3
-#define Game_Type_HO 4
-#define Game_Type_PIH 51
-#define Game_Type_EQH 52
-#define MAX_GAMETYPE_ROI Game_Type_EQ
+#define Game_Type_GI 0    //Gagnant individuel
+#define Game_Type_PI 1    //Perdant individuel
+#define Game_Type_EQ 2    //Équipe
+#define Game_Type_AU 3    //Autres
+#define Game_Type_HO 4    //Honte
+#define Game_Type_PIH 51  //Perdant individuel et honte
+#define Game_Type_EQH 52  //Équipe et honte
+
+#define MAX_GAMETYPE_ROI Game_Type_EQ  //Le roi peut choisir jusqu'aux jeux d'équipe: GI, PI ou EQ.
 
 //GAME ID
 #define NbJeux 26
 //Ordre utilisé pour le mode DÉMO  doit être consécutif de 0 à NbJeux-1.
-#define Game_id_PQP 0
-#define Game_id_PQR 1
-#define Game_id_TO 2
-#define Game_id_DQP 3
-#define Game_id_DQP2 4
-#define Game_id_PC 5
-#define Game_id_PC2 6
-#define Game_id_MIN 7
-#define Game_id_UC 8
-#define Game_id_JD 9
-#define Game_id_ED 10
-#define Game_id_AR 11
-#define Game_id_MH 12
-#define Game_id_TH 13
-#define Game_id_TV 14
-#define Game_id_PB 15
-#define Game_id_DUEL 16
-#define Game_id_PPV 17
-#define Game_id_TDD 18
-#define Game_id_JC 19
-#define Game_id_SEQ 20
-#define Game_id_TB 21
-#define Game_id_AR2 22
-#define Game_id_MIN2 23
-#define Game_id_ROI 24
+#define Game_id_PQP 0  //Premier Qui Pèse
+#define Game_id_PQR 1  //
+#define Game_id_TO 2   //
+#define Game_id_DQP 3  //
+#define Game_id_DQP2 4 //
+#define Game_id_PC 5   //
+#define Game_id_PC2 6  //
+#define Game_id_MIN 7  //
+#define Game_id_UC 8   //
+#define Game_id_JD 9   //
+#define Game_id_ED 10  //
+#define Game_id_AR 11  //
+#define Game_id_MH 12  //
+#define Game_id_TH 13  //
+#define Game_id_TV 14  //
+#define Game_id_PB 15  //
+#define Game_id_DUEL 16 //
+#define Game_id_PPV 17 //
+#define Game_id_TDD 18   //
+#define Game_id_JC 19    //
+#define Game_id_SEQ 20   //
+#define Game_id_TB 21    //
+#define Game_id_AR2 22   //
+#define Game_id_MIN2 23  //
+#define Game_id_ROI 24   //
 //Garder FFA comme dernier jeu
 #define Game_id_FFA 25
 
