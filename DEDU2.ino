@@ -55,24 +55,24 @@
 //GAME ID
 #define NbJeux 26
 //Ordre utilisé pour le mode DÉMO  doit être consécutif de 0 à NbJeux-1.
-#define Game_id_PQP 0  //Premier Qui Pèse
-#define Game_id_PQR 1  //
-#define Game_id_TO 2   //
-#define Game_id_DQP 3  //
-#define Game_id_DQP2 4 //
-#define Game_id_PC 5   //
-#define Game_id_PC2 6  //
-#define Game_id_MIN 7  //
-#define Game_id_UC 8   //
-#define Game_id_JD 9   //
-#define Game_id_ED 10  //
-#define Game_id_AR 11  //
-#define Game_id_MH 12  //
-#define Game_id_TH 13  //
-#define Game_id_TV 14  //
-#define Game_id_PB 15  //
-#define Game_id_DUEL 16 //
-#define Game_id_PPV 17 //
+#define Game_id_PQP 0    //Premier Qui Pèse
+#define Game_id_PQR 1    //
+#define Game_id_TO 2     //
+#define Game_id_DQP 3    //
+#define Game_id_DQP2 4   //
+#define Game_id_PC 5     //
+#define Game_id_PC2 6    //
+#define Game_id_MIN 7    //
+#define Game_id_UC 8     //
+#define Game_id_JD 9     //
+#define Game_id_ED 10    //
+#define Game_id_AR 11    //
+#define Game_id_MH 12    //
+#define Game_id_TH 13    //
+#define Game_id_TV 14    //
+#define Game_id_PB 15    //
+#define Game_id_DUEL 16  //
+#define Game_id_PPV 17   //
 #define Game_id_TDD 18   //
 #define Game_id_JC 19    //
 #define Game_id_SEQ 20   //
@@ -80,8 +80,7 @@
 #define Game_id_AR2 22   //
 #define Game_id_MIN2 23  //
 #define Game_id_ROI 24   //
-//Garder FFA comme dernier jeu
-#define Game_id_FFA 25
+#define Game_id_FFA 25   //Free For All: Toujours le dernier jeu.
 
 //==================\\
 //END GLOBAL DEFINES\\
