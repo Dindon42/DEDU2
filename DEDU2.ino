@@ -132,7 +132,7 @@ int JoueurHonte=-1;
 int JoueurPuissant=-1;
 int JoueurRoi=-1;
 //=========================\\
-//===      DEBUG END    ===\\
+//===  DEBUG FLAGS END  ===\\
 //=========================\\
 
 
