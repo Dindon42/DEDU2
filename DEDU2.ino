@@ -68,7 +68,7 @@
 #define Game_id_ED 10    //Estime DEDU
 #define Game_id_AR 11    //All Random
 #define Game_id_MH 12    //Marqueur Honte
-#define Game_id_TH 13    //Tourniquet Honte
+#define Game_id_TH 13    //Tourniquet de la Honte
 #define Game_id_TV 14    //Tourniquet de la Victoire
 #define Game_id_PB 15    //Press Battle
 #define Game_id_DUEL 16  //Duel individuel
