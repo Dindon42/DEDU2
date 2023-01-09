@@ -56,31 +56,31 @@
 #define NbJeux 26
 //Ordre utilisé pour le mode DÉMO  doit être consécutif de 0 à NbJeux-1.
 #define Game_id_PQP 0    //Premier Qui Pèse
-#define Game_id_PQR 1    //
-#define Game_id_TO 2     //
-#define Game_id_DQP 3    //
-#define Game_id_DQP2 4   //
-#define Game_id_PC 5     //
-#define Game_id_PC2 6    //
-#define Game_id_MIN 7    //
-#define Game_id_UC 8     //
-#define Game_id_JD 9     //
-#define Game_id_ED 10    //
-#define Game_id_AR 11    //
-#define Game_id_MH 12    //
-#define Game_id_TH 13    //
-#define Game_id_TV 14    //
-#define Game_id_PB 15    //
-#define Game_id_DUEL 16  //
-#define Game_id_PPV 17   //
-#define Game_id_TDD 18   //
-#define Game_id_JC 19    //
-#define Game_id_SEQ 20   //
-#define Game_id_TB 21    //
-#define Game_id_AR2 22   //
-#define Game_id_MIN2 23  //
-#define Game_id_ROI 24   //
-#define Game_id_FFA 25   //Free For All: Toujours le dernier jeu.
+#define Game_id_PQR 1    //Premier Qui Relâche
+#define Game_id_TO 2     //Trompe Oeil
+#define Game_id_DQP 3    //Dernier Qui Pèse
+#define Game_id_DQP2 4   //Dernier Qui Pèse 2 (Flash)
+#define Game_id_PC 5     //Patate Chaude
+#define Game_id_PC2 6    //Patate Chaude 2 (Double Patate)
+#define Game_id_MIN 7    //Minorité
+#define Game_id_UC 8     //Ultimate Challenge
+#define Game_id_JD 9     //Jean Dit
+#define Game_id_ED 10    //Estime DEDU
+#define Game_id_AR 11    //All Random
+#define Game_id_MH 12    //Marqueur Honte
+#define Game_id_TH 13    //Tourniquet Honte
+#define Game_id_TV 14    //Tourniquet de la Victoire
+#define Game_id_PB 15    //Press Battle
+#define Game_id_DUEL 16  //Duel individuel
+#define Game_id_PPV 17   //Pèse Plus Vite
+#define Game_id_TDD 18   //Team DeDuel
+#define Game_id_JC 19    //Jeu Chanson
+#define Game_id_SEQ 20   //Séquence Globale
+#define Game_id_TB 21    //The Button
+#define Game_id_AR2 22   //All Random 2
+#define Game_id_MIN2 23  //Minorité 2
+#define Game_id_ROI 24   //Roi
+#define Game_id_FFA 25   //Free For All (DEDU): Toujours le dernier jeu.
 
 //==================\\
 //END GLOBAL DEFINES\\
