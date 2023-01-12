@@ -88,11 +88,10 @@
 
 
 //===================================\\
-//===         DEBUG FLAGS         ===\\
+//===      DEBUGGING FLAGS        ===\\
 //===  ALL FALSE FOR NORMAL GAME. ===\\
 //===================================\\
-//Comment out the following line too.
-//Enable Logging
+//Remove comment on following line to enable logging.
 //#define ENABLE_LOGGING
 
 //Opt Generales
