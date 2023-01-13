@@ -331,8 +331,8 @@ void DQP()
   delay(500);
 }
 
-//Debut FFA
-void FFA()
+//Debut DEDU
+void DEDU()
 {
   float myRand1=random(280,400)/100;
   int myRand2=random(25,32);

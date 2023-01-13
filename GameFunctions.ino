@@ -173,9 +173,9 @@ void PlayGame(int game_id, bool DemoMode)
   {
     TrompeOeil();
   }
-  else if (game_id==Game_id_FFA)
+  else if (game_id==Game_id_DEDU)
   {
-    FFA();
+    DEDU();
   }
   else if (game_id==Game_id_MH)
   {
@@ -285,7 +285,7 @@ void LogGameName(int game_id, bool NewLine)
   {
     LOG_GENERAL("Trompe      ");
   }
-  else if (game_id==Game_id_FFA)
+  else if (game_id==Game_id_DEDU)
   {
     LOG_GENERAL("DEDU        ");
   }
@@ -457,9 +457,9 @@ void ResetProbHonte()
   DivideGameProb(Game_id_TDD,2);
 }
 
-void ResetProbFFA()
+void ResetProbDEDU()
 {
-  ResetGameProb(Game_id_FFA);
+  ResetGameProb(Game_id_DEDU);
 }
 
 void LogGameCounts()

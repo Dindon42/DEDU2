@@ -391,8 +391,8 @@ SequenceGlobale(false);
       delay(500);
     }
     TurnOffAllLights();
-    ResetProbFFA();
-    FFA();
+    ResetProbDEDU();
+    DEDU();
   }
 }
 

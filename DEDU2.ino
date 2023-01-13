@@ -80,7 +80,7 @@
 #define Game_id_AR2 22   //All Random 2
 #define Game_id_MIN2 23  //Minorité 2
 #define Game_id_ROI 24   //Roi
-#define Game_id_FFA 25   //Free For All (DEDU): Toujours le dernier jeu.
+#define Game_id_DEDU 25  //DEDU: Toujours le dernier jeu.
 
 //==================\\
 //END GLOBAL DEFINES\\

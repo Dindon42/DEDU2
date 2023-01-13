@@ -61,7 +61,7 @@ void DefineProbJeux()
 
   //Autres
   GameProb[Game_id_TO][wMode]=50;
-  GameProb[Game_id_FFA][wMode]=40;
+  GameProb[Game_id_DEDU][wMode]=40;
   
   //===================//
   
@@ -85,7 +85,7 @@ void DefineProbJeux()
   
   //Autres
   GameProb[Game_id_TO][wMode]=30;
-  GameProb[Game_id_FFA][wMode]=45;
+  GameProb[Game_id_DEDU][wMode]=45;
     //===================//
   
   //Mode AVANCE - 15 jeux
@@ -114,7 +114,7 @@ void DefineProbJeux()
   
   //Autres
   GameProb[Game_id_TO][wMode]=0;
-  GameProb[Game_id_FFA][wMode]=84;
+  GameProb[Game_id_DEDU][wMode]=84;
   
   //===================//
   
@@ -149,7 +149,7 @@ void DefineProbJeux()
   
   //Autres
   GameProb[Game_id_TO][wMode]=0;
-  GameProb[Game_id_FFA][wMode]=84;
+  GameProb[Game_id_DEDU][wMode]=84;
   //===================//
   
   //Mode EXPÉRIMENTAL.  Les nouveaux jeux passent par ici.
@@ -235,7 +235,7 @@ void DefineGameTypes()
   
   //3=Autres
   GameTypes[Game_id_TO]=Game_Type_AU;
-  GameTypes[Game_id_FFA]=Game_Type_AU;
+  GameTypes[Game_id_DEDU]=Game_Type_AU;
   GameTypes[Game_id_ROI]=Game_Type_AU;
   
   //51=Perdant indiv et honte
@@ -263,7 +263,7 @@ void AjustementProbJeuxInit()
     ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
   }
   //MarqueurHonte initial élevé, FFA et ROI 0
-  ProbIndivJeuxCurrent[Game_id_FFA]=0;
+  ProbIndivJeuxCurrent[Game_id_DEDU]=0;
   ProbIndivJeuxCurrent[Game_id_ROI]=0;
   if (Game_Mode!=Game_Mode_Original)
   {

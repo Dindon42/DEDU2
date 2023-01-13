@@ -21,7 +21,7 @@ void Repartiteur()
     if (NotMoreThanMaxProb)
     {
       //Logique si le flag NotMoreThanMaxProb est ON.  Exclusion pour les évenements speciaux.
-      if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=Game_id_FFA && i!=Game_id_MH && i!=Game_id_ROI)
+      if (ProbIndivJeuxCurrent[i]>ProbIndivJeux[i] && i!=Game_id_DEDU && i!=Game_id_MH && i!=Game_id_ROI)
       {
         ProbIndivJeuxCurrent[i]=ProbIndivJeux[i];
       }
