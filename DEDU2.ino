@@ -19,15 +19,22 @@
 //         \::::/    /              \:::\____\               \::::/    /              \::::/    /       
 //          \::/____/                \::/    /                \::/____/                \::/____/        
 //           ~~                       \/____/                  ~~                       ~~              
-
+//
+//  Dispositif Électronique de Distribution Universelle (DEDU)
+//  Idée originale:  Éric Geoffroy (2012)
+//  Nouvelles idées: Vincent Labrèche (2017+)
 
 
 //===============\\
 //GLOBAL INCLUDES\\
 //===============\\
+
 #include <Servo.h>
 #include <avr/pgmspace.h>
 
+//===================\\
+//END GLOBAL INCLUDES\\
+//===================\\
 
 //==============\\
 //GLOBAL DEFINES\\
@@ -89,8 +96,11 @@
 
 //===================================\\
 //===      DEBUGGING FLAGS        ===\\
-//===  ALL FALSE FOR NORMAL GAME. ===\\
 //===================================\\
+//===  ALL FALSE FOR NORMAL GAME  ===\\
+//=== USE TO FACILITATE DEBUGGING ===\\
+//===================================\\
+
 //Remove comment on following line to enable logging.
 //#define ENABLE_LOGGING
 
@@ -99,7 +109,7 @@
 #define NoSound false
 #define SkipLights false
 
-//Opt Game
+//Opt Exclusive Game
 #define ExclusiveGame false
 #define ExclusiveGame_ID Game_id_ROI
 #define ExclusiveGame_DemoMode false
@@ -130,12 +140,16 @@ bool AllModes=false;
 int JoueurHonte=-1;
 int JoueurPuissant=-1;
 int JoueurRoi=-1;
-//=========================\\
-//===  DEBUG FLAGS END  ===\\
-//=========================\\
+
+//=============================\\
+//===  END DEBUGGING FLAGS  ===\\
+//=============================\\
 
 
-//Prob, Jeux
+//=============================\\
+//===     PROBS et JEUX     ===\\
+//=============================\\
+
 #define MinRoundsRoi 3
 #define Score_Min_JoueurPuissant 3
 int NumberOfRoundsForFullProb=4;
@@ -151,6 +165,15 @@ int ProbIndivJeux[NbJeux];
 int MinProbAcc=9999;
 int MaxProbAcc=0;
 
+//=============================\\
+//===   END PROBS et JEUX   ===\\
+//=============================\\
+
+
+//===========================\\
+//===   LOGGING ROUTINE   ===\\
+//===========================\\
+//Activate logging only if ENABLE_LOGGING defined (DEBUG only)
 #ifdef ENABLE_LOGGING
   bool ActiveGameLogging[NbJeux]={false};
   #define LOG_GAME(i,a) if (ActiveGameLogging[i]) Serial.print(a);
@@ -159,19 +182,36 @@ int MaxProbAcc=0;
   #define LOG_GAME(i,a)
   #define LOG_GENERAL(a)
 #endif
+//=============================\\
+//===  END LOGGING ROUTINE  ===\\
+//=============================\\
 
-//Definitions
-//Pins
-#define RandomSeedPin 0 //To initialize the random function
-#define G 3 //Green LED ALL
-#define B 2 //Blue LED ALL
 
+//=========================\\
+//===  PIN / SERVO DEF  ===\\
+//=========================\\
+
+#define RandomSeedPin 0 //Read from this pin (unconnected) to initialize the random function.
+#define G 3 //GREEN LED - One PWM (Pulse With Modulation) pin for all 10 LED (allows variable output)
+#define B 2 //BLUE  LED - One PWM (Pulse With Modulation) pin for all 10 LED (allows variable output)
+
+//Player Pins
+int PlayerInputPins[nbj_max]; //Manettes
+int PlayerOutputPins[nbj_max]; //RED LED
+
+//Sound Buzzer
 int Tone_Pin=52;
+
+//Servo DEDU Flag
 Servo Servo_BrasDEDU;
-//Position à l'arrêt du Servo (bâton rentré)
-#define Servo_LowPos 40
-#define Servo_HighPos 154
 #define Servo_Pin 53
+#define Servo_LowPos 40 //Position à l'arrêt du Servo (bâton rentré)
+#define Servo_HighPos 154 //Position haute (90 deg)
+
+//=============================\\
+//===  END PIN / SERVO DEF  ===\\
+//=============================\\
+
 
 //Pour setup
 #define nbj_max 10
@@ -179,9 +219,6 @@ Servo Servo_BrasDEDU;
 int nbj_raw;
 int vitesse_raw;
 
-//Pins
-int PlayerInputPins[nbj_max];
-int PlayerOutputPins[nbj_max];
 
 //Time variables
 unsigned long TimeStart;

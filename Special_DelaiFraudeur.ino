@@ -136,9 +136,9 @@ void Delai_Fraudeur(unsigned int NumRoundsToWait)
     RoundCounter++;
   }while(RoundCounter<NumRoundsToWait);
 
-  LOG_GENERAL("===============\n");
-  LOG_GENERAL("FRAUDEURTERMINE\n");
-  LOG_GENERAL("===============\n");
+  LOG_GENERAL("================\n");
+  LOG_GENERAL("FRAUDEUR TERMINE\n");
+  LOG_GENERAL("================\n");
   
   if(!OverrideGameTypeFromFraudeur)
   {
