@@ -419,7 +419,7 @@ void loop()
     //Normal loop starts here.
     WaitForAllNonActive(nbj_raw);
     TurnOffAllLights();
-    Delay_Fraudeur(CalculDelaiFraudeur(true));
+    Delai_Fraudeur(CalculDelaiFraudeur(true));
     TurnOffAllLights();
   }
   

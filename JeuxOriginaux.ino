@@ -4,7 +4,7 @@ int CalculDelaiFraudeur(bool iNormalDelay)
   else return random(25,50) + (11 - vitesse) * random(50);
 }
 
-void Delay_Fraudeur(unsigned int NumRoundsToWait)
+void Delai_Fraudeur(unsigned int NumRoundsToWait)
 {
   bool PreviousState[nbj];
   //Debut DELAY et TESTFRAUDEUR --------------------------------------
