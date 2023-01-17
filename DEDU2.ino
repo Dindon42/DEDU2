@@ -382,10 +382,17 @@ const PROGMEM float Tetris[3][37]={
 
 
 
-//One-time setup
+//==============================================================\\
+//====================        SETUP        =====================\\
+//==============================================================\\
+//  This code runs once, when the board is initially connected  \\
+//==============================================================\\
+
 void setup()
 {
-  bool ManualPinDef;
+  bool ManualPinDef;  //Special feature: Permet de réassigner les manettes lorsqu'on joue à moins de 10 joueurs.
+  
+  //Logging
   #ifdef ENABLE_LOGGING
     Serial.begin(500000);
   #endif
@@ -393,17 +400,14 @@ void setup()
   LOG_GENERAL("==============\n");
   LOG_GENERAL("SETUP STARTING\n");
   LOG_GENERAL("==============\n");
-  //TONE
+  
+  //Disable sound if NoSound is set.
   if (NoSound)
   {
     Tone_Pin=9999;
   }
-  else
-  {
-    Tone_Pin=52; //Tone
-  }
   
-  //In case setup was skipped.
+  //Set setup parameters in case setup is skipped.
   nbj_raw=nbj-1;
   vitesse_raw=vitesse-1;
   
@@ -414,57 +418,74 @@ void setup()
   Servo_BrasDEDU.attach(Servo_Pin);
   Servo_BrasDEDU.write(Servo_LowPos);
 
-  //Toutes lumières G et B
+  //Toutes les lumières G et B
   pinMode(G, OUTPUT);
   pinMode(B, OUTPUT);
   
+  //Définir le type pour chaque jeu.
   DefineGameTypes();
   
+  //Définir les pins des joueurs à leur valeur par défaut
   RedefinePlayerPins(true);
+  
+
+  //=========================\\
+  //======  Main Setup  =====\\
+  //=========================\\
   
   if (!SkipSetup && !MusicMode)
   {
     ResetJoueursSpeciaux();
+
     WaitForAllNonActive(nbj_raw_max);
     
     // NBJ - Nombre de Joueurs
     // Attend que les joueurs choisissent le nombre en cliquant sur le bouton correspondant au nombre souhaité.
-    // Pour 5 joueurs, cliquer sur la manette #5.  Les lumières de 1 à 5 vont s'allumer et on passe au mode suivant.
-    // ----------------------------------------
+    // Pour redéfinir les assignations de manettes, tenir le bouton enfoncé.
     ManualPinDef=NombreJoueurs();
-    //TestModeEngage if player=1
+    
+    //Entrer en mode test si nbj=1
     if (nbj_raw==0)
     {
       TestMode();
     }
     
-    //Debut VITESSE
+    // Vitesse de jeu
     // Attend que les joueurs choisissent la vitesse du jeu.
-    // 1=lent, 10=vite
+    // 1=lent, 10=vite, 7 ou 8 sont de bonnes valeurs pour un grand groupe.
     Vitesse();
     
-    //Choix de complexité du jeu.
+    // Mode de jeu
+    // 1 à 5, défini plus haut.
+    // 6 à 10, Permet de choisir le mode DEMO (Delta) ou tenir enfoncé (ALL)
     GameMode();
 
+    //Redéfinir les manettes si précédemment sélectionné
     if (ManualPinDef)
     {
       RedefinePlayerPins(false);
     }
   }
-  
+
+  //Définir la probabilité des jeux en fonction du mode sélectionné.
   DefineProbJeux();
   
+  //Entrer dans le Mode DEMO si précédemment sélectionné.
   if (EnterDemo)
   {
+    //Mode DEMO avec option DELTA (AllModes=false) ou ALL (AllModes=true)
     DemoMode(AllModes);
-    //Reset joueurspec après la démo.
+    
+    //Reset joueurs speciaux après la démo.
     ResetJoueursSpeciaux();
   }
   
+  //Défini le nombre de jeux nécessaire pour revenir aux probabilités de base.
   AdjustNumRoundsFullProb();
   //Ajustement initial des prob pour les jeux.  Quelques cas spéciaux.
   AjustementProbJeuxInit();
-  
+
+  //Remise à zéro des compteurs.
   for(int i=0; i<nbj_max; i++)
   {
     GlobalScore[i]=0;
@@ -478,20 +499,27 @@ void setup()
     CountType[i]=0;
   }
   
+  //Ça y est, on commence!!
   if (!SkipSetup)
   {
     //Toune de DEDU pour initialiser la chose.
     JoueChanson(0,3,false, true);
   }
   
+  //Logging setup params
   LogSetupParams();
+
   LOG_GENERAL("==============\n");
   LOG_GENERAL("  SETUP END   \n");
   LOG_GENERAL("==============\n");
-  
 }
 
-//Setup complete.  MAIN loop.
+//=================================================================\\
+//====================     MAIN GAME LOOP     =====================\\
+//=================================================================\\
+//  This is where everything happens.  You cannot exit the loop.   \\
+//=================================================================\\
+
 void loop() 
 {
   //Special Music Mode
@@ -500,20 +528,25 @@ void loop()
     EndlessMusicMode();
   }
   
-  //Special exclusivegamemode loop
+  //Special exclusive game loop
   if (ExclusiveGame)
   {
     PlayExclusiveGame();
   }
   
+  //====================\\
+  //= NORMAL GAME LOOP =\\
+  //====================\\
+  
+  //Fraudeur (délai entre les jeux)
   if (!SkipFraudeur)
   {
-    //Normal loop starts here.
     WaitForAllNonActive(nbj_raw);
     TurnOffAllLights();
     Delai_Fraudeur(CalculDelaiFraudeur(true));
     TurnOffAllLights();
   }
-  
+
+  //Répartiteur (choix de jeu)  
   Repartiteur();
 }
