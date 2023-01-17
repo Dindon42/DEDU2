@@ -8,6 +8,7 @@ void BesoinOrdreChansons(int c)
     DefinirOrdreChansons();
   }
 }
+
 void DefinirOrdreChansons()
 {
   bool NotGood=false;
@@ -106,6 +107,7 @@ void JoueChanson(int Chanson, float FacteurVitesse, bool RandVitesse, bool Lumie
   LOG_GENERAL("===================\n");
 }
 
+//Fills the MaChanson array for selected song.
 //Returns the number of notes.
 int SelectionChanson(int Numero)
 {
@@ -257,12 +259,15 @@ int SelectionChanson(int Numero)
       ChansonFacteurRandomMin=115;
       ChansonFacteurRandomMax=160;
       return NombreDeNotes;
-    //Max pour JeuChanson - Les tounes ci-bas ne peuvent jouer.
+    
+    
+    //=============================================================\\
+    //Max pour JeuChanson - Les tounes ci-bas ne peuvent pas jouer.\\
+    //=============================================================\\
+
     case 11:
       pf = (float*)Figaro;
-      NombreDeNotes = sizeof(Figaro[0]) / sizeof(float);      
-      
-
+      NombreDeNotes = sizeof(Figaro[0]) / sizeof(float);
       for (int i = 0; i < ParamChansons; i++)
       {
         for (int j = 0; j < NombreDeNotes; j++)
@@ -299,7 +304,6 @@ int SelectionChanson(int Numero)
       ChansonFacteurRandomMin = 300;
       ChansonFacteurRandomMax = 300;
       return NombreDeNotes;
-
   }
 }
 

@@ -1,3 +1,4 @@
+//
 //            _____                    _____                    _____                    _____          
 //           /\    \                  /\    \                  /\    \                  /\    \         
 //          /::\    \                /::\    \                /::\    \                /::\____\        
@@ -25,6 +26,13 @@
 //  Nouvelles idées: Vincent Labrèche (2017+)
 
 
+//===================================================================================================================\\
+//===================================================================================================================\\
+//===================================            DEFINES AND VARIABLES            ===================================\\
+//===================================================================================================================\\
+//===================================================================================================================\\
+
+
 //===============\\
 //GLOBAL INCLUDES\\
 //===============\\
@@ -36,9 +44,11 @@
 //END GLOBAL INCLUDES\\
 //===================\\
 
-//==============\\
-//GLOBAL DEFINES\\
-//==============\\
+
+//============\\
+//GAME DEFINES\\
+//============\\
+
 //GAME MODES
 #define NbModes 5
 #define Game_Mode_Original 0
@@ -89,9 +99,9 @@
 #define Game_id_ROI 24   //Roi
 #define Game_id_DEDU 25  //DEDU: Toujours le dernier jeu.
 
-//==================\\
-//END GLOBAL DEFINES\\
-//==================\\
+//================\\
+//END GAME DEFINES\\
+//================\\
 
 
 //===================================\\
@@ -101,7 +111,7 @@
 //=== USE TO FACILITATE DEBUGGING ===\\
 //===================================\\
 
-//Remove comment on following line to enable logging.
+//Remove comment on following line to enable logging (DEBUG only... Slows down the game).
 //#define ENABLE_LOGGING
 
 //Opt Generales
@@ -127,7 +137,7 @@ int ExclusiveGameType_ID=Game_Type_GI;
 //Opt Musique
 #define MusicMode false
 #define MusicModeLumiere false
-#define SelectedSong 6
+#define SelectedSong 6  //Set to -1 for random songs.
 #define MusicRandFactVit false
 
 //SETUP IF SKIPPED:
@@ -147,7 +157,7 @@ int JoueurRoi=-1;
 
 
 //=============================\\
-//===     PROBS et JEUX     ===\\
+//===     PROBS / JEUX      ===\\
 //=============================\\
 
 #define MinRoundsRoi 3
@@ -166,14 +176,15 @@ int MinProbAcc=9999;
 int MaxProbAcc=0;
 
 //=============================\\
-//===   END PROBS et JEUX   ===\\
+//===   END PROBS / JEUX    ===\\
 //=============================\\
 
 
 //===========================\\
 //===   LOGGING ROUTINE   ===\\
 //===========================\\
-//Activate logging only if ENABLE_LOGGING defined (DEBUG only)
+
+//Activate logging only if ENABLE_LOGGING defined above 
 #ifdef ENABLE_LOGGING
   bool ActiveGameLogging[NbJeux]={false};
   #define LOG_GAME(i,a) if (ActiveGameLogging[i]) Serial.print(a);
@@ -213,35 +224,63 @@ Servo Servo_BrasDEDU;
 //=============================\\
 
 
-//Pour setup
+//===============\\
+//===  SETUP  ===\\
+//===============\\
+
+//Nombre de Joueurs
 #define nbj_max 10
 #define nbj_raw_max 9
 int nbj_raw;
+
+//Vitesse
 int vitesse_raw;
 
+//===================\\
+//===  END SETUP  ===\\
+//===================\\
+
+
+//================\\
+//===   MISC   ===\\
+//================\\
 
 //Time variables
 unsigned long TimeStart;
 
-int Tone_Frequency;
-
-//Globales.
+//IO
 bool InputState[nbj_max]={false};
 bool OutputState[nbj_max]={false};
+
+//Équipes
 int Equipes[16];
 int NbEquipes;
 int NbJoueursEq1;
 int NbJoueursEq2;
+
+//Score
 int GlobalScore[nbj_max]={0};
 
+//Music
+int Tone_Frequency;
 int const ParamChansons=3;
 int const NbNoteMax=50;
 int OrdreJoueurs[NbNoteMax];
+
+//Honte
 #define DelaiPetiteHonte 90 - nbj * 5
 #define DelaiHonte 160 - nbj * 7
 
-////Chansons.
-#define NombreChansons 11 //Pour jeux.
+//====================\\
+//===   END MISC   ===\\
+//====================\\
+
+
+//===================\\
+//===   MUSIQUE   ===\\
+//===================\\
+
+#define NombreChansons 11 //Pour jeux.  
 int OrdreChansons[NombreChansons]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 int ChansonFacteurRandomMin;
 int ChansonFacteurRandomMax;
@@ -250,12 +289,14 @@ int ChansonPourJeu=0;
 #define CHANSON_FinalCtd2ID 2
 #define CHANSON_FF3Win 12
 #define CHANSON_CAN 13
-//Pour Chaque chanson:
-//0 =>Freq
-//1 =>Temps Actif
-//2 =>Temps Silence Après
+
+//Array chanson active
 float MaChanson[ParamChansons][NbNoteMax];
-//Definition des arrays de chansons.
+
+//Pour Chaque chanson:
+//Array 0 => Frequence de la note
+//Array 1 => Durée de la note
+//Array 2 => Temps de silence après la note
 const PROGMEM float CAN[3][10] = {
     {392,466.2,466.2,311.1,349.2,392,415.3,466.2,523.3,349.2},
     {1979.2,1458.3,479.2,2916.7,979.2,979.2,979.2,979.2,979.2,2000},
@@ -327,7 +368,21 @@ const PROGMEM float Tetris[3][37]={
   {216.5,108.2,108.2,216.5,108.2,108.2,216.5,108.2,108.2,216.5,92.6,123.9,260.4,108.2,216.5,216.5,216.5,216.5,605.5,216.5,108.2,216.5,108.2,108.2,260.4,108.2,216.5,108.2,108.2,216.5,108.2,108.2,216.5,216.5,225.9,207.1,222.7}
   };
 
-//One-time setup:
+//=====================\\
+//===  END MUSIQUE  ===\\
+//=====================\\
+
+
+//=======================================================================================================================\\
+//=======================================================================================================================\\
+//===================================            END DEFINES AND VARIABLES            ===================================\\
+//=======================================================================================================================\\
+//=======================================================================================================================\\
+
+
+
+
+//One-time setup
 void setup()
 {
   bool ManualPinDef;
