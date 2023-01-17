@@ -571,7 +571,7 @@ int LumiereHonte(int iJoueurChanceux, int iSpinDelay, bool Bleu, bool Vert)
     delay(500);
   }
 
-  //Blue off.
+  //Blue/Green off.
   DeactivateBlueLED();
   DeactivateGreenLED();
 
