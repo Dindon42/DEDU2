@@ -144,6 +144,7 @@ int ExclusiveGameType_ID=Game_Type_GI;
 int nbj=10;
 int vitesse=10;
 int Game_Mode=Game_Mode_Experimental;
+
 //Demo Mode
 bool EnterDemo=false;
 bool AllModes=false;
