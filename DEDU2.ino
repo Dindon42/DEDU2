@@ -198,6 +198,23 @@ int MaxProbAcc=0;
 //=============================\\
 
 
+//======================\\
+//===  SETUP PARAMS  ===\\
+//======================\\
+
+//Nombre de Joueurs
+#define nbj_max 10
+#define nbj_raw_max 9
+int nbj_raw;
+
+//Vitesse
+int vitesse_raw;
+
+//==========================\\
+//===  END SETUP PARAMS  ===\\
+//==========================\\
+
+
 //=========================\\
 //===  PIN / SERVO DEF  ===\\
 //=========================\\
@@ -222,23 +239,6 @@ Servo Servo_BrasDEDU;
 //=============================\\
 //===  END PIN / SERVO DEF  ===\\
 //=============================\\
-
-
-//===============\\
-//===  SETUP  ===\\
-//===============\\
-
-//Nombre de Joueurs
-#define nbj_max 10
-#define nbj_raw_max 9
-int nbj_raw;
-
-//Vitesse
-int vitesse_raw;
-
-//===================\\
-//===  END SETUP  ===\\
-//===================\\
 
 
 //================\\
