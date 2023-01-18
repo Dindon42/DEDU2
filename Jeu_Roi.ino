@@ -104,11 +104,13 @@ void ROI()
             }
             
             //Check condition to count score.
-            if(CurrentState && !PreviousState[i] && !VoteRecorded[i] && HasReleased[i])
+            if(CurrentState && !PreviousState[i] && !VoteRecorded[i] && HasReleased[i] && i != VotePlayer)
             {
               LOG_ROI("Player ");
               LOG_ROI(i);
-              LOG_ROI(" has voted\n");
+              LOG_ROI(" has voted for Player ");
+              LOG_ROI(VotePlayer)
+              LOG_ROI("\n");
               Score[VotePlayer]++;
               VoteRecorded[i]=true;
             }
