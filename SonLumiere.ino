@@ -168,12 +168,16 @@ void FlashAndBuzzAllActive()
     Buzz();
     delay(150);
 
-    if (Activate==false) Activate=true;
+
+    if (Activate==false) Activate= true;
     else Activate=false;
+    
   }
+
 
   DeactivateGreenLED();
   DeactivateBlueLED();
+  
 }
 
 void Buzz()
