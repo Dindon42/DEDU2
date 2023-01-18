@@ -49,7 +49,7 @@ void ROI()
     if(i==JoueurRoi) 
     {
       PlayersInGame[i]=false;
-    }
+    
     else
     {
       PlayersInGame[i]=true;
@@ -73,7 +73,7 @@ void ROI()
       //Scroll through all players.  Wait a decent amount of time at each to record vote.
       for(int VotePlayer=0; VotePlayer<nbj ; VotePlayer++)
       {
-        //Skip Les joueurs qui ont éliminé dans les rondes précédentes.
+        //Skip Les joueurs qui ont été éliminés dans les rondes précédentes.
         if(!PlayersInGame[VotePlayer]) continue;
         
         ActivateRedLight(VotePlayer);
