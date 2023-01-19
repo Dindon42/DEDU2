@@ -16,7 +16,7 @@ void PQP()
   LOG_PQP(r2);
   LOG_PQP("\n");
 
-  //Init lights as GREEN.
+  //Init lights to GREEN.
   //Random Low intensity green from time to time.
   if (r == 4) 
   {

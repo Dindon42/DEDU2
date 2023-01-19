@@ -163,23 +163,22 @@ void PatateChaude(bool SimpleControls)
       }
     }
     
+    //Side-switching function
     if (random(10000)>9996)
     {
-      
       LOG_PATATE("SwitchingSIDE!!");
       LOG_PATATE("\n");
       
       if (NextPlayer == 1)
       {
         NextPlayer=-1;
-
         //Decrease Flag
         MoveDEDUFlag(random(ServoAnglePercent()));
       }
       else
       {
-        //IncreaseFlag
         NextPlayer=1;
+        //IncreaseFlag
         MoveDEDUFlag(random(ServoAnglePercent(),100));
       }
     }

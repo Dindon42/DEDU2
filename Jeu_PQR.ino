@@ -80,7 +80,6 @@ void PQR()
     {
       PreviousState[i]=InputState[i];
     }
-
     
     ActivateGreenLED(PercG);
     ActivateBlueLED(PercB);
