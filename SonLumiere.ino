@@ -167,11 +167,9 @@ void FlashAndBuzzAllActive()
     }
     Buzz();
     delay(150);
-
-
-    if (Activate==false) Activate= true;
-    else Activate=false;
     
+    if (Activate==false) Activate=true;
+    else Activate=false;
   }
 
 
