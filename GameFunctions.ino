@@ -402,7 +402,6 @@ void ResetProbAfterGame(int game_id)
   else if (game_id==Game_id_MH || game_id==Game_id_TH)
   {
     ResetProbHonte();
-    ResetProbHonte();
   }
   else if (game_id==Game_id_AR || game_id==Game_id_AR2)
   {
