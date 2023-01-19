@@ -199,8 +199,8 @@ void DefineProbJeux()
 
 void DefineGameTypes()
 {
-  //DEFINE GAME TYPES.
-  //SET DEFAULT TO -1;
+  //DEFINE GAME TYPES
+  //SET DEFAULT TO -1 FOR ALL GAMES
   for (int i=0; i<NbJeux; i++)
   {
     GameTypes[i]=-1;
@@ -340,25 +340,22 @@ bool NombreJoueurs()
 
 void RedefinePlayerPins(bool Auto)
 {
-  #define OutPinStart 31
-  #define OutPinInterval 2
-  #define InPinStart 24
-  #define InPinInterval 2
   if (Auto)
   {
     //Pin definitions
     for (int i=0; i<=nbj_raw_max;i++)
     {
       int Pin;
-      //LED ROUGE des joueurs
-      Pin=OutPinStart+OutPinInterval*i;
-      pinMode(Pin, OUTPUT);
-      PlayerOutputPins[i]=Pin;
       
       //Manettes.
       Pin=InPinStart+InPinInterval*i;
       pinMode(Pin, INPUT);
       PlayerInputPins[i]=Pin;
+
+      //LED ROUGE des joueurs
+      Pin=OutPinStart+OutPinInterval*i;
+      pinMode(Pin, OUTPUT);
+      PlayerOutputPins[i]=Pin;
     }
   }
   else
@@ -420,7 +417,6 @@ void RedefinePlayerPins(bool Auto)
       LOG_GENERAL("\n");
     }
 
-    
     //Reorder the pins so that the game makes sense.
     int TempPins[nbj];
     int TempPinAssigned[nbj_max]={false};
@@ -436,7 +432,6 @@ void RedefinePlayerPins(bool Auto)
           break;
         }
       }
-      
       LOG_GENERAL("Min Unassigned:");
       LOG_GENERAL(NewPins[index]);
       LOG_GENERAL("\n");
@@ -535,7 +530,6 @@ void Vitesse()
 //Game mode selection
 void GameMode()
 {
-  
   #define GM_BASETONE 500
   #define GM_TONEINC 50
   
@@ -593,7 +587,6 @@ void GameMode()
       ClignoteEtSon(Game_Mode,GM_BASETONE,GM_TONEINC,5);
     }
   }
-  
 }
 
 void LogSetupParams()

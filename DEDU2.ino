@@ -227,6 +227,10 @@ int vitesse_raw;
 //Player Pins
 int PlayerInputPins[nbj_max]; //Manettes
 int PlayerOutputPins[nbj_max]; //RED LED
+#define InPinStart 24
+#define InPinInterval 2
+#define OutPinStart 31
+#define OutPinInterval 2
 
 //Sound Buzzer
 int Tone_Pin=52;
@@ -560,3 +564,5 @@ void loop()
 //======================================================================\\
 //====================     END: MAIN GAME LOOP     =====================\\
 //======================================================================\\
+
+

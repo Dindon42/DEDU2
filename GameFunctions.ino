@@ -67,7 +67,6 @@ void LogScore()
 
 void LogGameCountsByType()
 {
-  
   LOG_GENERAL("COUNTS BY TYPE\n");
   for (int i=0; i<NbGameTypes; i++)
   {
@@ -110,7 +109,7 @@ int SelectGame(int r)
       return i;
     }
   }
-  //Default =>Should not happen.
+  //Default => Should not happen.
   return Game_id_PQP;
 }
 

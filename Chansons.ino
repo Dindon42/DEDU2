@@ -306,10 +306,3 @@ int SelectionChanson(int Numero)
       return NombreDeNotes;
   }
 }
-
-
-
-
-
-
-
