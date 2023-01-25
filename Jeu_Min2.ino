@@ -10,7 +10,7 @@ void MIN2()
   #define MIN2_EndTicTimerThresholdMin 350
   #define MIN2_EndTicTimerThresholdMax 425
   #define MIN2_TicTimerDecrementFactorMin  92 //0 to 100
-  #define MIN2_TicTimerDecrementFactorMax 102 //0 to 100
+  #define MIN2_TicTimerDecrementFactorMax 102 //0 to 100 (?)
   int TicTimer=0;
   int RoundTicCounter;
   unsigned long GameTimer=0;
